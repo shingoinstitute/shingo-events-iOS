@@ -8,20 +8,78 @@
 
 import UIKit
 import MapKit
-
+import PureLayout
 
 class EventMenuViewController: UIViewController {
-
+    
+    @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var eventNameLabel: UILabel!
     @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var speakerButton: UIButton!
-    @IBOutlet weak var scheduleButton: UIButton!
-    @IBOutlet weak var affiliatesButton: UIButton!
-    @IBOutlet weak var exhibitorsButton: UIButton!
-    @IBOutlet weak var recipientsButton: UIButton!
-    @IBOutlet weak var directionsButton: UIButton!
-    @IBOutlet weak var sponsorsButton: UIButton!
-    @IBOutlet weak var venuePhotosButton: UIButton!
+//    @IBOutlet weak var speakerButton: UIButton!
+//    @IBOutlet weak var scheduleButton: UIButton!
+//    @IBOutlet weak var affiliatesButton: UIButton!
+//    @IBOutlet weak var exhibitorsButton: UIButton!
+//    @IBOutlet weak var recipientsButton: UIButton!
+//    @IBOutlet weak var directionsButton: UIButton!
+//    @IBOutlet weak var sponsorsButton: UIButton!
+//    @IBOutlet weak var venuePhotosButton: UIButton!
+//    
+//    let eventNameLabel:UILabel = {
+//        let label = UILabel()
+//        label.translatesAutoresizingMaskIntoConstraints = false
+//        return label
+//    }()
+    
+    let speakerButton:UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "Speaker_Button"), forState: .Normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
+    let scheduleButton:UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "Schedule_Button"), forState: .Normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
+    let affiliatesButton:UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "Affiliates_Button"), forState: .Normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    let exhibitorsButton:UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "Exhibitors_Button"), forState: .Normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    let recipientsButton:UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "Recipients_Button"), forState: .Normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    let directionsButton:UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "Directions_Button"), forState: .Normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    let sponsorsButton:UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "Sponsors_Button"), forState: .Normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    let venuePhotosButton:UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(named: "Venue_Pictures_Button"), forState: .Normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
     
     var backgroundImage: UIImageView = {
         let view = UIImageView.newAutoLayoutView()
@@ -33,24 +91,172 @@ class EventMenuViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        eventNameLabel.text = appData.event.name
         
-        view.addSubview(backgroundImage)
-        backgroundImage.autoSetDimensionsToSize(CGSize(width: view.frame.width, height: view.frame.height))
-        backgroundImage.autoPinEdgesToSuperviewEdges()
-        scrollView.bringSubviewToFront(speakerButton)
-        scrollView.bringSubviewToFront(scheduleButton)
-        scrollView.bringSubviewToFront(affiliatesButton)
-        scrollView.bringSubviewToFront(exhibitorsButton)
-        scrollView.bringSubviewToFront(recipientsButton)
-        scrollView.bringSubviewToFront(directionsButton)
-        scrollView.bringSubviewToFront(sponsorsButton)
-        scrollView.bringSubviewToFront(venuePhotosButton)
-        scrollView.bringSubviewToFront(eventNameLabel)
-        view.bringSubviewToFront(scrollView)
+        eventNameLabel.text = appData.event.name
+        contentView.addSubview(eventNameLabel)
+        
+        let buttonViews:NSArray = [
+            scheduleButton,
+            venuePhotosButton,
+            recipientsButton,
+            exhibitorsButton,
+            speakerButton,
+            directionsButton,
+            affiliatesButton,
+            sponsorsButton
+        ]
+        
+        for button in buttonViews
+        {
+            contentView.addSubview(button as! UIButton)
+        }
+        
+        // Set height and width constraints for buttons
+        for button in buttonViews
+        {
+            let widthConstraint = NSLayoutConstraint(
+                item: button,
+                attribute: NSLayoutAttribute.Width,
+                relatedBy: NSLayoutRelation.Equal,
+                toItem: nil,
+                attribute: NSLayoutAttribute.NotAnAttribute,
+                multiplier: 1,
+                constant: 110)
+            
+            let heightConstraint = NSLayoutConstraint(
+                item: button,
+                attribute: NSLayoutAttribute.Height,
+                relatedBy: NSLayoutRelation.Equal,
+                toItem: nil,
+                attribute: NSLayoutAttribute.NotAnAttribute,
+                multiplier: 1,
+                constant: 110)
+            
+            contentView.addConstraint(widthConstraint)
+            contentView.addConstraint(heightConstraint)
+        }
+        
+        setButtonConstraints()
         
     }
+    
+    func setButtonConstraints() {
+        
+        let leftButtons:NSArray = [
+            scheduleButton,
+            venuePhotosButton,
+            recipientsButton,
+            exhibitorsButton,
+        ]
+        
+        let rightButtons:NSArray = [
+            speakerButton,
+            directionsButton,
+            affiliatesButton,
+            sponsorsButton
+        ]
+        
+        let quarter = contentView.frame.width * 0.25 // calculate 1/4 width of parent view
 
+        var horizontalConstraint = NSLayoutConstraint(
+            item: leftButtons.firstObject as! UIButton,
+            attribute: NSLayoutAttribute.CenterX,
+            relatedBy: NSLayoutRelation.Equal,
+            toItem: contentView,
+            attribute: NSLayoutAttribute.CenterX,
+            multiplier: 1,
+            constant: quarter * -1 + 10)
+        contentView.addConstraint(horizontalConstraint)
+        
+        var verticalConstraint = NSLayoutConstraint(
+            item: leftButtons.firstObject as! UIButton,
+            attribute: NSLayoutAttribute.Top,
+            relatedBy: .Equal,
+            toItem: eventNameLabel,
+            attribute: NSLayoutAttribute.Bottom,
+            multiplier: 1,
+            constant: 10.0)
+        contentView.addConstraint(verticalConstraint)
+        
+        var previousButton:UIButton!
+        for item in leftButtons
+        {
+            if let previousButton = previousButton
+            {
+                let verticalConstraint = NSLayoutConstraint(
+                    item: item,
+                    attribute: NSLayoutAttribute.Top,
+                    relatedBy: .Equal,
+                    toItem: previousButton,
+                    attribute: NSLayoutAttribute.Bottom,
+                    multiplier: 1,
+                    constant: 0)
+                contentView.addConstraint(verticalConstraint)
+                
+                // Even numbered indecies get offset from center of contentView by (quarter * -1 + 10)
+                let horizontalConstraint = NSLayoutConstraint(
+                    item: item,
+                    attribute: NSLayoutAttribute.CenterX,
+                    relatedBy: NSLayoutRelation.Equal,
+                    toItem: contentView,
+                    attribute: NSLayoutAttribute.CenterX,
+                    multiplier: 1,
+                    constant: quarter * -1 + 10)
+                contentView.addConstraint(horizontalConstraint)
+            }
+            previousButton = item as! UIButton
+        }
+        
+        horizontalConstraint = NSLayoutConstraint(
+            item: rightButtons.firstObject as! UIButton,
+            attribute: NSLayoutAttribute.CenterX,
+            relatedBy: NSLayoutRelation.Equal,
+            toItem: contentView,
+            attribute: NSLayoutAttribute.CenterX,
+            multiplier: 1,
+            constant: quarter - 10)
+        contentView.addConstraint(horizontalConstraint)
+        
+        verticalConstraint = NSLayoutConstraint(
+            item: rightButtons.firstObject as! UIButton,
+            attribute: NSLayoutAttribute.Top,
+            relatedBy: .Equal,
+            toItem: eventNameLabel,
+            attribute: NSLayoutAttribute.Bottom,
+            multiplier: 1,
+            constant: 10.0)
+        contentView.addConstraint(verticalConstraint)
+        
+        previousButton = nil
+        for item in rightButtons
+        {
+            if let previousButton = previousButton
+            {
+                let verticalConstraint = NSLayoutConstraint(
+                    item: item,
+                    attribute: NSLayoutAttribute.Top,
+                    relatedBy: .Equal,
+                    toItem: previousButton,
+                    attribute: NSLayoutAttribute.Bottom,
+                    multiplier: 1,
+                    constant: 0)
+                contentView.addConstraint(verticalConstraint)
+                
+                let horizontalConstraint = NSLayoutConstraint(
+                    item: item,
+                    attribute: NSLayoutAttribute.CenterX,
+                    relatedBy: NSLayoutRelation.Equal,
+                    toItem: contentView,
+                    attribute: NSLayoutAttribute.CenterX,
+                    multiplier: 1,
+                    constant: quarter - 10)
+                contentView.addConstraint(horizontalConstraint)
+            }
+            previousButton = item as! UIButton
+        }
+        
+    }
+    
     @IBAction func didTapSchedule(sender: AnyObject) {
         self.performSegueWithIdentifier("SchedulesView", sender: self)
     }
@@ -62,7 +268,7 @@ class EventMenuViewController: UIViewController {
     @IBAction func didTapRecipients(sender: AnyObject) {
         self.performSegueWithIdentifier("RecipientsView", sender: self)
     }
-
+    
     @IBAction func didTapCityMap(sender: AnyObject) {
         self.performSegueWithIdentifier("MapView", sender: self)
     }
@@ -100,7 +306,7 @@ class EventMenuViewController: UIViewController {
             // segues if imageFetchNotComplete is false (meaning all exhibitors have an image assigned)
             // or if more than 2 seconds have elapsed. During the loop caused by this closure, async
             // calls are working in the background that are attempting to fetch images for each exhibitor.
-            // If the http request for each exhibitor fails to return an image OR if more than 2 seconds 
+            // If the http request for each exhibitor fails to return an image OR if more than 2 seconds
             // have elapsed then their image will be assigned a placeholder image.
             if !imageFetchNotComplete || counter > abs(stopTime) {
                 timer.invalidate()
@@ -116,7 +322,7 @@ class EventMenuViewController: UIViewController {
                 self.performSegueWithIdentifier("ExhibitorsListView", sender: self)
             }
         }
-
+        
     }
     
     @IBAction func didTapAffiliates(sender: AnyObject) {
@@ -132,7 +338,7 @@ class EventMenuViewController: UIViewController {
     }
     
     // MARK: - Navigation
-
+    
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
@@ -173,7 +379,7 @@ class EventMenuViewController: UIViewController {
         if segue.identifier == "VenueView" {
             let destination = segue.destinationViewController as! VenueMapsViewController
             destination.event = appData.event
-
+            
         }
         
         if segue.identifier == "SponsorsView" {
@@ -187,7 +393,7 @@ class EventMenuViewController: UIViewController {
         }
         
     }
-
+    
     // MARK: - Custom Functions
     
     func sortWeekByDay(var days_of_week:[EventDay]) -> [EventDay] {
@@ -209,19 +415,19 @@ class EventMenuViewController: UIViewController {
     func valueOfDay(var day:String) -> Int {
         day = day.lowercaseString
         switch day {
-            case "monday":
+        case "monday":
             return 1
-            case "tuesday":
+        case "tuesday":
             return 2
-            case "wednesday":
+        case "wednesday":
             return 3
-            case "thursday":
+        case "thursday":
             return 4
-            case "friday":
+        case "friday":
             return 5
-            case "saturday":
+        case "saturday":
             return 6
-            case "sunday":
+        case "sunday":
             return 7
         default:
             print("ERROR: EventMenuViewController::valueOfDay, invalid string passed into parameter!")
@@ -236,7 +442,7 @@ class EventMenuViewController: UIViewController {
         var benefactors = [Sponsor]()
         var champions = [Sponsor]()
         var presidents = [Sponsor]()
-
+        
         for item in sponsors {
             if item.sponsor_type == .Friend {
                 friends.append(item)
@@ -260,7 +466,7 @@ class EventMenuViewController: UIViewController {
         sponsors_array[2] = benefactors
         sponsors_array[3] = champions
         sponsors_array[4] = presidents
-
+        
         return sponsors_array
     }
     
