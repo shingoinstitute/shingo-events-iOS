@@ -138,6 +138,22 @@ class EventMenuViewController: UIViewController {
         
         setButtonConstraints()
         
+        let backgroundImage = UIImageView()
+        backgroundImage.image = UIImage(named: "shingo_icon_skinny")
+        
+        contentView.addSubview(backgroundImage)
+        backgroundImage.autoPinEdgesToSuperviewEdges()
+        
+        contentView.bringSubviewToFront(scheduleButton)
+        contentView.bringSubviewToFront(venuePhotosButton)
+        contentView.bringSubviewToFront(recipientsButton)
+        contentView.bringSubviewToFront(exhibitorsButton)
+        contentView.bringSubviewToFront(speakerButton)
+        contentView.bringSubviewToFront(directionsButton)
+        contentView.bringSubviewToFront(affiliatesButton)
+        contentView.bringSubviewToFront(sponsorsButton)
+        contentView.bringSubviewToFront(eventNameLabel)
+        
     }
     
     func setButtonConstraints() {
