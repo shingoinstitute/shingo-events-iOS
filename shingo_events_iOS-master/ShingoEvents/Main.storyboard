@@ -675,7 +675,7 @@
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Event Name" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DsV-1P-KTJ">
                                                 <rect key="frame" x="8" y="4" width="584" height="44"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="44" id="hih-sh-EF6"/>
+                                                    <constraint firstAttribute="height" constant="44" id="9Ju-w8-WxF"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -684,27 +684,28 @@
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="600" id="lzr-d9-XAJ"/>
+                                            <constraint firstAttribute="trailing" secondItem="DsV-1P-KTJ" secondAttribute="trailing" constant="8" id="1v2-9D-xxh"/>
+                                            <constraint firstItem="DsV-1P-KTJ" firstAttribute="top" secondItem="jEz-wf-vfQ" secondAttribute="top" constant="4" id="BR4-Ue-afG"/>
+                                            <constraint firstItem="DsV-1P-KTJ" firstAttribute="leading" secondItem="jEz-wf-vfQ" secondAttribute="leading" constant="8" id="NDd-Mb-CR7"/>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="600" id="VE1-wX-6NI"/>
+                                            <constraint firstAttribute="height" constant="600" id="l69-Cd-iQ5"/>
                                         </constraints>
                                     </view>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="jEz-wf-vfQ" firstAttribute="centerX" secondItem="Ogs-jn-j1c" secondAttribute="centerX" id="FiZ-v6-2Fd"/>
-                                    <constraint firstAttribute="bottom" secondItem="jEz-wf-vfQ" secondAttribute="bottom" id="TuX-4c-9dB"/>
-                                    <constraint firstItem="jEz-wf-vfQ" firstAttribute="leading" secondItem="Ogs-jn-j1c" secondAttribute="leading" id="cHn-Wa-ABP"/>
-                                    <constraint firstAttribute="trailing" secondItem="jEz-wf-vfQ" secondAttribute="trailing" id="qGc-ct-LeI"/>
-                                    <constraint firstItem="jEz-wf-vfQ" firstAttribute="top" secondItem="Ogs-jn-j1c" secondAttribute="top" id="tEb-pU-Hl0"/>
+                                    <constraint firstItem="jEz-wf-vfQ" firstAttribute="centerX" secondItem="Ogs-jn-j1c" secondAttribute="centerX" id="CmC-ed-yAQ"/>
+                                    <constraint firstAttribute="bottom" secondItem="jEz-wf-vfQ" secondAttribute="bottom" id="DWd-Do-gbC"/>
+                                    <constraint firstItem="jEz-wf-vfQ" firstAttribute="leading" secondItem="Ogs-jn-j1c" secondAttribute="leading" id="FLz-Oa-L7t"/>
+                                    <constraint firstItem="jEz-wf-vfQ" firstAttribute="top" secondItem="Ogs-jn-j1c" secondAttribute="top" id="rf5-ie-Z1Z"/>
+                                    <constraint firstAttribute="trailing" secondItem="jEz-wf-vfQ" secondAttribute="trailing" id="z5P-dc-8Tr"/>
                                 </constraints>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" red="0.054901960780000002" green="0.12941176469999999" blue="0.27058823529999998" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="Ogs-jn-j1c" secondAttribute="trailing" id="3Ou-ym-XKW"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="DsV-1P-KTJ" secondAttribute="trailing" constant="-12" id="4Yi-o5-Pnz"/>
                             <constraint firstItem="Ogs-jn-j1c" firstAttribute="leading" secondItem="rAy-Ke-xpN" secondAttribute="leading" id="Gs6-eH-v4n"/>
-                            <constraint firstItem="DsV-1P-KTJ" firstAttribute="leading" secondItem="rAy-Ke-xpN" secondAttribute="leadingMargin" constant="-12" id="JWe-dZ-hWh"/>
                             <constraint firstAttribute="bottom" secondItem="Ogs-jn-j1c" secondAttribute="bottom" id="ZfA-uj-hkS"/>
-                            <constraint firstItem="DsV-1P-KTJ" firstAttribute="top" secondItem="CqH-DA-lTH" secondAttribute="bottom" constant="4" id="n9N-4s-Cp1"/>
                             <constraint firstItem="Ogs-jn-j1c" firstAttribute="top" secondItem="rAy-Ke-xpN" secondAttribute="top" id="qgP-s4-eFP"/>
                         </constraints>
                     </view>

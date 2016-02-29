@@ -112,6 +112,7 @@ class EventMenuViewController: UIViewController {
             sponsorsButton
         ]
         
+        // add custom built UIButtons to contentView
         for button in buttonViews
         {
             contentView.addSubview(button as! UIButton)
@@ -123,8 +124,6 @@ class EventMenuViewController: UIViewController {
             button.autoSetDimension(.Height, toSize: 110)
             button.autoSetDimension(.Width, toSize: 110)
         }
-        
-        setButtonConstraints()
         
         let backgroundImage = UIImageView()
         backgroundImage.image = UIImage(named: "shingo_icon_skinny")
@@ -151,6 +150,8 @@ class EventMenuViewController: UIViewController {
         directionsButton.addTarget(self, action: "didTapDirections:", forControlEvents: UIControlEvents.TouchUpInside)
         affiliatesButton.addTarget(self, action: "didTapAffiliates:", forControlEvents: UIControlEvents.TouchUpInside)
         sponsorsButton.addTarget(self, action: "didTapSponsors:", forControlEvents: UIControlEvents.TouchUpInside)
+        
+        setButtonConstraints()
         
     }
     
@@ -190,7 +191,7 @@ class EventMenuViewController: UIViewController {
             attribute: NSLayoutAttribute.Bottom,
             multiplier: 1,
             constant: 10.0)
-        contentView.addConstraint(verticalConstraint)
+        scrollView.addConstraint(verticalConstraint)
         
         var previousButton:UIButton!
         for item in leftButtons
