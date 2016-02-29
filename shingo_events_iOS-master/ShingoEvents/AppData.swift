@@ -29,7 +29,7 @@ enum URLTYPE {
 public class AppData {
 
 //    var eventSessions:[EventSession]? = nil
-    var upcomingEvents:[Event]? = nil
+    var upcomingEvents:[Event]!
     var event:Event!
     var exhibitors:[Exhibitor]? = nil
     var affiliates:[Affiliate]? = nil
@@ -77,28 +77,19 @@ public class AppData {
                         upcoming_event.location = CLLocationCoordinate2D(latitude: item["LatLng__c"]["latitude"].double! as Double, longitude: item["LatLng__c"]["longitude"].double! as Double)
                     }
                     
-                    let stockPhotos = [
-                        "http://i.istockimg.com/image-zoom/69764945/3/380/253/stock-photo-69764945-dogs-playing.jpg",
-                        "http://i.istockimg.com/image-zoom/52848884/3/357/380/stock-photo-52848884-english-bulldog-puppy-3-months-old-.jpg",
-                        "http://i.istockimg.com/image-zoom/48185660/3/380/253/stock-photo-48185660-cute-cat-oudoors.jpg"
-                    ]
-                    upcoming_event.venueMaps = [VenueMap]()
-                    for var i = 0; i < 3; i++
-                    {
-                        let venueMap = VenueMap(name: "pic name", url: stockPhotos[i])
-                        upcoming_event.venueMaps.append(venueMap)
+                    if item["Venue_Maps"] != nil {
+                        upcoming_event.venueMaps = [VenueMap]()
+                        for map in item["Venue_Maps"].array! {
+                            
+                            // FYI: This class constructor makes an http request to get the venue picture when initialized
+                            let venueMap = VenueMap(
+                                name: map["name"].string! as String,
+                                url: map["url"].string! as String
+                            )
+                            upcoming_event.venueMaps.append(venueMap)
+                        }
                     }
-                    
-//                    if item["Venue_Maps"] != nil {
-//                        for item in item["Venue_Maps"].array! {
-//                            let venueMap = VenueMap(
-//                                name: item["name"].string! as String,
-//                                url: item["url"].string! as String
-//                            )
-//                            upcoming_event.venueMaps?.append(venueMap)
-//                        }
-//                    }
-                    self.upcomingEvents?.append(upcoming_event)
+                    self.upcomingEvents.append(upcoming_event)
 
                     
                 }

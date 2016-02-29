@@ -13,6 +13,8 @@ class VenueMapsViewController: UIViewController, UIScrollViewDelegate {
 
     var event:Event!
     
+    var imageViews = [UIImageView]()
+    
     let messageLabel:UILabel = {
         let label = UILabel.newAutoLayoutView()
         label.textAlignment = .Center
@@ -22,8 +24,17 @@ class VenueMapsViewController: UIViewController, UIScrollViewDelegate {
         return label
     }()
     
-    var imageViews = [UIImageView]()
-    let scrollView = UIScrollView()
+    let contentView:UIView = {
+       let view = UIView.newAutoLayoutView()
+        view.backgroundColor = UIColor.whiteColor()
+        return view
+    }()
+    
+    let scrollView:UIScrollView = {
+       let view = UIScrollView.newAutoLayoutView()
+        view.backgroundColor = UIColor.whiteColor()
+        return view
+    }()
     
     var didSetupConstraints = false
     
@@ -31,57 +42,82 @@ class VenueMapsViewController: UIViewController, UIScrollViewDelegate {
         view = UIView()
         view.backgroundColor = UIColor.whiteColor()
 
-        if event.venueMaps == nil {
+        // If there are no venueMaps, display message label
+        if event.venueMaps == nil
+        {
             view.addSubview(messageLabel)
         }
         else
         {
+            
             for venueMap in event.venueMaps
             {
                 let imageView = UIImageView()
                 imageView.image = venueMap.image
+                imageView.frame = CGRectMake(0, 0, view.frame.width, view.frame.height)
                 imageViews.append(imageView)
-                scrollView.addSubview(imageView)
+                contentView.addSubview(imageView)
             }
-            getContentSizeForScrollView()
+            scrollView.addSubview(contentView)
             view.addSubview(scrollView)
-            
-            //        scrollView.delegate = self
-            //        scrollView.frame = CGRectMake(0, 0, view.frame.width, view.frame.height)
-            //        scrollView.flashScrollIndicators()
-            //        scrollView.maximumZoomScale = 10.0
-            //        scrollView.minimumZoomScale = 1.0
-            //        scrollView.clipsToBounds = false
         }
         
         view.setNeedsUpdateConstraints()
+        
+//        scrollView.delegate = self
+//        setZoomScale()
     }
     
+    
     func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
-        return self.view
+        return contentView
     }
+    
+    
+//    func setZoomScale() {
+//        let contentViewSize = contentView.bounds.size
+//        let scrollViewSize = scrollView.bounds.size
+//        let widthScale = scrollViewSize.width / contentViewSize.width
+//        let heightScale = contentViewSize.width / contentViewSize.height
+//        
+//        scrollView.minimumZoomScale = min(widthScale, heightScale) - 1.0
+//        scrollView.maximumZoomScale = 2.0
+//        scrollView.zoomScale = 1.0
+//    }
     
     override func updateViewConstraints() {
         if didSetupConstraints == false && event.venueMaps != nil
         {
+            contentView.autoSetDimension(.Height, toSize: getContentHeight())
             scrollView.autoPinEdgesToSuperviewEdges()
             
-            let views = imageViews
+            // Set contentSize height of scrollview large enough to fit all of the venueMaps
+            scrollView.contentSize = CGSize(width: view.frame.width, height: getContentHeight())
             
-            for view in views
+            
+            
+            // Set height and width constraints of each image to fit the size of the device screen
+            for imageView in imageViews
             {
-                view.autoSetDimensionsToSize(CGSize(width: (view.image?.size.width)!, height: (view.image?.size.height)!))
+                var width:CGFloat! = imageView.image?.size.width
+                var height:CGFloat! = imageView.image?.size.height
+            
+                let aspectRatio = height / width
+                width = view.frame.width
+                height = height / aspectRatio
+                
+                imageView.autoSetDimensionsToSize(CGSize(width: width, height: height))
             }
             
-            views.first?.autoPinEdgeToSuperviewEdge(.Top, withInset: 10.0)
-            views.first?.autoPinEdgeToSuperviewEdge(.Left)
+            imageViews.first?.autoPinEdgeToSuperviewEdge(.Top)
+            imageViews.first?.autoPinEdgeToSuperviewEdge(.Left)
             var previousView:UIImageView?
-            for view in views
+            for view in imageViews
             {
                 if let previousView = previousView
                 {
                     view.autoPinEdgeToSuperviewEdge(.Left)
-                    view.autoPinEdge(.Left, toEdge: .Left, ofView: scrollView)
+                    view.autoPinEdge(.Left, toEdge: .Left, ofView: contentView)
                     view.autoPinEdge(.Top, toEdge: .Bottom, ofView: previousView)
                 }
                 previousView = view
@@ -93,30 +129,39 @@ class VenueMapsViewController: UIViewController, UIScrollViewDelegate {
             messageLabel.autoSetDimensionsToSize(CGSizeMake(view.frame.width, 42.0))
             messageLabel.autoAlignAxis(.Horizontal, toSameAxisOfView: view)
             messageLabel.autoAlignAxis(.Vertical, toSameAxisOfView: view)
+            
+            didSetupConstraints = true
         }
         super.updateViewConstraints()
     }
-
-
-    func getContentSizeForScrollView()
-    {
-        var height:CGFloat = 0
-        for view in imageViews
-        {
-            height += (view.image?.size.height)!
-        }
+    
+    
+    func getContentHeight() -> CGFloat {
+        var total:CGFloat = 0.0
         
-        var width = (imageViews.first?.sizeThatFits(CGSize()))
-        for view in imageViews
+        for image in imageViews
         {
-            if width?.width < view.frame.width
-            {
-                width?.width = view.frame.width
-            }
+            let aspectRatio = (image.image?.size.height)! / (image.image?.size.width)!
+            let height = (image.image?.size.height)! / aspectRatio
+            
+            total += height
         }
-        
-        scrollView.contentSize = CGSize(width: width!.width, height: height)
+        return total
     }
 
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

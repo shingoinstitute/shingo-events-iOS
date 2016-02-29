@@ -627,7 +627,7 @@
             </objects>
             <point key="canvasLocation" x="2866" y="-2777"/>
         </scene>
-        <!--Venue Maps View Controller-->
+        <!--Venue Map-->
         <scene sceneID="W1V-q4-iBY">
             <objects>
                 <viewController id="fAu-De-NAj" customClass="VenueMapsViewController" customModule="Shingo_Events" customModuleProvider="target" sceneMemberID="viewController">
@@ -639,34 +639,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5LB-L3-4SF">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="556"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X4Q-5j-ROu">
-                                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="600" id="9DA-XH-t5C"/>
-                                            <constraint firstAttribute="width" constant="600" id="NqK-wP-0AD"/>
-                                        </constraints>
-                                    </view>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="X4Q-5j-ROu" secondAttribute="trailing" id="54X-d0-1za"/>
-                                    <constraint firstItem="X4Q-5j-ROu" firstAttribute="leading" secondItem="5LB-L3-4SF" secondAttribute="leading" id="DMe-x0-hGp"/>
-                                    <constraint firstAttribute="bottom" secondItem="X4Q-5j-ROu" secondAttribute="bottom" id="dIA-bb-B24"/>
-                                    <constraint firstItem="X4Q-5j-ROu" firstAttribute="top" secondItem="5LB-L3-4SF" secondAttribute="top" id="exu-KK-CSa"/>
-                                </constraints>
-                            </scrollView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Views added programmatically" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="heP-nS-ccA">
+                                <rect key="frame" x="182" y="289" width="236" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="5LB-L3-4SF" firstAttribute="top" secondItem="fEc-g2-7hc" secondAttribute="top" id="DRu-nd-GDD"/>
-                            <constraint firstAttribute="trailing" secondItem="5LB-L3-4SF" secondAttribute="trailing" id="cgr-MR-btM"/>
-                            <constraint firstItem="5LB-L3-4SF" firstAttribute="bottom" secondItem="jic-IU-oo2" secondAttribute="top" id="dHu-iO-H8g"/>
-                            <constraint firstItem="5LB-L3-4SF" firstAttribute="leading" secondItem="fEc-g2-7hc" secondAttribute="leading" id="jLT-LL-IO0"/>
-                        </constraints>
+                        <color key="backgroundColor" red="0.050980392843484879" green="0.094117648899555206" blue="0.20784313976764679" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
+                    <navigationItem key="navigationItem" title="Venue Map" id="6rJ-Dg-NLf"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="58Y-s5-j2w" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -696,7 +678,7 @@
                                                     <constraint firstAttribute="height" constant="44" id="hih-sh-EF6"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>

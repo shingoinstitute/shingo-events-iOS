@@ -13,7 +13,7 @@ class EventTableViewCell: UITableViewCell {
     
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var dateRangeLabel: UILabel!
-    var event:Event? = nil
+    var event:Event!
 }
 
 
@@ -28,7 +28,7 @@ class EventsTableViewController: UITableViewController {
         super.viewDidLoad()
         print("Number of async tasks: \(number_of_async_tasks)")
 
-        if appData.upcomingEvents?.count == 0 {
+        if appData.upcomingEvents.count == 0 {
             
             let alert = UIAlertController(title: "Oops!",
                 message: "We were unable to fetch any data for you. Please check your internet connection and try again.",
@@ -60,7 +60,7 @@ class EventsTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return appData!.upcomingEvents!.count
+        return appData.upcomingEvents.count
     }
     
     
@@ -68,7 +68,7 @@ class EventsTableViewController: UITableViewController {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("EventsCell", forIndexPath: indexPath) as! EventTableViewCell
         // Configure the cell...
-        let event = appData!.upcomingEvents![indexPath.row]
+        let event = appData.upcomingEvents[indexPath.row]
         cell.event = event
         cell.nameLabel.text = event.name
         
@@ -76,7 +76,7 @@ class EventsTableViewController: UITableViewController {
         formatter.dateFormat = "yyyy-MM-dd"
         formatter.dateStyle = .MediumStyle
         
-        cell.dateRangeLabel.text = formatter.stringFromDate(cell.event!.event_start_date) + " - " + formatter.stringFromDate(cell.event!.event_end_date)
+        cell.dateRangeLabel.text = formatter.stringFromDate(cell.event.event_start_date) + " - " + formatter.stringFromDate(cell.event.event_end_date)
         
         return cell
         
@@ -92,7 +92,7 @@ class EventsTableViewController: UITableViewController {
         cell_index_path = indexPath
         self.async_tasks_completed = 0
 
-        if cell.event?.eventSessions == nil
+        if cell.event.eventSessions == nil
         {
             let activitiyViewController = ActivityViewController(message: "Loading Conference Data...")
             presentViewController(activitiyViewController, animated: true, completion: nil)
