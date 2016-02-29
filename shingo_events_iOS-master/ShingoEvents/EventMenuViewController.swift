@@ -83,7 +83,13 @@ class EventMenuViewController: UIViewController {
     
     var backgroundImage: UIImageView = {
         let view = UIImageView.newAutoLayoutView()
-        view.image = UIImage(named: "shingo_icon_skinny")
+        
+        if UIDevice.currentDevice().model == "iPad" || UIDevice.currentDevice().model == "Simulator"{
+            view.image = UIImage(named: "shingo_icon")
+        } else {
+            view.image = UIImage(named: "shingo_icon_skinny")
+        }
+
         return view
     }()
     
@@ -114,26 +120,8 @@ class EventMenuViewController: UIViewController {
         // Set height and width constraints for buttons
         for button in buttonViews
         {
-            let widthConstraint = NSLayoutConstraint(
-                item: button,
-                attribute: NSLayoutAttribute.Width,
-                relatedBy: NSLayoutRelation.Equal,
-                toItem: nil,
-                attribute: NSLayoutAttribute.NotAnAttribute,
-                multiplier: 1,
-                constant: 110)
-            
-            let heightConstraint = NSLayoutConstraint(
-                item: button,
-                attribute: NSLayoutAttribute.Height,
-                relatedBy: NSLayoutRelation.Equal,
-                toItem: nil,
-                attribute: NSLayoutAttribute.NotAnAttribute,
-                multiplier: 1,
-                constant: 110)
-            
-            contentView.addConstraint(widthConstraint)
-            contentView.addConstraint(heightConstraint)
+            button.autoSetDimension(.Height, toSize: 110)
+            button.autoSetDimension(.Width, toSize: 110)
         }
         
         setButtonConstraints()
@@ -144,6 +132,7 @@ class EventMenuViewController: UIViewController {
         contentView.addSubview(backgroundImage)
         backgroundImage.autoPinEdgesToSuperviewEdges()
         
+        contentView.bringSubviewToFront(eventNameLabel)
         contentView.bringSubviewToFront(scheduleButton)
         contentView.bringSubviewToFront(venuePhotosButton)
         contentView.bringSubviewToFront(recipientsButton)
@@ -152,7 +141,16 @@ class EventMenuViewController: UIViewController {
         contentView.bringSubviewToFront(directionsButton)
         contentView.bringSubviewToFront(affiliatesButton)
         contentView.bringSubviewToFront(sponsorsButton)
-        contentView.bringSubviewToFront(eventNameLabel)
+        
+        // Add targets to all buttons
+        scheduleButton.addTarget(self, action: "didTapSchedule:", forControlEvents: UIControlEvents.TouchUpInside)
+        venuePhotosButton.addTarget(self, action: "didTapVenue:", forControlEvents: UIControlEvents.TouchUpInside)
+        recipientsButton.addTarget(self, action: "didTapRecipients:", forControlEvents: UIControlEvents.TouchUpInside)
+        exhibitorsButton.addTarget(self, action: "didTapExhibitors:", forControlEvents: UIControlEvents.TouchUpInside)
+        speakerButton.addTarget(self, action: "didTapSpeakers:", forControlEvents: UIControlEvents.TouchUpInside)
+        directionsButton.addTarget(self, action: "didTapDirections:", forControlEvents: UIControlEvents.TouchUpInside)
+        affiliatesButton.addTarget(self, action: "didTapAffiliates:", forControlEvents: UIControlEvents.TouchUpInside)
+        sponsorsButton.addTarget(self, action: "didTapSponsors:", forControlEvents: UIControlEvents.TouchUpInside)
         
     }
     
@@ -172,7 +170,7 @@ class EventMenuViewController: UIViewController {
             sponsorsButton
         ]
         
-        let quarter = contentView.frame.width * 0.25 // calculate 1/4 width of parent view
+        let quarter = self.view.frame.width * 0.25 // calculate 1/4 width of parent view
 
         var horizontalConstraint = NSLayoutConstraint(
             item: leftButtons.firstObject as! UIButton,
@@ -181,7 +179,7 @@ class EventMenuViewController: UIViewController {
             toItem: contentView,
             attribute: NSLayoutAttribute.CenterX,
             multiplier: 1,
-            constant: quarter * -1 + 10)
+            constant: quarter * -1 + 10.0)
         contentView.addConstraint(horizontalConstraint)
         
         var verticalConstraint = NSLayoutConstraint(
@@ -273,23 +271,23 @@ class EventMenuViewController: UIViewController {
         
     }
     
-    @IBAction func didTapSchedule(sender: AnyObject) {
+    func didTapSchedule(sender: AnyObject) {
         self.performSegueWithIdentifier("SchedulesView", sender: self)
     }
     
-    @IBAction func didTapSpeakers(sender: AnyObject) {
+    func didTapSpeakers(sender: AnyObject) {
         self.performSegueWithIdentifier("SpeakerList", sender: self)
     }
     
-    @IBAction func didTapRecipients(sender: AnyObject) {
+    func didTapRecipients(sender: AnyObject) {
         self.performSegueWithIdentifier("RecipientsView", sender: self)
     }
     
-    @IBAction func didTapCityMap(sender: AnyObject) {
+    func didTapDirections(sender: AnyObject) {
         self.performSegueWithIdentifier("MapView", sender: self)
     }
     
-    @IBAction func didTapExhibitors(sender: AnyObject) {
+    func didTapExhibitors(sender: AnyObject) {
         let activity = ActivityViewController(message: "Getting info")
         presentViewController(activity, animated: true, completion: nil)
         
@@ -341,15 +339,15 @@ class EventMenuViewController: UIViewController {
         
     }
     
-    @IBAction func didTapAffiliates(sender: AnyObject) {
+    func didTapAffiliates(sender: AnyObject) {
         self.performSegueWithIdentifier("AffiliatesListView", sender: self)
     }
     
-    @IBAction func didTapVenue(sender: AnyObject) {
+    func didTapVenue(sender: AnyObject) {
         self.performSegueWithIdentifier("VenueView", sender: self)
     }
     
-    @IBAction func didTapSponsors(sender: AnyObject) {
+    func didTapSponsors(sender: AnyObject) {
         self.performSegueWithIdentifier("SponsorsView", sender: self)
     }
     
