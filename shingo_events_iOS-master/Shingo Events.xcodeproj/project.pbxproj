@@ -22,7 +22,6 @@
 		C26DC9021C59785700BB4DDA /* ExhibitorTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C26DC9011C59785700BB4DDA /* ExhibitorTableViewController.swift */; };
 		C26DC9041C597A8600BB4DDA /* ExhibitorInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C26DC9031C597A8600BB4DDA /* ExhibitorInfoViewController.swift */; };
 		C26DC9061C59841700BB4DDA /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C26DC9051C59841700BB4DDA /* MapViewController.swift */; };
-		C281C5D21C6D529100FEDAF7 /* SessionTextPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C281C5D11C6D529100FEDAF7 /* SessionTextPopoverViewController.swift */; };
 		C281C6101C74C7AA00FEDAF7 /* SwiftyTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C281C60F1C74C7AA00FEDAF7 /* SwiftyTimer.swift */; };
 		C28B67E91C3F0BD700AC9193 /* EventData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28B67E81C3F0BD700AC9193 /* EventData.swift */; };
 		C28B67F31C406BDE00AC9193 /* EventMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28B67F21C406BDE00AC9193 /* EventMenuViewController.swift */; };
@@ -84,7 +83,6 @@
 		C26DC9011C59785700BB4DDA /* ExhibitorTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExhibitorTableViewController.swift; sourceTree = "<group>"; };
 		C26DC9031C597A8600BB4DDA /* ExhibitorInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExhibitorInfoViewController.swift; sourceTree = "<group>"; };
 		C26DC9051C59841700BB4DDA /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
-		C281C5D11C6D529100FEDAF7 /* SessionTextPopoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionTextPopoverViewController.swift; sourceTree = "<group>"; };
 		C281C60F1C74C7AA00FEDAF7 /* SwiftyTimer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyTimer.swift; sourceTree = "<group>"; };
 		C28B67E81C3F0BD700AC9193 /* EventData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventData.swift; sourceTree = "<group>"; };
 		C28B67F21C406BDE00AC9193 /* EventMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventMenuViewController.swift; sourceTree = "<group>"; };
@@ -178,7 +176,6 @@
 				C2B7EB411C7CD89900162AFB /* ReportABugViewController.swift */,
 				C2B7EB3F1C7B813100162AFB /* ContactUsViewController.swift */,
 				C2CFC3031C4576D00036E485 /* SettingsTableViewController.swift */,
-				C281C5D11C6D529100FEDAF7 /* SessionTextPopoverViewController.swift */,
 				C2F17FA71C6AAFCF0028062C /* Assets.xcassets */,
 				C28B67E81C3F0BD700AC9193 /* EventData.swift */,
 				C2A6950B1C35AC2900F6E0B8 /* AppData.swift */,
@@ -441,7 +438,6 @@
 				C234BD581C529597002E9814 /* SpeakerDetailsViewController.swift in Sources */,
 				C28B67E91C3F0BD700AC9193 /* EventData.swift in Sources */,
 				C2CFC3101C481EAB0036E485 /* MainMenuViewController.swift in Sources */,
-				C281C5D21C6D529100FEDAF7 /* SessionTextPopoverViewController.swift in Sources */,
 				C26DC9021C59785700BB4DDA /* ExhibitorTableViewController.swift in Sources */,
 				C21ECE2A1C5FB22A00689FDE /* AfilliateViewController.swift in Sources */,
 				C262CAD71C3DC55C005845AF /* ActivityIndicator.swift in Sources */,

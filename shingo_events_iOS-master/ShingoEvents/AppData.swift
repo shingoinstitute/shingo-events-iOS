@@ -363,7 +363,7 @@ public class AppData {
                 if item["Logo_Book_Cover__c"] != nil {
                     let image_url = item["Logo_Book_Cover__c"].string! as String
                     recipient.logo_book_cover_url = image_url
-                    recipient.getImage(image_url) {
+                    recipient.getRecipientImage(image_url) {
                         image in
                         recipient.logo_book_cover_image = image
                     }

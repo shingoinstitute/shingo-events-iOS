@@ -13,6 +13,13 @@ class ChallengerInfoViewController: UIViewController {
     @IBOutlet weak var logoImage: UIImageView!
     @IBOutlet weak var abstractTextField: UITextView!
     
+    let logoImage__c:UIImageView = {
+        let view = UIImageView()
+        view.backgroundColor = .grayColor()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     var recipient:Recipient!
     
     override func viewDidLoad() {
@@ -20,10 +27,22 @@ class ChallengerInfoViewController: UIViewController {
 
         abstractTextField.text = ""
         
-        if recipient.logo_book_cover_image != nil {
+        if recipient.logo_book_cover_image != nil
+        {
             logoImage.image = recipient.logo_book_cover_image
-        } else {
-            logoImage.image = UIImage(named: "shingo_icon")
+        }
+        else
+        {
+            logoImage.removeFromSuperview() // Why? Because screw you interface builder, that's why.
+            view.addSubview(logoImage__c)
+            logoImage__c.autoSetDimensionsToSize(CGSize(width: 200, height: 200))
+            logoImage__c.autoPinToTopLayoutGuideOfViewController(self, withInset: 8.0)
+            logoImage__c.autoPinEdgeToSuperviewEdge(.Left, withInset: 8.0)
+
+            abstractTextField.autoPinEdge(.Top, toEdge: .Bottom, ofView: logoImage__c, withOffset: 8.0)
+            
+            logoImage__c.image = UIImage(named: "logoComingSoon500x500")
+            
         }
         
         logoImage.image = recipient.logo_book_cover_image

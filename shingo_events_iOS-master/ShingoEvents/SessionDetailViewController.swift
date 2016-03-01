@@ -60,6 +60,7 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
     var textField:UITextView = {
         let view = UITextView.newAutoLayoutView()
         view.backgroundColor = .whiteColor()
+        view.editable = false
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

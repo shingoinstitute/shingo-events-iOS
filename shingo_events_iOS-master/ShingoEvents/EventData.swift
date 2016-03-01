@@ -102,6 +102,28 @@ public class Recipient: AppDataImage {
     var authors:String!
     var logo_book_cover_image:UIImage!
     var logo_book_cover_url:String!
+
+    func getRecipientImage(url:String?, callback: (image: UIImage?) -> Void) {
+        if url == nil {
+            print("WARNING! Null url string sent to function AppDataImage:getImage")
+            callback(image: nil)
+            return
+        }
+        print("Attempting to fetch image @func AppDataImage::getImage")
+        Alamofire.request(.GET, url!).responseImage {
+            response in
+            
+            print(response.response)
+            
+            if let image = response.result.value {
+                print("image downloaded: \(image.size.width)x\(image.size.height)")
+                callback(image: image)
+            } else {
+                print("ERROR! Image download failed | Request from \(url!)")
+                callback(image: nil)
+            }
+        }
+    }
     
 }
 
@@ -222,7 +244,7 @@ public class AppDataImage {
                 callback(image: image)
             } else {
                 print("ERROR! Image download failed | Request from \(url!)")
-                callback(image: UIImage(named: "shingo_icon"))
+                callback(image: UIImage(named: "shingo_icon_200x200"))
             }
         }
     }
