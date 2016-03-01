@@ -291,53 +291,29 @@ class EventMenuViewController: UIViewController {
     func didTapExhibitors(sender: AnyObject) {
         let activity = ActivityViewController(message: "Getting info")
         presentViewController(activity, animated: true, completion: nil)
-        
-        var imageFetchNotComplete = false
-        
-        // Super complicated way to calculate 2.0 seconds for a timeout timer
-        let stopTime:NSTimeInterval = abs(NSTimeIntervalSince1970.distanceTo(2.0)) - NSTimeIntervalSince1970
-        var counter = 0.0
-        var timer = NSTimer()
-        timer = NSTimer.every(0.1) {
-            
-            counter += timer.timeInterval
-            imageFetchNotComplete = false
-            for exhibitor in (self.appData.exhibitors)!
+
+        for exhibitor in self.appData.exhibitors
+        {
+            if exhibitor.logo_image == nil
             {
-                if exhibitor.logo_image == nil
-                {
-                    if exhibitor.logo_url != nil
-                    {
-                        print(exhibitor.logo_url)
-                    }
-                    else
-                    {
-                        print("NULL Exhibitor url found.")
-                    }
-                    imageFetchNotComplete = true
-                }
-            }
-            
-            // segues if imageFetchNotComplete is false (meaning all exhibitors have an image assigned)
-            // or if more than 2 seconds have elapsed. During the loop caused by this closure, async
-            // calls are working in the background that are attempting to fetch images for each exhibitor.
-            // If the http request for each exhibitor fails to return an image OR if more than 2 seconds
-            // have elapsed then their image will be assigned a placeholder image.
-            if !imageFetchNotComplete || counter > abs(stopTime) {
-                timer.invalidate()
-                
-                for exhibitor in (self.appData.exhibitors)!
-                {
-                    if exhibitor.logo_image == nil
-                    {
-                        exhibitor.logo_image = UIImage(named: "sponsor_banner_pl")
-                    }
-                }
-                self.dismissViewControllerAnimated(true, completion: nil)
-                self.performSegueWithIdentifier("ExhibitorsListView", sender: self)
+                exhibitor.logo_image = UIImage(named: "sponsor_banner_pl")
             }
         }
         
+        for (var i = 0; i < appData.exhibitors.count - 1; i++)
+        {
+            for (var j = 0; j < appData.exhibitors.count - i - 1; j++)
+            {
+                if appData.exhibitors[j].name > appData.exhibitors[j+1].name
+                {
+                    let temp = appData.exhibitors[j]
+                    appData.exhibitors[j] = appData.exhibitors[j+1]
+                    appData.exhibitors[j+1] = temp
+                }
+            }
+        }
+        
+        self.performSegueWithIdentifier("ExhibitorsListView", sender: self)
     }
     
     func didTapAffiliates(sender: AnyObject) {

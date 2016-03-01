@@ -31,9 +31,9 @@ public class AppData {
 //    var eventSessions:[EventSession]? = nil
     var upcomingEvents:[Event]!
     var event:Event!
-    var exhibitors:[Exhibitor]? = nil
-    var affiliates:[Affiliate]? = nil
-    var sponsors:[Sponsor]? = nil
+    var exhibitors:[Exhibitor]!
+    var affiliates:[Affiliate]!
+    var sponsors:[Sponsor]!
     var researchRecipients = [Recipient]()
     var shingoPrizeRecipients = [Recipient]()
     var silverRecipients = [Recipient]()

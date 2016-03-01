@@ -7,12 +7,14 @@
 //
 
 import UIKit
+import PureLayout
 
 class ExhibitorInfoViewController: UIViewController {
 
+//    @IBOutlet weak var scrollView: UITextView!
     @IBOutlet weak var exhibitorImage: UIImageView!
-
     @IBOutlet weak var descriptionTextField: UITextView!
+//    @IBOutlet weak var contentView: UIView!
     
     var exhibitor:Exhibitor!
     
@@ -24,6 +26,19 @@ class ExhibitorInfoViewController: UIViewController {
         if exhibitor.logo_image != nil
         {
             exhibitorImage.image = exhibitor.logo_image
+            
+            if exhibitorImage.image?.size.width >= view.frame.width * 0.9
+            {
+                exhibitorImage.autoSetDimension(.Height, toSize: 150.0)
+                exhibitorImage.autoSetDimension(.Width, toSize: view.frame.width - 16.0)
+            }
+
+            if exhibitorImage.image?.size.width < view.frame.width * 0.9
+            {
+                exhibitorImage.autoSetDimension(.Height, toSize: (exhibitorImage.image?.size.height)!)
+                exhibitorImage.autoSetDimension(.Width, toSize: (exhibitorImage.image?.size.width)!)
+            }
+            
         }
         else
         {
@@ -68,6 +83,9 @@ class ExhibitorInfoViewController: UIViewController {
         frame.size.height = descriptionTextField.contentSize.height
         descriptionTextField.frame = frame
         descriptionTextField.scrollEnabled = false
+
+        
+
     }
     
 
