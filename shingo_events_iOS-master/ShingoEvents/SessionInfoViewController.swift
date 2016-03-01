@@ -7,16 +7,17 @@
 //
 
 import UIKit
+import PureLayout
 
-class SessionSpeakerCell: UITableViewCell {
-    
-    @IBOutlet weak var speakerNameLabel: UILabel!
-    @IBOutlet weak var speakerImage: UIImageView!
-    var speaker:Speaker!
-    
-}
+//class SessionSpeakerCell: UITableViewCell {
+//    
+//    @IBOutlet weak var speakerNameLabel: UILabel!
+//    @IBOutlet weak var speakerImage: UIImageView!
+//    var speaker:Speaker!
+//    
+//}
 
-class SessionInfoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UIPopoverPresentationControllerDelegate {
+class SessionInfoViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var roomLabel: UILabel!
@@ -29,6 +30,7 @@ class SessionInfoViewController: UIViewController, UITableViewDelegate, UITableV
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         titleLabel.text = session.name
         roomLabel.text = "Room " + session.room
         abstractTextField.text = session.abstract
@@ -40,8 +42,13 @@ class SessionInfoViewController: UIViewController, UITableViewDelegate, UITableV
         expandButton.backgroundColor = UIColor(colorLiteralRed: 0.0/255.0, green: 47.0/255.0, blue: 86.0/255.0, alpha: 1.0)
         expandButton.setTitleColor(.whiteColor(), forState: UIControlState.Normal)
         expandButton.layer.cornerRadius = 3.0
+        
+        
+        
+        
     }
-
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -96,16 +103,16 @@ class SessionInfoViewController: UIViewController, UITableViewDelegate, UITableV
             dest_vc.speaker = self.dataToSend
         }
         
-        if segue.identifier == "showTextFieldPopover" {
-            let destination = segue.destinationViewController as! SessionTextPopoverViewController
-            destination.abstractText = abstractTextField.text
-            let controller = destination.popoverPresentationController
-            
-            if controller != nil
-            {
-                controller?.delegate = self
-            }
-        }
+//        if segue.identifier == "showTextFieldPopover" {
+//            let destination = segue.destinationViewController as! SessionTextPopoverViewController
+//            destination.abstractText = abstractTextField.text
+//            let controller = destination.popoverPresentationController
+//            
+//            if controller != nil
+//            {
+//                controller?.delegate = self
+//            }
+//        }
     }
 
     func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {

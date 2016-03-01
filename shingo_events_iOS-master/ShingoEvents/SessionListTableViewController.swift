@@ -32,7 +32,7 @@ class SessionListTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let cell = tableView.cellForRowAtIndexPath(indexPath) as! SessionTableViewCell
         dataToSend = cell.session
-        performSegueWithIdentifier("SessionInfoView", sender: self)
+        performSegueWithIdentifier("SessionDetailView", sender: self)
     }
     
     // MARK: - Table view data source
@@ -93,8 +93,8 @@ class SessionListTableViewController: UITableViewController {
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
 
-        if segue.identifier == "SessionInfoView" {
-            let dest_vc = segue.destinationViewController as! SessionInfoViewController
+        if segue.identifier == "SessionDetailView" {
+            let dest_vc = segue.destinationViewController as! SessionDetailViewController
             if dest_vc.session == nil {
                 dest_vc.session = dataToSend
                 dest_vc.speakers = self.event.speakers

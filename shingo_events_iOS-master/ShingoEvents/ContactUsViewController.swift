@@ -69,8 +69,12 @@ class ContactUsViewController: UIViewController, UITextFieldDelegate, UITextView
         {
             textView.text = ""
             textView.textColor = .blackColor()
+            let size:CGSize = textView.text.sizeWithAttributes([NSFontAttributeName: UIFont.systemFontOfSize(12.0)])
+            print(size)
         }
     }
+    
+    
     
     @IBAction func sendMessage(sender: AnyObject) {
         if !messageSent

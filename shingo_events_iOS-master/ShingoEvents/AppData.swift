@@ -81,7 +81,7 @@ public class AppData {
                         upcoming_event.venueMaps = [VenueMap]()
                         for map in item["Venue_Maps"].array! {
                             
-                            // FYI: This class constructor makes an http request to get the venue picture when initialized
+                            // an FYI; This class constructor makes an http request to get the venue picture when initialized
                             let venueMap = VenueMap(
                                 name: map["name"].string! as String,
                                 url: map["url"].string! as String
