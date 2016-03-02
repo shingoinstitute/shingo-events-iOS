@@ -15,7 +15,7 @@ class ChallengerInfoViewController: UIViewController {
     
     let logoImage__c:UIImageView = {
         let view = UIImageView()
-        view.backgroundColor = .grayColor()
+        view.backgroundColor = .clearColor()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -30,6 +30,9 @@ class ChallengerInfoViewController: UIViewController {
         if recipient.logo_book_cover_image != nil
         {
             logoImage.image = recipient.logo_book_cover_image
+            logoImage.layer.borderColor = UIColor.grayColor().CGColor
+            logoImage.layer.borderWidth = 1.0
+            logoImage.layer.cornerRadius = 1.0
         }
         else
         {
@@ -42,12 +45,13 @@ class ChallengerInfoViewController: UIViewController {
             abstractTextField.autoPinEdge(.Top, toEdge: .Bottom, ofView: logoImage__c, withOffset: 8.0)
             
             logoImage__c.image = UIImage(named: "logoComingSoon500x500")
-            
+
+            logoImage__c.layer.borderColor = UIColor.grayColor().CGColor
+            logoImage__c.layer.borderWidth = 1.0
+            logoImage__c.layer.cornerRadius = 4.0
         }
         
-        logoImage.image = recipient.logo_book_cover_image
-        logoImage.layer.borderColor = UIColor.blackColor().CGColor
-        logoImage.layer.cornerRadius = 5.0
+
         
         if recipient.name != nil && recipient.award != nil {
             abstractTextField.text = ("Presenting ") + recipient.name
