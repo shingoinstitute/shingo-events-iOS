@@ -14,6 +14,7 @@
 		C234BD561C5293CF002E9814 /* SpeakerListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C234BD551C5293CF002E9814 /* SpeakerListTableViewController.swift */; };
 		C234BD581C529597002E9814 /* SpeakerDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C234BD571C529597002E9814 /* SpeakerDetailsViewController.swift */; };
 		C2494E241C88BD6A00E2969D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C2494E231C88BD6A00E2969D /* LaunchScreen.storyboard */; };
+		C2494E261C88E4F600E2969D /* ShingoIconImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2494E251C88E4F600E2969D /* ShingoIconImages.swift */; };
 		C262CA8D1C3B1C29005845AF /* EventsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C262CA8C1C3B1C29005845AF /* EventsTableViewController.swift */; };
 		C262CAD71C3DC55C005845AF /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C262CAD61C3DC55C005845AF /* ActivityIndicator.swift */; };
 		C262DCBA1C861BA900712D4E /* SessionDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C262DCB91C861BA900712D4E /* SessionDetailViewController.swift */; };
@@ -76,6 +77,7 @@
 		C234BD551C5293CF002E9814 /* SpeakerListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeakerListTableViewController.swift; sourceTree = "<group>"; };
 		C234BD571C529597002E9814 /* SpeakerDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeakerDetailsViewController.swift; sourceTree = "<group>"; };
 		C2494E231C88BD6A00E2969D /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		C2494E251C88E4F600E2969D /* ShingoIconImages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShingoIconImages.swift; sourceTree = "<group>"; };
 		C262CA8C1C3B1C29005845AF /* EventsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsTableViewController.swift; sourceTree = "<group>"; };
 		C262CAD61C3DC55C005845AF /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		C262DCB91C861BA900712D4E /* SessionDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionDetailViewController.swift; sourceTree = "<group>"; };
@@ -172,6 +174,7 @@
 				C2A6950C1C35AC2900F6E0B8 /* Info.plist */,
 				C2494E231C88BD6A00E2969D /* LaunchScreen.storyboard */,
 				C2A695081C35AC2900F6E0B8 /* AppDelegate.swift */,
+				C2494E251C88E4F600E2969D /* ShingoIconImages.swift */,
 				C2A695231C35E30F00F6E0B8 /* SwiftyJSON.swift */,
 				C281C60F1C74C7AA00FEDAF7 /* SwiftyTimer.swift */,
 				C262CAD61C3DC55C005845AF /* ActivityIndicator.swift */,
@@ -445,6 +448,7 @@
 				C26DC9021C59785700BB4DDA /* ExhibitorTableViewController.swift in Sources */,
 				C21ECE2A1C5FB22A00689FDE /* AfilliateViewController.swift in Sources */,
 				C262CAD71C3DC55C005845AF /* ActivityIndicator.swift in Sources */,
+				C2494E261C88E4F600E2969D /* ShingoIconImages.swift in Sources */,
 				C2986DC41C65136600ADCF40 /* ShingoModelViewController.swift in Sources */,
 				C2A695241C35E30F00F6E0B8 /* SwiftyJSON.swift in Sources */,
 				C264CCB41C57ECA7005CDB11 /* RecipientsTableViewController.swift in Sources */,

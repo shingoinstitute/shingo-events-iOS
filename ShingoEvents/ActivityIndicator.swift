@@ -42,7 +42,7 @@ private class ActivityView: UIView {
     init() {
         super.init(frame: CGRectZero)
         backgroundColor = UIColor.blackColor()
-        backgroundImage.image = UIImage(named: "shingo_icon_skinny")
+        backgroundImage.image = ShingoIconImages().getShingoIconForDevice()
         contentView.backgroundColor = UIColor(white: 0.0, alpha: 0.5)
         contentView.layer.cornerRadius = 12.0
         
