@@ -172,13 +172,13 @@
 			isa = PBXGroup;
 			children = (
 				C2A6950C1C35AC2900F6E0B8 /* Info.plist */,
-				C2494E231C88BD6A00E2969D /* LaunchScreen.storyboard */,
 				C2A695081C35AC2900F6E0B8 /* AppDelegate.swift */,
 				C2494E251C88E4F600E2969D /* ShingoIconImages.swift */,
 				C2A695231C35E30F00F6E0B8 /* SwiftyJSON.swift */,
 				C281C60F1C74C7AA00FEDAF7 /* SwiftyTimer.swift */,
 				C262CAD61C3DC55C005845AF /* ActivityIndicator.swift */,
 				C2CFC3171C4954C20036E485 /* Main.storyboard */,
+				C2494E231C88BD6A00E2969D /* LaunchScreen.storyboard */,
 				C2B7EB411C7CD89900162AFB /* ReportABugViewController.swift */,
 				C2B7EB3F1C7B813100162AFB /* ContactUsViewController.swift */,
 				C2CFC3031C4576D00036E485 /* SettingsTableViewController.swift */,

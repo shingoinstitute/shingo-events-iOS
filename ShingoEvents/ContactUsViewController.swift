@@ -21,7 +21,7 @@ class ContactUsViewController: UIViewController, UITextFieldDelegate, UITextView
 
     var backgroundImage:UIImageView = {
         let view = UIImageView.newAutoLayoutView()
-        view.image = UIImage(named: "shingo_icon_skinny")
+        view.image = ShingoIconImages().getShingoIconForDevice()
         return view
     }()
 
@@ -30,8 +30,10 @@ class ContactUsViewController: UIViewController, UITextFieldDelegate, UITextView
         super.viewDidLoad()
 
         view.addSubview(backgroundImage)
-        backgroundImage.autoSetDimensionsToSize(CGSize(width: view.frame.width, height: view.frame.height))
-        backgroundImage.autoPinEdgesToSuperviewEdges()
+        backgroundImage.autoPinToTopLayoutGuideOfViewController(self, withInset: 0)
+        backgroundImage.autoPinEdgeToSuperviewEdge(.Right)
+        backgroundImage.autoPinEdgeToSuperviewEdge(.Left)
+        backgroundImage.autoPinEdgeToSuperviewEdge(.Bottom)
         
         messageTF.layer.borderColor = UIColor.lightGrayColor().CGColor
         messageTF.layer.borderWidth = 1.0

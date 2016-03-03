@@ -32,9 +32,11 @@ class ReportABugViewController: UIViewController, UITextViewDelegate {
         
         let backgroundImage = UIImageView.newAutoLayoutView()
         view.addSubview(backgroundImage)
-        backgroundImage.image = UIImage(named: "shingo_icon_skinny")
-        backgroundImage.autoSetDimensionsToSize(CGSize(width: self.view.frame.width, height: self.view.frame.height))
-        backgroundImage.autoPinEdgesToSuperviewEdges()
+        backgroundImage.image = ShingoIconImages().getShingoIconForDevice()
+        backgroundImage.autoPinToTopLayoutGuideOfViewController(self, withInset: 0)
+        backgroundImage.autoPinEdgeToSuperviewEdge(.Left)
+        backgroundImage.autoPinEdgeToSuperviewEdge(.Right)
+        backgroundImage.autoPinEdgeToSuperviewEdge(.Bottom)
         
         messageTextField.layer.borderColor = UIColor.lightGrayColor().CGColor
         messageTextField.layer.borderWidth = 1.0

@@ -83,13 +83,7 @@ class EventMenuViewController: UIViewController {
     
     var backgroundImage: UIImageView = {
         let view = UIImageView.newAutoLayoutView()
-        
-        if UIDevice.currentDevice().model == "iPad" || UIDevice.currentDevice().model == "Simulator"{
-            view.image = UIImage(named: "shingo_icon")
-        } else {
-            view.image = UIImage(named: "shingo_icon_skinny")
-        }
-
+        view.image = ShingoIconImages().getShingoIconForDevice()
         return view
     }()
     
@@ -97,6 +91,8 @@ class EventMenuViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        contentView.backgroundColor = .clearColor()
         
         eventNameLabel.text = appData.event.name
         contentView.addSubview(eventNameLabel)
@@ -125,11 +121,12 @@ class EventMenuViewController: UIViewController {
             button.autoSetDimension(.Width, toSize: 110)
         }
         
-        let backgroundImage = UIImageView()
-        backgroundImage.image = UIImage(named: "shingo_icon_skinny")
-        
         contentView.addSubview(backgroundImage)
-        backgroundImage.autoPinEdgesToSuperviewEdges()
+        
+        backgroundImage.autoPinToTopLayoutGuideOfViewController(self, withInset: 0)
+        backgroundImage.autoPinEdge(.Left, toEdge: .Left, ofView: view)
+        backgroundImage.autoPinEdge(.Right, toEdge: .Right, ofView: view)
+        backgroundImage.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: view)
         
         contentView.bringSubviewToFront(eventNameLabel)
         contentView.bringSubviewToFront(scheduleButton)
@@ -289,9 +286,6 @@ class EventMenuViewController: UIViewController {
     }
     
     func didTapExhibitors(sender: AnyObject) {
-        let activity = ActivityViewController(message: "Getting info")
-        presentViewController(activity, animated: true, completion: nil)
-
         for exhibitor in self.appData.exhibitors
         {
             if exhibitor.logo_image == nil

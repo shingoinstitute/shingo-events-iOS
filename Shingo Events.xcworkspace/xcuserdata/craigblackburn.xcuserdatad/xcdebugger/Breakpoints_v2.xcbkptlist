@@ -83,11 +83,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShingoEvents/ContactUsViewController.swift"
-            timestampString = "477942469.510151"
+            timestampString = "478739644.983332"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "67"
-            endingLineNumber = "67"
+            startingLineNumber = "69"
+            endingLineNumber = "69"
             landmarkName = "textViewDidBeginEditing(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -99,11 +99,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShingoEvents/ContactUsViewController.swift"
-            timestampString = "477942469.510151"
+            timestampString = "478739644.983332"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "62"
-            endingLineNumber = "62"
+            startingLineNumber = "64"
+            endingLineNumber = "64"
             landmarkName = "textFieldShouldReturn(_:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -115,11 +115,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShingoEvents/ContactUsViewController.swift"
-            timestampString = "477942469.510151"
+            timestampString = "478739644.983332"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "54"
-            endingLineNumber = "54"
+            startingLineNumber = "56"
+            endingLineNumber = "56"
             landmarkName = "textView(_:shouldChangeTextInRange:replacementText:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -131,13 +131,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShingoEvents/ContactUsViewController.swift"
-            timestampString = "477942525.316612"
+            timestampString = "478739644.983332"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "78"
-            endingLineNumber = "78"
-            landmarkName = "sendMessage(_:)"
-            landmarkType = "5">
+            startingLineNumber = "80"
+            endingLineNumber = "80"
+            landmarkName = "ContactUsViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -163,11 +163,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShingoEvents/EventMenuViewController.swift"
-            timestampString = "478453261.869336"
+            timestampString = "478740550.37434"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "87"
-            endingLineNumber = "87"
+            startingLineNumber = "86"
+            endingLineNumber = "86"
             landmarkName = "backgroundImage"
             landmarkType = "19">
          </BreakpointContent>

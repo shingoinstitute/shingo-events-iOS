@@ -65,9 +65,6 @@ class ExhibitorTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Dismisses loading screen from previous view
-        self.dismissViewControllerAnimated(true, completion: nil)
-        
         tableView.registerClass(ExhibitorCell.self, forCellReuseIdentifier: "ExhibitorCell")
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 150.0

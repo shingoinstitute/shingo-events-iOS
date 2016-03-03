@@ -32,23 +32,7 @@ class MainMenuViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if self.appData == nil
-        {
-            self.presentViewController(self.activitiyViewController, animated: true, completion: nil)
-            self.activitiyViewController.updateProgress(0.1)
-            
-
-            Alamofire.request(.GET, "https://shingo-events.herokuapp.com/api").response // Poke the server
-            {
-                _ in
-                self.activitiyViewController.updateProgress(0.5)
-                self.appData = AppData()
-                self.appData.getUpcomingEvents() {
-                    self.activitiyViewController.updateProgress(1.0)
-                    self.dismissViewControllerAnimated(true, completion: nil)
-                }
-            }
-        }
+        loadUpcomingEvents()
 
         menuBackgroundImage.image = shingoImage.getShingoIconForDevice()
         view.addSubview(menuBackgroundImage)
@@ -81,11 +65,7 @@ class MainMenuViewController: UIViewController {
     
     @IBAction func reloadEventData(sender: AnyObject) {
         appData = nil
-        self.presentViewController(activitiyViewController, animated: true, completion: nil)
-        appData = AppData()
-        appData.getUpcomingEvents() {
-            self.dismissViewControllerAnimated(true, completion: nil)
-        }
+        loadUpcomingEvents()
     }
     @IBAction func didTapShingoModel(sender: AnyObject) {
         self.performSegueWithIdentifier("ShingoModel", sender: self)
@@ -98,6 +78,26 @@ class MainMenuViewController: UIViewController {
             dest_vc.appData = self.appData
         }
         
+    }
+    
+    func loadUpcomingEvents() {
+        if self.appData == nil
+        {
+            self.presentViewController(self.activitiyViewController, animated: true, completion: nil)
+            self.activitiyViewController.updateProgress(0.1)
+            
+            
+            Alamofire.request(.GET, "https://shingo-events.herokuapp.com/api").response // Poke the server
+                {
+                    _ in
+                    self.activitiyViewController.updateProgress(0.5)
+                    self.appData = AppData()
+                    self.appData.getUpcomingEvents() {
+                        self.activitiyViewController.updateProgress(1.0)
+                        self.dismissViewControllerAnimated(true, completion: nil)
+                    }
+            }
+        }
     }
     
 }
