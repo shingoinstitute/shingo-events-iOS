@@ -7,8 +7,4 @@
 
 <h4><strong>App Structure</strong><h4>
 
-This project is still <strong>very</strong> much under development. A final product has not yet been released. See the inline comments for help trying to understand the code.
-
-This app uses the Alamofire and AlamofireImage packages to retrieve data from our back-end server, and uses SwiftyJSON to parse the json response.
-
-Nearly all of the data and API call functions are handled within the AppData class. Once you are familiar with using Alamofire, the rest of the code should hopefully seem pretty straightforward.
+<p>This repository holds the code for the Shingo Events iOS app for the <i>Shingo Institute</i> at Utah State University. This branch contains the most current and stable release of the app.</p>
