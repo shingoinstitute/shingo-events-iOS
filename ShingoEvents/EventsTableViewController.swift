@@ -23,6 +23,9 @@ class EventsTableViewController: UITableViewController {
     var cell_index_path:NSIndexPath!
     var number_of_async_tasks = 7
     var async_tasks_completed = 0
+    var progress:Float = 0
+    
+    var activityViewController:ActivityViewController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,6 +52,14 @@ class EventsTableViewController: UITableViewController {
             cell.event = self.appData.event
             self.performSegueWithIdentifier("EventMenu", sender: self)
             self.dismissViewControllerAnimated(true, completion: nil)
+        }
+        else
+        {
+            if activityViewController != nil
+            {
+                progress += Float(1.0) / Float(number_of_async_tasks + 1)
+                activityViewController.updateProgress(progress)
+            }
         }
     }
     
@@ -94,8 +105,8 @@ class EventsTableViewController: UITableViewController {
 
         if cell.event.eventSessions == nil
         {
-            let activitiyViewController = ActivityViewController(message: "Loading Conference Data...")
-            presentViewController(activitiyViewController, animated: true, completion: nil)
+            activityViewController = ActivityViewController(message: "Loading Conference Data...")
+            presentViewController(activityViewController, animated: true, completion: nil)
             appData.getEventSessions() { // appData.eventSessions should be populated before calling other tasks
                 self.asyncTaskDidComplete()
                 self.appData.getAgenda() {

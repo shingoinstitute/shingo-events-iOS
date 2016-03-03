@@ -9,6 +9,7 @@
 import UIKit
 import Crashlytics
 import Fabric
+import Alamofire
 
 
 class MainMenuViewController: UIViewController {
@@ -29,15 +30,27 @@ class MainMenuViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        if appData == nil
+
+        if self.appData == nil
         {
-            appData = AppData()
-            self.presentViewController(activitiyViewController, animated: true, completion: nil)
-            appData.getUpcomingEvents() {
-                self.dismissViewControllerAnimated(true, completion: nil)
+            self.presentViewController(self.activitiyViewController, animated: true, completion: nil)
+            self.activitiyViewController.updateProgress(0.1)
+            
+
+            Alamofire.request(.GET, "https://shingo-events.herokuapp.com/api").response // Poke the server
+            {
+                _ in
+                self.activitiyViewController.updateProgress(0.5)
+                self.appData = AppData()
+                self.appData.getUpcomingEvents() {
+                    self.activitiyViewController.updateProgress(1.0)
+                    self.dismissViewControllerAnimated(true, completion: nil)
+                }
             }
         }
+
+        
+
         
         menuBackgroundImage.image = UIImage(named: "shingo_icon_skinny")
         view.addSubview(menuBackgroundImage)
