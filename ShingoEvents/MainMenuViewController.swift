@@ -18,6 +18,7 @@ class MainMenuViewController: UIViewController {
     @IBOutlet weak var shingoModelBtn: UIButton!
     @IBOutlet weak var settingsBtn: UIButton!
     
+    let shingoImage = ShingoIconImages()
     
     var menuBackgroundImage: UIImageView = {
         let view = UIImageView()
@@ -49,10 +50,7 @@ class MainMenuViewController: UIViewController {
             }
         }
 
-        
-
-        
-        menuBackgroundImage.image = UIImage(named: "shingo_icon_skinny")
+        menuBackgroundImage.image = shingoImage.getShingoIconForDevice()
         view.addSubview(menuBackgroundImage)
         
         menuBackgroundImage.autoPinToTopLayoutGuideOfViewController(self, withInset: 0)
