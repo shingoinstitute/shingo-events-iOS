@@ -5,6 +5,4 @@
 
 <p>If you open the project from the correct project folder and it still does not compile, make sure you have cocoapods installed on your system, and in a terminal window move to the working directory you stored the project under and type "pod install".</p>
 
-<h4><strong>App Structure</strong><h4>
-
 <p>This repository holds the code for the Shingo Events iOS app for the <i>Shingo Institute</i> at Utah State University. This branch contains the most current and stable release of the app.</p>
