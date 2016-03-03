@@ -87,7 +87,7 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
         
         // Load data
         titleLabel.text = session.name
-        roomLabel.text = session.room
+        roomLabel.text = "Location: " + session.room
         
         if session.abstract == ""
         {

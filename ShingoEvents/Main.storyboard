@@ -8,7 +8,7 @@
         <!--Shingo Model-->
         <scene sceneID="8eC-wj-x99">
             <objects>
-                <viewController id="CiA-zN-tV3" sceneMemberID="viewController">
+                <viewController id="CiA-zN-tV3" customClass="ShingoModelViewController" customModule="Shingo_Events" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="inV-Ke-WnA"/>
                         <viewControllerLayoutGuide type="bottom" id="BnI-e5-q5c"/>
@@ -16,43 +16,7 @@
                     <view key="view" contentMode="scaleToFill" id="dLZ-iL-a0P">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gmg-vl-cX7">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FP7-VA-vXe">
-                                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                                        <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="shingoModel" translatesAutoresizingMaskIntoConstraints="NO" id="pxP-dt-gZw">
-                                                <rect key="frame" x="8" y="8" width="584" height="584"/>
-                                            </imageView>
-                                        </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstItem="pxP-dt-gZw" firstAttribute="top" secondItem="FP7-VA-vXe" secondAttribute="topMargin" id="duX-FN-CJF"/>
-                                            <constraint firstItem="pxP-dt-gZw" firstAttribute="leading" secondItem="FP7-VA-vXe" secondAttribute="leadingMargin" id="ed8-Lo-SmE"/>
-                                            <constraint firstAttribute="height" constant="600" id="i7c-rR-du6"/>
-                                            <constraint firstItem="pxP-dt-gZw" firstAttribute="bottom" secondItem="FP7-VA-vXe" secondAttribute="bottomMargin" id="kks-UJ-3gx"/>
-                                            <constraint firstItem="pxP-dt-gZw" firstAttribute="trailing" secondItem="FP7-VA-vXe" secondAttribute="trailingMargin" id="ooR-2P-8fn"/>
-                                        </constraints>
-                                    </view>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstItem="FP7-VA-vXe" firstAttribute="top" secondItem="Gmg-vl-cX7" secondAttribute="top" id="RwK-Qg-p8L"/>
-                                    <constraint firstAttribute="bottom" secondItem="FP7-VA-vXe" secondAttribute="bottom" id="WMF-1c-H77"/>
-                                    <constraint firstAttribute="trailing" secondItem="FP7-VA-vXe" secondAttribute="trailing" id="iYI-Xz-5Rn"/>
-                                    <constraint firstItem="FP7-VA-vXe" firstAttribute="centerX" secondItem="Gmg-vl-cX7" secondAttribute="centerX" id="ozE-YM-00N"/>
-                                    <constraint firstItem="FP7-VA-vXe" firstAttribute="leading" secondItem="Gmg-vl-cX7" secondAttribute="leading" id="ugZ-AM-QPp"/>
-                                </constraints>
-                            </scrollView>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstAttribute="bottom" secondItem="Gmg-vl-cX7" secondAttribute="bottom" id="6Qg-u6-BFQ"/>
-                            <constraint firstItem="Gmg-vl-cX7" firstAttribute="top" secondItem="dLZ-iL-a0P" secondAttribute="top" id="C5V-GO-pbW"/>
-                            <constraint firstAttribute="trailing" secondItem="Gmg-vl-cX7" secondAttribute="trailing" id="bWT-dk-11f"/>
-                            <constraint firstItem="Gmg-vl-cX7" firstAttribute="leading" secondItem="dLZ-iL-a0P" secondAttribute="leading" id="zyL-DR-ywP"/>
-                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Shingo Model" id="A8c-P7-oao"/>
                 </viewController>
@@ -73,19 +37,19 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="vlY-KD-jc9">
-                                <rect key="frame" x="251" y="406" width="98" height="78"/>
+                                <rect key="frame" x="252" y="406" width="96" height="78"/>
                                 <color key="backgroundColor" red="0.0" green="0.13725490196078433" blue="0.24705882352941178" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="78" id="H6t-h3-1T6"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
-                                <state key="normal" title="Settings">
+                                <state key="normal" title="Support">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
-                                    <segue destination="6xI-ZT-ju6" kind="show" id="5CL-2w-gQ2"/>
+                                    <segue destination="6xI-ZT-ju6" kind="show" identifier="MainMenu" id="5CL-2w-gQ2"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="0qP-cY-Jaf">
@@ -117,37 +81,35 @@
                                     <color key="titleShadowColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
-                                    <action selector="didTapShingoModel:" destination="ZAg-ba-yVl" eventType="touchUpInside" id="5T1-SJ-0AU"/>
-                                    <segue destination="CiA-zN-tV3" kind="show" id="KNs-cU-EgX"/>
+                                    <action selector="didTapShingoModel:" destination="ZAg-ba-yVl" eventType="touchUpInside" id="tGU-wr-Rw7"/>
                                 </connections>
                             </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="das-eT-avZ">
-                                <rect key="frame" x="0.0" y="64" width="600" height="492"/>
-                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="das-eT-avZ" firstAttribute="leading" secondItem="5Qf-h3-9wY" secondAttribute="leading" id="2tZ-VI-VjH"/>
                             <constraint firstItem="vlY-KD-jc9" firstAttribute="top" secondItem="tak-ux-Hkh" secondAttribute="bottom" constant="48" id="BTE-Ic-erF"/>
-                            <constraint firstItem="das-eT-avZ" firstAttribute="bottom" secondItem="qJq-jL-J1z" secondAttribute="top" id="PoP-KY-LSu"/>
-                            <constraint firstItem="das-eT-avZ" firstAttribute="centerX" secondItem="tak-ux-Hkh" secondAttribute="centerX" id="Qxt-8e-WPq"/>
                             <constraint firstItem="tak-ux-Hkh" firstAttribute="centerX" secondItem="5Qf-h3-9wY" secondAttribute="centerX" id="ayU-aT-swA"/>
                             <constraint firstItem="0qP-cY-Jaf" firstAttribute="centerX" secondItem="5Qf-h3-9wY" secondAttribute="centerX" id="c6M-qv-KOR"/>
                             <constraint firstItem="tak-ux-Hkh" firstAttribute="centerY" secondItem="5Qf-h3-9wY" secondAttribute="centerY" constant="19" id="gey-K4-ff9"/>
                             <constraint firstItem="vlY-KD-jc9" firstAttribute="centerX" secondItem="5Qf-h3-9wY" secondAttribute="centerX" id="jZs-aR-Jj2"/>
-                            <constraint firstItem="das-eT-avZ" firstAttribute="top" secondItem="zEo-yN-E71" secondAttribute="bottom" id="rDE-59-fOJ"/>
                             <constraint firstItem="tak-ux-Hkh" firstAttribute="top" secondItem="0qP-cY-Jaf" secondAttribute="bottom" constant="47" id="xL2-FN-Asy"/>
                         </constraints>
                     </view>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" id="ymz-lO-ffe"/>
+                    <navigationItem key="navigationItem" id="ymz-lO-ffe">
+                        <barButtonItem key="rightBarButtonItem" title="Reload Event Data" id="DDw-6N-7JR">
+                            <connections>
+                                <action selector="reloadEventData:" destination="ZAg-ba-yVl" id="nCS-eX-K3Z"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="eventsBtn" destination="0qP-cY-Jaf" id="8X9-nM-8gE"/>
-                        <outlet property="menuBackgroundImage" destination="das-eT-avZ" id="aAa-De-UHf"/>
                         <outlet property="settingsBtn" destination="vlY-KD-jc9" id="i0b-nH-Xlw"/>
                         <outlet property="shingoModelBtn" destination="tak-ux-Hkh" id="gGT-8J-pBs"/>
                         <segue destination="3gh-6S-bFF" kind="show" identifier="EventsView" id="iHG-N7-94G"/>
+                        <segue destination="CiA-zN-tV3" kind="show" identifier="ShingoModel" id="CSJ-A0-Grq"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vZn-rg-JCP" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -292,7 +254,7 @@
             </objects>
             <point key="canvasLocation" x="26" y="120"/>
         </scene>
-        <!--Settings-->
+        <!--Support-->
         <scene sceneID="B0u-1M-pZP">
             <objects>
                 <tableViewController id="6xI-ZT-ju6" customClass="SettingsTableViewController" customModule="Shingo_Events" customModuleProvider="target" sceneMemberID="viewController">
@@ -382,35 +344,7 @@
                                 </cells>
                             </tableViewSection>
                             <tableViewSection headerTitle="" id="h2r-ED-5Qz">
-                                <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="6My-E9-Awt">
-                                        <rect key="frame" x="0.0" y="333" width="600" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="6My-E9-Awt" id="rlf-Wq-YXL">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="o97-7k-CXQ">
-                                                    <rect key="frame" x="216" y="0.0" width="169" height="43"/>
-                                                    <state key="normal" title="Reload upcoming events"/>
-                                                    <connections>
-                                                        <action selector="didTapReloadEvents:" destination="6xI-ZT-ju6" eventType="touchUpInside" id="XTf-fX-6f6"/>
-                                                    </connections>
-                                                </button>
-                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="m6N-RP-Ts4">
-                                                    <rect key="frame" x="393" y="12" width="20" height="20"/>
-                                                </activityIndicatorView>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="o97-7k-CXQ" firstAttribute="centerY" secondItem="m6N-RP-Ts4" secondAttribute="centerY" id="3di-e6-VRG"/>
-                                                <constraint firstItem="o97-7k-CXQ" firstAttribute="top" secondItem="rlf-Wq-YXL" secondAttribute="top" id="4pL-3b-P2v"/>
-                                                <constraint firstItem="m6N-RP-Ts4" firstAttribute="leading" secondItem="o97-7k-CXQ" secondAttribute="trailing" constant="8" id="6XN-2k-JGN"/>
-                                                <constraint firstAttribute="bottom" secondItem="o97-7k-CXQ" secondAttribute="bottom" id="olH-F8-B2R"/>
-                                                <constraint firstItem="o97-7k-CXQ" firstAttribute="centerX" secondItem="rlf-Wq-YXL" secondAttribute="centerX" id="zLE-rG-0Hj"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </cells>
+                                <cells/>
                             </tableViewSection>
                         </sections>
                         <connections>
@@ -418,12 +352,9 @@
                             <outlet property="delegate" destination="6xI-ZT-ju6" id="KeU-Pm-YUq"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Settings" id="QlB-E6-WPe">
+                    <navigationItem key="navigationItem" title="Support" id="QlB-E6-WPe">
                         <barButtonItem key="backBarButtonItem" title="Back" id="DIj-sQ-sWx"/>
                     </navigationItem>
-                    <connections>
-                        <outlet property="activityIndicator" destination="m6N-RP-Ts4" id="1IS-CP-YDW"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sw1-Kr-d3H" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1430,7 +1361,6 @@
     <resources>
         <image name="100x100PL" width="100" height="100"/>
         <image name="200x200PL" width="200" height="200"/>
-        <image name="shingoModel" width="400" height="607"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="eVQ-Ri-Rbe"/>

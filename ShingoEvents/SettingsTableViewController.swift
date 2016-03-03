@@ -53,17 +53,11 @@ public extension UIDevice {
 
 class SettingsTableViewController: UITableViewController {
 
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     var dataToSend:AppData!
     var buttonPushedString:String!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        activityIndicator.stopAnimating()
-        activityIndicator.hidesWhenStopped = true
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
     }
 
     override func canPerformUnwindSegueAction(action: Selector, fromViewController: UIViewController, withSender sender: AnyObject) -> Bool {
@@ -83,22 +77,11 @@ class SettingsTableViewController: UITableViewController {
     }
 
     @IBAction func didTapLeaveSuggestion(sender: AnyObject) {
-        buttonPushedString = "Leave Feedback"
+        buttonPushedString = "Leave a suggestion"
     }
     
-    @IBAction func didTapReloadEvents(sender: AnyObject) {
-        activityIndicator.startAnimating()
-        dataToSend = AppData()
-        dataToSend.getUpcomingEvents() {
-            self.activityIndicator.stopAnimating()
-        }
-    }
-
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if dataToSend != nil {
-            let destination = segue.destinationViewController as? MainMenuViewController
-            destination?.appData = dataToSend
-        }
         
         if segue.identifier == "reportABug" || segue.identifier == "feedback"
         {
