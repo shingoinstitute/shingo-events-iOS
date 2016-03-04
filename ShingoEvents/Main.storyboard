@@ -46,7 +46,7 @@
                                 <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
                                 <state key="normal" title="Support"/>
                                 <connections>
-                                    <segue destination="6xI-ZT-ju6" kind="show" identifier="MainMenu" id="5CL-2w-gQ2"/>
+                                    <action selector="didTapSupport:" destination="ZAg-ba-yVl" eventType="touchUpInside" id="Hab-Jg-kTb"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="0qP-cY-Jaf">
@@ -101,6 +101,7 @@
                         <outlet property="shingoModelBtn" destination="tak-ux-Hkh" id="gGT-8J-pBs"/>
                         <segue destination="3gh-6S-bFF" kind="show" identifier="EventsView" id="iHG-N7-94G"/>
                         <segue destination="CiA-zN-tV3" kind="show" identifier="ShingoModel" id="CSJ-A0-Grq"/>
+                        <segue destination="6xI-ZT-ju6" kind="show" identifier="Support" id="wbV-gV-Csy"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vZn-rg-JCP" userLabel="First Responder" sceneMemberID="firstResponder"/>

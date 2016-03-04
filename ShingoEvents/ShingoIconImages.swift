@@ -37,6 +37,7 @@ public class ShingoIconImages: UIImage {
             "iPhone 5c", "iPhone 5s":  return self.iPhone5!
             case "iPhone 4",
             "iPhone 4s":               return self.iPhone4!
+            case "Simulator":          return self.iPadPro!
         default:
             return UIImage()
         }

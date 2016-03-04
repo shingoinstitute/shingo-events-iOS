@@ -84,8 +84,26 @@ class MainMenuViewController: UIViewController {
             (button as! UIButton).backgroundColor = UIColor(white: 0.9, alpha: 0.9)
         }
         
-        loadUpcomingEvents()
-
+        if Reachability.isConnectedToNetwork() == true
+        {
+            loadUpcomingEvents()
+        }
+        else
+        {
+            displayInternetAlert()
+        }
+    }
+    
+    func displayInternetAlert() {
+        let alert = UIAlertController(
+            title: "No Internet Connection",
+            message: "Your device must be connected to the internet to use this app.",
+            preferredStyle: UIAlertControllerStyle.Alert)
+        let action = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel) { _ in
+            self.animateLayout()
+        }
+        alert.addAction(action)
+        self.presentViewController(alert, animated: true, completion: nil)
     }
     
     func animateLayout() {
@@ -101,7 +119,15 @@ class MainMenuViewController: UIViewController {
     }
     
     @IBAction func didTapEvents(sender: AnyObject) {
-        self.performSegueWithIdentifier("EventsView", sender: self)
+        if appData == nil
+        {
+            displayInternetAlert()
+        }
+        else
+        {
+            self.performSegueWithIdentifier("EventsView", sender: self)
+        }
+
     }
     
     @IBAction func reloadEventData(sender: AnyObject) {
@@ -111,12 +137,16 @@ class MainMenuViewController: UIViewController {
     @IBAction func didTapShingoModel(sender: AnyObject) {
         self.performSegueWithIdentifier("ShingoModel", sender: self)
     }
-
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if (segue.identifier == "EventsView")
+    
+    @IBAction func didTapSupport(sender: AnyObject) {
+        
+        if appData == nil
         {
-            let dest_vc = segue.destinationViewController as! EventsTableViewController
-            dest_vc.appData = self.appData
+            displayInternetAlert()
+        }
+        else
+        {
+            self.performSegueWithIdentifier("Support", sender: self)
         }
         
     }
@@ -139,6 +169,15 @@ class MainMenuViewController: UIViewController {
                     }
             }
         }
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if (segue.identifier == "EventsView")
+        {
+            let dest_vc = segue.destinationViewController as! EventsTableViewController
+            dest_vc.appData = self.appData
+        }
+        
     }
     
 }

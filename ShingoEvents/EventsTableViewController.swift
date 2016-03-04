@@ -31,15 +31,14 @@ class EventsTableViewController: UITableViewController {
         super.viewDidLoad()
         print("Number of async tasks: \(number_of_async_tasks)")
 
-        if appData.upcomingEvents.count == 0 {
-            
+        if appData == nil {
             let alert = UIAlertController(title: "Oops!",
                 message: "We were unable to fetch any data for you. Please check your internet connection and try again.",
                 preferredStyle: UIAlertControllerStyle.Alert)
             let action = UIAlertAction(title: "OK", style: .Default, handler: nil)
             alert.addAction(action)
             presentViewController(alert, animated: true, completion: nil)
-            
+            appData = AppData()
         }
         
     }
@@ -103,7 +102,7 @@ class EventsTableViewController: UITableViewController {
         cell_index_path = indexPath
         self.async_tasks_completed = 0
 
-        if cell.event.eventSessions == nil
+        if cell.event.eventSessions == nil && Reachability.isConnectedToNetwork()
         {
             activityViewController = ActivityViewController(message: "Loading Conference Data...")
             presentViewController(activityViewController, animated: true, completion: nil)
@@ -130,7 +129,10 @@ class EventsTableViewController: UITableViewController {
                 
             }
         } else {
-            performSegueWithIdentifier("EventMenu", sender: self)
+            let alert = UIAlertController(title: "No Internet Connection", message: "You must be connected to the internet to use this app.", preferredStyle: UIAlertControllerStyle.Alert)
+            let action = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel, handler: nil)
+            alert.addAction(action)
+            self.presentViewController(alert, animated: true, completion: nil)
         }
 
         

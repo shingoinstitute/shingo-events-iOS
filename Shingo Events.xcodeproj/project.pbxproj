@@ -15,6 +15,7 @@
 		C234BD581C529597002E9814 /* SpeakerDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C234BD571C529597002E9814 /* SpeakerDetailsViewController.swift */; };
 		C2494E241C88BD6A00E2969D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C2494E231C88BD6A00E2969D /* LaunchScreen.storyboard */; };
 		C2494E261C88E4F600E2969D /* ShingoIconImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2494E251C88E4F600E2969D /* ShingoIconImages.swift */; };
+		C2494E281C89FBFE00E2969D /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2494E271C89FBFE00E2969D /* Reachability.swift */; };
 		C262CA8D1C3B1C29005845AF /* EventsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C262CA8C1C3B1C29005845AF /* EventsTableViewController.swift */; };
 		C262CAD71C3DC55C005845AF /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C262CAD61C3DC55C005845AF /* ActivityIndicator.swift */; };
 		C262DCBA1C861BA900712D4E /* SessionDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C262DCB91C861BA900712D4E /* SessionDetailViewController.swift */; };
@@ -77,6 +78,7 @@
 		C234BD571C529597002E9814 /* SpeakerDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeakerDetailsViewController.swift; sourceTree = "<group>"; };
 		C2494E231C88BD6A00E2969D /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C2494E251C88E4F600E2969D /* ShingoIconImages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShingoIconImages.swift; sourceTree = "<group>"; };
+		C2494E271C89FBFE00E2969D /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		C262CA8C1C3B1C29005845AF /* EventsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsTableViewController.swift; sourceTree = "<group>"; };
 		C262CAD61C3DC55C005845AF /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		C262DCB91C861BA900712D4E /* SessionDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionDetailViewController.swift; sourceTree = "<group>"; };
@@ -174,6 +176,7 @@
 				C2494E251C88E4F600E2969D /* ShingoIconImages.swift */,
 				C2A695231C35E30F00F6E0B8 /* SwiftyJSON.swift */,
 				C262CAD61C3DC55C005845AF /* ActivityIndicator.swift */,
+				C2494E271C89FBFE00E2969D /* Reachability.swift */,
 				C2CFC3171C4954C20036E485 /* Main.storyboard */,
 				C2494E231C88BD6A00E2969D /* LaunchScreen.storyboard */,
 				C2B7EB411C7CD89900162AFB /* ReportABugViewController.swift */,
@@ -439,6 +442,7 @@
 				C264CCF01C5834A5005CDB11 /* ChallengerInfoViewController.swift in Sources */,
 				C26DC9061C59841700BB4DDA /* MapViewController.swift in Sources */,
 				C262CA8D1C3B1C29005845AF /* EventsTableViewController.swift in Sources */,
+				C2494E281C89FBFE00E2969D /* Reachability.swift in Sources */,
 				C234BD581C529597002E9814 /* SpeakerDetailsViewController.swift in Sources */,
 				C28B67E91C3F0BD700AC9193 /* EventData.swift in Sources */,
 				C2CFC3101C481EAB0036E485 /* MainMenuViewController.swift in Sources */,
