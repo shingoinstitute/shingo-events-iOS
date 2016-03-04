@@ -7,4 +7,5 @@
 
 <p>This repository holds the code for the Shingo Events iOS app for the <i>Shingo Institute</i> at Utah State University. This branch contains the most current and stable release of the app.</p>
 
+<h4><strong>Contact</strong></h4>
 <p>To contact us regarding app issues, general feedback, and feature enhancement requests, please email <a href="mailto:shingo.events@usu.edu?Subject=Github%20support%20email">shingo.events@usu.edu</a>.</p>
