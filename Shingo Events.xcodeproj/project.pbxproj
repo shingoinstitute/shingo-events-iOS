@@ -24,7 +24,6 @@
 		C26DC9021C59785700BB4DDA /* ExhibitorTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C26DC9011C59785700BB4DDA /* ExhibitorTableViewController.swift */; };
 		C26DC9041C597A8600BB4DDA /* ExhibitorInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C26DC9031C597A8600BB4DDA /* ExhibitorInfoViewController.swift */; };
 		C26DC9061C59841700BB4DDA /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C26DC9051C59841700BB4DDA /* MapViewController.swift */; };
-		C281C6101C74C7AA00FEDAF7 /* SwiftyTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C281C60F1C74C7AA00FEDAF7 /* SwiftyTimer.swift */; };
 		C28B67E91C3F0BD700AC9193 /* EventData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28B67E81C3F0BD700AC9193 /* EventData.swift */; };
 		C28B67F31C406BDE00AC9193 /* EventMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28B67F21C406BDE00AC9193 /* EventMenuViewController.swift */; };
 		C2986DBE1C63E98300ADCF40 /* VenueMapsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2986DBD1C63E98300ADCF40 /* VenueMapsViewController.swift */; };
@@ -87,7 +86,6 @@
 		C26DC9011C59785700BB4DDA /* ExhibitorTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExhibitorTableViewController.swift; sourceTree = "<group>"; };
 		C26DC9031C597A8600BB4DDA /* ExhibitorInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExhibitorInfoViewController.swift; sourceTree = "<group>"; };
 		C26DC9051C59841700BB4DDA /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
-		C281C60F1C74C7AA00FEDAF7 /* SwiftyTimer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyTimer.swift; sourceTree = "<group>"; };
 		C28B67E81C3F0BD700AC9193 /* EventData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventData.swift; sourceTree = "<group>"; };
 		C28B67F21C406BDE00AC9193 /* EventMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventMenuViewController.swift; sourceTree = "<group>"; };
 		C2986DBD1C63E98300ADCF40 /* VenueMapsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VenueMapsViewController.swift; sourceTree = "<group>"; };
@@ -175,7 +173,6 @@
 				C2A695081C35AC2900F6E0B8 /* AppDelegate.swift */,
 				C2494E251C88E4F600E2969D /* ShingoIconImages.swift */,
 				C2A695231C35E30F00F6E0B8 /* SwiftyJSON.swift */,
-				C281C60F1C74C7AA00FEDAF7 /* SwiftyTimer.swift */,
 				C262CAD61C3DC55C005845AF /* ActivityIndicator.swift */,
 				C2CFC3171C4954C20036E485 /* Main.storyboard */,
 				C2494E231C88BD6A00E2969D /* LaunchScreen.storyboard */,
@@ -454,7 +451,6 @@
 				C264CCB41C57ECA7005CDB11 /* RecipientsTableViewController.swift in Sources */,
 				C2CFC3041C4576D00036E485 /* SettingsTableViewController.swift in Sources */,
 				C2F358081C500B2500AE62D0 /* SessionListTableViewController.swift in Sources */,
-				C281C6101C74C7AA00FEDAF7 /* SwiftyTimer.swift in Sources */,
 				C2CFC3141C483C1C0036E485 /* SchedulesTableViewController.swift in Sources */,
 				C234BD561C5293CF002E9814 /* SpeakerListTableViewController.swift in Sources */,
 				C2986DBE1C63E98300ADCF40 /* VenueMapsViewController.swift in Sources */,

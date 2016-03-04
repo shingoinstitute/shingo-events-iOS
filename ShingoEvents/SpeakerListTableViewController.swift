@@ -8,20 +8,14 @@
 
 import UIKit
 
-class SpeakerListCell: UITableViewCell
-{
-    
+class SpeakerListCell: UITableViewCell {
     var speaker:Speaker? = nil
-    
     @IBOutlet weak var speakerNameLabel: UILabel!
     @IBOutlet weak var speakerImage: UIImageView!
-    
 }
 
 
-
-class SpeakerListTableViewController: UITableViewController
-{
+class SpeakerListTableViewController: UITableViewController {
 
     var speakers:[Speaker]? = nil
     var dataToSend:Speaker? = nil
@@ -31,8 +25,6 @@ class SpeakerListTableViewController: UITableViewController
         super.viewDidLoad()
 
     }
-    
-
     
     override func tableView(tableView: UITableView, accessoryButtonTappedForRowWithIndexPath indexPath: NSIndexPath)
     {
@@ -47,7 +39,6 @@ class SpeakerListTableViewController: UITableViewController
     
     
     // MARK: - Table view data source
-
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int
     {

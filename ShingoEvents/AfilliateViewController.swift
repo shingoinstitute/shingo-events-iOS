@@ -11,9 +11,6 @@ import UIKit
 class AfilliateViewController: UIViewController {
 
     @IBOutlet weak var logoImage: UIImageView!
-//    @IBOutlet weak var nameLabel: UILabel!
-//    @IBOutlet weak var phoneLabel: UILabel!
-//    @IBOutlet weak var websiteTextField: UITextView!
     @IBOutlet weak var abstractTextField: UITextView!
     
     var affiliate:Affiliate!

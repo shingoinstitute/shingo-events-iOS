@@ -15,20 +15,6 @@ class EventMenuViewController: UIViewController {
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var eventNameLabel: UILabel!
     @IBOutlet weak var scrollView: UIScrollView!
-//    @IBOutlet weak var speakerButton: UIButton!
-//    @IBOutlet weak var scheduleButton: UIButton!
-//    @IBOutlet weak var affiliatesButton: UIButton!
-//    @IBOutlet weak var exhibitorsButton: UIButton!
-//    @IBOutlet weak var recipientsButton: UIButton!
-//    @IBOutlet weak var directionsButton: UIButton!
-//    @IBOutlet weak var sponsorsButton: UIButton!
-//    @IBOutlet weak var venuePhotosButton: UIButton!
-//    
-//    let eventNameLabel:UILabel = {
-//        let label = UILabel()
-//        label.translatesAutoresizingMaskIntoConstraints = false
-//        return label
-//    }()
     
     let speakerButton:UIButton = {
         let button = UIButton()

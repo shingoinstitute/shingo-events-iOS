@@ -82,22 +82,3 @@ class ShingoModelViewController: UIViewController {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

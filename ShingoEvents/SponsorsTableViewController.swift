@@ -198,7 +198,6 @@ class SponsorTableViewCell:UITableViewCell {
     
     func setupViews()
     {
-//        testView.addSubview(bannerImage)
         contentView.addSubview(bannerImage)
     }
     
@@ -223,7 +222,6 @@ class SponsorTableViewCell:UITableViewCell {
                 }
             }
             
-//            bannerImage.autoSetDimensionsToSize(CGSize(width: contentView.frame.width, height: contentView.frame.height + 20.0))
             bannerImage.autoPinEdgesToSuperviewEdgesWithInsets(UIEdgeInsets.init(top: 10.0, left: 0.0, bottom: 10.0, right: 0.0))
 
             didSetupConstraints = true

@@ -11,10 +11,8 @@ import PureLayout
 
 class ExhibitorInfoViewController: UIViewController {
 
-//    @IBOutlet weak var scrollView: UITextView!
     @IBOutlet weak var exhibitorImage: UIImageView!
     @IBOutlet weak var descriptionTextField: UITextView!
-//    @IBOutlet weak var contentView: UIView!
     
     var exhibitor:Exhibitor!
     

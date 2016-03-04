@@ -90,24 +90,10 @@ private class ActivityView: UIView {
         messageLabel.autoAlignAxis(.Vertical, toSameAxisOfView: contentView)
         messageLabel.autoAlignAxis(.Horizontal, toSameAxisOfView: contentView)
         
-//        progressIndicator.sizeThatFits(CGSizeMake(160.0 - 10.0 * 2.0, CGFloat.max))
         progressIndicator.autoSetDimensionsToSize(CGSizeMake(140.0, 3.0))
         progressIndicator.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: contentView, withOffset: -10.0)
         progressIndicator.autoAlignAxis(.Vertical, toSameAxisOfView: contentView)
-//
-//        boundingBoxView.frame.size.width = 160.0
-//        boundingBoxView.frame.size.height = 160.0
-//        boundingBoxView.frame.origin.x = ceil((bounds.width / 2.0) - (boundingBoxView.frame.width / 2.0))
-//        boundingBoxView.frame.origin.y = ceil((bounds.height / 2.0) - (boundingBoxView.frame.height / 2.0))
-//        
-//        activityIndicatorView.frame.origin.x = ceil((bounds.width / 2.0) - (activityIndicatorView.frame.width / 2.0))
-//        activityIndicatorView.frame.origin.y = ceil((bounds.height / 2.0) - (activityIndicatorView.frame.height / 2.0))
-//        
-//        let messageLabelSize = messageLabel.sizeThatFits(CGSizeMake(160.0 - 20.0 * 2.0, CGFloat.max))
-//        messageLabel.frame.size.width = messageLabelSize.width
-//        messageLabel.frame.size.height = messageLabelSize.height
-//        messageLabel.frame.origin.x = ceil((bounds.width / 2.0) - (messageLabel.frame.width / 2.0))
-//        messageLabel.frame.origin.y = ceil(activityIndicatorView.frame.origin.y + activityIndicatorView.frame.size.height + ((boundingBoxView.frame.height - activityIndicatorView.frame.height) / 4.0) - (messageLabel.frame.height / 2.0))
+
     }
     
 

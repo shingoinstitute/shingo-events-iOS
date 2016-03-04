@@ -100,27 +100,3 @@ class SettingsTableViewController: UITableViewController {
     
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

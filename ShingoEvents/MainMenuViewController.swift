@@ -26,7 +26,6 @@ class MainMenuViewController: UIViewController {
     
     let contentView: UIView = {
         let view = UIView.newAutoLayoutView()
-//        view.backgroundColor = UIColor(white: 1.0, alpha: 1.0)
         view.backgroundColor = UIColor(red: 0, green: 47.0/255.0, blue: 86.0/255.0, alpha: 0.5)
         return view
     }()

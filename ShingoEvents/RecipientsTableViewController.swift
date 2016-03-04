@@ -29,9 +29,6 @@ class RecipientsTableViewController: UITableViewController {
         return 4
     }
     
-
-
-    
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var numOfRows = 0
         if appData != nil {
@@ -151,18 +148,6 @@ class RecipientsTableViewController: UITableViewController {
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

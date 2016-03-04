@@ -28,7 +28,6 @@ enum URLTYPE {
 
 public class AppData {
 
-//    var eventSessions:[EventSession]? = nil
     var upcomingEvents:[Event]!
     var event:Event!
     var exhibitors:[Exhibitor]!
@@ -160,11 +159,6 @@ public class AppData {
     public func getEventSessions (callback: () -> Void) {
         self.event.eventSessions = nil
         self.event.eventSessions = [EventSession]()
-//        if self.event!.eventSessions == nil {
-//            self.event!.eventSessions = [EventSession]()
-//        } else {
-//            callback()
-//        }
         
         let parameters = [
             "event_id": self.event!.event_id

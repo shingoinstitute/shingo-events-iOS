@@ -11,12 +11,6 @@ import PureLayout
 
 class SpeakerDetailsViewController: UIViewController {
 
-//    @IBOutlet weak var speakerNameLabel: UILabel!
-//    @IBOutlet weak var speakerTitleLabel: UILabel!
-//    @IBOutlet weak var organizationLabel: UILabel!
-//    @IBOutlet weak var biographyTextField: UITextView!
-//    @IBOutlet weak var speakerImageView: UIImageView!
-
     var speakerNameLabel: UILabel!
     var speakerTitleLabel: UILabel!
     var organizationLabel: UILabel!
@@ -33,9 +27,6 @@ class SpeakerDetailsViewController: UIViewController {
         scrollView = UIScrollView.newAutoLayoutView()
         view.addSubview(scrollView)
         if speaker != nil {
-            // For testing
-            print("Speaker Name: \(speaker.display_name), ID: \(speaker.speaker_id)")
-            
             speakerNameLabel = UILabel.newAutoLayoutView()
             if speaker.display_name != nil && speaker.title != nil {
                 speakerNameLabel.text = speaker.display_name + ", " + speaker.title
@@ -85,11 +76,7 @@ class SpeakerDetailsViewController: UIViewController {
             
             setScrollViewContentHeight()
         }
-        else
-        {
-            // TO-DO: - Set up displaying message when speaker information could not be displayed
-            print("ERROR: Could not display information for speaker in SpeakerDetailsViewController.")
-        }
+
         view.setNeedsUpdateConstraints()
     }
 

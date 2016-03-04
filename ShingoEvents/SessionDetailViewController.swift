@@ -83,7 +83,7 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.removeFromSuperview() // Need to remove tableView before re-adding it
+        tableView.removeFromSuperview() // remove tableView before re-adding it
         
         // Load data
         titleLabel.text = session.name
