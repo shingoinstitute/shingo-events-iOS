@@ -32,7 +32,7 @@ class ReportABugViewController: UIViewController, UITextViewDelegate {
         
         let backgroundImage = UIImageView.newAutoLayoutView()
         view.addSubview(backgroundImage)
-        backgroundImage.image = ShingoIconImages().getShingoIconForDevice()
+        backgroundImage.image = ShingoIconImages().shingoIconForDevice()
         backgroundImage.autoPinToTopLayoutGuideOfViewController(self, withInset: 0)
         backgroundImage.autoPinEdgeToSuperviewEdge(.Left)
         backgroundImage.autoPinEdgeToSuperviewEdge(.Right)

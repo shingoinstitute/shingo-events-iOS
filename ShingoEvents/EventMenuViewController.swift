@@ -83,7 +83,7 @@ class EventMenuViewController: UIViewController {
     
     var backgroundImage: UIImageView = {
         let view = UIImageView.newAutoLayoutView()
-        view.image = ShingoIconImages().getShingoIconForDevice()
+        view.image = ShingoIconImages().shingoIconForDevice()
         return view
     }()
     

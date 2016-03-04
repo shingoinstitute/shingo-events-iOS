@@ -17,7 +17,7 @@ public class ShingoIconImages: UIImage {
     let iPhone5 = UIImage(named: "shingoIcon_iPhone5_Res")
     let iPhone4 = UIImage(named: "shingoIcon_iPhone4_Res")
     
-    public func getShingoIconForDevice() -> UIImage {
+    public func shingoIconForDevice() -> UIImage {
 
 //        switch identifier {
 //        case "iPod5,1":                                 return "iPod Touch 5"

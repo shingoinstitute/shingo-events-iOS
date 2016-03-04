@@ -21,7 +21,7 @@ class ContactUsViewController: UIViewController, UITextFieldDelegate, UITextView
 
     var backgroundImage:UIImageView = {
         let view = UIImageView.newAutoLayoutView()
-        view.image = ShingoIconImages().getShingoIconForDevice()
+        view.image = ShingoIconImages().shingoIconForDevice()
         return view
     }()
 
