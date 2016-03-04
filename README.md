@@ -7,7 +7,8 @@
 
 <p>This repository holds the code for the Shingo Events iOS app for the <i>Shingo Institute</i> at Utah State University. This branch contains the most current and stable release of the app.</p>
 
-<h4><strong>Shingo Events API</strong><h4>
+<h4><strong>Shingo Events API</strong></h4>
+
 <p>This app pulls a vast majority of it's data from our node server API. The API url requests and responses can be found <a href="https://github.com/shingoinstitute/shingo-events-backend">here</a>.</p>
 
 <h4><strong>Contact</strong></h4>
