@@ -90,7 +90,7 @@ class MainMenuViewController: UIViewController {
     
     func animateLayout() {
         contentViewHeightConstraint?.constant = view.frame.height * CGFloat(-0.1)
-        UIView.animateWithDuration(1.5, delay: 0.2, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: UIViewAnimationOptions(), animations: {
+        UIView.animateWithDuration(1.8, delay: 0.2, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: UIViewAnimationOptions(), animations: {
             self.view.layoutIfNeeded()
             }, completion: nil)
     }
