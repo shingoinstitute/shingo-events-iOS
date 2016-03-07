@@ -17,6 +17,7 @@ class MainMenuViewController: UIViewController {
     @IBOutlet weak var eventsBtn: UIButton!
     @IBOutlet weak var shingoModelBtn: UIButton!
     @IBOutlet weak var settingsBtn: UIButton!
+    @IBOutlet weak var reloadEventsBtn: UIButton!
     
     var menuBackgroundImage: UIImageView = {
         let view = UIImageView()
@@ -41,12 +42,15 @@ class MainMenuViewController: UIViewController {
         eventsBtn.removeFromSuperview()
         shingoModelBtn.removeFromSuperview()
         settingsBtn.removeFromSuperview()
+        reloadEventsBtn.removeFromSuperview()
         
         contentView.addSubview(eventsBtn)
         contentView.addSubview(shingoModelBtn)
         contentView.addSubview(settingsBtn)
+        contentView.addSubview(reloadEventsBtn)
         
         menuBackgroundImage.image = ShingoIconImages().shingoIconForDevice()
+        
         view.addSubview(menuBackgroundImage)
         view.addSubview(contentView)
         view.bringSubviewToFront(contentView)
@@ -56,7 +60,7 @@ class MainMenuViewController: UIViewController {
         menuBackgroundImage.autoPinEdge(.Right, toEdge: .Right, ofView: view)
         menuBackgroundImage.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: view)
         
-        contentView.autoSetDimension(.Height, toSize: 200)
+        contentView.autoSetDimension(.Height, toSize: 265)
         contentViewHeightConstraint = contentView.autoAlignAxis(.Horizontal, toSameAxisOfView: view, withOffset: view.frame.height)
         contentView.autoPinEdge(.Left, toEdge: .Left, ofView: view, withOffset: 5.0)
         contentView.autoPinEdge(.Right, toEdge: .Right, ofView: view, withOffset: -5.0)
@@ -69,28 +73,38 @@ class MainMenuViewController: UIViewController {
         shingoModelBtn.autoSetDimension(.Height, toSize: 60)
         shingoModelBtn.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 5)
         shingoModelBtn.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -5)
-        shingoModelBtn.autoAlignAxis(.Horizontal, toSameAxisOfView: contentView)
+        shingoModelBtn.autoPinEdge(.Top, toEdge: .Bottom, ofView: eventsBtn, withOffset: 5)
         
         settingsBtn.autoSetDimension(.Height, toSize: 60)
+        settingsBtn.autoPinEdge(.Top, toEdge: .Bottom, ofView: shingoModelBtn, withOffset: 5)
         settingsBtn.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 5)
         settingsBtn.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -5)
-        settingsBtn.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: contentView, withOffset: -5)
+        
+        reloadEventsBtn.autoSetDimension(.Height, toSize: 60)
+        reloadEventsBtn.autoPinEdge(.Top, toEdge: .Bottom, ofView: settingsBtn, withOffset: 5)
+        reloadEventsBtn.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 5)
+        reloadEventsBtn.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -5)
         
         
-        let buttons:NSArray = [eventsBtn, shingoModelBtn, settingsBtn]
+        let buttons:NSArray = [eventsBtn, shingoModelBtn, settingsBtn, reloadEventsBtn]
         for button in buttons
         {
             contentView.bringSubviewToFront(button as! UIView)
             (button as! UIButton).backgroundColor = UIColor(white: 0.9, alpha: 0.9)
         }
-        
-        if Reachability.isConnectedToNetwork() == true
-        {
-            loadUpcomingEvents()
-        }
-        else
-        {
-            displayInternetAlert()
+
+        loadUpcomingEvents()
+
+    }
+
+    // Check for internet connectivity
+    func isConnected() -> Bool {
+        let status = Reach().connectionStatus()
+        switch status {
+        case .Unknown, .Offline:
+            return false
+        case .Online(.WWAN), .Online(.WiFi):
+            return true
         }
     }
     
@@ -107,7 +121,7 @@ class MainMenuViewController: UIViewController {
     }
     
     func animateLayout() {
-        contentViewHeightConstraint?.constant = view.frame.height * CGFloat(-0.1)
+        contentViewHeightConstraint?.constant = 0
         UIView.animateWithDuration(1.8, delay: 0.2, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: UIViewAnimationOptions(), animations: {
             self.view.layoutIfNeeded()
             }, completion: nil)
@@ -119,15 +133,7 @@ class MainMenuViewController: UIViewController {
     }
     
     @IBAction func didTapEvents(sender: AnyObject) {
-        if appData == nil
-        {
-            displayInternetAlert()
-        }
-        else
-        {
-            self.performSegueWithIdentifier("EventsView", sender: self)
-        }
-
+        self.performSegueWithIdentifier("EventsView", sender: self)
     }
     
     @IBAction func reloadEventData(sender: AnyObject) {
@@ -139,20 +145,12 @@ class MainMenuViewController: UIViewController {
     }
     
     @IBAction func didTapSupport(sender: AnyObject) {
-        
-        if appData == nil
-        {
-            displayInternetAlert()
-        }
-        else
-        {
-            self.performSegueWithIdentifier("Support", sender: self)
-        }
-        
+        if !isConnected() { displayInternetAlert() }
+        self.performSegueWithIdentifier("Support", sender: self)
     }
     
     func loadUpcomingEvents() {
-        if self.appData == nil
+        if isConnected()
         {
             self.presentViewController(self.activitiyViewController, animated: true, completion: nil)
             self.activitiyViewController.updateProgress(0.1)
@@ -168,6 +166,10 @@ class MainMenuViewController: UIViewController {
                         self.animateLayout()
                     }
             }
+        }
+        else
+        {
+            displayInternetAlert()
         }
     }
     

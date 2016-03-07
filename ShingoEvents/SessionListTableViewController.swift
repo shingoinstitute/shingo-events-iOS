@@ -68,6 +68,7 @@ class SessionListTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier("SessionCell", forIndexPath: indexPath) as! SessionTableViewCell
         cell.session = day_sessions![indexPath.row]
         cell.sessionTitleLabel?.text = day_sessions![indexPath.row].name
+        cell.sessionTitleLabel.font = UIFont.boldSystemFontOfSize(17.0)
         if day_sessions![indexPath.row].start_end_date != nil
         {
             let start_date = day_sessions![indexPath.row].start_end_date!.0
@@ -109,6 +110,8 @@ class SessionListTableViewController: UITableViewController {
         var am_pm:String = String()
         if hour > 12 {
             hour = hour - 12
+            am_pm = " pm"
+        } else if hour == 12 {
             am_pm = " pm"
         } else {
             am_pm = " am"

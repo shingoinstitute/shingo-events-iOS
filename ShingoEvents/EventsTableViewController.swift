@@ -33,7 +33,7 @@ class EventsTableViewController: UITableViewController {
 
         if appData == nil {
             let alert = UIAlertController(title: "Oops!",
-                message: "We were unable to fetch any data for you. Please check your internet connection and try again.",
+                message: "We were unable to fetch any data for you. Please check your internet connection and try reloading our upcoming events in the previous menu.",
                 preferredStyle: UIAlertControllerStyle.Alert)
             let action = UIAlertAction(title: "OK", style: .Default, handler: nil)
             alert.addAction(action)
@@ -70,7 +70,15 @@ class EventsTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return appData.upcomingEvents.count
+        let events = appData.upcomingEvents
+        if events != nil
+        {
+            return events.count
+        }
+        else
+        {
+            return 0
+        }
     }
     
     
@@ -102,7 +110,15 @@ class EventsTableViewController: UITableViewController {
         cell_index_path = indexPath
         self.async_tasks_completed = 0
 
-        if cell.event.eventSessions == nil && Reachability.isConnectedToNetwork()
+//        if !Reachability.isConnectedToNetwork()
+//        {
+//            let alert = UIAlertController(title: "No Internet Connection", message: "You must be connected to the internet to use this app.", preferredStyle: UIAlertControllerStyle.Alert)
+//            let action = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel, handler: nil)
+//            alert.addAction(action)
+//            self.presentViewController(alert, animated: true, completion: nil)
+//        }
+        
+        if cell.event.eventSessions == nil
         {
             activityViewController = ActivityViewController(message: "Loading Conference Data...")
             presentViewController(activityViewController, animated: true, completion: nil)
@@ -128,11 +144,10 @@ class EventsTableViewController: UITableViewController {
                 }
                 
             }
-        } else {
-            let alert = UIAlertController(title: "No Internet Connection", message: "You must be connected to the internet to use this app.", preferredStyle: UIAlertControllerStyle.Alert)
-            let action = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel, handler: nil)
-            alert.addAction(action)
-            self.presentViewController(alert, animated: true, completion: nil)
+        }
+        else
+        {
+            self.performSegueWithIdentifier("EventMenu", sender: self)
         }
 
         

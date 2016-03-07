@@ -10,6 +10,7 @@ import UIKit
 import AVFoundation
 import PureLayout
 
+
 class ExhibitorCell: UITableViewCell {
     
     var didSetupConstraints = false
@@ -31,6 +32,7 @@ class ExhibitorCell: UITableViewCell {
         setupViews()
     }
     
+    
     func setupViews()
     {
         contentView.addSubview(exhibitorImage)
@@ -42,11 +44,25 @@ class ExhibitorCell: UITableViewCell {
             NSLayoutConstraint.autoSetPriority(UILayoutPriorityRequired) {
                 self.exhibitorImage.autoSetContentCompressionResistancePriorityForAxis(.Vertical)
             }
+            let cellMargin: CGFloat = 10.0
+            let aspectRatio = (exhibitorImage.image?.size.height)! / (exhibitorImage.image?.size.width)!
+            var width:CGFloat = 0
+            var height:CGFloat = 0
+//            print("w: \(exhibitorImage.image!.size.width), h: \(exhibitorImage.image!.size.height), exhibitor: \(exhibitor.name)")
+            if exhibitorImage.image?.size.width > 299 {
+                width = contentView.frame.width - CGFloat(cellMargin * 2)
+                height = width * aspectRatio
+            } else if aspectRatio == 1.0 {
+                height = contentView.frame.height - CGFloat(cellMargin * 2)
+                width = height
+            } else {
+                height = contentView.frame.height - CGFloat(cellMargin * 2)
+                width = height / aspectRatio
+            }
             
-            exhibitorImage.autoPinEdgeToSuperviewEdge(.Top, withInset: 5.0)
-            exhibitorImage.autoPinEdgeToSuperviewEdge(.Leading, withInset: 5.0)
-            exhibitorImage.autoPinEdgeToSuperviewEdge(.Trailing, withInset: 5.0)
-            exhibitorImage.autoPinEdgeToSuperviewEdge(.Bottom, withInset: 5.0)
+            exhibitorImage.autoSetDimensionsToSize(CGSize(width: width, height: height))
+            exhibitorImage.autoPinEdgeToSuperviewEdge(.Top, withInset: 8.0)
+            exhibitorImage.autoPinEdgeToSuperviewEdge(.Left, withInset: 8.0)
             
             didSetupConstraints = true
         }
@@ -96,17 +112,19 @@ class ExhibitorTableViewController: UITableViewController {
 
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell: ExhibitorCell = tableView.dequeueReusableCellWithIdentifier("ExhibitorCell", forIndexPath: indexPath) as! ExhibitorCell
-
+//        let referralCell: ExhibitorCell = tableView.dequeueReusableCellWithIdentifier("ExhibitorCell", forIndexPath: indexPath) as! ExhibitorCell
+        let cell :ExhibitorCell = ExhibitorCell()
         cell.exhibitor = exhibitors[indexPath.row]
         cell.exhibitorImage.image = exhibitors[indexPath.row].logo_image
-        cell.exhibitorImage.frame = CGRectMake(0, 0, cell.exhibitorImage.frame.width, 100.0)
+        cell.contentView.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 160)
         cell.setNeedsUpdateConstraints()
         cell.updateConstraintsIfNeeded()
         
         return cell
     }
 
+
+    
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let cell = tableView.cellForRowAtIndexPath(indexPath) as! ExhibitorCell
         dataToSend = cell.exhibitor

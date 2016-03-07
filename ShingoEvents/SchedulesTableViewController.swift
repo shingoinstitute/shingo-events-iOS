@@ -98,18 +98,18 @@ class SchedulesTableViewController: UITableViewController {
                 
                 if sessions[j].start_end_date!.0.timeIntervalSince1970 > sessions[j+1].start_end_date!.0.timeIntervalSince1970
                 {
-                    let temp = sessions[j].start_end_date!
-                    sessions[j].start_end_date! = sessions[j+1].start_end_date!
-                    sessions[j+1].start_end_date! = temp
+                    let temp = sessions[j]
+                    sessions[j] = sessions[j+1]
+                    sessions[j+1] = temp
                 }
                 
                 if sessions[j].start_end_date!.0.timeIntervalSince1970 == sessions[j+1].start_end_date!.0.timeIntervalSince1970
                 {
                     if sessions[j].start_end_date!.1.timeIntervalSince1970 > sessions[j+1].start_end_date!.1.timeIntervalSince1970
                     {
-                        let temp = sessions[j].start_end_date!
-                        sessions[j].start_end_date! = sessions[j+1].start_end_date!
-                        sessions[j+1].start_end_date! = temp
+                        let temp = sessions[j]
+                        sessions[j] = sessions[j+1]
+                        sessions[j+1] = temp
                     }
                 }
             }

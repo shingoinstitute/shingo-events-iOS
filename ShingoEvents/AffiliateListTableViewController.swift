@@ -21,6 +21,8 @@ class AffiliateListTableViewController: UITableViewController {
     var affiliates:[Affiliate]? = nil
     var dataToSend:Affiliate? = nil
     
+    let cellHeight:CGFloat = 117.0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -52,6 +54,10 @@ class AffiliateListTableViewController: UITableViewController {
         
         if affiliates![indexPath.row].logo_image != nil {
             cell.logoImage.image = affiliates![indexPath.row].logo_image
+            if cell.logoImage.frame.height > self.cellHeight
+            {
+                cell.logoImage.frame = CGRect(x: 0, y: 0, width: cellHeight, height: cellHeight)
+            }
         }
         if affiliates![indexPath.row].name != nil {
             cell.nameLabel.text = affiliates![indexPath.row].name

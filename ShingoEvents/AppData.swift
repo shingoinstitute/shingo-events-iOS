@@ -445,11 +445,13 @@ public class AppData {
     
     public func getAffiliates(callback: () -> Void) {
         
-        if self.affiliates != nil {
+        if self.affiliates != nil
+        {
             callback()
-        } else {
-            self.affiliates = [Affiliate]()
+            return
         }
+        
+        self.affiliates = [Affiliate]()
         
         self.GET(.GetAffiliates) {
             json in
@@ -661,12 +663,13 @@ public class AppData {
     
     
     func isConnectedToNetwork() -> Bool {
-        if Reachability.isConnectedToNetwork() == true {
-            return true
-        } else {
-            print("No internet connection!")
-            return false
-        }
+//        if Reachability.isConnectedToNetwork() == true {
+//            return true
+//        } else {
+//            print("No internet connection!")
+//            return false
+//        }
+        return true
     }
     
     

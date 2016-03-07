@@ -337,7 +337,6 @@ class EventMenuViewController: UIViewController {
         
         if segue.identifier == "ExhibitorsListView" {
             let destination = segue.destinationViewController as! ExhibitorTableViewController
-            
             destination.exhibitors = self.appData.exhibitors
         }
         
@@ -355,7 +354,7 @@ class EventMenuViewController: UIViewController {
         
         if segue.identifier == "SponsorsView" {
             let destination = segue.destinationViewController as! SponsorsTableViewController
-            let sponsors_array = self.getAmountOfEachSponsorType(self.appData!.sponsors!)
+            let sponsors_array = self.numberOfEachSponsorType(self.appData!.sponsors!)
             destination.friends = sponsors_array[0]
             destination.supporters = sponsors_array[1]
             destination.benefactors = sponsors_array[2]
@@ -406,7 +405,7 @@ class EventMenuViewController: UIViewController {
         }
     }
     
-    func getAmountOfEachSponsorType(sponsors:[Sponsor]) -> [[Sponsor]] {
+    func numberOfEachSponsorType(sponsors:[Sponsor]) -> [[Sponsor]] {
         var sponsors_array = [[Sponsor](),[Sponsor](),[Sponsor()],[Sponsor()],[Sponsor()]]
         var friends = [Sponsor]()
         var supporters = [Sponsor]()
