@@ -500,6 +500,7 @@ public class AppData {
         
         if self.sponsors != nil {
             callback()
+            return
         } else {
             self.sponsors = [Sponsor]()
         }
@@ -600,8 +601,6 @@ public class AppData {
     
     func GET(url: URLTYPE, callback: (json: JSON) -> Void) {
         
-        if !isConnectedToNetwork() {callback(json: nil); return}
-        
         Alamofire.request(.GET, getUrl(url)).validate().responseJSON {
             response in
             
@@ -632,8 +631,6 @@ public class AppData {
     
     func POST(url: URLTYPE, parameters: [String:String]?, callback: (json: JSON) -> Void){
         
-        if !isConnectedToNetwork() {callback(json: nil); return}
-        
         Alamofire.request(.POST, getUrl(url), parameters: parameters).validate().responseJSON {
             response in
             
@@ -661,16 +658,6 @@ public class AppData {
         }
     }
     
-    
-    func isConnectedToNetwork() -> Bool {
-//        if Reachability.isConnectedToNetwork() == true {
-//            return true
-//        } else {
-//            print("No internet connection!")
-//            return false
-//        }
-        return true
-    }
     
     
     func getUrl(var type: URLTYPE) -> String {

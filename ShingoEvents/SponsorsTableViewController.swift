@@ -182,23 +182,18 @@ class SponsorTableViewCell:UITableViewCell {
             NSLayoutConstraint.autoSetPriority(UILayoutPriorityRequired) {
                 self.bannerImage.autoSetContentCompressionResistancePriorityForAxis(.Vertical)
             }
-            
-            if sponsor.sponsor_type == .Friend {
-                if let image = self.sponsor.logo_image {
-                    bannerImage.image = image
-                } else {
-                    bannerImage.image = UIImage(named: "100x100PL")
-                }
+
+            if let image = self.sponsor.banner_image {
+                bannerImage.image = image
+            } else if let image = self.sponsor.logo_image {
+                bannerImage.image = image
             } else {
-                if let image = self.sponsor.banner_image {
-                    bannerImage.image = image
-                } else {
-                    bannerImage.image = UIImage(named: "600x100PL")
-                }
+                bannerImage.image = UIImage(named: "logoComingSoon")
             }
             
             let cellInsets:CGFloat = 10.0
             let cellHeight:CGFloat = 150.0
+            print(bannerImage.image?.size.width)
             var width:CGFloat = (bannerImage.image?.size.width)!
             var height:CGFloat = (bannerImage.image?.size.height)!
             let aspectRatio:CGFloat = height / width
