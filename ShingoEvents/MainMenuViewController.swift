@@ -93,8 +93,10 @@ class MainMenuViewController: UIViewController {
             (button as! UIButton).backgroundColor = UIColor(white: 0.9, alpha: 0.9)
         }
 
-        loadUpcomingEvents()
-
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        if appData == nil { loadUpcomingEvents() }
     }
 
     // Check for internet connectivity
@@ -122,7 +124,7 @@ class MainMenuViewController: UIViewController {
     
     func animateLayout() {
         contentViewHeightConstraint?.constant = 0
-        UIView.animateWithDuration(1.8, delay: 0.2, usingSpringWithDamping: 0.6, initialSpringVelocity: 0, options: UIViewAnimationOptions(), animations: {
+        UIView.animateWithDuration(1.5, delay: 0.2, usingSpringWithDamping: 0.7, initialSpringVelocity: 0, options: UIViewAnimationOptions(), animations: {
             self.view.layoutIfNeeded()
             }, completion: nil)
     }
@@ -152,6 +154,7 @@ class MainMenuViewController: UIViewController {
     func loadUpcomingEvents() {
         if isConnected()
         {
+            
             self.presentViewController(self.activitiyViewController, animated: true, completion: nil)
             self.activitiyViewController.updateProgress(0.1)
             
@@ -164,6 +167,7 @@ class MainMenuViewController: UIViewController {
                         self.activitiyViewController.updateProgress(1.0)
                         self.dismissViewControllerAnimated(true, completion: nil)
                         self.animateLayout()
+//                        self.performSegueWithIdentifier("EventsView", sender: self)
                     }
             }
         }

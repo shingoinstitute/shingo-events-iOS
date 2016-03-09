@@ -78,6 +78,11 @@ class EventMenuViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // do some sorting! Yay!
+        sortResearchRecipientsByName()
+        sortPrizeRecipientsByName()
+        sortSpeakersByFirstName()
+        
         contentView.backgroundColor = .clearColor()
         
         eventNameLabel.text = appData.event.name
@@ -100,13 +105,14 @@ class EventMenuViewController: UIViewController {
             contentView.addSubview(button as! UIButton)
         }
         
-        // Set height and width constraints for buttons
+        // height and width constraints for buttons
         for button in buttonViews
         {
             button.autoSetDimension(.Height, toSize: 110)
             button.autoSetDimension(.Width, toSize: 110)
         }
         
+        // constraints for view
         contentView.addSubview(backgroundImage)
         
         backgroundImage.autoPinToTopLayoutGuideOfViewController(self, withInset: 0)
@@ -138,6 +144,7 @@ class EventMenuViewController: UIViewController {
         
     }
     
+    // constraints for UIButtons
     func setButtonConstraints() {
         
         let leftButtons:NSArray = [
@@ -320,7 +327,6 @@ class EventMenuViewController: UIViewController {
         }
         
         if segue.identifier == "SpeakerList" {
-            sortSpeakersByFirstName()
             let dest_vc = segue.destinationViewController as! SpeakerListTableViewController
             dest_vc.speakers = appData.event.speakers
         }
@@ -440,10 +446,9 @@ class EventMenuViewController: UIViewController {
         return sponsors_array
     }
     
-    func sortSpeakersByFirstName()
-    {
-        var speakers = appData!.event!.speakers
-        
+    // Some simple bubble sorting functions
+    func sortSpeakersByFirstName() {
+        var speakers = appData.event.speakers
         for (var i = 0; i < speakers.count - 1; i++)
         {
             for (var j = 0; j < speakers.count - i - 1; j++)
@@ -457,6 +462,40 @@ class EventMenuViewController: UIViewController {
             }
         }
         appData.event.speakers = speakers
+    }
+    
+    func sortResearchRecipientsByName() {
+        var researchRecipients = appData.researchRecipients
+        for var i = 0; i < researchRecipients.count - 1; i++
+        {
+            for var j = 0; j < researchRecipients.count - i - 1; j++
+            {
+                if researchRecipients[j].name > researchRecipients[j+1].name
+                {
+                    let temp = researchRecipients[j]
+                    researchRecipients[j] = researchRecipients[j+1]
+                    researchRecipients[j+1] = temp
+                }
+            }
+        }
+        appData.researchRecipients = researchRecipients
+    }
+    
+    func sortPrizeRecipientsByName() {
+        var prizeRecipients = appData.shingoPrizeRecipients
+        for var i = 0; i < prizeRecipients.count - 1; i++
+        {
+            for var j = 0; j < prizeRecipients.count - i - 1; j++
+            {
+                if prizeRecipients[j].name > prizeRecipients[j+1].name
+                {
+                    let temp = prizeRecipients[j]
+                    prizeRecipients[j] = prizeRecipients[j+1]
+                    prizeRecipients[j+1] = temp
+                }
+            }
+        }
+        appData.shingoPrizeRecipients = prizeRecipients
     }
     
 }

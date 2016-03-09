@@ -21,14 +21,14 @@ class ExhibitorCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String!)
     {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+        self.accessoryType = .DisclosureIndicator
         setupViews()
     }
     
     required init?(coder aDecoder: NSCoder)
     {
         super.init(coder: aDecoder)
-        
+        self.accessoryType = .DisclosureIndicator        
         setupViews()
     }
     
@@ -48,21 +48,26 @@ class ExhibitorCell: UITableViewCell {
             let aspectRatio = (exhibitorImage.image?.size.height)! / (exhibitorImage.image?.size.width)!
             var width:CGFloat = 0
             var height:CGFloat = 0
-//            print("w: \(exhibitorImage.image!.size.width), h: \(exhibitorImage.image!.size.height), exhibitor: \(exhibitor.name)")
-            if exhibitorImage.image?.size.width > 299 {
-                width = contentView.frame.width - CGFloat(cellMargin * 2)
-                height = width * aspectRatio
-            } else if aspectRatio == 1.0 {
+            
+            if aspectRatio == 1.0 {
                 height = contentView.frame.height - CGFloat(cellMargin * 2)
                 width = height
-            } else {
+            } else if exhibitorImage.image?.size.width > 299 {
+                width = contentView.frame.width - CGFloat(cellMargin * 2)
+                height = width * aspectRatio
+            }
+
+            if exhibitorImage.image?.size.height > contentView.frame.height {
                 height = contentView.frame.height - CGFloat(cellMargin * 2)
                 width = height / aspectRatio
+            } else {
+                height = (exhibitorImage.image?.size.height)!
+                width = (exhibitorImage.image?.size.width)!
             }
             
             exhibitorImage.autoSetDimensionsToSize(CGSize(width: width, height: height))
-            exhibitorImage.autoPinEdgeToSuperviewEdge(.Top, withInset: 8.0)
-            exhibitorImage.autoPinEdgeToSuperviewEdge(.Left, withInset: 8.0)
+            exhibitorImage.autoAlignAxis(.Horizontal, toSameAxisOfView: contentView)
+            exhibitorImage.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 8.0)
             
             didSetupConstraints = true
         }
@@ -81,7 +86,7 @@ class ExhibitorTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.registerClass(ExhibitorCell.self, forCellReuseIdentifier: "ExhibitorCell")
+//        tableView.registerClass(ExhibitorCell.self, forCellReuseIdentifier: "ExhibitorCell")
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 150.0
     }
@@ -112,11 +117,10 @@ class ExhibitorTableViewController: UITableViewController {
 
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-//        let referralCell: ExhibitorCell = tableView.dequeueReusableCellWithIdentifier("ExhibitorCell", forIndexPath: indexPath) as! ExhibitorCell
         let cell :ExhibitorCell = ExhibitorCell()
         cell.exhibitor = exhibitors[indexPath.row]
         cell.exhibitorImage.image = exhibitors[indexPath.row].logo_image
-        cell.contentView.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 160)
+        cell.contentView.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 150)
         cell.setNeedsUpdateConstraints()
         cell.updateConstraintsIfNeeded()
         

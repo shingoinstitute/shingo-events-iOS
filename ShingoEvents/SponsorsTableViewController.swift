@@ -24,21 +24,11 @@ class SponsorsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.registerClass(SponsorTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
-        
-        tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 150.0
-    }
-
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIContentSizeCategoryDidChangeNotification, object: nil)
-    }
-
-    func contentSizeCategoryChanged(notification: NSNotification) {
-        tableView.reloadData()
     }
     
+//    override func viewWillAppear(animated: Bool) {
+//        UILabel.appearanceWhenContainedInInstancesOfClasses([UITableViewHeaderFooterView.self]).textColor = UIColor.whiteColor()
+//    }
     
     // MARK: - Table view data source
 
@@ -69,8 +59,19 @@ class SponsorsTableViewController: UITableViewController {
         return numSections
     }
 
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return sectionTitles[section]
+    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header = UILabel()
+        header.backgroundColor = UIColor(red: 204/255.0, green: 150/255.0, blue:73/255.0, alpha: 1.0)
+        header.text = sectionTitles[section]
+        header.textColor = .whiteColor()
+        header.font = UIFont.boldSystemFontOfSize(16.0)
+        header.textAlignment = .Center
+        
+        return header
+    }
+    
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 30
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -126,6 +127,7 @@ class SponsorsTableViewController: UITableViewController {
         default: break
         }
         cell.selectionStyle = .None
+        cell.contentView.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 150.0)
         cell.setNeedsUpdateConstraints()
         cell.updateConstraintsIfNeeded()
         
@@ -134,33 +136,6 @@ class SponsorsTableViewController: UITableViewController {
 
 
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-
-        switch sectionTitles[indexPath.section] {
-        case "Friends":
-            if friends!.count > 0 {
-                if let image = friends[indexPath.row].banner_image {
-                    return image.size.height as CGFloat
-                }
-            }
-        case "Supporters":
-            if supporters!.count > 0 {
-                return 351.0
-            }
-        case "Benefactors":
-            if benefactors!.count > 0 {
-                return 351.0
-            }
-        case "Champions":
-            if champions!.count > 0 {
-                return 351.0
-            }
-        case "Presidents":
-            if presidents?.count > 0 {
-                return 351.0
-            }
-        default:
-            return 44.0
-        }
         return 150.0
     }
 
@@ -222,8 +197,26 @@ class SponsorTableViewCell:UITableViewCell {
                 }
             }
             
-            bannerImage.autoPinEdgesToSuperviewEdgesWithInsets(UIEdgeInsets.init(top: 10.0, left: 0.0, bottom: 10.0, right: 0.0))
-
+            let cellInsets:CGFloat = 10.0
+            let cellHeight:CGFloat = 150.0
+            var width:CGFloat = (bannerImage.image?.size.width)!
+            var height:CGFloat = (bannerImage.image?.size.height)!
+            let aspectRatio:CGFloat = height / width
+            
+            if bannerImage.image?.size.width > contentView.frame.width {
+                width = contentView.frame.width
+                height = width * aspectRatio
+            }
+            
+            if bannerImage.image?.size.height > 150 - (cellInsets * 2.0) {
+                height = cellHeight - (cellInsets * 2.0)
+                width = height / aspectRatio
+            }
+            
+            bannerImage.autoSetDimensionsToSize(CGSize(width: width, height: height))
+            bannerImage.autoAlignAxis(.Horizontal, toSameAxisOfView: contentView)
+            bannerImage.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 8.0)
+            
             didSetupConstraints = true
         }
         super.updateConstraints()

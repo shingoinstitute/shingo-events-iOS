@@ -80,7 +80,7 @@ class RecipientsTableViewController: UITableViewController {
             }
         default: cell.textLabel!.text = "No recipient."
         }
-
+        cell.textLabel?.font = UIFont.boldSystemFontOfSize(CGFloat(16))
         return cell
     }
     

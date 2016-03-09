@@ -109,14 +109,6 @@ class EventsTableViewController: UITableViewController {
         appData.event = cell.event
         cell_index_path = indexPath
         self.async_tasks_completed = 0
-
-//        if !Reachability.isConnectedToNetwork()
-//        {
-//            let alert = UIAlertController(title: "No Internet Connection", message: "You must be connected to the internet to use this app.", preferredStyle: UIAlertControllerStyle.Alert)
-//            let action = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel, handler: nil)
-//            alert.addAction(action)
-//            self.presentViewController(alert, animated: true, completion: nil)
-//        }
         
         if cell.event.eventSessions == nil
         {

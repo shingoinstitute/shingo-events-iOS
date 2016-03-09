@@ -23,6 +23,11 @@ class AfilliateViewController: UIViewController {
             logoImage.image = affiliate.logo_image
         }
         
+        logoImage.layer.borderColor = UIColor.grayColor().CGColor
+        logoImage.layer.borderWidth = 1.0
+        logoImage.layer.cornerRadius = 5.0
+        logoImage.clipsToBounds = true
+        
         if affiliate.name != nil {
             abstractTextField.text = affiliate.name
         } else {
