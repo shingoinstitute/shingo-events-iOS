@@ -29,6 +29,10 @@ class ActivityViewController: UIViewController {
     func updateProgress(progress: Float) {
         activityView.progressIndicator.progress += progress
     }
+    
+    func setProgress(progress: Float) {
+        activityView.progressIndicator.progress = progress
+    }
 }
 
 private class ActivityView: UIView {

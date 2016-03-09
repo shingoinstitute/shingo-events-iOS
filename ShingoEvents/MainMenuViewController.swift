@@ -140,6 +140,7 @@ class MainMenuViewController: UIViewController {
     
     @IBAction func reloadEventData(sender: AnyObject) {
         appData = nil
+        activitiyViewController.setProgress(Float(0))
         loadUpcomingEvents()
     }
     @IBAction func didTapShingoModel(sender: AnyObject) {
@@ -167,7 +168,6 @@ class MainMenuViewController: UIViewController {
                         self.activitiyViewController.updateProgress(1.0)
                         self.dismissViewControllerAnimated(true, completion: nil)
                         self.animateLayout()
-//                        self.performSegueWithIdentifier("EventsView", sender: self)
                     }
             }
         }
