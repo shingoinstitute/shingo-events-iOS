@@ -16,6 +16,8 @@ class ExhibitorCell: UITableViewCell {
     var didSetupConstraints = false
     
     var exhibitorImage:UIImageView = UIImageView.newAutoLayoutView()
+    var label:UILabel = UILabel.newAutoLayoutView()
+    
     var exhibitor:Exhibitor!
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String!)
@@ -36,6 +38,7 @@ class ExhibitorCell: UITableViewCell {
     func setupViews()
     {
         contentView.addSubview(exhibitorImage)
+        contentView.addSubview(label)
     }
     
     override func updateConstraints() {
@@ -44,30 +47,29 @@ class ExhibitorCell: UITableViewCell {
             NSLayoutConstraint.autoSetPriority(UILayoutPriorityRequired) {
                 self.exhibitorImage.autoSetContentCompressionResistancePriorityForAxis(.Vertical)
             }
-            let cellMargin: CGFloat = 10.0
-            let aspectRatio = (exhibitorImage.image?.size.height)! / (exhibitorImage.image?.size.width)!
-            var width:CGFloat = 0
-            var height:CGFloat = 0
+            let cellMargin: CGFloat = 8.0
+            var width:CGFloat = (exhibitorImage.image?.size.width)!
+            var height:CGFloat = (exhibitorImage.image?.size.height)!
+            let aspectRatio = height / width
             
-            if aspectRatio == 1.0 {
-                height = contentView.frame.height - CGFloat(cellMargin * 2)
-                width = height
-            } else if exhibitorImage.image?.size.width > 299 {
-                width = contentView.frame.width - CGFloat(cellMargin * 2)
+            if exhibitorImage.image?.size.width > 200 {
+                width = (contentView.frame.width / 2.0) - cellMargin
                 height = width * aspectRatio
-            }
-
-            if exhibitorImage.image?.size.height > contentView.frame.height {
-                height = contentView.frame.height - CGFloat(cellMargin * 2)
-                width = height / aspectRatio
-            } else {
-                height = (exhibitorImage.image?.size.height)!
-                width = (exhibitorImage.image?.size.width)!
             }
             
             exhibitorImage.autoSetDimensionsToSize(CGSize(width: width, height: height))
             exhibitorImage.autoAlignAxis(.Horizontal, toSameAxisOfView: contentView)
             exhibitorImage.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 8.0)
+            
+            label.text = exhibitor.name
+            label.numberOfLines = 4
+            label.lineBreakMode = .ByWordWrapping
+            label.font = UIFont.boldSystemFontOfSize(14.0)
+            
+            label.autoPinEdgeToSuperviewEdge(.Top)
+            label.autoPinEdge(.Left, toEdge: .Right, ofView: exhibitorImage, withOffset: 8.0)
+            label.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -10.0)
+            label.autoPinEdgeToSuperviewEdge(.Bottom)
             
             didSetupConstraints = true
         }
