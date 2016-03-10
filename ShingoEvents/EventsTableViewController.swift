@@ -29,8 +29,7 @@ class EventsTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("Number of async tasks: \(number_of_async_tasks)")
-
+        self.dismissViewControllerAnimated(true, completion: nil)
         if appData == nil {
             let alert = UIAlertController(title: "Oops!",
                 message: "We were unable to fetch any data for you. Please check your internet connection and try reloading our upcoming events in the previous menu.",

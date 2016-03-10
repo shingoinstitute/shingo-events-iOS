@@ -31,7 +31,7 @@ class MainMenuViewController: UIViewController {
         return view
     }()
     
-    let activitiyViewController = ActivityViewController(message: "Loading Data...")
+    let activitiyViewController = ActivityViewController()
     var appData:AppData!
     
     var contentViewHeightConstraint: NSLayoutConstraint?
@@ -96,7 +96,7 @@ class MainMenuViewController: UIViewController {
     }
     
     override func viewDidAppear(animated: Bool) {
-        if appData == nil { loadUpcomingEvents() }
+        self.animateLayout()
     }
 
     // Check for internet connectivity
@@ -104,6 +104,7 @@ class MainMenuViewController: UIViewController {
         let status = Reach().connectionStatus()
         switch status {
         case .Unknown, .Offline:
+            displayInternetAlert()
             return false
         case .Online(.WWAN), .Online(.WiFi):
             return true
@@ -135,13 +136,19 @@ class MainMenuViewController: UIViewController {
     }
     
     @IBAction func didTapEvents(sender: AnyObject) {
-        self.performSegueWithIdentifier("EventsView", sender: self)
+        if appData == nil {
+            loadUpcomingEvents() {
+                self.performSegueWithIdentifier("EventsView", sender: self)
+            }
+        } else {
+            self.performSegueWithIdentifier("EventsView", sender: self)
+        }
     }
     
     @IBAction func reloadEventData(sender: AnyObject) {
         appData = nil
         activitiyViewController.setProgress(Float(0))
-        loadUpcomingEvents()
+        loadUpcomingEvents() {self.dismissViewControllerAnimated(true, completion: nil)}
     }
     @IBAction func didTapShingoModel(sender: AnyObject) {
         self.performSegueWithIdentifier("ShingoModel", sender: self)
@@ -152,29 +159,27 @@ class MainMenuViewController: UIViewController {
         self.performSegueWithIdentifier("Support", sender: self)
     }
     
-    func loadUpcomingEvents() {
+    func loadUpcomingEvents(callback: (() -> Void)? = {} ) {
         if isConnected()
         {
             
             self.presentViewController(self.activitiyViewController, animated: true, completion: nil)
             self.activitiyViewController.updateProgress(0.1)
             
-            
+            self.activitiyViewController.setMessage("Connecting...")
             Alamofire.request(.GET, "https://shingo-events.herokuapp.com/api").response { // Poke the server
-                    _ in
-                    self.activitiyViewController.updateProgress(0.5)
-                    self.appData = AppData()
-                    self.appData.getUpcomingEvents() {
-                        self.activitiyViewController.updateProgress(1.0)
-                        self.dismissViewControllerAnimated(true, completion: nil)
-                        self.animateLayout()
-                    }
+                _ in
+                self.activitiyViewController.setMessage("Getting Upcoming Conferences...")
+                self.activitiyViewController.updateProgress(0.5)
+                self.appData = AppData()
+                self.appData.getUpcomingEvents() {
+                    self.activitiyViewController.updateProgress(1.0)
+//                    self.dismissViewControllerAnimated(true, completion: nil)
+                    callback!()
+                }
             }
         }
-        else
-        {
-            displayInternetAlert()
-        }
+
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

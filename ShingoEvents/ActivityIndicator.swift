@@ -14,6 +14,14 @@ class ActivityViewController: UIViewController {
     
     private let activityView = ActivityView()
     
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        modalTransitionStyle = .CrossDissolve
+        modalPresentationStyle = .OverFullScreen
+        activityView.messageLabel.text = " "
+        view = activityView
+    }
+    
     init(message: String) {
         super.init(nibName: nil, bundle: nil)
         modalTransitionStyle = .CrossDissolve
@@ -24,6 +32,10 @@ class ActivityViewController: UIViewController {
     
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setMessage(message:String) {
+        self.activityView.messageLabel.text = message
     }
     
     func updateProgress(progress: Float) {
@@ -57,7 +69,7 @@ private class ActivityView: UIView {
         messageLabel.textAlignment = .Center
         messageLabel.shadowColor = UIColor.blackColor()
         messageLabel.shadowOffset = CGSizeMake(0.0, 1.0)
-        messageLabel.numberOfLines = 0
+        messageLabel.numberOfLines = 3
         
         progressIndicator.progress = 0
         
@@ -89,8 +101,10 @@ private class ActivityView: UIView {
         activityIndicatorView.autoAlignAxis(.Vertical, toSameAxisOfView: contentView)
         activityIndicatorView.autoPinEdge(.Top, toEdge: .Top, ofView: contentView, withOffset: 8.0)
         
-        let messageLabelSize:CGSize = messageLabel.sizeThatFits(CGSizeMake(160.0 - 20.0 * 2.0, CGFloat.max))
-        messageLabel.autoSetDimensionsToSize(CGSize(width: messageLabelSize.width, height: messageLabelSize.height))
+//        let messageLabelSize:CGSize = messageLabel.sizeThatFits(CGSizeMake(160.0 - 20.0 * 2.0, CGFloat.max))
+//        messageLabel.autoSetDimensionsToSize(CGSize(width: messageLabelSize.width, height: messageLabelSize.height))
+        messageLabel.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 5)
+        messageLabel.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -5)
         messageLabel.autoAlignAxis(.Vertical, toSameAxisOfView: contentView)
         messageLabel.autoAlignAxis(.Horizontal, toSameAxisOfView: contentView)
         
