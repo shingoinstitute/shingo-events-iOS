@@ -101,7 +101,7 @@
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="111" sectionHeaderHeight="18" sectionFooterHeight="18" id="eXo-c8-zLs">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.61176470588235299" green="0.41960784313725491" blue="0.12156862745098039" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.79002403846153846" green="0.54432377668445986" blue="0.16418382044220106" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="sectionIndexBackgroundColor" red="0.054901960784313725" green="0.12941176470588237" blue="0.27058823529411763" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="sectionIndexTrackingBackgroundColor" red="0.054901960784313725" green="0.12941176470588237" blue="0.27058823529411763" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>

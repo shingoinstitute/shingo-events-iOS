@@ -74,6 +74,7 @@ class EventMenuViewController: UIViewController {
     }()
     
     var appData:AppData!
+    var sectionHeaders = [(Character, [Exhibitor])]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -279,6 +280,7 @@ class EventMenuViewController: UIViewController {
     }
     
     func didTapExhibitors(sender: AnyObject) {
+        // Ensure each exhibitor has an image assigned to it
         for exhibitor in self.appData.exhibitors
         {
             if exhibitor.logo_image == nil
@@ -287,6 +289,7 @@ class EventMenuViewController: UIViewController {
             }
         }
         
+        // Alphabetically sort exhibitors by company name
         for (var i = 0; i < appData.exhibitors.count - 1; i++)
         {
             for (var j = 0; j < appData.exhibitors.count - i - 1; j++)
@@ -299,6 +302,33 @@ class EventMenuViewController: UIViewController {
                 }
             }
         }
+        
+
+        // Create dictionary to set section headers in ExhibitorTableViewController
+        if var char = appData.exhibitors[0].name.characters.first {
+            var exhibitorList = [Exhibitor]()
+            exhibitorList.append(appData.exhibitors[0])
+            sectionHeaders.append((char, exhibitorList))
+            var count = 0
+            for var i = 1; i < appData.exhibitors.count; i++
+            {
+                char = appData.exhibitors[i].name.characters.first!
+                if char == sectionHeaders[count].0
+                {
+                    sectionHeaders[count].1.append(appData.exhibitors[i])
+                }
+                else
+                {
+                    var nextList = [Exhibitor]()
+                    nextList.append(appData.exhibitors[i])
+                    sectionHeaders.append((char, nextList))
+                    count++
+                }
+            }
+        }
+
+
+            
         
         self.performSegueWithIdentifier("ExhibitorsListView", sender: self)
     }
@@ -343,6 +373,7 @@ class EventMenuViewController: UIViewController {
         
         if segue.identifier == "ExhibitorsListView" {
             let destination = segue.destinationViewController as! ExhibitorTableViewController
+            destination.sectionInformation = self.sectionHeaders
             destination.exhibitors = self.appData.exhibitors
         }
         
