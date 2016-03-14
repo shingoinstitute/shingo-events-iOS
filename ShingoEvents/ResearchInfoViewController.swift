@@ -12,6 +12,7 @@ class ResearchInfoViewController: UIViewController {
 
     @IBOutlet weak var bookImage: UIImageView!
     @IBOutlet weak var abstractTextField: UITextView!
+    @IBOutlet weak var scrollView: UIScrollView!
     
     var recipient:Recipient!
     
@@ -54,10 +55,26 @@ class ResearchInfoViewController: UIViewController {
         
 
         
-        var frame:CGRect = abstractTextField.frame
-        frame.size.height = abstractTextField.contentSize.height
-        abstractTextField.frame = frame
-        abstractTextField.scrollEnabled = false
+//        var frame:CGRect = abstractTextField.frame
+//        frame.size.height = abstractTextField.contentSize.height
+//        abstractTextField.frame = frame
+//        abstractTextField.scrollEnabled = false
+        calculateScrollViewContent()
+    }
+    
+    func calculateScrollViewContent() {
+        var height:CGFloat = 0
+        let uiOffset:CGFloat = 8.0
+        
+        abstractTextField.sizeToFit()
+        abstractTextField.layoutIfNeeded()
+        
+        height += bookImage.frame.height
+        height += abstractTextField.contentSize.height
+        height += (uiOffset * 2.0)
+        
+        scrollView.contentSize = CGSize(width: view.frame.width, height: height)
+        
     }
 
 }

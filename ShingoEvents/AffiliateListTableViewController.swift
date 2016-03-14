@@ -10,18 +10,80 @@ import UIKit
 
 public class AffiliateTableViewCell: UITableViewCell {
     
-    @IBOutlet weak var logoImage: UIImageView!
-    @IBOutlet weak var nameLabel: UILabel!
-    var affiliate:Affiliate? = nil
+    var logoImage:UIImageView = UIImageView.newAutoLayoutView()
+    var nameLabel:UILabel = UILabel.newAutoLayoutView()
     
+    var affiliate:Affiliate!
+    
+    var didSetupConstraints = false
+    
+    override init(style: UITableViewCellStyle, reuseIdentifier: String!)
+    {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    }
+    
+    required public init?(coder aDecoder: NSCoder)
+    {
+        super.init(coder: aDecoder)
+    }
+    
+    
+    override public func updateConstraints() {
+        if !didSetupConstraints
+        {
+            logoImage.removeFromSuperview()
+            nameLabel.removeFromSuperview()
+            contentView.addSubview(logoImage)
+            contentView.addSubview(nameLabel)
+            
+            NSLayoutConstraint.autoSetPriority(UILayoutPriorityRequired) {
+                self.logoImage.autoSetContentCompressionResistancePriorityForAxis(.Vertical)
+            }
+            
+            logoImage.image = affiliate.logo_image
+            nameLabel.text = affiliate.name
+            
+            var width = logoImage.image?.size.width
+            var height = logoImage.image?.size.height
+            let aspectRatio:CGFloat = height! / width!
+            
+            if width > 150 {
+                width = 150
+                height = width! * aspectRatio
+            }
+            
+            if height > 100 {
+                width = 100
+                height = width! * aspectRatio
+            }
+            
+            logoImage.autoSetDimensionsToSize(CGSize(width: width!, height: height!))
+            logoImage.autoAlignAxis(.Horizontal, toSameAxisOfView: contentView, withOffset: 0)
+            logoImage.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 8.0)
+            
+            
+            nameLabel.autoSetDimension(.Height, toSize: 42.0)
+            nameLabel.numberOfLines = 3
+            nameLabel.lineBreakMode = .ByWordWrapping
+            nameLabel.autoAlignAxis(.Horizontal, toSameAxisOfView: contentView)
+            nameLabel.autoPinEdge(.Left, toEdge: .Right, ofView: logoImage, withOffset: 8.0)
+            nameLabel.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -8.0)
+            
+            didSetupConstraints = true
+        }
+        super.updateConstraints()
+    }
 }
 
 class AffiliateListTableViewController: UITableViewController {
 
-    var affiliates:[Affiliate]? = nil
-    var dataToSend:Affiliate? = nil
+    var affiliates:[Affiliate]!
+    var sectionInfo:[(String, [Affiliate])]!
+    
+    var dataToSend:Affiliate!
     
     let cellHeight:CGFloat = 117.0
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,36 +100,61 @@ class AffiliateListTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
-    }
-
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if affiliates != nil {
-            return (affiliates?.count)!
+        if sectionInfo != nil {
+            return sectionInfo.count
         } else {
             return 0
         }
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("AffiliateCell", forIndexPath: indexPath) as! AffiliateTableViewCell
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if sectionInfo != nil {
+            return sectionInfo[section].1.count
+        } else {
+            return 0
+        }
+    }
+
+    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = UIView()
+        view.backgroundColor = UIColor(netHex: 0xbc7820)
+        let header = UILabel()
+        header.text = String(sectionInfo[section].0).uppercaseString
+        header.textColor = .whiteColor()
+        header.font = UIFont.boldSystemFontOfSize(16.0)
+        header.backgroundColor = .clearColor()
         
-        if affiliates![indexPath.row].logo_image != nil {
-            cell.logoImage.image = affiliates![indexPath.row].logo_image
-            if cell.logoImage.frame.height > self.cellHeight
-            {
-                cell.logoImage.frame = CGRect(x: 0, y: 0, width: cellHeight, height: cellHeight)
-            }
-        }
-        if affiliates![indexPath.row].name != nil {
-            cell.nameLabel.text = affiliates![indexPath.row].name
-        }
-        cell.affiliate = affiliates![indexPath.row]
+        view.addSubview(header)
+        header.autoPinEdgesToSuperviewEdgesWithInsets(UIEdgeInsets.init(top: 0, left: 8, bottom: 0, right: 0))
+        
+        return view
+        
+    }
+    
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 30
+    }
+    
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+//        let cell = tableView.dequeueReusableCellWithIdentifier("AffiliateCell", forIndexPath: indexPath) as! AffiliateTableViewCell
+        let cell = AffiliateTableViewCell()
+        
+        let affiliate = sectionInfo[indexPath.section].1[indexPath.row]
+        cell.affiliate = affiliate
+        cell.logoImage.image = affiliate.logo_image
+        cell.nameLabel.text = affiliate.name
+        
+        cell.accessoryType = .DisclosureIndicator
+        
+        cell.setNeedsUpdateConstraints()
+        cell.updateConstraintsIfNeeded()
         return cell
     }
 
 
-
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 116
+    }
 
     
     // MARK: - Navigation

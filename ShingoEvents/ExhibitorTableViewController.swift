@@ -52,10 +52,32 @@ class ExhibitorCell: UITableViewCell {
             var height:CGFloat = (exhibitorImage.image?.size.height)!
             let aspectRatio = height / width
             
-            if exhibitorImage.image?.size.width > 200 {
-                width = (contentView.frame.width / 2.0) - cellMargin
-                height = width * aspectRatio
+            if UIDevice.currentDevice().userInterfaceIdiom == .Phone
+            {
+                let preferredWidth = (contentView.frame.width / 2) - cellMargin
+                if exhibitorImage.image?.size.width > preferredWidth {
+                    width = preferredWidth
+                    height = width * aspectRatio
+                }
+                
+                if height > 150 - (cellMargin * 2) {
+                    width = 150 - (cellMargin * 2)
+                    height = width * aspectRatio
+                }
             }
+            else
+            {
+                if exhibitorImage.image?.size.width > 300 - cellMargin {
+                    width = 300 - (cellMargin * 2)
+                    height = width * aspectRatio
+                }
+                
+                if height > 200 - (cellMargin * 2) {
+                    width = 200 - (cellMargin * 2)
+                    height = width * aspectRatio
+                }
+            }
+
             
             exhibitorImage.autoSetDimensionsToSize(CGSize(width: width, height: height))
             exhibitorImage.autoAlignAxis(.Horizontal, toSameAxisOfView: contentView)
@@ -159,7 +181,11 @@ class ExhibitorTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 150.0
+        if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+            return 200.0
+        } else {
+            return 150
+        }
     }
     
     // MARK: - Navigation
@@ -170,38 +196,7 @@ class ExhibitorTableViewController: UITableViewController {
             destination.exhibitor = self.dataToSend
         }
     }
-    
-    func characterForSection(section: Int) -> Character {
-        switch section {
-        case 0: return "a"
-        case 1: return "b"
-        case 2: return "c"
-        case 3: return "d"
-        case 4: return "e"
-        case 5: return "f"
-        case 6: return "g"
-        case 7: return "h"
-        case 8: return "i"
-        case 9: return "j"
-        case 10: return "k"
-        case 11: return "l"
-        case 12: return "m"
-        case 13: return "n"
-        case 14: return "o"
-        case 15: return "p"
-        case 16: return "q"
-        case 17: return "r"
-        case 18: return "s"
-        case 19: return "t"
-        case 20: return "u"
-        case 21: return "v"
-        case 22: return "w"
-        case 23: return "x"
-        case 24: return "y"
-        case 25: return "z"
-        default: return "#"
-        }
-    }
+
 
 }
 

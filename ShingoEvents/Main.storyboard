@@ -67,9 +67,9 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f7N-c4-lYZ">
-                                <rect key="frame" x="243" y="390" width="115" height="78"/>
+                                <rect key="frame" x="240" y="390" width="122" height="78"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                <state key="normal" title="Reload Events"/>
+                                <state key="normal" title="Refresh Events"/>
                                 <connections>
                                     <action selector="reloadEventData:" destination="ZAg-ba-yVl" eventType="touchUpInside" id="pOl-EE-29J"/>
                                 </connections>
@@ -755,11 +755,8 @@
                                                 </constraints>
                                             </imageView>
                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="YC7-s1-3dj">
-                                                <rect key="frame" x="0.0" y="316" width="600" height="276"/>
+                                                <rect key="frame" x="0.0" y="316" width="600" height="284"/>
                                                 <color key="backgroundColor" red="0.050980392843484879" green="0.094117648899555206" blue="0.20784313976764679" alpha="1" colorSpace="calibratedRGB"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="276" id="jJ8-bz-Jj3"/>
-                                                </constraints>
                                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -770,8 +767,8 @@
                                             <constraint firstAttribute="height" constant="600" id="RrY-YW-8ZG"/>
                                             <constraint firstAttribute="trailing" secondItem="YC7-s1-3dj" secondAttribute="trailing" id="dSF-bd-DHO"/>
                                             <constraint firstItem="1Rf-54-ekD" firstAttribute="leading" secondItem="gKn-LY-2ns" secondAttribute="leading" constant="8" id="k8l-eH-KNM"/>
+                                            <constraint firstItem="YC7-s1-3dj" firstAttribute="top" secondItem="1Rf-54-ekD" secondAttribute="bottom" constant="8" id="mWS-dM-eVr"/>
                                             <constraint firstItem="YC7-s1-3dj" firstAttribute="leading" secondItem="gKn-LY-2ns" secondAttribute="leading" id="muf-LU-0T9"/>
-                                            <constraint firstItem="YC7-s1-3dj" firstAttribute="bottom" secondItem="gKn-LY-2ns" secondAttribute="bottomMargin" id="mx2-GE-mK5"/>
                                             <constraint firstItem="1Rf-54-ekD" firstAttribute="top" secondItem="gKn-LY-2ns" secondAttribute="top" constant="8" id="swA-ad-EZb"/>
                                         </constraints>
                                     </view>
@@ -780,6 +777,7 @@
                                     <constraint firstAttribute="trailing" secondItem="gKn-LY-2ns" secondAttribute="trailing" id="1e5-gt-y9a"/>
                                     <constraint firstItem="gKn-LY-2ns" firstAttribute="leading" secondItem="DSF-hV-6ny" secondAttribute="leading" id="Jza-lh-VuO"/>
                                     <constraint firstItem="gKn-LY-2ns" firstAttribute="top" secondItem="DSF-hV-6ny" secondAttribute="top" id="OH4-dM-bcg"/>
+                                    <constraint firstAttribute="bottom" secondItem="YC7-s1-3dj" secondAttribute="bottom" id="Zbh-Vx-xyv"/>
                                     <constraint firstItem="gKn-LY-2ns" firstAttribute="centerX" secondItem="DSF-hV-6ny" secondAttribute="centerX" id="nBD-YD-KTI"/>
                                     <constraint firstAttribute="bottom" secondItem="gKn-LY-2ns" secondAttribute="bottom" id="pnn-7c-2YX"/>
                                 </constraints>
@@ -797,6 +795,7 @@
                     <connections>
                         <outlet property="abstractTextField" destination="YC7-s1-3dj" id="63V-r4-h99"/>
                         <outlet property="bookImage" destination="1Rf-54-ekD" id="23g-gC-AZG"/>
+                        <outlet property="scrollView" destination="DSF-hV-6ny" id="WiF-ml-f6O"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9XB-LD-0Gb" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1238,7 +1237,7 @@
                                                 <rect key="frame" x="8" y="8" width="200" height="200"/>
                                             </imageView>
                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="BjE-mM-zwV">
-                                                <rect key="frame" x="0.0" y="216" width="600" height="376"/>
+                                                <rect key="frame" x="0.0" y="216" width="600" height="384"/>
                                                 <color key="backgroundColor" red="0.050980392843484879" green="0.094117648899555206" blue="0.20784313976764679" alpha="1" colorSpace="calibratedRGB"/>
                                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1251,13 +1250,13 @@
                                             <constraint firstItem="Sd7-vT-Q5r" firstAttribute="leading" secondItem="OwH-mD-N64" secondAttribute="leadingMargin" id="Hwz-Ea-yCG"/>
                                             <constraint firstAttribute="trailing" secondItem="BjE-mM-zwV" secondAttribute="trailing" id="KEl-ss-ifY"/>
                                             <constraint firstItem="BjE-mM-zwV" firstAttribute="leading" secondItem="OwH-mD-N64" secondAttribute="leading" id="SI8-NJ-m4L"/>
-                                            <constraint firstItem="BjE-mM-zwV" firstAttribute="bottom" secondItem="OwH-mD-N64" secondAttribute="bottomMargin" id="alS-Nz-FY1"/>
                                             <constraint firstItem="BjE-mM-zwV" firstAttribute="top" secondItem="Sd7-vT-Q5r" secondAttribute="bottom" constant="8" symbolic="YES" id="f6O-MK-ky9"/>
                                             <constraint firstAttribute="height" constant="600" id="mbV-LV-oBm"/>
                                         </constraints>
                                     </view>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="BjE-mM-zwV" secondAttribute="bottom" id="4RF-IH-1JQ"/>
                                     <constraint firstAttribute="bottom" secondItem="OwH-mD-N64" secondAttribute="bottom" id="8a0-EN-LIw"/>
                                     <constraint firstAttribute="trailing" secondItem="OwH-mD-N64" secondAttribute="trailing" id="H1n-UZ-Prt"/>
                                     <constraint firstItem="OwH-mD-N64" firstAttribute="top" secondItem="ulH-Pn-lw0" secondAttribute="top" id="PHn-sz-Tg2"/>
@@ -1278,6 +1277,7 @@
                     <connections>
                         <outlet property="abstractTextField" destination="BjE-mM-zwV" id="Kcy-Dk-9QX"/>
                         <outlet property="logoImage" destination="Sd7-vT-Q5r" id="via-bQ-iSd"/>
+                        <outlet property="scrollView" destination="ulH-Pn-lw0" id="WjV-Uu-FX1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mDs-Vz-6SW" userLabel="First Responder" sceneMemberID="firstResponder"/>

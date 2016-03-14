@@ -83,6 +83,7 @@ class EventMenuViewController: UIViewController {
         sortResearchRecipientsByName()
         sortPrizeRecipientsByName()
         sortSpeakersByFirstName()
+        sortAffiliatesByName()
         
         contentView.backgroundColor = .clearColor()
         
@@ -378,8 +379,34 @@ class EventMenuViewController: UIViewController {
         }
         
         if segue.identifier == "AffiliatesListView" {
+            var sectionInfo = [(String, [Affiliate])]()
+            
+            if var char:String = String(appData.affiliates[0].name.characters.first!) {
+                var affiliateList = [Affiliate]()
+                affiliateList.append(appData.affiliates[0])
+                sectionInfo.append((char, affiliateList))
+                var count = 0
+                for var i = 1; i < appData.affiliates.count; i++
+                {
+                    let affiliate = appData.affiliates[i]
+                    char = String(affiliate.name.characters.first!)
+                    if char == sectionInfo[count].0
+                    {
+                        sectionInfo[count].1.append(appData.affiliates[i])
+                    }
+                    else
+                    {
+                        var nextList = [Affiliate]()
+                        nextList.append(appData.affiliates[i])
+                        sectionInfo.append((char, nextList))
+                        count++
+                    }
+                }
+            }
+            
             let destination = segue.destinationViewController as! AffiliateListTableViewController
             destination.affiliates = self.appData.affiliates
+            destination.sectionInfo = sectionInfo
             
         }
         
@@ -528,7 +555,23 @@ class EventMenuViewController: UIViewController {
         }
         appData.shingoPrizeRecipients = prizeRecipients
     }
-    
+ 
+    func sortAffiliatesByName() {
+        var affiliates = appData.affiliates
+        for var i = 0; i < affiliates.count - 1; i++
+        {
+            for var j = 0; j < affiliates.count - i - 1; j++
+            {
+                if affiliates[j].name > affiliates[j+1].name
+                {
+                    let temp = affiliates[j]
+                    affiliates[j] = affiliates[j+1]
+                    affiliates[j+1] = temp
+                }
+            }
+        }
+        appData.affiliates = affiliates
+    }
 }
 
 
