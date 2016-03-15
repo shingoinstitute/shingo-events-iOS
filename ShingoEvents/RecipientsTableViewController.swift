@@ -56,7 +56,6 @@ class RecipientsTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("RecipientCell", forIndexPath: indexPath) as! RecipientCell
-        
         switch indexPath.section {
         case 0:
             if !appData.shingoPrizeRecipients.isEmpty {

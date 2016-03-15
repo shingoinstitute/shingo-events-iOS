@@ -31,8 +31,9 @@ class MainMenuViewController: UIViewController {
         return view
     }()
     
-    let activitiyViewController = ActivityViewController()
+//    let activitiyViewController = ActivityViewController()
     var appData:AppData!
+    var request:Alamofire.Request!
     
     var contentViewHeightConstraint: NSLayoutConstraint?
     
@@ -147,8 +148,7 @@ class MainMenuViewController: UIViewController {
     
     @IBAction func reloadEventData(sender: AnyObject) {
         appData = nil
-        activitiyViewController.setProgress(Float(0))
-        loadUpcomingEvents() {self.dismissViewControllerAnimated(true, completion: nil)}
+        loadUpcomingEvents()
     }
     @IBAction func didTapShingoModel(sender: AnyObject) {
         self.performSegueWithIdentifier("ShingoModel", sender: self)
@@ -159,28 +159,36 @@ class MainMenuViewController: UIViewController {
         self.performSegueWithIdentifier("Support", sender: self)
     }
     
+    let activityView = ActivityView()
     func loadUpcomingEvents(callback: (() -> Void)? = {} ) {
+    
         if isConnected()
         {
-            
-            self.presentViewController(self.activitiyViewController, animated: true, completion: nil)
-            self.activitiyViewController.updateProgress(0.1)
-            
-            self.activitiyViewController.setMessage("Connecting...")
-            Alamofire.request(.GET, "https://shingo-events.herokuapp.com/api").response { // Poke the server
+            disableButtons(shouldDisable: true)
+            activityView.displayActivityView(message: "Loading Upcoming Conferences...", forView: self.view, withRequest: self.request)
+            request = Alamofire.request(.GET, "http://104.131.77.136:5000/api").response { // Poke the server
                 _ in
-                self.activitiyViewController.setMessage("Getting Upcoming Conferences...")
-                self.activitiyViewController.updateProgress(0.5)
+                self.activityView.progressIndicator.progress = 0.5
                 self.appData = AppData()
                 self.appData.getUpcomingEvents() {
-                    self.activitiyViewController.updateProgress(1.0)
-//                    self.dismissViewControllerAnimated(true, completion: nil)
+                    self.activityView.progressIndicator.progress = 1
+                    self.disableButtons(shouldDisable: false)
+                    self.activityView.removeActivityViewFromDisplay()
                     callback!()
                 }
             }
         }
-
+        
     }
+    
+    
+    func disableButtons(shouldDisable disable:Bool){
+        eventsBtn.enabled = !disable
+        shingoModelBtn.enabled = !disable
+        settingsBtn.enabled = !disable
+        reloadEventsBtn.enabled = !disable
+    }
+
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if (segue.identifier == "EventsView")

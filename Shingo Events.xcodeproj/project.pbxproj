@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C2130BD81C987650009B3BB8 /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2130BD71C987650009B3BB8 /* ActivityView.swift */; };
 		C21ECE281C5FB21500689FDE /* AffiliateListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21ECE271C5FB21500689FDE /* AffiliateListTableViewController.swift */; };
 		C21ECE2A1C5FB22A00689FDE /* AfilliateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21ECE291C5FB22A00689FDE /* AfilliateViewController.swift */; };
 		C224C8981C92138700F4E393 /* AboutPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C224C8971C92138700F4E393 /* AboutPageViewController.swift */; };
@@ -66,6 +67,7 @@
 /* Begin PBXFileReference section */
 		1478ADAA210BB3436DBA32E0 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		2D372B05CBBB2E7BF78EA707 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C2130BD71C987650009B3BB8 /* ActivityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
 		C21ECE271C5FB21500689FDE /* AffiliateListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AffiliateListTableViewController.swift; sourceTree = "<group>"; };
 		C21ECE291C5FB22A00689FDE /* AfilliateViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AfilliateViewController.swift; sourceTree = "<group>"; };
 		C224C8971C92138700F4E393 /* AboutPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutPageViewController.swift; sourceTree = "<group>"; };
@@ -178,6 +180,7 @@
 				C2494E251C88E4F600E2969D /* ShingoIconImages.swift */,
 				C2A695231C35E30F00F6E0B8 /* SwiftyJSON.swift */,
 				C262CAD61C3DC55C005845AF /* ActivityIndicator.swift */,
+				C2130BD71C987650009B3BB8 /* ActivityView.swift */,
 				C2494E271C89FBFE00E2969D /* Reachability.swift */,
 				C2CFC3171C4954C20036E485 /* Main.storyboard */,
 				C2494E231C88BD6A00E2969D /* LaunchScreen.storyboard */,
@@ -464,6 +467,7 @@
 				C2A695141C35AC2900F6E0B8 /* AppData.swift in Sources */,
 				C2B7EB401C7B813100162AFB /* ContactUsViewController.swift in Sources */,
 				C224C8981C92138700F4E393 /* AboutPageViewController.swift in Sources */,
+				C2130BD81C987650009B3BB8 /* ActivityView.swift in Sources */,
 				C2A695111C35AC2900F6E0B8 /* AppDelegate.swift in Sources */,
 				C2C021231C6272D3008732DC /* SponsorsTableViewController.swift in Sources */,
 				C262DCBA1C861BA900712D4E /* SessionDetailViewController.swift in Sources */,

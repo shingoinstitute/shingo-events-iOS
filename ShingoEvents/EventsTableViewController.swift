@@ -25,7 +25,8 @@ class EventsTableViewController: UITableViewController {
     var async_tasks_completed = 0
     var progress:Float = 0
     
-    var activityViewController:ActivityViewController!
+//    var activityViewController:ActivityViewController!
+    var activityView = ActivityView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,15 +50,18 @@ class EventsTableViewController: UITableViewController {
             let cell = tableView.cellForRowAtIndexPath(cell_index_path) as! EventTableViewCell
             cell.event = self.appData.event
             self.performSegueWithIdentifier("EventMenu", sender: self)
-            self.dismissViewControllerAnimated(true, completion: nil)
+//            self.dismissViewControllerAnimated(true, completion: nil)
+            activityView.removeActivityViewFromDisplay()
         }
         else
         {
-            if activityViewController != nil
-            {
-                progress += Float(1.0) / Float(number_of_async_tasks + 1)
-                activityViewController.updateProgress(progress)
-            }
+            progress += Float(1.0) / Float(number_of_async_tasks + 1)
+            activityView.progressIndicator.progress += progress
+//            if activityViewController != nil
+//            {
+//                progress += Float(1.0) / Float(number_of_async_tasks + 1)
+//                activityViewController.updateProgress(progress)
+//            }
         }
     }
     
@@ -89,11 +93,11 @@ class EventsTableViewController: UITableViewController {
         cell.event = event
         cell.nameLabel.text = event.name
         
-        let formatter = NSDateFormatter() // Date formatting
-        formatter.dateFormat = "yyyy-MM-dd"
-        formatter.dateStyle = .MediumStyle
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.dateStyle = .MediumStyle
         
-        cell.dateRangeLabel.text = formatter.stringFromDate(cell.event.event_start_date) + " - " + formatter.stringFromDate(cell.event.event_end_date)
+        cell.dateRangeLabel.text = dateFormatter.stringFromDate(cell.event.event_start_date) + " - " + dateFormatter.stringFromDate(cell.event.event_end_date)
         
         return cell
         
@@ -111,8 +115,9 @@ class EventsTableViewController: UITableViewController {
         
         if cell.event.eventSessions == nil
         {
-            activityViewController = ActivityViewController(message: "Loading Conference Data...")
-            presentViewController(activityViewController, animated: true, completion: nil)
+//            activityViewController = ActivityViewController(message: "Loading Conference Data...")
+//            presentViewController(activityViewController, animated: true, completion: nil)
+            activityView.displayActivityView(message: "Loading Conference Data...", forView: self.view, withRequest: nil)
             appData.getEventSessions() { // appData.eventSessions should be populated before calling other tasks
                 self.asyncTaskDidComplete()
                 self.appData.getAgenda() {
