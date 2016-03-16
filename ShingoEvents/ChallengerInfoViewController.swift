@@ -12,7 +12,7 @@ class ChallengerInfoViewController: UIViewController {
 
     @IBOutlet weak var logoImage: UIImageView!
     @IBOutlet weak var abstractTextField: UITextView!
-    @IBOutlet weak var scrollView: UIScrollView!
+//    @IBOutlet weak var scrollView: UIScrollView!
     
     var recipient:Recipient!
     
@@ -20,7 +20,7 @@ class ChallengerInfoViewController: UIViewController {
         super.viewDidLoad()
         
         abstractTextField.text = ""
-        
+        self.automaticallyAdjustsScrollViewInsets = false
         if recipient.logo_book_cover_image != nil
         {
             logoImage.image = recipient.logo_book_cover_image
@@ -57,23 +57,9 @@ class ChallengerInfoViewController: UIViewController {
         
         abstractTextField.textColor = .whiteColor()
         abstractTextField.font = UIFont.systemFontOfSize(16)
-        
-        abstractTextField.sizeToFit()
-        abstractTextField.layoutIfNeeded()
-        calcContentHeightForScrollView()
+
     }
     
-    func calcContentHeightForScrollView() {
-        var height:CGFloat = 0
-        
-        let uiElementOffset:CGFloat = 8
-        
-        height += logoImage.frame.height
-        height += abstractTextField.contentSize.height
-        height += (uiElementOffset * 2.0)
-        
-        scrollView.contentSize = CGSize(width: view.frame.width, height: height)
-        
-    }
+
 
 }

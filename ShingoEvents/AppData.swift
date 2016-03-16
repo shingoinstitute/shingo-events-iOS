@@ -662,7 +662,7 @@ public class AppData {
     
     func getUrl(var type: URLTYPE) -> String {
         
-        let base_url = "https://shingo-events.herokuapp.com/api"
+        let base_url = "http://104.131.77.136:5000/api"
         let CLIENT_ID_SECRET = "client_id=6cd61ca33e7f2f94d460b1e9f2cb73&client_secret=bb313eea59bd309a4443c38b29"
         
         var url = ""

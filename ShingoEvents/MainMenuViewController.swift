@@ -167,7 +167,7 @@ class MainMenuViewController: UIViewController {
             self.activitiyViewController.updateProgress(0.1)
             
             self.activitiyViewController.setMessage("Connecting...")
-            Alamofire.request(.GET, "https://shingo-events.herokuapp.com/api").response { // Poke the server
+            Alamofire.request(.GET, "http://104.131.77.136:5000/api").response { // Poke the server
                 _ in
                 self.activitiyViewController.setMessage("Getting Upcoming Conferences...")
                 self.activitiyViewController.updateProgress(0.5)
