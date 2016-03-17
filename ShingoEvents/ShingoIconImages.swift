@@ -32,16 +32,17 @@ public class ShingoIconImages: UIImage {
             case "iPhone 6 Plus",
             "iPhone 6s Plus":          return self.iPhone6Plus!
             case "iPhone 6",
-            "iPhone 6s":               return self.iPhone6!
+            "iPhone 6s",
+            "iPod Touch 6":               return self.iPhone6!
             case "iPhone 5",
-            "iPhone 5c", "iPhone 5s":  return self.iPhone5!
+            "iPhone 5c",
+            "iPhone 5s",
+            "iPod Touch 5":  return self.iPhone5!
             case "iPhone 4",
             "iPhone 4s":               return self.iPhone4!
             case "Simulator":          return self.iPadPro!
         default:
-            return UIImage()
+            return iPhone6Plus!
         }
-        
     }
-    
 }
