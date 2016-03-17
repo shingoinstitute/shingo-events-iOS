@@ -418,12 +418,12 @@ class EventMenuViewController: UIViewController {
         
         if segue.identifier == "SponsorsView" {
             let destination = segue.destinationViewController as! SponsorsTableViewController
-            let sponsors_array = self.numberOfEachSponsorType(self.appData!.sponsors!)
-            destination.friends = sponsors_array[0]
-            destination.supporters = sponsors_array[1]
-            destination.benefactors = sponsors_array[2]
-            destination.champions = sponsors_array[3]
-            destination.presidents = sponsors_array[4]
+//            let sponsors_array = self.numberOfEachSponsorType(self.appData!.sponsors!)
+            destination.friends = appData.friendSponsors//sponsors_array[0]
+            destination.supporters = appData.supportersSponsors //sponsors_array[1]
+            destination.benefactors = appData.benefactorsSponsors //sponsors_array[2]
+            destination.champions = appData.championsSponsors //sponsors_array[3]
+            destination.presidents = appData.presidentsSponsors //sponsors_array[4]
         }
         
     }
@@ -469,40 +469,29 @@ class EventMenuViewController: UIViewController {
         }
     }
     
-    func numberOfEachSponsorType(sponsors:[Sponsor]) -> [[Sponsor]] {
-        var sponsors_array = [[Sponsor](),[Sponsor](),[Sponsor()],[Sponsor()],[Sponsor()]]
-        var friends = [Sponsor]()
-        var supporters = [Sponsor]()
-        var benefactors = [Sponsor]()
-        var champions = [Sponsor]()
-        var presidents = [Sponsor]()
-        
-        for item in sponsors {
-            if item.sponsor_type == .Friend {
-                friends.append(item)
-            }
-            if item.sponsor_type == .Supporter {
-                supporters.append(item)
-            }
-            if item.sponsor_type == .Benefactor {
-                benefactors.append(item)
-            }
-            if item.sponsor_type == .Champion {
-                champions.append(item)
-            }
-            if item.sponsor_type == .President {
-                presidents.append(item)
-            }
-        }
-        
-        sponsors_array[0] = friends
-        sponsors_array[1] = supporters
-        sponsors_array[2] = benefactors
-        sponsors_array[3] = champions
-        sponsors_array[4] = presidents
-        
-        return sponsors_array
-    }
+//    func numberOfEachSponsorType(sponsors:[Sponsor]) -> [[Sponsor]] {
+//        
+//        var sponsors_array = [[Sponsor](), [Sponsor](), [Sponsor](), [Sponsor](), [Sponsor]()]
+//        
+//        for item in sponsors {
+//            if item.sponsor_type == .Friend {
+//                sponsors_array[0].append(item)
+//            }
+//            else if item.sponsor_type == .Supporter {
+//                sponsors_array[1].append(item)
+//            }
+//            else if item.sponsor_type == .Benefactor {
+//                sponsors_array[2].append(item)
+//            }
+//            else if item.sponsor_type == .Champion {
+//                sponsors_array[3].append(item)
+//            }
+//            else if item.sponsor_type == .President {
+//                sponsors_array[4].append(item)
+//            }
+//        }
+//        return sponsors_array
+//    }
     
     // Some simple bubble sorting functions
     func sortSpeakersByFirstName() {
