@@ -21,18 +21,10 @@ class ChallengerInfoViewController: UIViewController {
         
         abstractTextField.text = ""
         self.automaticallyAdjustsScrollViewInsets = false
+        logoImage.contentMode = UIViewContentMode.ScaleAspectFit
         if recipient.logo_book_cover_image != nil
         {
             logoImage.image = recipient.logo_book_cover_image
-            if logoImage.image?.size.width > (view.frame.width * 0.75) {
-                var height = logoImage.image?.size.height
-                var width = logoImage.image?.size.width
-                let aspectRatio = height! / width!
-                
-                width = view.frame.width * 0.75
-                height = width! * aspectRatio
-                logoImage.autoSetDimensionsToSize(CGSize(width: width!, height: height!))
-            }
         }
         else
         {
