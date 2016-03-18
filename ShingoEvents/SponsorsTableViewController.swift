@@ -26,10 +26,6 @@ class SponsorsTableViewController: UITableViewController {
 
     }
     
-//    override func viewWillAppear(animated: Bool) {
-//        UILabel.appearanceWhenContainedInInstancesOfClasses([UITableViewHeaderFooterView.self]).textColor = UIColor.whiteColor()
-//    }
-    
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -78,7 +74,7 @@ class SponsorsTableViewController: UITableViewController {
 
         let title = sectionTitles[section]
         
-        if title == "President" {
+        if title == "Presidents" {
             return presidents.count
         } else if title == "Champions" {
             return champions.count
@@ -96,8 +92,8 @@ class SponsorsTableViewController: UITableViewController {
 
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("SponsorCell", forIndexPath: indexPath) as! SponsorTableViewCell
-
+//        let cell = tableView.dequeueReusableCellWithIdentifier("SponsorCell", forIndexPath: indexPath) as! SponsorTableViewCell
+        let cell = SponsorTableViewCell()
         switch sectionTitles[indexPath.section] {
         case "Friends":
             if (friends?.count > 0) {

@@ -32,7 +32,13 @@ public class AppData {
     var event:Event!
     var exhibitors:[Exhibitor]!
     var affiliates:[Affiliate]!
-    var sponsors:[Sponsor]!
+    
+    var friendSponsors:[Sponsor]!
+    var supportersSponsors:[Sponsor]!
+    var benefactorsSponsors:[Sponsor]!
+    var championsSponsors:[Sponsor]!
+    var presidentsSponsors:[Sponsor]!
+    
     var researchRecipients = [Recipient]()
     var shingoPrizeRecipients = [Recipient]()
     var silverRecipients = [Recipient]()
@@ -498,15 +504,8 @@ public class AppData {
     
     public func getSponsors(callback: () -> Void) {
         
-        if self.sponsors != nil {
-            callback()
-            return
-        } else {
-            self.sponsors = [Sponsor]()
-        }
-        
         let parameters = [
-            "event_id": self.event!.event_id
+            "event_id": self.event.event_id
         ]
         
         POST(.GetSponsors, parameters: parameters) {
@@ -521,35 +520,35 @@ public class AppData {
                     for item in sponsors_new {
                         item.sponsor_type = .Friend
                     }
-                    self.sponsors? += sponsors_new
+                    self.friendSponsors = sponsors_new
                 }
                 if sponsors["supporters"] != nil {
                     sponsors_new = self.parseSponsorData(sponsors["supporters"]["records"])
                     for item in sponsors_new {
                         item.sponsor_type = .Supporter
                     }
-                    self.sponsors? += sponsors_new
+                    self.supportersSponsors = sponsors_new
                 }
                 if sponsors["benefactors"] != nil {
                     sponsors_new = self.parseSponsorData(sponsors["benefactors"]["records"])
                     for item in sponsors_new {
                         item.sponsor_type = .Benefactor
                     }
-                    self.sponsors? += sponsors_new
+                    self.benefactorsSponsors = sponsors_new
                 }
                 if sponsors["champions"] != nil {
                     sponsors_new = self.parseSponsorData(sponsors["champions"]["records"])
                     for item in sponsors_new {
                         item.sponsor_type = .Champion
                     }
-                    self.sponsors? += sponsors_new
+                    self.championsSponsors = sponsors_new
                 }
                 if sponsors["presidents"] != nil {
                     sponsors_new = self.parseSponsorData(sponsors["presidents"]["records"])
                     for item in sponsors_new {
                         item.sponsor_type = .President
                     }
-                    self.sponsors? += sponsors_new
+                    self.presidentsSponsors = sponsors_new
                 }
             }
             callback()
@@ -559,9 +558,9 @@ public class AppData {
     
     func parseSponsorData(json:JSON) -> [Sponsor] {
         var sponsors = [Sponsor]()
-        let sponsor = Sponsor()
         
         for item in json.array! {
+            let sponsor = Sponsor()
             if item["Id"] != nil {
                 sponsor.id = item["Id"].string! as String
             }
@@ -590,6 +589,7 @@ public class AppData {
                 sponsor.event_id = item["Event__c"].string! as String
             }
             if item["Name"] != nil {
+                print(item["Name"].string! as String)
                 sponsor.name = item["Name"].string! as String
             }
             sponsors.append(sponsor)
@@ -661,7 +661,6 @@ public class AppData {
     
     
     func getUrl(var type: URLTYPE) -> String {
-        
 //        let base_url = "https://shingo-events.herokuapp.com/api"
         let CLIENT_ID_SECRET = "client_id=6cd61ca33e7f2f94d460b1e9f2cb73&client_secret=bb313eea59bd309a4443c38b29"
         let base_url = "http://104.131.77.136:5000/api"
