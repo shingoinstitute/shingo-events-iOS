@@ -179,34 +179,23 @@ class SponsorTableViewCell:UITableViewCell {
                 self.bannerImage.autoSetContentCompressionResistancePriorityForAxis(.Vertical)
             }
 
-            if let image = self.sponsor.banner_image {
+            if let image = self.sponsor.banner_image
+            {
                 bannerImage.image = image
-            } else if let image = self.sponsor.logo_image {
+            }
+            else if let image = self.sponsor.logo_image
+            {
                 bannerImage.image = image
-            } else {
-                bannerImage.image = UIImage(named: "logoComingSoon")
+            }
+            else
+            {
+                bannerImage.image = UIImage(named: "sponsor_banner_pl")
             }
             
-            let cellInsets:CGFloat = 10.0
-            let cellHeight:CGFloat = 150.0
-            print(bannerImage.image?.size.width)
-            var width:CGFloat = (bannerImage.image?.size.width)!
-            var height:CGFloat = (bannerImage.image?.size.height)!
-            let aspectRatio:CGFloat = height / width
+            bannerImage.contentMode = UIViewContentMode.ScaleAspectFit
             
-            if bannerImage.image?.size.width > contentView.frame.width {
-                width = contentView.frame.width
-                height = width * aspectRatio
-            }
-            
-            if bannerImage.image?.size.height > 150 - (cellInsets * 2.0) {
-                height = cellHeight - (cellInsets * 2.0)
-                width = height / aspectRatio
-            }
-            
-            bannerImage.autoSetDimensionsToSize(CGSize(width: width, height: height))
-            bannerImage.autoAlignAxis(.Horizontal, toSameAxisOfView: contentView)
-            bannerImage.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 8.0)
+            bannerImage.autoAlignAxis(.Horizontal, toSameAxisOfView: contentView, withOffset: 8.0)
+            bannerImage.autoAlignAxis(.Vertical, toSameAxisOfView: contentView, withOffset: 8.0)
             
             didSetupConstraints = true
         }
