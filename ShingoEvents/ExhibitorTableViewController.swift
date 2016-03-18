@@ -47,35 +47,21 @@ class ExhibitorCell: UITableViewCell {
             NSLayoutConstraint.autoSetPriority(UILayoutPriorityRequired) {
                 self.exhibitorImage.autoSetContentCompressionResistancePriorityForAxis(.Vertical)
             }
-            let cellMargin: CGFloat = 8.0
-            var width:CGFloat = (exhibitorImage.image?.size.width)!
-            var height:CGFloat = (exhibitorImage.image?.size.height)!
-            let aspectRatio = height / width
+            
+            exhibitorImage.contentMode = UIViewContentMode.ScaleAspectFit
+            
+            var width:CGFloat = CGFloat()
+            var height:CGFloat = CGFloat()
             
             if UIDevice.currentDevice().userInterfaceIdiom == .Phone
             {
-                let preferredWidth = (contentView.frame.width / 2) - cellMargin
-                if exhibitorImage.image?.size.width > preferredWidth {
-                    width = preferredWidth
-                    height = width * aspectRatio
-                }
-                
-                if height > 150 - (cellMargin * 2) {
-                    width = 150 - (cellMargin * 2)
-                    height = width * aspectRatio
-                }
+                width = contentView.frame.width * 0.33
+                height = 150
             }
             else
             {
-                if exhibitorImage.image?.size.width > 300 - cellMargin {
-                    width = 300 - (cellMargin * 2)
-                    height = width * aspectRatio
-                }
-                
-                if height > 200 - (cellMargin * 2) {
-                    width = 200 - (cellMargin * 2)
-                    height = width * aspectRatio
-                }
+                width = 300
+                height = 200
             }
 
             
