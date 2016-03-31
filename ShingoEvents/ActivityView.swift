@@ -25,7 +25,7 @@ public class ActivityView: UIView {
             self.request = request
         }
         view.addSubview(activityView)
-        view.addSubview(cancelButton)
+//        view.addSubview(cancelButton)
         activityView.addSubview(activityIndicatorView)
         activityView.addSubview(messageLabel)
         activityView.addSubview(progressIndicator)
@@ -59,17 +59,17 @@ public class ActivityView: UIView {
         progressIndicator.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: activityView, withOffset: -10.0)
         progressIndicator.autoAlignAxis(.Vertical, toSameAxisOfView: activityView)
         
-        cancelButton.setTitle("Cancel", forState: UIControlState.Normal)
-        cancelButton.addTarget(self, action: #selector(ActivityView.cancelRequest), forControlEvents: UIControlEvents.TouchUpInside)
-        cancelButton.setTitleColor(view.tintColor, forState: UIControlState.Normal)
-        cancelButton.titleLabel?.font = UIFont.systemFontOfSize(16.0)
-        cancelButton.titleLabel?.textAlignment = .Center
-        cancelButton.layer.cornerRadius = 5.0
-        cancelButton.backgroundColor = UIColor.whiteColor()
-        
-        cancelButton.autoSetDimensionsToSize(CGSize(width: 160, height: 42))
-        cancelButton.autoPinEdge(.Left, toEdge: .Left, ofView: activityView, withOffset: 0)
-        cancelButton.autoPinEdge(.Top, toEdge: .Bottom, ofView: activityView, withOffset: 8.0)
+//        cancelButton.setTitle("Cancel", forState: UIControlState.Normal)
+//        cancelButton.addTarget(self, action: #selector(ActivityView.cancelRequest), forControlEvents: UIControlEvents.TouchUpInside)
+//        cancelButton.setTitleColor(view.tintColor, forState: UIControlState.Normal)
+//        cancelButton.titleLabel?.font = UIFont.systemFontOfSize(16.0)
+//        cancelButton.titleLabel?.textAlignment = .Center
+//        cancelButton.layer.cornerRadius = 5.0
+//        cancelButton.backgroundColor = UIColor.whiteColor()
+//        
+//        cancelButton.autoSetDimensionsToSize(CGSize(width: 160, height: 42))
+//        cancelButton.autoPinEdge(.Left, toEdge: .Left, ofView: activityView, withOffset: 0)
+//        cancelButton.autoPinEdge(.Top, toEdge: .Bottom, ofView: activityView, withOffset: 8.0)
         
     }
     
