@@ -282,8 +282,8 @@ class EventMenuViewController: UIViewController {
     
     func didTapExhibitors(sender: AnyObject) {
         // Ensure each exhibitor has an image assigned to it
-//        if sectionHeaders == nil
-//        {
+        if sectionHeaders == nil
+        {
             sectionHeaders = [(Character, [Exhibitor])]()
             
             for exhibitor in self.appData.exhibitors
@@ -332,7 +332,7 @@ class EventMenuViewController: UIViewController {
                 }
             }
             
-//        }
+        }
         self.performSegueWithIdentifier("ExhibitorsListView", sender: self)
     }
     
@@ -350,7 +350,6 @@ class EventMenuViewController: UIViewController {
     
     // MARK: - Navigation
     
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         if segue.identifier == "SchedulesView" {
@@ -420,30 +419,40 @@ class EventMenuViewController: UIViewController {
         
         if segue.identifier == "SponsorsView" {
             let destination = segue.destinationViewController as! SponsorsTableViewController
-//            let sponsors_array = self.numberOfEachSponsorType(self.appData!.sponsors!)
-            destination.friends = appData.friendSponsors//sponsors_array[0]
-            destination.supporters = appData.supportersSponsors //sponsors_array[1]
-            destination.benefactors = appData.benefactorsSponsors //sponsors_array[2]
-            destination.champions = appData.championsSponsors //sponsors_array[3]
-            destination.presidents = appData.presidentsSponsors //sponsors_array[4]
+            destination.friends = appData.friendSponsors            //sponsors_array[0]
+            destination.supporters = appData.supportersSponsors     //sponsors_array[1]
+            destination.benefactors = appData.benefactorsSponsors   //sponsors_array[2]
+            destination.champions = appData.championsSponsors       //sponsors_array[3]
+            destination.presidents = appData.presidentsSponsors     //sponsors_array[4]
         }
         
     }
     
     // MARK: - Custom Functions
     
-    func sortWeekByDay(week:[EventDay]) -> [EventDay] {
-        var days = week
+    func sortWeekByDay(eventDayList:[EventDay]) -> [EventDay] {
+        var days = eventDayList
         for i in 0 ..< days.count - 1
         {
             for j in 0 ..< (days.count - i - 1)
             {
-                if valueOfDay(days[j].dayOfWeek) > valueOfDay(days[j+1].dayOfWeek)
+                
+                if days[j].sessions[0].start_end_date.0 != days[j].sessions[0].start_end_date.0.earlierDate(days[j+1].sessions[0].start_end_date.0)
                 {
                     let temp = days[j]
                     days[j] = days[j+1]
                     days[j+1] = temp
                 }
+                
+                
+//                /////
+//                if valueOfDay(days[j].dayOfWeek) > valueOfDay(days[j+1].dayOfWeek)
+//                {
+//                    let temp = days[j]
+//                    days[j] = days[j+1]
+//                    days[j+1] = temp
+//                }
+//                /////
             }
         }
         return days
@@ -472,29 +481,6 @@ class EventMenuViewController: UIViewController {
         }
     }
     
-//    func numberOfEachSponsorType(sponsors:[Sponsor]) -> [[Sponsor]] {
-//        
-//        var sponsors_array = [[Sponsor](), [Sponsor](), [Sponsor](), [Sponsor](), [Sponsor]()]
-//        
-//        for item in sponsors {
-//            if item.sponsor_type == .Friend {
-//                sponsors_array[0].append(item)
-//            }
-//            else if item.sponsor_type == .Supporter {
-//                sponsors_array[1].append(item)
-//            }
-//            else if item.sponsor_type == .Benefactor {
-//                sponsors_array[2].append(item)
-//            }
-//            else if item.sponsor_type == .Champion {
-//                sponsors_array[3].append(item)
-//            }
-//            else if item.sponsor_type == .President {
-//                sponsors_array[4].append(item)
-//            }
-//        }
-//        return sponsors_array
-//    }
     
     // Some simple bubble sorting functions
     func sortSpeakersByFirstName() {

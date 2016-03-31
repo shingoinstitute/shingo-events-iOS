@@ -86,7 +86,7 @@ public class AppData {
                         upcoming_event.venueMaps = [VenueMap]()
                         for map in item["Venue_Maps"].array! {
                             
-                            // an FYI; This class constructor makes an http request to get the venue picture when initialized
+                            // an FYI - This class constructor makes an http request to get the venue picture when initialized
                             let venueMap = VenueMap(
                                 name: map["name"].string! as String,
                                 url: map["url"].string! as String
@@ -112,53 +112,24 @@ public class AppData {
         POST(.GetAgenda, parameters: parameters) {
             json in
             
-            // Checks if json["agenda"]["records"] is empty or not
             if json["agenda"]["Days"]["records"] != nil {
-                self.event!.eventAgenda.agenda_id = json["agenda"]["Id"].string! as String
-                let days = json["agenda"]["Days"]["records"] // Pass in entire ["records"] array to completeAsyncTaskOnGetAgenda()
-                let count = days.array!.count
                 
-                // I blame this code on the flurry of async calls being sent out by this task
-                for i in 0 ..< count
+                self.event!.eventAgenda.agenda_id = json["agenda"]["Id"].string! as String
+                let days = json["agenda"]["Days"]["records"].array!
+                let count = days.count
+                
+                for i in 0 ..< count - 1
                 {
                     let day_id = days[i]["Id"].string! as String
-                    
-                    // This is set up so it will only use callback() on the last iteration i
-                    // Note to self: Come up with a more graceful solution once we get this app deployed
-                    if i == (count - 1) {
-                        self.findDayFromDayId(day_id) {
-                            day in
-                            
-                            if day != nil {
-                                self.event!.eventAgenda.days_array.append(day!)
-                            }
-                            callback()
-                        }
-                    } else {
-                        self.findDayFromDayId(day_id) {
-                            day in
-                            
-                            if day != nil {
-                                self.event!.eventAgenda.days_array.append(day!)
-                            }
-                        }
+                
+                    self.getDay(day_id)
+                    {
+                        day in
+                        self.event.eventAgenda.days_array.append(day)
                     }
                 }
-                
-            } else {
-                print("WARNING! Empty agenda @func AppData::getAgenda")
                 callback()
             }
-            
-            
-        }
-    }
-    
-
-    func findDayFromDayId(day_id:String, completionHandler:(day: EventDay?) -> Void) {
-        self.getDay(day_id) {
-            day in
-            completionHandler(day: day)
         }
     }
 

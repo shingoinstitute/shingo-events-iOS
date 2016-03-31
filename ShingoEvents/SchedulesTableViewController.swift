@@ -74,7 +74,6 @@ class SchedulesTableViewController: UITableViewController {
     
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "SessionListView" {
             let dest_vc = segue.destinationViewController as! SessionListTableViewController
