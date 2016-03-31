@@ -91,9 +91,9 @@ class SchedulesTableViewController: UITableViewController {
     
     func sortSessionsByDate(inout sessions:[EventSession]) {
     
-        for(var i = 0; i < sessions.count - 1; i++) {
-            for(var j = 0; j < sessions.count - i - 1; j++) {
-                
+        for i in 0 ..< sessions.count - 1 {
+            for j in 0 ..< sessions.count - i - 1 {
+            
                 if sessions[j].start_end_date == nil { continue }
                 
                 if sessions[j].start_end_date!.0.timeIntervalSince1970 > sessions[j+1].start_end_date!.0.timeIntervalSince1970

@@ -32,23 +32,23 @@ class SponsorsTableViewController: UITableViewController {
         
         var numSections = 0
         if presidents.count > 0 {
-            numSections++
+            numSections += 1
             sectionTitles.append("Presidents")
         }
         if champions.count > 0 {
-            numSections++
+            numSections += 1
             sectionTitles.append("Champions")
         }
         if benefactors.count > 0 {
-            numSections++
+            numSections += 1
             sectionTitles.append("Benefactors")
         }
         if supporters.count > 0 {
-            numSections++
+            numSections += 1
             sectionTitles.append("Supporters")
         }
         if friends.count > 0 {
-            numSections++
+            numSections += 1
             sectionTitles.append("Friends")
         }
 

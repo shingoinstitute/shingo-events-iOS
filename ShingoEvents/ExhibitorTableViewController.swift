@@ -103,10 +103,10 @@ class ExhibitorTableViewController: UITableViewController {
         tableView.estimatedRowHeight = 150.0
     }
     
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "contentSizeCategoryChanged", name: UIContentSizeCategoryDidChangeNotification, object: nil)
-    }
+//    override func viewDidAppear(animated: Bool) {
+//        super.viewDidAppear(animated)
+//        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("contentSizeCategoryChanged"), name: UIContentSizeCategoryDidChangeNotification, object: nil)
+//    }
 
     override func viewDidDisappear(animated: Bool) {
         super.viewDidDisappear(animated)

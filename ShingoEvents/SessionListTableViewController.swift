@@ -105,7 +105,8 @@ class SessionListTableViewController: UITableViewController {
 
     // MARK: - Custom Functions
     
-    func timeStringFromComponents(var hour: Int, minute:Int) -> String {
+    func timeStringFromComponents(hour: Int, minute:Int) -> String {
+        var hour = hour
         var time:String = String()
         var am_pm:String = String()
         if hour > 12 {

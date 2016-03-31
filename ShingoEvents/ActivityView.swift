@@ -60,7 +60,7 @@ public class ActivityView: UIView {
         progressIndicator.autoAlignAxis(.Vertical, toSameAxisOfView: activityView)
         
         cancelButton.setTitle("Cancel", forState: UIControlState.Normal)
-        cancelButton.addTarget(self, action: "cancelRequest", forControlEvents: UIControlEvents.TouchUpInside)
+        cancelButton.addTarget(self, action: #selector(ActivityView.cancelRequest), forControlEvents: UIControlEvents.TouchUpInside)
         cancelButton.setTitleColor(view.tintColor, forState: UIControlState.Normal)
         cancelButton.titleLabel?.font = UIFont.systemFontOfSize(16.0)
         cancelButton.titleLabel?.textAlignment = .Center

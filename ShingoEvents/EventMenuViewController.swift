@@ -74,7 +74,7 @@ class EventMenuViewController: UIViewController {
     }()
     
     var appData:AppData!
-    var sectionHeaders = [(Character, [Exhibitor])]()
+    var sectionHeaders:[(Character, [Exhibitor])]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -133,14 +133,14 @@ class EventMenuViewController: UIViewController {
         contentView.bringSubviewToFront(sponsorsButton)
         
         // Add targets to all buttons
-        scheduleButton.addTarget(self, action: "didTapSchedule:", forControlEvents: UIControlEvents.TouchUpInside)
-        venuePhotosButton.addTarget(self, action: "didTapVenue:", forControlEvents: UIControlEvents.TouchUpInside)
-        recipientsButton.addTarget(self, action: "didTapRecipients:", forControlEvents: UIControlEvents.TouchUpInside)
-        exhibitorsButton.addTarget(self, action: "didTapExhibitors:", forControlEvents: UIControlEvents.TouchUpInside)
-        speakerButton.addTarget(self, action: "didTapSpeakers:", forControlEvents: UIControlEvents.TouchUpInside)
-        directionsButton.addTarget(self, action: "didTapDirections:", forControlEvents: UIControlEvents.TouchUpInside)
-        affiliatesButton.addTarget(self, action: "didTapAffiliates:", forControlEvents: UIControlEvents.TouchUpInside)
-        sponsorsButton.addTarget(self, action: "didTapSponsors:", forControlEvents: UIControlEvents.TouchUpInside)
+        scheduleButton.addTarget(self, action: #selector(EventMenuViewController.didTapSchedule(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        venuePhotosButton.addTarget(self, action: #selector(EventMenuViewController.didTapVenue(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        recipientsButton.addTarget(self, action: #selector(EventMenuViewController.didTapRecipients(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        exhibitorsButton.addTarget(self, action: #selector(EventMenuViewController.didTapExhibitors(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        speakerButton.addTarget(self, action: #selector(EventMenuViewController.didTapSpeakers(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        directionsButton.addTarget(self, action: #selector(EventMenuViewController.didTapDirections(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        affiliatesButton.addTarget(self, action: #selector(EventMenuViewController.didTapAffiliates(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+        sponsorsButton.addTarget(self, action: #selector(EventMenuViewController.didTapSponsors(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         setButtonConstraints()
         
@@ -282,55 +282,57 @@ class EventMenuViewController: UIViewController {
     
     func didTapExhibitors(sender: AnyObject) {
         // Ensure each exhibitor has an image assigned to it
-        for exhibitor in self.appData.exhibitors
-        {
-            if exhibitor.logo_image == nil
-            {
-                exhibitor.logo_image = UIImage(named: "sponsor_banner_pl")
-            }
-        }
-        
-        // Alphabetically sort exhibitors by company name
-        for (var i = 0; i < appData.exhibitors.count - 1; i++)
-        {
-            for (var j = 0; j < appData.exhibitors.count - i - 1; j++)
-            {
-                if appData.exhibitors[j].name > appData.exhibitors[j+1].name
-                {
-                    let temp = appData.exhibitors[j]
-                    appData.exhibitors[j] = appData.exhibitors[j+1]
-                    appData.exhibitors[j+1] = temp
-                }
-            }
-        }
-        
-
-        // Create dictionary to set section headers in ExhibitorTableViewController
-        if var char = appData.exhibitors[0].name.characters.first {
-            var exhibitorList = [Exhibitor]()
-            exhibitorList.append(appData.exhibitors[0])
-            sectionHeaders.append((char, exhibitorList))
-            var count = 0
-            for var i = 1; i < appData.exhibitors.count; i++
-            {
-                char = appData.exhibitors[i].name.characters.first!
-                if char == sectionHeaders[count].0
-                {
-                    sectionHeaders[count].1.append(appData.exhibitors[i])
-                }
-                else
-                {
-                    var nextList = [Exhibitor]()
-                    nextList.append(appData.exhibitors[i])
-                    sectionHeaders.append((char, nextList))
-                    count++
-                }
-            }
-        }
-
-
+//        if sectionHeaders == nil
+//        {
+            sectionHeaders = [(Character, [Exhibitor])]()
             
-        
+            for exhibitor in self.appData.exhibitors
+            {
+                if exhibitor.logo_image == nil
+                {
+                    exhibitor.logo_image = UIImage(named: "sponsor_banner_pl")
+                }
+            }
+            
+            // Alphabetically sort exhibitors by company name
+            for i in 0 ..< appData.exhibitors.count - 1
+            {
+                for j in 0 ..< appData.exhibitors.count - i - 1
+                {
+                    if appData.exhibitors[j].name > appData.exhibitors[j+1].name
+                    {
+                        let temp = appData.exhibitors[j]
+                        appData.exhibitors[j] = appData.exhibitors[j+1]
+                        appData.exhibitors[j+1] = temp
+                    }
+                }
+            }
+            
+
+            // Create dictionary to set section headers in ExhibitorTableViewController
+            if var char = appData.exhibitors[0].name.characters.first {
+                var exhibitorList = [Exhibitor]()
+                exhibitorList.append(appData.exhibitors[0])
+                sectionHeaders.append((char, exhibitorList))
+                var count = 0
+                for i in 1 ..< appData.exhibitors.count
+                {
+                    char = appData.exhibitors[i].name.characters.first!
+                    if char == sectionHeaders[count].0
+                    {
+                        sectionHeaders[count].1.append(appData.exhibitors[i])
+                    }
+                    else
+                    {
+                        var nextList = [Exhibitor]()
+                        nextList.append(appData.exhibitors[i])
+                        sectionHeaders.append((char, nextList))
+                        count += 1
+                    }
+                }
+            }
+            
+//        }
         self.performSegueWithIdentifier("ExhibitorsListView", sender: self)
     }
     
@@ -386,7 +388,7 @@ class EventMenuViewController: UIViewController {
                 affiliateList.append(appData.affiliates[0])
                 sectionInfo.append((char, affiliateList))
                 var count = 0
-                for var i = 1; i < appData.affiliates.count; i++
+                for i in 1 ..< appData.affiliates.count
                 {
                     let affiliate = appData.affiliates[i]
                     char = String(affiliate.name.characters.first!)
@@ -399,7 +401,7 @@ class EventMenuViewController: UIViewController {
                         var nextList = [Affiliate]()
                         nextList.append(appData.affiliates[i])
                         sectionInfo.append((char, nextList))
-                        count++
+                        count += 1
                     }
                 }
             }
@@ -430,24 +432,25 @@ class EventMenuViewController: UIViewController {
     
     // MARK: - Custom Functions
     
-    func sortWeekByDay(var days_of_week:[EventDay]) -> [EventDay] {
-        for(var i = 0; i < days_of_week.count - 1; i++)
+    func sortWeekByDay(week:[EventDay]) -> [EventDay] {
+        var days = week
+        for i in 0 ..< days.count - 1
         {
-            for(var j = 0; j < days_of_week.count - i - 1; j++)
+            for j in 0 ..< (days.count - i - 1)
             {
-                if valueOfDay(days_of_week[j].dayOfWeek) > valueOfDay(days_of_week[j+1].dayOfWeek)
+                if valueOfDay(days[j].dayOfWeek) > valueOfDay(days[j+1].dayOfWeek)
                 {
-                    let temp = days_of_week[j]
-                    days_of_week[j] = days_of_week[j+1]
-                    days_of_week[j+1] = temp
+                    let temp = days[j]
+                    days[j] = days[j+1]
+                    days[j+1] = temp
                 }
             }
         }
-        return days_of_week
+        return days
     }
     
-    func valueOfDay(var day:String) -> Int {
-        day = day.lowercaseString
+    func valueOfDay(day:String) -> Int {
+        let day = day.lowercaseString
         switch day {
         case "monday":
             return 1
@@ -496,9 +499,9 @@ class EventMenuViewController: UIViewController {
     // Some simple bubble sorting functions
     func sortSpeakersByFirstName() {
         var speakers = appData.event.speakers
-        for (var i = 0; i < speakers.count - 1; i++)
+        for i in 0 ..< speakers.count - 1
         {
-            for (var j = 0; j < speakers.count - i - 1; j++)
+            for j in 0 ..< speakers.count - i - 1
             {
                 if speakers[j].display_name > speakers[j+1].display_name
                 {
@@ -513,9 +516,9 @@ class EventMenuViewController: UIViewController {
     
     func sortResearchRecipientsByName() {
         var researchRecipients = appData.researchRecipients
-        for var i = 0; i < researchRecipients.count - 1; i++
+        for i in 0 ..< researchRecipients.count - 1
         {
-            for var j = 0; j < researchRecipients.count - i - 1; j++
+            for j in 0 ..< researchRecipients.count - i - 1
             {
                 if researchRecipients[j].name > researchRecipients[j+1].name
                 {
@@ -530,9 +533,9 @@ class EventMenuViewController: UIViewController {
     
     func sortPrizeRecipientsByName() {
         var prizeRecipients = appData.shingoPrizeRecipients
-        for var i = 0; i < prizeRecipients.count - 1; i++
+        for i in 0 ..< prizeRecipients.count - 1
         {
-            for var j = 0; j < prizeRecipients.count - i - 1; j++
+            for j in 0 ..< prizeRecipients.count - i - 1
             {
                 if prizeRecipients[j].name > prizeRecipients[j+1].name
                 {
@@ -547,9 +550,9 @@ class EventMenuViewController: UIViewController {
  
     func sortAffiliatesByName() {
         var affiliates = appData.affiliates
-        for var i = 0; i < affiliates.count - 1; i++
+        for i in 0 ..< affiliates.count - 1
         {
-            for var j = 0; j < affiliates.count - i - 1; j++
+            for j in 0 ..< affiliates.count - i - 1
             {
                 if affiliates[j].name > affiliates[j+1].name
                 {

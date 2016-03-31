@@ -45,7 +45,7 @@ class EventsTableViewController: UITableViewController {
     
     
     func asyncTaskDidComplete() -> Void {
-        async_tasks_completed++
+        async_tasks_completed += 1
         if async_tasks_completed == number_of_async_tasks {
             let cell = tableView.cellForRowAtIndexPath(cell_index_path) as! EventTableViewCell
             cell.event = self.appData.event

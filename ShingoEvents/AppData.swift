@@ -119,7 +119,8 @@ public class AppData {
                 let count = days.array!.count
                 
                 // I blame this code on the flurry of async calls being sent out by this task
-                for (var i = 0; i < count; i++) {
+                for i in 0 ..< count
+                {
                     let day_id = days[i]["Id"].string! as String
                     
                     // This is set up so it will only use callback() on the last iteration i
@@ -660,7 +661,8 @@ public class AppData {
     
     
     
-    func getUrl(var type: URLTYPE) -> String {
+    func getUrl(type: URLTYPE) -> String {
+        var type = type
 //        let base_url = "https://shingo-events.herokuapp.com/api"
         let CLIENT_ID_SECRET = "client_id=6cd61ca33e7f2f94d460b1e9f2cb73&client_secret=bb313eea59bd309a4443c38b29"
         let base_url = "http://104.131.77.136:5000/api"
@@ -709,9 +711,11 @@ public class AppData {
     // MARK: - Custom Functions
     
     public func sortSessionsByDate(inout sessions:[EventSession]) {
-        for(var i = 0; i < sessions.count - 1; i++) {
-            for(var j = 0; j < sessions.count - i - 1; j++) {
-                
+        for i in 0 ..< sessions.count - 1
+        {
+            for j in 0 ..< sessions.count - i - 1
+            {
+            
                 if sessions[j].start_end_date!.0.timeIntervalSince1970 > sessions[j+1].start_end_date!.0.timeIntervalSince1970 {
                     let temp = sessions[j].start_end_date!
                     sessions[j].start_end_date! = sessions[j+1].start_end_date!
