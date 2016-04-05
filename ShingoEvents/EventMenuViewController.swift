@@ -410,11 +410,16 @@ class EventMenuViewController: UIViewController {
             destination.sectionInfo = sectionInfo
             
         }
+
+        // Segue to old venuemapviewcontroller
+//        if segue.identifier == "VenueView" {
+//            let destination = segue.destinationViewController as! VenueMapsViewController
+//            destination.event = appData.event
+//        }
         
         if segue.identifier == "VenueView" {
-            let destination = segue.destinationViewController as! VenueMapsViewController
-            destination.event = appData.event
-            
+            let destination = segue.destinationViewController as! VenueMapsCollectionView
+            destination.venueMaps = appData.event.venueMaps
         }
         
         if segue.identifier == "SponsorsView" {
@@ -443,16 +448,7 @@ class EventMenuViewController: UIViewController {
                     days[j] = days[j+1]
                     days[j+1] = temp
                 }
-                
-                
-//                /////
-//                if valueOfDay(days[j].dayOfWeek) > valueOfDay(days[j+1].dayOfWeek)
-//                {
-//                    let temp = days[j]
-//                    days[j] = days[j+1]
-//                    days[j+1] = temp
-//                }
-//                /////
+
             }
         }
         return days
@@ -485,70 +481,85 @@ class EventMenuViewController: UIViewController {
     // Some simple bubble sorting functions
     func sortSpeakersByFirstName() {
         var speakers = appData.event.speakers
-        for i in 0 ..< speakers.count - 1
+        if speakers.count > 1
         {
-            for j in 0 ..< speakers.count - i - 1
+            for i in 0 ..< speakers.count - 1
             {
-                if speakers[j].display_name > speakers[j+1].display_name
+                for j in 0 ..< speakers.count - i - 1
                 {
-                    let temp = speakers[j]
-                    speakers[j] = speakers[j+1]
-                    speakers[j+1] = temp
+                    if speakers[j].display_name > speakers[j+1].display_name
+                    {
+                        let temp = speakers[j]
+                        speakers[j] = speakers[j+1]
+                        speakers[j+1] = temp
+                    }
                 }
             }
+            appData.event.speakers = speakers
         }
-        appData.event.speakers = speakers
+        
     }
     
     func sortResearchRecipientsByName() {
         var researchRecipients = appData.researchRecipients
-        for i in 0 ..< researchRecipients.count - 1
+        if researchRecipients.count > 1
         {
-            for j in 0 ..< researchRecipients.count - i - 1
+            for i in 0 ..< researchRecipients.count - 1
             {
-                if researchRecipients[j].name > researchRecipients[j+1].name
+                for j in 0 ..< researchRecipients.count - i - 1
                 {
-                    let temp = researchRecipients[j]
-                    researchRecipients[j] = researchRecipients[j+1]
-                    researchRecipients[j+1] = temp
+                    if researchRecipients[j].name > researchRecipients[j+1].name
+                    {
+                        let temp = researchRecipients[j]
+                        researchRecipients[j] = researchRecipients[j+1]
+                        researchRecipients[j+1] = temp
+                    }
                 }
             }
+            appData.researchRecipients = researchRecipients
         }
-        appData.researchRecipients = researchRecipients
+        
     }
     
     func sortPrizeRecipientsByName() {
         var prizeRecipients = appData.shingoPrizeRecipients
-        for i in 0 ..< prizeRecipients.count - 1
+        if prizeRecipients.count > 1
         {
-            for j in 0 ..< prizeRecipients.count - i - 1
+            for i in 0 ..< prizeRecipients.count - 1
             {
-                if prizeRecipients[j].name > prizeRecipients[j+1].name
+                for j in 0 ..< prizeRecipients.count - i - 1
                 {
-                    let temp = prizeRecipients[j]
-                    prizeRecipients[j] = prizeRecipients[j+1]
-                    prizeRecipients[j+1] = temp
+                    if prizeRecipients[j].name > prizeRecipients[j+1].name
+                    {
+                        let temp = prizeRecipients[j]
+                        prizeRecipients[j] = prizeRecipients[j+1]
+                        prizeRecipients[j+1] = temp
+                    }
                 }
             }
+            appData.shingoPrizeRecipients = prizeRecipients
         }
-        appData.shingoPrizeRecipients = prizeRecipients
+        
     }
  
     func sortAffiliatesByName() {
         var affiliates = appData.affiliates
-        for i in 0 ..< affiliates.count - 1
+        if affiliates.count > 1
         {
-            for j in 0 ..< affiliates.count - i - 1
+            for i in 0 ..< affiliates.count - 1
             {
-                if affiliates[j].name > affiliates[j+1].name
+                for j in 0 ..< affiliates.count - i - 1
                 {
-                    let temp = affiliates[j]
-                    affiliates[j] = affiliates[j+1]
-                    affiliates[j+1] = temp
+                    if affiliates[j].name > affiliates[j+1].name
+                    {
+                        let temp = affiliates[j]
+                        affiliates[j] = affiliates[j+1]
+                        affiliates[j+1] = temp
+                    }
                 }
             }
+            appData.affiliates = affiliates
         }
-        appData.affiliates = affiliates
     }
 }
 

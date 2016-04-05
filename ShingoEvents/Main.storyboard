@@ -24,6 +24,92 @@
             </objects>
             <point key="canvasLocation" x="725" y="-1347"/>
         </scene>
+        <!--Venue Maps-->
+        <scene sceneID="02j-zI-Fhr">
+            <objects>
+                <viewController id="juq-ej-IdF" customClass="VenueMapsCollectionView" customModule="Shingo_Events" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="xpj-GY-DEh"/>
+                        <viewControllerLayoutGuide type="bottom" id="KuO-bf-Ixl"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="n3d-Gc-qzk">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="eFP-YV-sMU">
+                                <rect key="frame" x="0.0" y="64" width="600" height="492"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="30" minimumInteritemSpacing="30" id="fLF-CH-gyv">
+                                    <size key="itemSize" width="283" height="371"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="40" minY="0.0" maxX="10" maxY="20"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="VenueMapCell" id="rgx-eH-Npt" customClass="VenueMapCollectionCell" customModule="Shingo_Events" customModuleProvider="target">
+                                        <rect key="frame" x="40" y="60" width="283" height="371"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="283" height="371"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="nFa-sY-uOd">
+                                                    <rect key="frame" x="0.0" y="0.0" width="283" height="303"/>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FMV-Lw-m4e">
+                                                    <rect key="frame" x="0.0" y="311" width="283" height="60"/>
+                                                    <color key="backgroundColor" red="0.85486778846153844" green="0.85486778846153844" blue="0.85486778846153844" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="60" id="4oS-qn-l5G"/>
+                                                        <constraint firstAttribute="height" constant="60" id="Ki2-Jr-At3"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="nFa-sY-uOd" firstAttribute="leading" secondItem="rgx-eH-Npt" secondAttribute="leadingMargin" constant="-8" id="3KP-mE-eyA"/>
+                                            <constraint firstItem="FMV-Lw-m4e" firstAttribute="leading" secondItem="rgx-eH-Npt" secondAttribute="leading" id="CVe-c3-5Pq"/>
+                                            <constraint firstAttribute="trailingMargin" secondItem="nFa-sY-uOd" secondAttribute="trailing" constant="-8" id="Eep-Gr-FCK"/>
+                                            <constraint firstAttribute="bottom" secondItem="FMV-Lw-m4e" secondAttribute="bottom" id="k0S-rU-NIS"/>
+                                            <constraint firstItem="FMV-Lw-m4e" firstAttribute="top" secondItem="nFa-sY-uOd" secondAttribute="bottom" constant="8" id="ntz-h6-FC5"/>
+                                            <constraint firstItem="nFa-sY-uOd" firstAttribute="top" secondItem="rgx-eH-Npt" secondAttribute="topMargin" constant="-8" id="pr7-c3-qXl"/>
+                                            <constraint firstAttribute="trailing" secondItem="FMV-Lw-m4e" secondAttribute="trailing" id="rV6-vP-fg4"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="mapNameLabel" destination="FMV-Lw-m4e" id="bLl-0h-dvY"/>
+                                            <outlet property="venueImage" destination="nFa-sY-uOd" id="DvN-fm-CtJ"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="juq-ej-IdF" id="mFv-H4-gRe"/>
+                                    <outlet property="delegate" destination="juq-ej-IdF" id="UGF-E7-EK7"/>
+                                </connections>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.8548677885" green="0.8548677885" blue="0.8548677885" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="eFP-YV-sMU" firstAttribute="leading" secondItem="n3d-Gc-qzk" secondAttribute="leading" id="41R-pL-eFQ"/>
+                            <constraint firstItem="KuO-bf-Ixl" firstAttribute="top" secondItem="eFP-YV-sMU" secondAttribute="bottom" id="MEM-Eq-sS4"/>
+                            <constraint firstAttribute="trailing" secondItem="eFP-YV-sMU" secondAttribute="trailing" id="afg-w1-tvN"/>
+                            <constraint firstItem="eFP-YV-sMU" firstAttribute="top" secondItem="xpj-GY-DEh" secondAttribute="bottom" id="eXA-ro-pYk"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Venue Maps" id="iWc-gn-ml7"/>
+                    <connections>
+                        <outlet property="collectionView" destination="eFP-YV-sMU" id="Vq3-RR-mw1"/>
+                        <segue destination="fAu-De-NAj" kind="show" identifier="MapView" id="c8f-sk-MHk"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="co8-sG-YcW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2136" y="-1347"/>
+        </scene>
         <!--Main Menu View Controller-->
         <scene sceneID="EZv-9O-NP2">
             <objects>
@@ -530,7 +616,7 @@
         <!--Venue Map-->
         <scene sceneID="W1V-q4-iBY">
             <objects>
-                <viewController id="fAu-De-NAj" customClass="VenueMapsViewController" customModule="Shingo_Events" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="fAu-De-NAj" customClass="VenueMapViewController" customModule="Shingo_Events" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="rfS-W2-m8v"/>
                         <viewControllerLayoutGuide type="bottom" id="jic-IU-oo2"/>
@@ -539,20 +625,45 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Views added programmatically" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="heP-nS-ccA">
-                                <rect key="frame" x="182" y="289" width="236" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WTn-3E-4us">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gtr-o4-9OR">
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="gtr-o4-9OR" firstAttribute="top" secondItem="WTn-3E-4us" secondAttribute="top" id="4Ee-yw-8n4"/>
+                                    <constraint firstAttribute="trailing" secondItem="gtr-o4-9OR" secondAttribute="trailing" id="8F1-hY-LUE"/>
+                                    <constraint firstItem="gtr-o4-9OR" firstAttribute="leading" secondItem="WTn-3E-4us" secondAttribute="leading" id="GBK-zd-wAJ"/>
+                                    <constraint firstAttribute="bottom" secondItem="gtr-o4-9OR" secondAttribute="bottom" id="RQ9-cj-x6r"/>
+                                    <constraint firstItem="gtr-o4-9OR" firstAttribute="centerX" secondItem="WTn-3E-4us" secondAttribute="centerX" id="kvI-Xt-b1Q"/>
+                                    <constraint firstItem="gtr-o4-9OR" firstAttribute="centerY" secondItem="WTn-3E-4us" secondAttribute="centerY" id="nDH-iW-kzc"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="delegate" destination="fAu-De-NAj" id="yiG-LT-Qse"/>
+                                </connections>
+                            </scrollView>
                         </subviews>
-                        <color key="backgroundColor" red="0.050980392843484879" green="0.094117648899555206" blue="0.20784313976764679" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.94759615384615381" green="0.94759615384615381" blue="0.94759615384615381" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="WTn-3E-4us" firstAttribute="leading" secondItem="fEc-g2-7hc" secondAttribute="leading" id="2gF-1p-bzT"/>
+                            <constraint firstAttribute="trailing" secondItem="WTn-3E-4us" secondAttribute="trailing" id="OST-DY-GVU"/>
+                            <constraint firstItem="WTn-3E-4us" firstAttribute="bottom" secondItem="jic-IU-oo2" secondAttribute="top" id="XFB-ZY-EBQ"/>
+                            <constraint firstItem="WTn-3E-4us" firstAttribute="top" secondItem="fEc-g2-7hc" secondAttribute="top" id="Z4v-3s-ysy"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Venue Map" id="6rJ-Dg-NLf"/>
+                    <connections>
+                        <outlet property="image" destination="gtr-o4-9OR" id="rLK-4P-39r"/>
+                        <outlet property="scrollView" destination="WTn-3E-4us" id="Lca-cG-pAB"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="58Y-s5-j2w" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2136" y="-1347"/>
+            <point key="canvasLocation" x="1428" y="-1347"/>
         </scene>
         <!--Event Menu View Controller-->
         <scene sceneID="5iO-zb-Ych">
@@ -621,7 +732,7 @@
                         <segue destination="oeX-Ll-nwp" kind="show" identifier="AffiliatesListView" id="Ecg-KR-TRK"/>
                         <segue destination="PqC-BM-dR8" kind="show" identifier="SchedulesView" id="cGT-d7-faS"/>
                         <segue destination="ZKR-mo-2Bh" kind="show" identifier="SponsorsView" id="afP-xV-MiN"/>
-                        <segue destination="fAu-De-NAj" kind="show" identifier="VenueView" id="s07-Rr-Hjh"/>
+                        <segue destination="juq-ej-IdF" kind="show" identifier="VenueView" id="uWp-FS-9xc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="i1w-Lf-HCC" userLabel="First Responder" sceneMemberID="firstResponder"/>

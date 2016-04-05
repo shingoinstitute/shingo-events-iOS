@@ -9,11 +9,12 @@
 import UIKit
 import PureLayout
 
-class VenueMapsViewController: UIViewController, UIScrollViewDelegate {
+class Depr_VenueMapViewController: UIViewController, UIScrollViewDelegate {
     
     var event:Event!
     
     var imageViews = [UIImageView]()
+    @IBOutlet weak var scrollView: UIScrollView!
     
     let messageLabel:UILabel = {
         let label = UILabel.newAutoLayoutView()
@@ -73,19 +74,8 @@ class VenueMapsViewController: UIViewController, UIScrollViewDelegate {
         return contentView
     }
     
-    
-    //    func setZoomScale() {
-    //        let contentViewSize = contentView.bounds.size
-    //        let scrollViewSize = scrollView.bounds.size
-    //        let widthScale = scrollViewSize.width / contentViewSize.width
-    //        let heightScale = contentViewSize.width / contentViewSize.height
-    //
-    //        scrollView.minimumZoomScale = min(widthScale, heightScale) - 1.0
-    //        scrollView.maximumZoomScale = 2.0
-    //        scrollView.zoomScale = 1.0
-    //    }
-    
     override func updateViewConstraints() {
+        
         if didSetupConstraints == false && event.venueMaps != nil
         {
             contentView.autoSetDimension(.Height, toSize: getContentHeight())

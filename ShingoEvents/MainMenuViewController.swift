@@ -166,7 +166,7 @@ class MainMenuViewController: UIViewController {
         {
             disableButtons(shouldDisable: true)
             activityView.displayActivityView(message: "Loading Upcoming Conferences...", forView: self.view, withRequest: self.request)
-            request = Alamofire.request(.GET, "http://104.131.77.136:5000/api").response { // Poke the server
+            request = Alamofire.request(.GET, "http://api.shingo.org:5000/api").response { // Poke the server
                 _ in
                 self.activityView.progressIndicator.progress = 0.5
                 self.appData = AppData()
