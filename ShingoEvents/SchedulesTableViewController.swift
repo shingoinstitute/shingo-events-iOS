@@ -77,9 +77,9 @@ class SchedulesTableViewController: UITableViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "SessionListView" {
             let dest_vc = segue.destinationViewController as! SessionListTableViewController
-            if dest_vc.day_sessions == nil || dest_vc.event != nil {
+            if dest_vc.sessions == nil || dest_vc.event != nil {
                 sortSessionsByDate(&dataToSend)
-                dest_vc.day_sessions = dataToSend
+                dest_vc.sessions = dataToSend
                 dest_vc.event = self.event!
             }
         }

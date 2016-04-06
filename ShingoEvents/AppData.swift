@@ -168,10 +168,6 @@ public class AppData {
                         if event_speaker["Id"] != nil
                         {
                             let id = event_speaker["Id"].string! as String
-                            let name = event_speaker["Name"].string! as String
-                            if name.rangeOfString("Mark") != nil {
-                                print(name)
-                            }
                             session.speaker_ids.append(id)
                         }
                     }
@@ -179,7 +175,11 @@ public class AppData {
                 if item["Session_Date__c"] != nil && item["Session_Time__c"] != nil {
                     session.start_end_date = self.sessionDateParser(item["Session_Date__c"].string! as String, time: item["Session_Time__c"].string! as String)
                 }
-                self.event!.eventSessions?.append(session)
+                if item["Session_Format__c"] != nil {
+                    session.format = item["Session_Format__c"].string! as String
+                }
+                
+                self.event.eventSessions.append(session)
             }
             callback()
         }
@@ -237,13 +237,13 @@ public class AppData {
     
     public func getSpeakers(callback: () -> Void) {
         
-        if self.event.speakers != nil
+        if self.event.eventSpeakers != nil
         {
             return
         }
         else
         {
-            self.event.speakers = [Speaker]()
+            self.event.eventSpeakers = [Speaker]()
         }
         
         let parameters = [
@@ -279,14 +279,29 @@ public class AppData {
                     if item["Organization"] != nil {
                         speaker.organization = item["Organization"].string! as String
                     }
-                    self.event.speakers.append(speaker)
+                    self.event.eventSpeakers.append(speaker)
                     print("Speaker Name: \(speaker.display_name) | ID: \(speaker.speaker_id)")
                 }
             }
+            self.populateSessionSpeakers()
             callback()
         }
     }
     
+    func populateSessionSpeakers() {
+        for session in event.eventSessions
+        {
+            for id in session.speaker_ids
+            {
+                for speaker in event.eventSpeakers
+                {
+                    if id == speaker.speaker_id {
+                        session.sessionSpeakers.append(speaker)
+                    }
+                }
+            }
+        }
+    }
     
     public func getRecipients(callback: () -> Void) {
         

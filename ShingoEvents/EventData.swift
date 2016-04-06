@@ -25,7 +25,7 @@ public class Event {
     // each element contains sessions relating to a particular day.
     var venueMaps:[VenueMap]!
     var location:CLLocationCoordinate2D!
-    var speakers:[Speaker]!
+    var eventSpeakers:[Speaker]!
 }
 
 public class EventAgenda {
@@ -48,7 +48,9 @@ public class EventSession {
     var notes = String()
     var status = String()
     var time = NSDate()
-    var speaker_ids:[String] = [String]() // Array of speaker id's. Actual speaker data is stored in the EventAgenda class.
+    var format: String!
+    var sessionSpeakers = [Speaker?]()
+    var speaker_ids = [String]()
 }
 
 public class Speaker: AppDataImage {

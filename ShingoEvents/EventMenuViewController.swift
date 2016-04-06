@@ -360,7 +360,7 @@ class EventMenuViewController: UIViewController {
         
         if segue.identifier == "SpeakerList" {
             let dest_vc = segue.destinationViewController as! SpeakerListTableViewController
-            dest_vc.speakers = appData.event.speakers
+            dest_vc.speakers = appData.event.eventSpeakers
         }
         
         if segue.identifier == "RecipientsView" {
@@ -480,7 +480,7 @@ class EventMenuViewController: UIViewController {
     
     // Some simple bubble sorting functions
     func sortSpeakersByFirstName() {
-        var speakers = appData.event.speakers
+        var speakers = appData.event.eventSpeakers
         if speakers.count > 1
         {
             for i in 0 ..< speakers.count - 1
@@ -495,7 +495,7 @@ class EventMenuViewController: UIViewController {
                     }
                 }
             }
-            appData.event.speakers = speakers
+            appData.event.eventSpeakers = speakers
         }
         
     }
