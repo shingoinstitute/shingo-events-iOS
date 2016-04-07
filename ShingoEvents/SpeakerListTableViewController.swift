@@ -65,10 +65,15 @@ class SpeakerListTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier("SpeakerListCell", forIndexPath: indexPath) as! SpeakerListCell
         cell.speakerNameLabel.text = speakers![indexPath.row].display_name
         cell.speaker = speakers![indexPath.row]
-        if cell.speaker?.image != nil {
+        if cell.speaker?.image != nil
+        {
             cell.speakerImage.image = cell.speaker?.image
             cell.speakerImage.layer.cornerRadius = 5.0
             cell.speakerImage.layer.borderColor = UIColor.blackColor().CGColor
+        }
+        else
+        {
+            cell.speakerImage.image = UIImage(named: "silhouette")
         }
 
         return cell
