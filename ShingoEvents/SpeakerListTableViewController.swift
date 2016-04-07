@@ -9,7 +9,7 @@
 import UIKit
 
 class SpeakerListCell: UITableViewCell {
-    var speaker:Speaker? = nil
+    var speaker:Speaker!
     @IBOutlet weak var speakerNameLabel: UILabel!
     @IBOutlet weak var speakerImage: UIImageView!
 }
@@ -17,8 +17,8 @@ class SpeakerListCell: UITableViewCell {
 
 class SpeakerListTableViewController: UITableViewController {
 
-    var speakers:[Speaker]? = nil
-    var dataToSend:Speaker? = nil
+    var speakers:[Speaker]!
+    var dataToSend:Speaker!
     
     override func viewDidLoad()
     {
@@ -50,7 +50,7 @@ class SpeakerListTableViewController: UITableViewController {
         switch section
         {
         case 0:
-            return speakers!.count
+            return speakers.count
         case 1:
             return 0
         default:
@@ -65,9 +65,9 @@ class SpeakerListTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier("SpeakerListCell", forIndexPath: indexPath) as! SpeakerListCell
         cell.speakerNameLabel.text = speakers![indexPath.row].display_name
         cell.speaker = speakers![indexPath.row]
-        if cell.speaker?.image != nil
+        if cell.speaker.image != nil
         {
-            cell.speakerImage.image = cell.speaker?.image
+            cell.speakerImage.image = cell.speaker.image
             cell.speakerImage.layer.cornerRadius = 5.0
             cell.speakerImage.layer.borderColor = UIColor.blackColor().CGColor
         }

@@ -34,14 +34,11 @@ class ChallengerInfoViewController: UIViewController {
             logoImage.layer.borderWidth = 1.0
             logoImage.layer.cornerRadius = 4.0
         }
-        
-
-
-        
-        if recipient.name != nil && recipient.award != nil {
-            abstractTextField.text = ("Presenting ") + recipient.name
-            abstractTextField.text! += ", recipient of the " + recipient.award + ".\n\n"
-        }
+                
+//        if recipient.name != nil && recipient.award != nil {
+//            abstractTextField.text = ("Presenting ") + recipient.name
+//            abstractTextField.text! += ", recipient of the " + recipient.award + ".\n\n"
+//        }
         
         if let text = recipient.abstract {
             abstractTextField.text! += text

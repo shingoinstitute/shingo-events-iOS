@@ -57,7 +57,8 @@ class SponsorsTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = UILabel()
-        header.backgroundColor = UIColor(red: 204/255.0, green: 150/255.0, blue:73/255.0, alpha: 1.0)
+        header.backgroundColor = UIColor(netHex: 0xcd8931)
+//        header.backgroundColor = .orangeColor()
         header.text = sectionTitles[section]
         header.textColor = .whiteColor()
         header.font = UIFont.boldSystemFontOfSize(16.0)

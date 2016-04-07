@@ -129,7 +129,8 @@ class ExhibitorTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
-        view.backgroundColor = UIColor(netHex: 0xbc7820)
+        view.backgroundColor = UIColor(netHex: 0xcd8931)
+//        view.backgroundColor = .orangeColor()
         let header = UILabel()
         header.text = String(sectionInformation[section].0).uppercaseString
         header.textColor = .whiteColor()

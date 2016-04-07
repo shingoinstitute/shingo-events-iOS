@@ -28,25 +28,25 @@ class ResearchInfoViewController: UIViewController {
         }
         
         abstractTextField.text = ""
-        if recipient.authors != nil && recipient.name != nil{
-            if (recipient.authors.rangeOfString("&") != nil) {
-                abstractTextField.text = "Presenting the authors of \"" + recipient.name + "\", " + recipient.authors + ", recipients of the Research Award.\n\n"
-            } else {
-                abstractTextField.text = "Presenting the author of \"" + recipient.name + "\", " + recipient.authors + ", recipient of the Research Award.\n\n"
-            }
-        } else {
-            if recipient.authors != nil {
-                if recipient.authors.rangeOfString(",") != nil {
-                    abstractTextField.text! += "Presenting " + recipient.authors + ", recipients of the Research Award.\n\n"
-                } else {
-                    abstractTextField.text! += "Presenting " + recipient.authors + ", recipient of the Research Award.\n\n"
-                }
-            }
-            
-            if recipient.name != nil {
-                abstractTextField.text! += "Presenting the book \"" + recipient.name + "\", for being rewarded the Research Award.\n\n"
-            }
-        }
+//        if recipient.authors != nil && recipient.name != nil{
+//            if (recipient.authors.rangeOfString("&") != nil) {
+//                abstractTextField.text = "Presenting the authors of \"" + recipient.name + "\", " + recipient.authors + ", recipients of the Research Award.\n\n"
+//            } else {
+//                abstractTextField.text = "Presenting the author of \"" + recipient.name + "\", " + recipient.authors + ", recipient of the Research Award.\n\n"
+//            }
+//        } else {
+//            if recipient.authors != nil {
+//                if recipient.authors.rangeOfString(",") != nil {
+//                    abstractTextField.text! += "Presenting " + recipient.authors + ", recipients of the Research Award.\n\n"
+//                } else {
+//                    abstractTextField.text! += "Presenting " + recipient.authors + ", recipient of the Research Award.\n\n"
+//                }
+//            }
+//            
+//            if recipient.name != nil {
+//                abstractTextField.text! += "Presenting the book \"" + recipient.name + "\", for being rewarded the Research Award.\n\n"
+//            }
+//        }
         
         if recipient.abstract != nil {
             abstractTextField.text! += recipient.abstract

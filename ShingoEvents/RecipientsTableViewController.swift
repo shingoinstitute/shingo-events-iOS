@@ -8,10 +8,6 @@
 
 import UIKit
 
-class RecipientCell: UITableViewCell {
-    var recipient:Recipient!
-}
-
 class RecipientsTableViewController: UITableViewController {
 
     var appData: AppData!
@@ -55,36 +51,39 @@ class RecipientsTableViewController: UITableViewController {
 
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("RecipientCell", forIndexPath: indexPath) as! RecipientCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("RecipientCell", forIndexPath: indexPath) as! RecipientTableViewCell
         switch indexPath.section {
         case 0:
             if !appData.shingoPrizeRecipients.isEmpty {
-                cell.textLabel!.text = appData.shingoPrizeRecipients[indexPath.row].name
+//                cell.recipientLabel!.text = appData.shingoPrizeRecipients[indexPath.row].name
                 cell.recipient = appData.shingoPrizeRecipients[indexPath.row]
             }
         case 1:
             if !appData.silverRecipients.isEmpty {
-                cell.textLabel!.text = appData.silverRecipients[indexPath.row].name
+//                cell.textLabel!.text = appData.silverRecipients[indexPath.row].name
                 cell.recipient = appData.silverRecipients[indexPath.row]
             }
         case 2:
             if !appData.bronzeRecipients.isEmpty {
-                cell.textLabel!.text = appData.bronzeRecipients[indexPath.row].name
+//                cell.textLabel!.text = appData.bronzeRecipients[indexPath.row].name
                 cell.recipient = appData.bronzeRecipients[indexPath.row]
             }
         case 3:
             if !appData.researchRecipients.isEmpty {
-                cell.textLabel!.text = appData.researchRecipients[indexPath.row].name
+//                cell.textLabel!.text = appData.researchRecipients[indexPath.row].name
                 cell.recipient = appData.researchRecipients[indexPath.row]
             }
-        default: cell.textLabel!.text = "No recipient."
+        default:
+            let recipient = Recipient()
+            recipient.name = "No Recipient"
+            recipient.logo_book_cover_image = UIImage(named: "shingo_icon")
+            cell.recipient = recipient
         }
-        cell.textLabel?.font = UIFont.systemFontOfSize(CGFloat(16))
         return cell
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let cell = tableView.cellForRowAtIndexPath(indexPath) as! RecipientCell
+        let cell = tableView.cellForRowAtIndexPath(indexPath) as! RecipientTableViewCell
         if cell.recipient != nil
         {
             recipientToSend = cell.recipient
@@ -105,27 +104,37 @@ class RecipientsTableViewController: UITableViewController {
         return 42.0
     }
     
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 132.0
+    }
+    
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = UIView()
+        view.backgroundColor = UIColor(netHex: 0xcd8931)
+//        view.backgroundColor = .orangeColor()
+        
         let header = UILabel()
-        header.font = UIFont.systemFontOfSize(22)
+        header.font = UIFont.boldSystemFontOfSize(18)
         header.textColor = .whiteColor()
         
-        var title = String()
         switch section {
         case 0:
-            title = " Shingo Prize Recipients"
+            header.text = " Shingo Prize Recipients"
         case 1:
-            title = " Silver Medallion Recipients"
+            header.text = " Silver Medallion Recipients"
         case 2:
-            title = " Bronze Medallion Recipients"
+            header.text = " Bronze Medallion Recipients"
         case 3:
-            title = " Research Award Recipients"
+            header.text = " Research Award Recipients"
         default:
-            title = ""
+            header.text = ""
         }
         
-        header.text = title
-        return header
+        view.addSubview(header)
+        
+        header.autoPinEdgesToSuperviewEdgesWithInsets(UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8))
+        
+        return view
     }
     
     // MARK: - Navigation
