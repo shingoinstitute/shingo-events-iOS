@@ -49,6 +49,7 @@ public class EventSession {
     var status = String()
     var time = NSDate()
     var format: String!
+    var richAbstract: String?
     var sessionSpeakers = [Speaker?]()
     var speaker_ids = [String]()
 }
@@ -62,6 +63,7 @@ public class Speaker: AppDataImage {
     var image: UIImage!
     var display_name: String!
     var organization: String!
+    var richBiography: String?
     
     public func getImage(url:String?) {
         if url == nil {
@@ -96,14 +98,15 @@ public class Recipient: AppDataImage {
     }
     
     var award_type: RECIP_TYPE? = nil
-    var recipient_id:String!
-    var name:String!
-    var abstract:String!
-    var event_id:String!
-    var award:String!
-    var authors:String!
-    var logo_book_cover_image:UIImage!
-    var logo_book_cover_url:String!
+    var recipient_id: String!
+    var name: String!
+    var abstract: String!
+    var richAbstract: String?
+    var event_id: String!
+    var award: String!
+    var authors: String!
+    var logo_book_cover_image: UIImage!
+    var logo_book_cover_url: String!
 
     func getRecipientImage(url:String?, callback: (image: UIImage?) -> Void) {
         if url == nil {
@@ -133,6 +136,7 @@ public class Exhibitor: AppDataImage {
     var SF_id:String!
     var name:String!
     var description:String!
+    var richDescription: String?
     var phone:String!
     var email:String!
     var website:String!
@@ -146,6 +150,7 @@ public class Affiliate: AppDataImage {
     var id:String!
     var name:String!
     var abstract:String!
+    var richAbstract: String?
     var logo_url:String!
     var logo_image:UIImage!
     var website_url:String!

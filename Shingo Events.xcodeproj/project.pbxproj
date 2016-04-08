@@ -166,7 +166,7 @@
 			name = Menus;
 			sourceTree = "<group>";
 		};
-		C224CDF81CB6C9C8003147F0 /* Sessions */ = {
+		C224CDF81CB6C9C8003147F0 /* SessionInformation */ = {
 			isa = PBXGroup;
 			children = (
 				C2CFC3131C483C1C0036E485 /* SchedulesTableViewController.swift */,
@@ -175,7 +175,7 @@
 				C234BD551C5293CF002E9814 /* SpeakerListTableViewController.swift */,
 				C234BD571C529597002E9814 /* SpeakerDetailsViewController.swift */,
 			);
-			name = Sessions;
+			name = SessionInformation;
 			sourceTree = "<group>";
 		};
 		C224CDF91CB6C9DF003147F0 /* Recipients */ = {
@@ -236,7 +236,7 @@
 				C2FF6B241CB2E52400331ED2 /* SettingsViews */,
 				C2FF6B201CB2E3E700331ED2 /* Maps */,
 				C224CDF71CB6C960003147F0 /* Menus */,
-				C224CDF81CB6C9C8003147F0 /* Sessions */,
+				C224CDF81CB6C9C8003147F0 /* SessionInformation */,
 				C224CDF91CB6C9DF003147F0 /* Recipients */,
 				C224CDFA1CB6CA0A003147F0 /* Orgs */,
 			);

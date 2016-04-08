@@ -157,14 +157,17 @@ public class AppData {
                 if item["Session_Abstract__c"] != nil {
                     session.abstract = item["Session_Abstract__c"].string! as String
                 }
+                if item["Rich_Description"] != nil {
+                    session.richAbstract = item["Rich_Description"].string! as String
+                }
                 if item["Session_Notes__c"] != nil {
                     session.notes = item["Session_Notes__c"].string! as String
                 }
                 if item["Room"] != nil {
                     session.room = item["Room"].string! as String
                 }
-                if let event_speakers = item["Speakers"]["records"].array {
-                    for event_speaker in event_speakers {
+                if item["Speakers"]["records"] != nil {
+                    for event_speaker in item["Speaker"]["records"].array! {
                         if event_speaker["Id"] != nil
                         {
                             let id = event_speaker["Id"].string! as String
@@ -218,11 +221,16 @@ public class AppData {
                 day.dayOfWeek = json["day"]["Name"].string! as String
             }
             if json["day"]["Sessions"]["records"] != nil {
-                for session in json["day"]["Sessions"]["records"].array! {
-                    for item in self.event!.eventSessions! {
-                        if item.session_id == session["Id"].string! as String {
+                for session in json["day"]["Sessions"]["records"].array!
+                {
+                    
+                    for item in self.event!.eventSessions!
+                    {
+                        if item.session_id == session["Id"].string! as String
+                        {
                             day.sessions.append(item)
                         }
+                        
                     }
                 }
             }
@@ -262,6 +270,9 @@ public class AppData {
                     }
                     if item["Biography__c"] != nil {
                         speaker.biography = item["Biography__c"].string! as String
+                    }
+                    if item["Rich_Biography"] != nil {
+                        speaker.richBiography = item["Rich_Biography"].string! as String
                     }
                     if item["Speaker_Image__c"] != nil {
                         speaker.image_url = item["Speaker_Image__c"].string! as String
@@ -336,6 +347,9 @@ public class AppData {
                 if item["Abstract__c"] != nil {
                     recipient.abstract = item["Abstract__c"].string! as String
                 }
+                if item["Rich_Abstract"] != nil {
+                    recipient.richAbstract = item["Rich_Abstract"].string! as String
+                }
                 if item["Event__c"] != nil {
                     recipient.event_id = item["Event__c"].string! as String
                 }
@@ -408,6 +422,9 @@ public class AppData {
                     if item["Description__c"] != nil {
                         exhibitor.description = item["Description__c"].string! as String
                     }
+                    if item["Rich_Description"] != nil {
+                        exhibitor.richDescription = item["Rich_Description"].string! as String
+                    }
                     if item["Phone__c"] != nil {
                         exhibitor.phone = item["Phone__c"].string! as String
                     }
@@ -464,6 +481,9 @@ public class AppData {
                     }
                     if !(item["App_Abstract__c"].object is NSNull) {
                         affiliate.abstract = item["App_Abstract__c"].string! as String
+                    }
+                    if item["Rich_App_Abstract"] != nil {
+                        affiliate.richAbstract = item["Rich_App_Abstract"].string! as String
                     }
                     if !(item["Logo__c"].object is NSNull) {
                         affiliate.logo_url = item["Logo__c"].string! as String

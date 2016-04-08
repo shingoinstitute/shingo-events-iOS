@@ -14,7 +14,7 @@ class SpeakerDetailsViewController: UIViewController {
     var speakerNameLabel: UILabel!
     var speakerTitleLabel: UILabel!
     var organizationLabel: UILabel!
-    var biographyTextField: UITextView!
+    var biographyView: UIWebView!
     var speakerImageView: UIImageView!
     
     var speaker:Speaker!
@@ -54,15 +54,23 @@ class SpeakerDetailsViewController: UIViewController {
 
             if speaker.biography != nil
             {
-                biographyTextField = UITextView.newAutoLayoutView()
-                biographyTextField.text = speaker.biography
-                biographyTextField.textColor = .whiteColor()
-                biographyTextField.editable = false
-                biographyTextField.selectable = false
-                biographyTextField.backgroundColor = UIColor(red: 0.0/255.0, green: 47.0/255.0, blue: 86.0/255.0, alpha: 1.0)
-                biographyTextField.frame = CGRect(x: 0, y: 0, width: biographyTextField.frame.width, height: biographyTextField.contentSize.height)
-                biographyTextField.scrollEnabled = false
-                scrollView.addSubview(biographyTextField)
+                biographyView = UIWebView.newAutoLayoutView()
+                if var htmlString = speaker.richBiography {
+                    htmlString = "<style=\"color:white\">" + speaker.biography + "</style>"
+                    biographyView.loadHTMLString(htmlString, baseURL: nil)
+                } else {
+                    biographyView.loadHTMLString(speaker.biography, baseURL: nil)
+                }
+                
+                
+//                biographyView = speaker.biography
+//                biographyView = .whiteColor()
+//                biographyView = false
+//                biographyView = false
+                biographyView.backgroundColor = UIColor(red: 0.0/255.0, green: 47.0/255.0, blue: 86.0/255.0, alpha: 1.0)
+//                biographyView = CGRect(x: 0, y: 0, width: biographyTextField.frame.width, height: biographyTextField.contentSize.height)
+//                biographyView = false
+                scrollView.addSubview(biographyView)
             }
             
             if speaker.image != nil
@@ -88,7 +96,7 @@ class SpeakerDetailsViewController: UIViewController {
             speakerImageView.autoSetDimensionsToSize(CGSize(width: 200.0, height: 200.0))
             if speakerNameLabel != nil {speakerNameLabel.autoSetDimensionsToSize(CGSize(width: self.view.frame.width - 10, height: 42.0))}
             if organizationLabel != nil {organizationLabel.autoSetDimensionsToSize(CGSize(width: self.view.frame.width - 10, height: 42.0))}
-            if biographyTextField != nil {biographyTextField.autoSetDimension(.Width, toSize: self.view.frame.width)}
+            if biographyView != nil {biographyView.autoSetDimension(.Width, toSize: self.view.frame.width)}
 
             
             speakerImageView.autoPinEdgeToSuperviewEdge(.Top, withInset: 10.0)
@@ -110,11 +118,11 @@ class SpeakerDetailsViewController: UIViewController {
                 previousView = organizationLabel
             }
             
-            if biographyTextField != nil {
-                biographyTextField.autoPinEdge(.Top, toEdge: .Bottom, ofView: previousView)
-                biographyTextField.autoPinEdgeToSuperviewEdge(.Left)
-                biographyTextField.autoPinEdgeToSuperviewEdge(.Bottom)
-                biographyTextField.contentSize = biographyTextField.sizeThatFits(CGSize(width: view.frame.width, height: CGFloat(MAXFLOAT)))
+            if biographyView != nil {
+                biographyView.autoPinEdge(.Top, toEdge: .Bottom, ofView: previousView)
+                biographyView.autoPinEdgeToSuperviewEdge(.Left)
+                biographyView.autoPinEdgeToSuperviewEdge(.Bottom)
+//                biographyView.contentSize = biographyView.sizeThatFits(CGSize(width: view.frame.width, height: CGFloat(MAXFLOAT)))
             }
             
             didSetupConstraints = true
@@ -137,8 +145,8 @@ class SpeakerDetailsViewController: UIViewController {
         if speakerImageView != nil {
             height += speakerImageView.frame.height
         }
-        if biographyTextField != nil {
-            height += biographyTextField.frame.height
+        if biographyView != nil {
+            height += biographyView.frame.height
         }
 
         height += insets
