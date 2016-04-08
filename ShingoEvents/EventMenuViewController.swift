@@ -410,12 +410,6 @@ class EventMenuViewController: UIViewController {
             destination.sectionInfo = sectionInfo
             
         }
-
-        // Segue to old venuemapviewcontroller
-//        if segue.identifier == "VenueView" {
-//            let destination = segue.destinationViewController as! VenueMapsViewController
-//            destination.event = appData.event
-//        }
         
         if segue.identifier == "VenueView" {
             let destination = segue.destinationViewController as! VenueMapsCollectionView
@@ -423,6 +417,7 @@ class EventMenuViewController: UIViewController {
         }
         
         if segue.identifier == "SponsorsView" {
+            // This is a pointless comment!
             let destination = segue.destinationViewController as! SponsorsTableViewController
             destination.friends = appData.friendSponsors            //sponsors_array[0]
             destination.supporters = appData.supportersSponsors     //sponsors_array[1]
