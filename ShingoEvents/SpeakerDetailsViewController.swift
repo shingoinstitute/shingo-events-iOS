@@ -55,8 +55,8 @@ class SpeakerDetailsViewController: UIViewController {
             if speaker.biography != nil
             {
                 biographyView = UIWebView.newAutoLayoutView()
-                if var htmlString = speaker.richBiography {
-                    htmlString = "<style=\"color:white\">" + speaker.biography + "</style>"
+                if speaker.richBiography != nil {
+                    let htmlString = speaker.richBiography!
                     biographyView.loadHTMLString(htmlString, baseURL: nil)
                 } else {
                     biographyView.loadHTMLString(speaker.biography, baseURL: nil)
@@ -65,11 +65,8 @@ class SpeakerDetailsViewController: UIViewController {
                 
 //                biographyView = speaker.biography
 //                biographyView = .whiteColor()
-//                biographyView = false
-//                biographyView = false
-                biographyView.backgroundColor = UIColor(red: 0.0/255.0, green: 47.0/255.0, blue: 86.0/255.0, alpha: 1.0)
-//                biographyView = CGRect(x: 0, y: 0, width: biographyTextField.frame.width, height: biographyTextField.contentSize.height)
-//                biographyView = false
+//                biographyView.backgroundColor = UIColor(red: 0.0/255.0, green: 47.0/255.0, blue: 86.0/255.0, alpha: 1.0)
+                biographyView.frame = CGRect(x: 0, y: 0, width: biographyView.frame.width, height: biographyView.frame.height)
                 scrollView.addSubview(biographyView)
             }
             
@@ -79,8 +76,13 @@ class SpeakerDetailsViewController: UIViewController {
                 speakerImageView.image = speaker.image
                 speakerImageView.layer.borderColor = UIColor.blackColor().CGColor
                 speakerImageView.layer.cornerRadius = 5.0
-                scrollView.addSubview(speakerImageView)
             }
+            else
+            {
+                speakerImageView.image = UIImage(named: "silhouette")
+                speakerImageView.contentMode = UIViewContentMode.ScaleAspectFit
+            }
+            scrollView.addSubview(speakerImageView)
             
             setScrollViewContentHeight()
         }

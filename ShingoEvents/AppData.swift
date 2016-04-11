@@ -167,7 +167,8 @@ public class AppData {
                     session.room = item["Room"].string! as String
                 }
                 if item["Speakers"]["records"] != nil {
-                    for event_speaker in item["Speaker"]["records"].array! {
+                    let event_speakers = item["Speakers"]["records"].array!
+                    for event_speaker in event_speakers {
                         if event_speaker["Id"] != nil
                         {
                             let id = event_speaker["Id"].string! as String
