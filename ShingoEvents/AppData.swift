@@ -26,6 +26,8 @@ enum URLTYPE {
     ERROR
 }
 
+
+
 public class AppData {
 
     var upcomingEvents:[Event]!

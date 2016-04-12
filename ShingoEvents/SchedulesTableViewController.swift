@@ -71,6 +71,30 @@ class SchedulesTableViewController: UITableViewController {
         return cell
     }
 
+    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = UIView();
+//        view.backgroundColor = UIColor(netHex: 0xde9a42);
+        view.backgroundColor = .clearColor()
+        let header = UILabel();
+        header.text = event.name;
+        header.lineBreakMode = .ByWordWrapping;
+        header.textAlignment = .Center;
+        header.numberOfLines = 2;
+        header.textColor = .whiteColor();
+        header.font = UIFont.boldSystemFontOfSize(16.0);
+        header.clipsToBounds = true;
+        header.backgroundColor = UIColor(netHex: 0xde9a42);
+        header.layer.borderWidth = 1.0;
+        header.layer.cornerRadius = 5;
+        view.addSubview(header);
+        header.autoPinEdgesToSuperviewEdgesWithInsets(UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4));
+        
+        return view;
+    }
+    
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 50;
+    }
     
     // MARK: - Navigation
 

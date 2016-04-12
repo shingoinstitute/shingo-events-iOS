@@ -14,7 +14,7 @@ class SpeakerDetailsViewController: UIViewController {
     var speakerNameLabel: UILabel!
     var speakerTitleLabel: UILabel!
     var organizationLabel: UILabel!
-    var biographyView: UIWebView!
+    var biographyView: UITextView!
     var speakerImageView: UIImageView!
     
     var speaker:Speaker!
@@ -54,19 +54,32 @@ class SpeakerDetailsViewController: UIViewController {
 
             if speaker.biography != nil
             {
-                biographyView = UIWebView.newAutoLayoutView()
+                biographyView = UITextView.newAutoLayoutView()
                 if speaker.richBiography != nil {
-                    let htmlString = speaker.richBiography!
-                    biographyView.loadHTMLString(htmlString, baseURL: nil)
+                    var htmlString = speaker.richBiography!
+                    do {
+                        htmlString = "<font size=\"5\">" + htmlString + "</font>"
+                        let attributedText = try NSMutableAttributedString(data: htmlString.dataUsingEncoding(NSUTF8StringEncoding)!,
+                                                                options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType],
+                                                                documentAttributes: nil)
+                        biographyView.attributedText = attributedText
+                        
+                    } catch {
+                        print("Error in SpeakerDetailsViewController")
+                    }
+                    
                 } else {
-                    biographyView.loadHTMLString(speaker.biography, baseURL: nil)
+                    
+                    biographyView.text = speaker.biography
+                    biographyView.editable = true // Keep this here or the font size will not change while the view is not editable
+                    biographyView.font = UIFont.systemFontOfSize(15.0)
                 }
-                
-                
-//                biographyView = speaker.biography
-//                biographyView = .whiteColor()
-//                biographyView.backgroundColor = UIColor(red: 0.0/255.0, green: 47.0/255.0, blue: 86.0/255.0, alpha: 1.0)
-                biographyView.frame = CGRect(x: 0, y: 0, width: biographyView.frame.width, height: biographyView.frame.height)
+                biographyView.textColor = .whiteColor()
+                biographyView.editable = false
+                biographyView.selectable = false
+                biographyView.backgroundColor = UIColor(red: 0.0/255.0, green: 47.0/255.0, blue: 86.0/255.0, alpha: 1.0)
+                biographyView.frame = CGRect(x: 0, y: 0, width: biographyView.frame.width, height: biographyView.contentSize.height)
+                biographyView.scrollEnabled = false
                 scrollView.addSubview(biographyView)
             }
             

@@ -82,7 +82,7 @@ class EventMenuViewController: UIViewController {
         // do some sorting! Yay!
         sortResearchRecipientsByName()
         sortPrizeRecipientsByName()
-        sortSpeakersByFirstName()
+        sortSpeakersByLastName()
         sortAffiliatesByName()
         
         contentView.backgroundColor = .clearColor()
@@ -474,7 +474,7 @@ class EventMenuViewController: UIViewController {
     
     
     // Some simple bubble sorting functions
-    func sortSpeakersByFirstName() {
+    func sortSpeakersByLastName() {
         var speakers = appData.event.eventSpeakers
         if speakers.count > 1
         {
@@ -482,7 +482,9 @@ class EventMenuViewController: UIViewController {
             {
                 for j in 0 ..< speakers.count - i - 1
                 {
-                    if speakers[j].display_name > speakers[j+1].display_name
+                    let name1 = speakers[j].name.characters.split{$0 == " "}.map(String.init);
+                    let name2 = speakers[j+1].name.characters.split{$0 == " "}.map(String.init);
+                    if name1.last > name2.last
                     {
                         let temp = speakers[j]
                         speakers[j] = speakers[j+1]
@@ -545,6 +547,7 @@ class EventMenuViewController: UIViewController {
             {
                 for j in 0 ..< affiliates.count - i - 1
                 {
+                    
                     if affiliates[j].name > affiliates[j+1].name
                     {
                         let temp = affiliates[j]
