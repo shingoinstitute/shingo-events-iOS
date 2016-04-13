@@ -30,6 +30,7 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
         let label = UILabel.newAutoLayoutView()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.backgroundColor = .clearColor()
+        label.font = UIFont.boldSystemFontOfSize(20.0)
         label.textColor = .whiteColor()
         label.numberOfLines = 2
         label.lineBreakMode = .ByWordWrapping
@@ -48,8 +49,14 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
     
     var summaryLabel:UILabel = {
         let label = UILabel.newAutoLayoutView()
-        label.text = "Summary:"
+        let style = NSMutableParagraphStyle()
+        style.alignment = NSTextAlignment.Center
+        let attributes = [NSUnderlineStyleAttributeName : NSUnderlineStyle.StyleSingle.rawValue,
+                          NSParagraphStyleAttributeName : style]
+        let attrText = NSAttributedString(string: "Summary", attributes: attributes)
+        label.attributedText = attrText
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .Center
         label.textColor = .whiteColor()
         label.backgroundColor = .clearColor()
         return label
@@ -89,13 +96,27 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
         titleLabel.text = session.name
         roomLabel.text = "Location: " + session.room
         
-        if session.abstract == "" || session.abstract == "null"
+        if session.abstract == "" || session.abstract == "null" || session.richAbstract == "" || session.richAbstract == "null"
         {
             textField.text = "Session details coming soon."
         }
         else
         {
-            textField.text = session.abstract
+            if session.richAbstract != nil {
+                var htmlString:String! = session.richAbstract
+                do {
+                    htmlString = "<font size=\"5\">" + htmlString + "</font>"
+                    let attrString = try NSAttributedString(data: htmlString.dataUsingEncoding(NSUTF8StringEncoding)!,
+                                                            options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType],
+                                                            documentAttributes: nil)
+                    textField.attributedText = attrString
+                } catch {
+                    print("Error with session.richAbstract in SessionDetailViewController")
+                }
+            } else {
+                textField.text = session.abstract
+            }
+            
         }
         textField.scrollEnabled = false
         
@@ -134,13 +155,13 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
         titleLabel.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: 8.0)
         titleLabel.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 8.0)
         
-        roomLabel.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 35)
-        roomLabel.autoSetDimension(.Height, toSize: 35.0)
+        roomLabel.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 42)
+        roomLabel.autoSetDimension(.Height, toSize: 42.0)
         roomLabel.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 8.0)
         roomLabel.autoPinEdge(.Top, toEdge: .Bottom, ofView: titleLabel, withOffset: 8.0)
         
-        summaryLabel.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 21)
-        summaryLabel.autoSetDimension(.Height, toSize: 21)
+        summaryLabel.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 42)
+        summaryLabel.autoSetDimension(.Height, toSize: 42.0)
         summaryLabel.autoPinEdge(.Top, toEdge: .Bottom, ofView: roomLabel, withOffset: 8.0)
         summaryLabel.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 8.0)
         

@@ -870,12 +870,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4RJ-oS-mfG">
-                                <rect key="frame" x="0.0" y="280" width="600" height="276"/>
-                                <color key="backgroundColor" red="0.050980392843484879" green="0.094117648899555206" blue="0.20784313976764679" alpha="1" colorSpace="calibratedRGB"/>
-                            </view>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="top" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YC7-s1-3dj">
-                                <rect key="frame" x="20" y="280" width="560" height="276"/>
+                                <rect key="frame" x="0.0" y="280" width="600" height="276"/>
                                 <color key="backgroundColor" red="0.050980392843484879" green="0.094117648899555206" blue="0.20784313976764679" alpha="1" colorSpace="calibratedRGB"/>
                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -895,13 +891,9 @@
                             <constraint firstAttribute="leadingMargin" secondItem="1Rf-54-ekD" secondAttribute="leading" id="78w-nv-UZ8"/>
                             <constraint firstItem="1Rf-54-ekD" firstAttribute="top" secondItem="d2r-FV-c9O" secondAttribute="bottom" constant="8" id="I7t-eL-abo"/>
                             <constraint firstItem="YC7-s1-3dj" firstAttribute="top" secondItem="1Rf-54-ekD" secondAttribute="bottom" constant="8" id="Itg-9s-2WP"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="4RJ-oS-mfG" secondAttribute="trailing" constant="-20" id="Q27-1w-OhI"/>
-                            <constraint firstItem="4RJ-oS-mfG" firstAttribute="leading" secondItem="QtA-YM-IbV" secondAttribute="leadingMargin" constant="-20" id="WVL-BR-0dC"/>
                             <constraint firstItem="nhF-vY-wMO" firstAttribute="top" secondItem="YC7-s1-3dj" secondAttribute="bottom" id="X4j-9r-muH"/>
-                            <constraint firstItem="nhF-vY-wMO" firstAttribute="top" secondItem="4RJ-oS-mfG" secondAttribute="bottom" id="dTs-Hi-jek"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="YC7-s1-3dj" secondAttribute="trailing" id="eNv-Xs-Vkn"/>
-                            <constraint firstItem="4RJ-oS-mfG" firstAttribute="top" secondItem="YC7-s1-3dj" secondAttribute="top" id="nWQ-Pw-Q0R"/>
-                            <constraint firstItem="YC7-s1-3dj" firstAttribute="leading" secondItem="QtA-YM-IbV" secondAttribute="leadingMargin" id="qgK-nc-MBD"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="YC7-s1-3dj" secondAttribute="trailing" constant="-20" id="eNv-Xs-Vkn"/>
+                            <constraint firstItem="YC7-s1-3dj" firstAttribute="leading" secondItem="QtA-YM-IbV" secondAttribute="leadingMargin" constant="-20" id="qgK-nc-MBD"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Research Award" id="D79-vz-eRv"/>
@@ -1126,8 +1118,8 @@
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                 <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES"/>
                                             </textView>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="200x200PL" translatesAutoresizingMaskIntoConstraints="NO" id="f8c-jx-2f7">
-                                                <rect key="frame" x="8" y="8" width="200" height="200"/>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sponsor_banner_pl" translatesAutoresizingMaskIntoConstraints="NO" id="f8c-jx-2f7">
+                                                <rect key="frame" x="8" y="8" width="584" height="200"/>
                                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             </imageView>
                                         </subviews>
@@ -1136,6 +1128,7 @@
                                             <constraint firstItem="f8c-jx-2f7" firstAttribute="top" secondItem="wTU-ZN-jYa" secondAttribute="top" constant="8" id="1xA-jk-Zdd"/>
                                             <constraint firstItem="f8c-jx-2f7" firstAttribute="leading" secondItem="wTU-ZN-jYa" secondAttribute="leading" constant="8" id="BkP-ff-oqi"/>
                                             <constraint firstItem="KsT-Kf-LwT" firstAttribute="leading" secondItem="wTU-ZN-jYa" secondAttribute="leading" id="JLf-sS-oSX"/>
+                                            <constraint firstAttribute="trailing" secondItem="f8c-jx-2f7" secondAttribute="trailing" constant="8" id="UvI-He-wm8"/>
                                             <constraint firstAttribute="bottom" secondItem="KsT-Kf-LwT" secondAttribute="bottom" id="Ysj-TV-5ZH"/>
                                             <constraint firstAttribute="trailing" secondItem="KsT-Kf-LwT" secondAttribute="trailing" id="pk7-lX-pKv"/>
                                             <constraint firstItem="KsT-Kf-LwT" firstAttribute="top" secondItem="f8c-jx-2f7" secondAttribute="bottom" constant="8" symbolic="YES" id="xFE-Mf-Ml8"/>
@@ -1351,10 +1344,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eh7-AU-Ldw">
-                                <rect key="frame" x="0.0" y="230" width="600" height="326"/>
-                                <color key="backgroundColor" red="0.050980392843484879" green="0.094117648899555206" blue="0.20784313976764679" alpha="1" colorSpace="calibratedRGB"/>
-                            </view>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Sd7-vT-Q5r">
                                 <rect key="frame" x="20" y="72" width="560" height="150"/>
                                 <constraints>
@@ -1362,7 +1351,7 @@
                                 </constraints>
                             </imageView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="top" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="BjE-mM-zwV">
-                                <rect key="frame" x="20" y="230" width="560" height="326"/>
+                                <rect key="frame" x="0.0" y="230" width="600" height="326"/>
                                 <color key="backgroundColor" red="0.050980392843484879" green="0.094117648899555206" blue="0.20784313976764679" alpha="1" colorSpace="calibratedRGB"/>
                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1372,14 +1361,10 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="BjE-mM-zwV" secondAttribute="trailing" id="9CQ-Qu-RV5"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="eh7-AU-Ldw" secondAttribute="trailing" constant="-20" id="9Zs-Q4-ifo"/>
-                            <constraint firstItem="eh7-AU-Ldw" firstAttribute="top" secondItem="BjE-mM-zwV" secondAttribute="top" id="J7d-B5-7PE"/>
-                            <constraint firstItem="eh7-AU-Ldw" firstAttribute="leading" secondItem="h6K-dH-e3w" secondAttribute="leadingMargin" constant="-20" id="PEK-6C-rrm"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="BjE-mM-zwV" secondAttribute="trailing" constant="-20" id="9CQ-Qu-RV5"/>
                             <constraint firstAttribute="leadingMargin" secondItem="Sd7-vT-Q5r" secondAttribute="leading" id="Y0a-ni-wlo"/>
                             <constraint firstItem="K59-IO-Icb" firstAttribute="top" secondItem="BjE-mM-zwV" secondAttribute="bottom" id="ZGd-ba-TwD"/>
-                            <constraint firstItem="BjE-mM-zwV" firstAttribute="leading" secondItem="h6K-dH-e3w" secondAttribute="leadingMargin" id="g2L-Xf-kY7"/>
-                            <constraint firstItem="K59-IO-Icb" firstAttribute="top" secondItem="eh7-AU-Ldw" secondAttribute="bottom" id="jew-9g-luP"/>
+                            <constraint firstItem="BjE-mM-zwV" firstAttribute="leading" secondItem="h6K-dH-e3w" secondAttribute="leadingMargin" constant="-20" id="g2L-Xf-kY7"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Sd7-vT-Q5r" secondAttribute="trailing" id="rrd-Ob-KMz"/>
                             <constraint firstItem="BjE-mM-zwV" firstAttribute="top" secondItem="Sd7-vT-Q5r" secondAttribute="bottom" constant="8" id="wec-da-lii"/>
                             <constraint firstItem="Sd7-vT-Q5r" firstAttribute="top" secondItem="bWm-4C-xYz" secondAttribute="bottom" constant="8" id="z7n-y9-A04"/>
@@ -1456,14 +1441,15 @@
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                 <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES"/>
                                             </textView>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="200x200PL" translatesAutoresizingMaskIntoConstraints="NO" id="zIJ-a9-ska">
-                                                <rect key="frame" x="8" y="8" width="200" height="200"/>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sponsor_banner_pl" translatesAutoresizingMaskIntoConstraints="NO" id="zIJ-a9-ska">
+                                                <rect key="frame" x="8" y="8" width="584" height="200"/>
                                             </imageView>
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="bottom" secondItem="mFY-fd-rMl" secondAttribute="bottom" id="NOz-Md-NGc"/>
                                             <constraint firstItem="zIJ-a9-ska" firstAttribute="top" secondItem="eSv-wY-NWI" secondAttribute="topMargin" id="Pjo-QC-JRV"/>
+                                            <constraint firstAttribute="trailing" secondItem="zIJ-a9-ska" secondAttribute="trailing" constant="8" id="XUa-4N-PGu"/>
                                             <constraint firstItem="zIJ-a9-ska" firstAttribute="leading" secondItem="eSv-wY-NWI" secondAttribute="leadingMargin" id="bkU-11-1po"/>
                                             <constraint firstItem="mFY-fd-rMl" firstAttribute="leading" secondItem="eSv-wY-NWI" secondAttribute="leading" id="qZ6-Kn-f94"/>
                                             <constraint firstItem="mFY-fd-rMl" firstAttribute="top" secondItem="zIJ-a9-ska" secondAttribute="bottom" constant="8" symbolic="YES" id="qho-Hf-LJ5"/>
@@ -1502,6 +1488,7 @@
     <resources>
         <image name="100x100PL" width="100" height="100"/>
         <image name="200x200PL" width="200" height="200"/>
+        <image name="sponsor_banner_pl" width="400" height="200"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="WFw-TS-8kO"/>

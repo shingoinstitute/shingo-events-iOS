@@ -23,7 +23,8 @@ class SpeakerDetailsViewController: UIViewController {
     override func loadView()
     {
         view = UIView()
-        view.backgroundColor = .whiteColor() 
+//        view.backgroundColor = .whiteColor()
+        view.backgroundColor = UIColor(netHex: 0x002f56)
         scrollView = UIScrollView.newAutoLayoutView()
         view.addSubview(scrollView)
         if speaker != nil {
@@ -39,6 +40,7 @@ class SpeakerDetailsViewController: UIViewController {
             {
                 speakerNameLabel.text = "Name not available"
             }
+            speakerNameLabel.textColor = .whiteColor()
             speakerNameLabel.numberOfLines = 2
             speakerNameLabel.lineBreakMode = .ByWordWrapping
             scrollView.addSubview(speakerNameLabel)
@@ -48,6 +50,7 @@ class SpeakerDetailsViewController: UIViewController {
                 organizationLabel = UILabel.newAutoLayoutView()
                 organizationLabel.text = "From " + speaker.organization
                 organizationLabel.numberOfLines = 2
+                organizationLabel.textColor = .whiteColor()
                 organizationLabel.lineBreakMode = .ByWordWrapping
                 scrollView.addSubview(organizationLabel)
             }
@@ -74,10 +77,11 @@ class SpeakerDetailsViewController: UIViewController {
                     biographyView.editable = true // Keep this here or the font size will not change while the view is not editable
                     biographyView.font = UIFont.systemFontOfSize(15.0)
                 }
-                biographyView.textColor = .whiteColor()
+//                biographyView.textColor = .whiteColor()
                 biographyView.editable = false
                 biographyView.selectable = false
-                biographyView.backgroundColor = UIColor(red: 0.0/255.0, green: 47.0/255.0, blue: 86.0/255.0, alpha: 1.0)
+//                biographyView.backgroundColor = UIColor(red: 0.0/255.0, green: 47.0/255.0, blue: 86.0/255.0, alpha: 1.0)
+                biographyView.backgroundColor = .whiteColor()
                 biographyView.frame = CGRect(x: 0, y: 0, width: biographyView.frame.width, height: biographyView.contentSize.height)
                 biographyView.scrollEnabled = false
                 scrollView.addSubview(biographyView)

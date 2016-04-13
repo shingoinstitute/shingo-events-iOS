@@ -21,33 +21,76 @@ class ExhibitorInfoViewController: UIViewController {
 
         exhibitorImage.layer.cornerRadius = 5.0
 
-        if exhibitor.logo_image != nil
-        {
+        if exhibitor.logo_image != nil {
             exhibitorImage.image = exhibitor.logo_image
-            
-            if exhibitorImage.image?.size.width >= view.frame.width * 0.9
-            {
-                exhibitorImage.autoSetDimension(.Height, toSize: 150.0)
-                exhibitorImage.autoSetDimension(.Width, toSize: view.frame.width - 16.0)
-            }
-
-            if exhibitorImage.image?.size.width < view.frame.width * 0.9
-            {
-                exhibitorImage.autoSetDimension(.Height, toSize: (exhibitorImage.image?.size.height)!)
-                exhibitorImage.autoSetDimension(.Width, toSize: (exhibitorImage.image?.size.width)!)
-            }
-            
-        }
-        else
-        {
-            exhibitorImage.image = UIImage(named: "200x200PL")
+            exhibitorImage.contentMode = .ScaleAspectFit
+            exhibitorImage.autoSetDimension(.Height, toSize: 150.0)
+            exhibitorImage.autoSetDimension(.Width, toSize: view.frame.width - 16.0)
         }
         
+        descriptionTextField.text = "";
+        
+        if exhibitor.richDescription != nil {
+            descriptionForRichText()
+        } else {
+            descriptionForPlainText()
+        }
+    
+
+
+        var frame:CGRect = descriptionTextField.frame
+        frame.size.height = descriptionTextField.contentSize.height
+        descriptionTextField.frame = frame
+        descriptionTextField.scrollEnabled = false
+    }
+    
+    func descriptionForRichText() {
+        let richText = NSMutableAttributedString();
+        let attrs = [NSFontAttributeName : UIFont.systemFontOfSize(16.0),
+                     NSForegroundColorAttributeName : UIColor.whiteColor()]
+        descriptionTextField.linkTextAttributes = [NSForegroundColorAttributeName : UIColor.cyanColor(),
+                                                   NSUnderlineStyleAttributeName : NSUnderlineStyle.StyleSingle.rawValue]
+                                                   
+        
+        if exhibitor.richDescription != nil {
+            let htmlString: String! = "<style>body{color:white;}</style><font size=\"5\">" + exhibitor.richDescription! + "</font></style>";
+            do {
+            let description = try NSAttributedString(data: htmlString.dataUsingEncoding(NSUTF8StringEncoding)!,
+                                                        options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType],
+                                                        documentAttributes: nil)
+            richText.appendAttributedString(description);
+            } catch {
+                print("Error with richText in ExhibitorInfoViewController")
+            }
+        } else {
+            richText.appendAttributedString(NSAttributedString(string: "Description coming soon."));
+        }
+        richText.appendAttributedString(NSAttributedString(string: "\n\n"))
+        
+        
+        if exhibitor.website != nil {
+            richText.appendAttributedString(NSAttributedString(string: String("Website: " + exhibitor.website + "\n"), attributes: attrs))
+        }
+        if exhibitor.email != nil {
+            richText.appendAttributedString(NSAttributedString(string: String("Email: " + exhibitor.email + "\n"), attributes: attrs))
+        } else {
+            richText.appendAttributedString(NSAttributedString(string: "Email: Not available\n", attributes: attrs))
+        }
+        if exhibitor.phone != nil {
+            richText.appendAttributedString(NSAttributedString(string: String("Phone: " + exhibitor.phone + "\n"), attributes: attrs))
+        } else {
+            richText.appendAttributedString(NSAttributedString(string: "Phone: Not available\n", attributes: attrs))
+        }
+        
+        descriptionTextField.attributedText = richText;
+    }
+    
+    func descriptionForPlainText() {
         if exhibitor.name != nil
         {
             descriptionTextField.text = exhibitor.name + "\n"
         }
-
+        
         if exhibitor.email != nil
         {
             descriptionTextField.text! += "Email: " + exhibitor.email! + "\n"
@@ -56,13 +99,13 @@ class ExhibitorInfoViewController: UIViewController {
         {
             descriptionTextField.text! += "Email: Not available\n"
         }
-
+        
         if let phoneText = exhibitor?.phone {
             descriptionTextField.text! += "Phone: " + phoneText + "\n\n"
         } else {
             descriptionTextField.text! += "Phone: Not available\n\n"
         }
-
+        
         if exhibitor.description != nil
         {
             descriptionTextField.text! += exhibitor.description + "\n"
@@ -76,14 +119,6 @@ class ExhibitorInfoViewController: UIViewController {
         {
             descriptionTextField.text! += "Visit " + exhibitor.name + "'s website at " + exhibitor.website + "\n"
         }
-
-        var frame:CGRect = descriptionTextField.frame
-        frame.size.height = descriptionTextField.contentSize.height
-        descriptionTextField.frame = frame
-        descriptionTextField.scrollEnabled = false
-
-        
-
     }
     
 

@@ -21,6 +21,7 @@ class AfilliateViewController: UIViewController {
         
         if affiliate.logo_image != nil {
             logoImage.image = affiliate.logo_image
+            logoImage.contentMode = .ScaleAspectFit
         }
         
         logoImage.layer.borderColor = UIColor.grayColor().CGColor
@@ -52,6 +53,10 @@ class AfilliateViewController: UIViewController {
             abstractTextField.text! += "Visit \(affiliate.name)'s website at "  + affiliate.website_url
         }
 
+        var frame:CGRect = abstractTextField.frame
+        frame.size.height = abstractTextField.contentSize.height
+        abstractTextField.frame = frame
+        abstractTextField.scrollEnabled = false
     }
 
 

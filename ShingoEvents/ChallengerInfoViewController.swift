@@ -20,6 +20,7 @@ class ChallengerInfoViewController: UIViewController {
         super.viewDidLoad()
         
         abstractTextField.text = ""
+        abstractTextField.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         self.automaticallyAdjustsScrollViewInsets = false
         logoImage.contentMode = UIViewContentMode.ScaleAspectFit
         if recipient.logo_book_cover_image != nil
@@ -34,11 +35,6 @@ class ChallengerInfoViewController: UIViewController {
             logoImage.layer.borderWidth = 1.0
             logoImage.layer.cornerRadius = 4.0
         }
-                
-//        if recipient.name != nil && recipient.award != nil {
-//            abstractTextField.text = ("Presenting ") + recipient.name
-//            abstractTextField.text! += ", recipient of the " + recipient.award + ".\n\n"
-//        }
         
         if let text = recipient.abstract {
             abstractTextField.text! += text
