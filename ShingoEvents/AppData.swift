@@ -118,16 +118,15 @@ public class AppData {
                 
                 self.event!.eventAgenda.agenda_id = json["agenda"]["Id"].string! as String
                 let days = json["agenda"]["Days"]["records"].array!
-                let count = days.count
                 
-                for i in 0 ..< count - 1
+                for day in days
                 {
-                    let day_id = days[i]["Id"].string! as String
+                    let dayId = day["Id"].string! as String
                 
-                    self.getDay(day_id)
+                    self.getDay(dayId)
                     {
-                        day in
-                        self.event.eventAgenda.days_array.append(day)
+                        item in
+                        self.event.eventAgenda.days_array.append(item)
                     }
                 }
                 callback()

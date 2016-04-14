@@ -31,7 +31,6 @@ class MainMenuViewController: UIViewController {
         return view
     }()
     
-//    let activitiyViewController = ActivityViewController()
     var appData:AppData!
     var request:Alamofire.Request!
     
@@ -40,6 +39,8 @@ class MainMenuViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.navigationItem.title = "Shingo Events"
+        
         eventsBtn.removeFromSuperview()
         shingoModelBtn.removeFromSuperview()
         settingsBtn.removeFromSuperview()

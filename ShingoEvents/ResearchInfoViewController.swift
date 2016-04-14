@@ -20,6 +20,8 @@ class ResearchInfoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationItem.title = recipient.name
+        
         let shingoBlue = UIColor(netHex: 0x002f56)
         
         bookImage.removeFromSuperview()
@@ -72,7 +74,7 @@ class ResearchInfoViewController: UIViewController {
                                                                       options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType],
                                                                       documentAttributes: nil)
             } catch {
-                // do nothing
+                print("Error with richText in ResearchInfoViewController")
             }
             
         } else if recipient.abstract != nil {
@@ -81,10 +83,6 @@ class ResearchInfoViewController: UIViewController {
             abstractTextField.text! += "Book description coming soon."
         }
         
-//        var frame:CGRect = abstractTextField.frame
-//        frame.size.height = abstractTextField.contentSize.height
-//        abstractTextField.frame = frame
-//        abstractTextField.scrollEnabled = false
     }
     
 

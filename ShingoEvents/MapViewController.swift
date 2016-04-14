@@ -19,6 +19,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationItem.title = "Conference Location"
+        
         let initial_zoom_region:MKCoordinateSpan = MKCoordinateSpanMake(0.01 , 0.01)
         if location == nil {
             location = CLLocationCoordinate2D(latitude: 0, longitude: 0)

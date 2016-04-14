@@ -111,7 +111,7 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
                                                             documentAttributes: nil)
                     textField.attributedText = attrString
                 } catch {
-                    print("Error with session.richAbstract in SessionDetailViewController")
+                    print("Error with richAbstract in SessionDetailViewController")
                 }
             } else {
                 textField.text = session.abstract
@@ -149,10 +149,9 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
             contentView.autoPinEdgeToSuperviewEdge(.Bottom)
         }
         
-        titleLabel.frame = CGRect(x: 0, y: 0, width: view.frame.width - 16, height: 42)
-        titleLabel.autoSetDimension(.Height, toSize: titleLabel.frame.height)
+        titleLabel.autoSetDimension(.Width, toSize: view.frame.width - 16)
+        titleLabel.autoSetDimension(.Height, toSize: 60)
         titleLabel.autoPinEdge(.Top, toEdge: .Top, ofView: contentView, withOffset: 8.0)
-        titleLabel.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: 8.0)
         titleLabel.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 8.0)
         
         roomLabel.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 42)

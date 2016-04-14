@@ -115,8 +115,6 @@ class EventsTableViewController: UITableViewController {
         
         if cell.event.eventSessions == nil
         {
-//            activityViewController = ActivityViewController(message: "Loading Conference Data...")
-//            presentViewController(activityViewController, animated: true, completion: nil)
             activityView.displayActivityView(message: "Loading Conference Data...", forView: self.view, withRequest: nil)
             appData.getEventSessions() { // appData.eventSessions should be populated before calling other tasks
                 self.asyncTaskDidComplete()

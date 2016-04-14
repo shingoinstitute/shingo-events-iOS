@@ -55,22 +55,18 @@ class RecipientsTableViewController: UITableViewController {
         switch indexPath.section {
         case 0:
             if !appData.shingoPrizeRecipients.isEmpty {
-//                cell.recipientLabel!.text = appData.shingoPrizeRecipients[indexPath.row].name
                 cell.recipient = appData.shingoPrizeRecipients[indexPath.row]
             }
         case 1:
             if !appData.silverRecipients.isEmpty {
-//                cell.textLabel!.text = appData.silverRecipients[indexPath.row].name
                 cell.recipient = appData.silverRecipients[indexPath.row]
             }
         case 2:
             if !appData.bronzeRecipients.isEmpty {
-//                cell.textLabel!.text = appData.bronzeRecipients[indexPath.row].name
                 cell.recipient = appData.bronzeRecipients[indexPath.row]
             }
         case 3:
             if !appData.researchRecipients.isEmpty {
-//                cell.textLabel!.text = appData.researchRecipients[indexPath.row].name
                 cell.recipient = appData.researchRecipients[indexPath.row]
             }
         default:

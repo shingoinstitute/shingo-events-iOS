@@ -1103,56 +1103,21 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="APq-Vl-41b">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="556"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wTU-ZN-jYa">
-                                        <rect key="frame" x="0.0" y="0.0" width="600" height="556"/>
-                                        <subviews>
-                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KsT-Kf-LwT">
-                                                <rect key="frame" x="0.0" y="216" width="600" height="340"/>
-                                                <color key="backgroundColor" red="0.050980392843484879" green="0.094117648899555206" blue="0.20784313976764679" alpha="1" colorSpace="calibratedRGB"/>
-                                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                                <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES"/>
-                                            </textView>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sponsor_banner_pl" translatesAutoresizingMaskIntoConstraints="NO" id="f8c-jx-2f7">
-                                                <rect key="frame" x="8" y="8" width="584" height="200"/>
-                                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            </imageView>
-                                        </subviews>
-                                        <color key="backgroundColor" red="0.30588236451148987" green="0.011764706112444401" blue="0.094117648899555206" alpha="1" colorSpace="calibratedRGB"/>
-                                        <constraints>
-                                            <constraint firstItem="f8c-jx-2f7" firstAttribute="top" secondItem="wTU-ZN-jYa" secondAttribute="top" constant="8" id="1xA-jk-Zdd"/>
-                                            <constraint firstItem="f8c-jx-2f7" firstAttribute="leading" secondItem="wTU-ZN-jYa" secondAttribute="leading" constant="8" id="BkP-ff-oqi"/>
-                                            <constraint firstItem="KsT-Kf-LwT" firstAttribute="leading" secondItem="wTU-ZN-jYa" secondAttribute="leading" id="JLf-sS-oSX"/>
-                                            <constraint firstAttribute="trailing" secondItem="f8c-jx-2f7" secondAttribute="trailing" constant="8" id="UvI-He-wm8"/>
-                                            <constraint firstAttribute="bottom" secondItem="KsT-Kf-LwT" secondAttribute="bottom" id="Ysj-TV-5ZH"/>
-                                            <constraint firstAttribute="trailing" secondItem="KsT-Kf-LwT" secondAttribute="trailing" id="pk7-lX-pKv"/>
-                                            <constraint firstItem="KsT-Kf-LwT" firstAttribute="top" secondItem="f8c-jx-2f7" secondAttribute="bottom" constant="8" symbolic="YES" id="xFE-Mf-Ml8"/>
-                                        </constraints>
-                                    </view>
-                                </subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KsT-Kf-LwT">
+                                <rect key="frame" x="0.0" y="130" width="600" height="340"/>
+                                <color key="backgroundColor" red="0.050980392843484879" green="0.094117648899555206" blue="0.20784313976764679" alpha="1" colorSpace="calibratedRGB"/>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES"/>
+                            </textView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="sponsor_banner_pl" translatesAutoresizingMaskIntoConstraints="NO" id="f8c-jx-2f7">
+                                <rect key="frame" x="8" y="200" width="584" height="200"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstItem="wTU-ZN-jYa" firstAttribute="top" secondItem="APq-Vl-41b" secondAttribute="top" id="0h0-lK-DtT"/>
-                                    <constraint firstAttribute="bottom" secondItem="wTU-ZN-jYa" secondAttribute="bottom" id="SdP-Pd-ibd"/>
-                                    <constraint firstItem="wTU-ZN-jYa" firstAttribute="height" secondItem="APq-Vl-41b" secondAttribute="height" id="awf-Ow-jlh"/>
-                                    <constraint firstItem="wTU-ZN-jYa" firstAttribute="leading" secondItem="APq-Vl-41b" secondAttribute="leading" id="l0s-N5-LYT"/>
-                                    <constraint firstItem="wTU-ZN-jYa" firstAttribute="width" secondItem="APq-Vl-41b" secondAttribute="width" id="qk7-wZ-sbG"/>
-                                    <constraint firstAttribute="trailing" secondItem="wTU-ZN-jYa" secondAttribute="trailing" id="y1i-7b-MwU"/>
-                                </constraints>
-                            </scrollView>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                        <constraints>
-                            <constraint firstAttribute="trailing" secondItem="APq-Vl-41b" secondAttribute="trailing" id="5hs-dL-oKF"/>
-                            <constraint firstItem="APq-Vl-41b" firstAttribute="leading" secondItem="5tR-58-V26" secondAttribute="leading" id="FhZ-7J-Xab"/>
-                            <constraint firstItem="APq-Vl-41b" firstAttribute="bottom" secondItem="i88-v0-SuX" secondAttribute="top" id="odk-C9-GIr"/>
-                            <constraint firstItem="APq-Vl-41b" firstAttribute="top" secondItem="5tR-58-V26" secondAttribute="top" id="uiM-5d-4NJ"/>
-                        </constraints>
                     </view>
                     <connections>
                         <outlet property="abstractTextField" destination="KsT-Kf-LwT" id="u2K-wZ-CiB"/>

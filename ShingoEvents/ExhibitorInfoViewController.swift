@@ -19,6 +19,8 @@ class ExhibitorInfoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.navigationItem.title = exhibitor.name
+        
         exhibitorImage.layer.cornerRadius = 5.0
 
         if exhibitor.logo_image != nil {

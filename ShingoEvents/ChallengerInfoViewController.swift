@@ -20,6 +20,8 @@ class ChallengerInfoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationItem.title = recipient.name
+        
         let shingoBlue = UIColor(netHex: 0x002f56)
         backgroundView.backgroundColor = shingoBlue
         abstractTextField.backgroundColor = shingoBlue
@@ -30,7 +32,6 @@ class ChallengerInfoViewController: UIViewController {
         view.addSubview(scrollView)
         view.addSubview(backgroundView)
         view.bringSubviewToFront(scrollView)
-//        scrollView.autoPinEdgesToSuperviewEdges()
         scrollView.autoPinToTopLayoutGuideOfViewController(self, withInset: 8)
         scrollView.autoPinEdgeToSuperviewEdge(.Left)
         scrollView.autoPinEdgeToSuperviewEdge(.Right)
@@ -41,7 +42,6 @@ class ChallengerInfoViewController: UIViewController {
         logoImage.autoPinEdgeToSuperviewEdge(.Top)
         logoImage.autoPinEdgeToSuperviewEdge(.Left, withInset: 8)
         logoImage.autoPinEdgeToSuperviewEdge(.Right, withInset: 8)
-//        logoImage.autoSetDimension(.Height, toSize: 200)
         logoImage.contentMode = .ScaleAspectFit
         
         abstractTextField.autoPinEdge(.Top, toEdge: .Bottom, ofView: logoImage, withOffset: 8)
@@ -66,24 +66,19 @@ class ChallengerInfoViewController: UIViewController {
         else
         {
             logoImage.image = UIImage(named: "logoComingSoon500x500")
-//            logoImage.autoSetDimensionsToSize(CGSize(width: 200, height: 200))
             logoImage.layer.borderColor = UIColor.lightGrayColor().CGColor
             logoImage.layer.borderWidth = 1.0
             logoImage.layer.cornerRadius = 4.0
         }
         
         if recipient.richAbstract != nil {
-//            let attrs = [NSFontAttributeName : UIFont.systemFontOfSize(16.0),
-//                         NSForegroundColorAttributeName : UIColor.whiteColor()]
-//            abstractTextField.linkTextAttributes = [NSForegroundColorAttributeName : UIColor.cyanColor(),
-//                                                       NSUnderlineStyleAttributeName : NSUnderlineStyle.StyleSingle.rawValue]
             do {
                 let htmlString: String! = "<style>body{color:white;}</style><font size=\"5\">" + recipient.richAbstract! + "</font></style>";
                 abstractTextField.attributedText = try NSAttributedString(data: htmlString.dataUsingEncoding(NSUTF8StringEncoding)!,
                                                                       options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType],
                                                                       documentAttributes: nil)
             } catch {
-                // do nothing...
+                print("Error with richText in ChallengerInfoViewController")
             }
         } else {
             abstractTextField.text! = recipient.abstract
