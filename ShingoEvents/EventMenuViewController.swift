@@ -449,28 +449,28 @@ class EventMenuViewController: UIViewController {
         return days
     }
     
-    func valueOfDay(day:String) -> Int {
-        let day = day.lowercaseString
-        switch day {
-        case "monday":
-            return 1
-        case "tuesday":
-            return 2
-        case "wednesday":
-            return 3
-        case "thursday":
-            return 4
-        case "friday":
-            return 5
-        case "saturday":
-            return 6
-        case "sunday":
-            return 7
-        default:
-            print("ERROR: EventMenuViewController::valueOfDay, invalid string passed into parameter!")
-            return 0
-        }
-    }
+//    func valueOfDay(day:String) -> Int {
+//        let day = day.lowercaseString
+//        switch day {
+//        case "monday":
+//            return 1
+//        case "tuesday":
+//            return 2
+//        case "wednesday":
+//            return 3
+//        case "thursday":
+//            return 4
+//        case "friday":
+//            return 5
+//        case "saturday":
+//            return 6
+//        case "sunday":
+//            return 7
+//        default:
+//            print("ERROR: EventMenuViewController::valueOfDay, invalid string passed into parameter!")
+//            return 0
+//        }
+//    }
     
     
     // Some simple bubble sorting functions

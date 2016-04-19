@@ -58,7 +58,6 @@ class SponsorsTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = UILabel()
         header.backgroundColor = UIColor(netHex: 0xcd8931)
-//        header.backgroundColor = .orangeColor()
         header.text = sectionTitles[section]
         header.textColor = .whiteColor()
         header.font = UIFont.boldSystemFontOfSize(16.0)
@@ -195,31 +194,13 @@ class SponsorTableViewCell:UITableViewCell {
             
             bannerImage.contentMode = UIViewContentMode.ScaleAspectFit
             
-            bannerImage.autoAlignAxis(.Horizontal, toSameAxisOfView: contentView, withOffset: 8.0)
-            bannerImage.autoAlignAxis(.Vertical, toSameAxisOfView: contentView, withOffset: 8.0)
+            bannerImage.autoPinEdgesToSuperviewEdgesWithInsets(UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8))
             
             didSetupConstraints = true
         }
         super.updateConstraints()
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

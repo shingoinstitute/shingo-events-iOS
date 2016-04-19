@@ -42,28 +42,14 @@ public class AffiliateTableViewCell: UITableViewCell {
             
             logoImage.image = affiliate.logo_image
             nameLabel.text = affiliate.name
-            
-            var width = logoImage.image?.size.width
-            var height = logoImage.image?.size.height
-            let aspectRatio:CGFloat = height! / width!
-            
-            if width > 150 {
-                width = 150
-                height = width! * aspectRatio
-            }
-            
-            if height > 100 {
-                width = 100
-                height = width! * aspectRatio
-            }
-            
-            logoImage.autoSetDimensionsToSize(CGSize(width: width!, height: height!))
+  
+            logoImage.contentMode = .ScaleAspectFit
+            logoImage.autoSetDimension(.Width, toSize: contentView.frame.width * 0.33)
             logoImage.autoAlignAxis(.Horizontal, toSameAxisOfView: contentView, withOffset: 0)
             logoImage.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 8.0)
             
-            
             nameLabel.autoSetDimension(.Height, toSize: 42.0)
-            nameLabel.numberOfLines = 3
+            nameLabel.numberOfLines = 0
             nameLabel.lineBreakMode = .ByWordWrapping
             nameLabel.autoAlignAxis(.Horizontal, toSameAxisOfView: contentView)
             nameLabel.autoPinEdge(.Left, toEdge: .Right, ofView: logoImage, withOffset: 8.0)

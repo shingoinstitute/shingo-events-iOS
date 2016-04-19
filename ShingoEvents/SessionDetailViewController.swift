@@ -32,7 +32,8 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
         label.backgroundColor = .clearColor()
         label.font = UIFont.boldSystemFontOfSize(20.0)
         label.textColor = .whiteColor()
-        label.numberOfLines = 2
+        label.numberOfLines = 0
+        label.textAlignment = .Center
         label.lineBreakMode = .ByWordWrapping
         return label
     }()
@@ -41,7 +42,8 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
         let label = UILabel.newAutoLayoutView()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.lineBreakMode = .ByWordWrapping
-        label.numberOfLines = 2
+        label.numberOfLines = 0
+        label.textAlignment = .Center
         label.backgroundColor = UIColor.clearColor()
         label.textColor = .whiteColor()
         return label
@@ -55,6 +57,7 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
                           NSParagraphStyleAttributeName : style]
         let attrText = NSAttributedString(string: "Summary", attributes: attributes)
         label.attributedText = attrText
+        label.textAlignment = .Center
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .Center
         label.textColor = .whiteColor()
@@ -68,6 +71,7 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
         view.editable = true
         view.font = UIFont.systemFontOfSize(15)
         view.editable = false
+        view.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -92,6 +96,9 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
         super.viewDidLoad()
         tableView.removeFromSuperview() // remove tableView before re-adding it
         
+        scrollView.backgroundColor = ShingoColors().shingoRed
+        tableView.backgroundColor = ShingoColors().shingoRed
+        
         // Load data
         titleLabel.text = session.name
         roomLabel.text = "Location: " + session.room
@@ -100,25 +107,29 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
         {
             textField.text = "Session details coming soon."
         }
-        else
+        else if session.richAbstract != nil
         {
-            if session.richAbstract != nil {
-                var htmlString:String! = session.richAbstract
-                do {
-                    htmlString = "<font size=\"5\">" + htmlString + "</font>"
-                    let attrString = try NSAttributedString(data: htmlString.dataUsingEncoding(NSUTF8StringEncoding)!,
-                                                            options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType],
-                                                            documentAttributes: nil)
-                    textField.attributedText = attrString
-                } catch {
-                    print("Error with richAbstract in SessionDetailViewController")
-                }
-            } else {
-                textField.text = session.abstract
+
+            do {
+                let htmlString = "<font size=\"5\">" + session.richAbstract! + "</font>"
+                let attrString = try NSAttributedString(data: htmlString.dataUsingEncoding(NSUTF8StringEncoding)!,
+                                                        options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
+                                                                    NSCharacterEncodingDocumentAttribute : NSUTF8StringEncoding],
+                                                        documentAttributes: nil)
+                textField.attributedText = attrString
+            } catch {
+                print("Error with richAbstract in SessionDetailViewController")
             }
             
         }
+        else
+        {
+            textField.text = session.abstract
+        }
+        
+//        }
         textField.scrollEnabled = false
+        
         
         contentView.addSubview(titleLabel)
         contentView.addSubview(roomLabel)
@@ -130,7 +141,8 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
         }
         view.addSubview(scrollView)
 
-        scrollView.autoSetDimensionsToSize(CGSize(width: view.frame.width, height: view.frame.height))
+        scrollView.autoSetDimensionsToSize(CGSize(width: self.view.frame.width, height: self.view.frame.height))
+//        scrollView.sizeToFit()
         scrollView.autoPinEdgesToSuperviewEdges()
         
         contentView.autoPinEdgeToSuperviewEdge(.Top)
@@ -149,28 +161,28 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
             contentView.autoPinEdgeToSuperviewEdge(.Bottom)
         }
         
-        titleLabel.autoSetDimension(.Width, toSize: view.frame.width - 16)
-        titleLabel.autoSetDimension(.Height, toSize: 60)
+        titleLabel.autoSetDimension(.Width, toSize: view.frame.width)
         titleLabel.autoPinEdge(.Top, toEdge: .Top, ofView: contentView, withOffset: 8.0)
         titleLabel.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 8.0)
+        titleLabel.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: 8.0)
         
         roomLabel.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 42)
-        roomLabel.autoSetDimension(.Height, toSize: 42.0)
-        roomLabel.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 8.0)
         roomLabel.autoPinEdge(.Top, toEdge: .Bottom, ofView: titleLabel, withOffset: 8.0)
+        roomLabel.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 8.0)
+        roomLabel.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: 8.0)
         
         summaryLabel.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 42)
-        summaryLabel.autoSetDimension(.Height, toSize: 42.0)
         summaryLabel.autoPinEdge(.Top, toEdge: .Bottom, ofView: roomLabel, withOffset: 8.0)
+        summaryLabel.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: 8.0)
         summaryLabel.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 8.0)
         
         
         textField.sizeToFit()
         textField.layoutIfNeeded()
         textField.autoSetDimension(.Width, toSize: view.frame.width)
-        textField.autoPinEdgeToSuperviewEdge(.Left)
-        textField.autoPinEdgeToSuperviewEdge(.Right)
-        textField.autoPinEdge(.Top, toEdge: .Bottom, ofView: summaryLabel, withOffset: 8.0)
+        textField.autoPinEdge(.Left, toEdge: .Left, ofView: view, withOffset: 0)
+        textField.autoPinEdge(.Right, toEdge: .Right, ofView: view, withOffset: 0)
+        textField.autoPinEdge(.Top, toEdge: .Bottom, ofView: summaryLabel, withOffset: 0)
         textField.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: contentView, withOffset: 0.0)
         
         if session.speaker_ids.count > 0

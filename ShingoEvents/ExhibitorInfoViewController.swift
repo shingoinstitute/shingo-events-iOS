@@ -11,8 +11,14 @@ import PureLayout
 
 class ExhibitorInfoViewController: UIViewController {
 
-    @IBOutlet weak var exhibitorImage: UIImageView!
-    @IBOutlet weak var descriptionTextField: UITextView!
+    var exhibitorImage = UIImageView.newAutoLayoutView()
+    var descriptionTextField = UITextView.newAutoLayoutView()
+    var scrollView = UIScrollView.newAutoLayoutView()
+    var backdrop: UIView = {
+        let view = UIView()
+        view.backgroundColor = ShingoColors().shingoBlue
+        return view
+    }()
     
     var exhibitor:Exhibitor!
     
@@ -38,13 +44,46 @@ class ExhibitorInfoViewController: UIViewController {
             descriptionForPlainText()
         }
     
-
-
+        
+        view.addSubview(scrollView)
+        view.addSubview(backdrop)
+        
+        scrollView.autoPinToTopLayoutGuideOfViewController(self, withInset: 0)
+        scrollView.autoPinEdgeToSuperviewEdge(.Left)
+        scrollView.autoPinEdgeToSuperviewEdge(.Right)
+        scrollView.autoPinEdgeToSuperviewEdge(.Bottom)
+        
+        scrollView.addSubview(exhibitorImage)
+        scrollView.addSubview(descriptionTextField)
+        view.bringSubviewToFront(scrollView)
+        
+        exhibitorImage.autoPinEdgeToSuperviewEdge(.Top, withInset: 8)
+        exhibitorImage.autoPinEdgeToSuperviewEdge(.Left, withInset: 8)
+        exhibitorImage.autoPinEdgeToSuperviewEdge(.Right, withInset: 8)
+//        exhibitorImage.autoSetDimension(.Height, toSize: 200)
+        
+        descriptionTextField.autoPinEdge(.Top, toEdge: .Bottom, ofView: exhibitorImage, withOffset: 8.0)
+        descriptionTextField.autoPinEdge(.Left, toEdge: .Left, ofView: view, withOffset: 0)
+        descriptionTextField.autoPinEdge(.Right, toEdge: .Right, ofView: view, withOffset: 0)
+        descriptionTextField.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: scrollView, withOffset: 0)
+        descriptionTextField.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        descriptionTextField.backgroundColor = ShingoColors().shingoBlue
+        descriptionTextField.editable = false
+        descriptionTextField.dataDetectorTypes = [UIDataDetectorTypes.Link, UIDataDetectorTypes.PhoneNumber]
+        
+        backdrop.autoPinEdge(.Top, toEdge: .Bottom, ofView: exhibitorImage, withOffset: 0)
+        backdrop.autoPinEdgeToSuperviewEdge(.Right)
+        backdrop.autoPinEdgeToSuperviewEdge(.Left)
+        backdrop.autoPinEdgeToSuperviewEdge(.Bottom)
+        
+        
         var frame:CGRect = descriptionTextField.frame
         frame.size.height = descriptionTextField.contentSize.height
         descriptionTextField.frame = frame
         descriptionTextField.scrollEnabled = false
     }
+    
+    
     
     func descriptionForRichText() {
         let richText = NSMutableAttributedString();
@@ -58,7 +97,8 @@ class ExhibitorInfoViewController: UIViewController {
             let htmlString: String! = "<style>body{color:white;}</style><font size=\"5\">" + exhibitor.richDescription! + "</font></style>";
             do {
             let description = try NSAttributedString(data: htmlString.dataUsingEncoding(NSUTF8StringEncoding)!,
-                                                        options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType],
+                                                        options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
+                                                            NSCharacterEncodingDocumentAttribute : NSUTF8StringEncoding],
                                                         documentAttributes: nil)
             richText.appendAttributedString(description);
             } catch {

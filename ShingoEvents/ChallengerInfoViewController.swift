@@ -75,7 +75,8 @@ class ChallengerInfoViewController: UIViewController {
             do {
                 let htmlString: String! = "<style>body{color:white;}</style><font size=\"5\">" + recipient.richAbstract! + "</font></style>";
                 abstractTextField.attributedText = try NSAttributedString(data: htmlString.dataUsingEncoding(NSUTF8StringEncoding)!,
-                                                                      options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType],
+                                                                      options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
+                                                                                NSCharacterEncodingDocumentAttribute : NSUTF8StringEncoding],
                                                                       documentAttributes: nil)
             } catch {
                 print("Error with richText in ChallengerInfoViewController")

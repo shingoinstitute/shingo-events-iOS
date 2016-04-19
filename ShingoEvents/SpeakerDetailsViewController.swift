@@ -63,7 +63,8 @@ class SpeakerDetailsViewController: UIViewController {
                     do {
                         htmlString = "<font size=\"5\">" + htmlString + "</font>"
                         let attributedText = try NSMutableAttributedString(data: htmlString.dataUsingEncoding(NSUTF8StringEncoding)!,
-                                                                options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType],
+                                                                options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
+                                                                    NSCharacterEncodingDocumentAttribute : NSUTF8StringEncoding],
                                                                 documentAttributes: nil)
                         biographyView.attributedText = attributedText
                         
@@ -80,8 +81,8 @@ class SpeakerDetailsViewController: UIViewController {
 //                biographyView.textColor = .whiteColor()
                 biographyView.editable = false
                 biographyView.selectable = false
-//                biographyView.backgroundColor = UIColor(red: 0.0/255.0, green: 47.0/255.0, blue: 86.0/255.0, alpha: 1.0)
                 biographyView.backgroundColor = .whiteColor()
+                biographyView.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
                 biographyView.frame = CGRect(x: 0, y: 0, width: biographyView.frame.width, height: biographyView.contentSize.height)
                 biographyView.scrollEnabled = false
                 scrollView.addSubview(biographyView)
@@ -91,14 +92,15 @@ class SpeakerDetailsViewController: UIViewController {
             {
                 speakerImageView = UIImageView.newAutoLayoutView()
                 speakerImageView.image = speaker.image
-                speakerImageView.layer.borderColor = UIColor.blackColor().CGColor
-                speakerImageView.layer.cornerRadius = 5.0
             }
             else
             {
                 speakerImageView.image = UIImage(named: "silhouette")
                 speakerImageView.contentMode = UIViewContentMode.ScaleAspectFit
             }
+            speakerImageView.layer.borderColor = UIColor.blackColor().CGColor
+            speakerImageView.layer.cornerRadius = 5.0
+            speakerImageView.backgroundColor = .whiteColor()
             scrollView.addSubview(speakerImageView)
             
             setScrollViewContentHeight()
@@ -124,7 +126,7 @@ class SpeakerDetailsViewController: UIViewController {
             var previousView = speakerImageView as UIView
             
             if speakerNameLabel != nil {
-                speakerNameLabel.autoPinEdge(.Top, toEdge: .Bottom, ofView: previousView)
+                speakerNameLabel.autoPinEdge(.Top, toEdge: .Bottom, ofView: previousView, withOffset: 8)
                 speakerNameLabel.autoPinEdgeToSuperviewEdge(.Left, withInset: 10.0)
                 speakerNameLabel.autoPinEdgeToSuperviewEdge(.Right)
                 previousView = speakerNameLabel
@@ -132,7 +134,7 @@ class SpeakerDetailsViewController: UIViewController {
 
             if organizationLabel != nil {
                 organizationLabel.autoPinEdgeToSuperviewEdge(.Left, withInset: 10.0)
-                organizationLabel.autoPinEdge(.Top, toEdge: .Bottom, ofView: previousView)
+                organizationLabel.autoPinEdge(.Top, toEdge: .Bottom, ofView: previousView, withOffset: 8)
                 organizationLabel.autoPinEdgeToSuperviewEdge(.Right)
                 previousView = organizationLabel
             }

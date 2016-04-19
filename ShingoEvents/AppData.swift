@@ -26,7 +26,10 @@ enum URLTYPE {
     ERROR
 }
 
-
+public struct ShingoColors {
+    let shingoBlue = UIColor(netHex: 0x002f56)
+    let shingoRed = UIColor(netHex: 0x650820)
+}
 
 public class AppData {
 

@@ -51,6 +51,8 @@ class AfilliateViewController: UIViewController {
         abstractTextField.autoPinEdge(.Left, toEdge: .Left, ofView: view)
         abstractTextField.autoPinEdge(.Right, toEdge: .Right, ofView: view)
         abstractTextField.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: scrollView)
+        abstractTextField.editable = false
+        abstractTextField.dataDetectorTypes = [UIDataDetectorTypes.Link, UIDataDetectorTypes.PhoneNumber]
         
         backdrop.autoPinEdge(.Top, toEdge: .Bottom, ofView: logoImage, withOffset: 8)
         backdrop.autoPinEdge(.Left, toEdge: .Left, ofView: view, withOffset: 0)
@@ -74,7 +76,8 @@ class AfilliateViewController: UIViewController {
             do {
                 let htmlString: String! = "<style>body{color:white;}</style><font size=\"5\">" + affiliate.richAbstract! + "</font></style>"
                 richText = try NSMutableAttributedString(data: htmlString.dataUsingEncoding(NSUTF8StringEncoding)!,
-                                                                             options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType],
+                                                                             options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
+                                                                                NSCharacterEncodingDocumentAttribute: NSUTF8StringEncoding],
                                                                              documentAttributes: nil)
             } catch {
                 print("Error with richText in affiliateViewController")

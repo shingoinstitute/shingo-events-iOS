@@ -1217,7 +1217,7 @@
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="bok-lj-u67">
                                 <rect key="frame" x="0.0" y="354" width="600" height="246"/>
-                                <color key="backgroundColor" red="0.30588236451148987" green="0.011764706112444401" blue="0.094117648899555206" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.30588235294117649" green="0.011764705882352941" blue="0.094117647058823528" alpha="1" colorSpace="calibratedRGB"/>
                                 <label key="tableHeaderView" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Session Speakers" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="032-p9-1R2">
                                     <rect key="frame" x="0.0" y="64" width="600" height="32"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1391,59 +1391,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iSG-UB-4ze">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="556"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eSv-wY-NWI">
-                                        <rect key="frame" x="0.0" y="0.0" width="600" height="556"/>
-                                        <subviews>
-                                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mFY-fd-rMl">
-                                                <rect key="frame" x="0.0" y="216" width="600" height="340"/>
-                                                <color key="backgroundColor" red="0.050980392839999999" green="0.094117648900000003" blue="0.20784313979999999" alpha="1" colorSpace="calibratedRGB"/>
-                                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                                <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES"/>
-                                            </textView>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sponsor_banner_pl" translatesAutoresizingMaskIntoConstraints="NO" id="zIJ-a9-ska">
-                                                <rect key="frame" x="8" y="8" width="584" height="200"/>
-                                            </imageView>
-                                        </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstAttribute="bottom" secondItem="mFY-fd-rMl" secondAttribute="bottom" id="NOz-Md-NGc"/>
-                                            <constraint firstItem="zIJ-a9-ska" firstAttribute="top" secondItem="eSv-wY-NWI" secondAttribute="topMargin" id="Pjo-QC-JRV"/>
-                                            <constraint firstAttribute="trailing" secondItem="zIJ-a9-ska" secondAttribute="trailing" constant="8" id="XUa-4N-PGu"/>
-                                            <constraint firstItem="zIJ-a9-ska" firstAttribute="leading" secondItem="eSv-wY-NWI" secondAttribute="leadingMargin" id="bkU-11-1po"/>
-                                            <constraint firstItem="mFY-fd-rMl" firstAttribute="leading" secondItem="eSv-wY-NWI" secondAttribute="leading" id="qZ6-Kn-f94"/>
-                                            <constraint firstItem="mFY-fd-rMl" firstAttribute="top" secondItem="zIJ-a9-ska" secondAttribute="bottom" constant="8" symbolic="YES" id="qho-Hf-LJ5"/>
-                                            <constraint firstAttribute="trailing" secondItem="mFY-fd-rMl" secondAttribute="trailing" id="qmR-OK-XVt"/>
-                                        </constraints>
-                                    </view>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="eSv-wY-NWI" secondAttribute="trailing" id="01B-cW-okP"/>
-                                    <constraint firstAttribute="bottom" secondItem="eSv-wY-NWI" secondAttribute="bottom" id="Dxz-BX-6fu"/>
-                                    <constraint firstItem="eSv-wY-NWI" firstAttribute="top" secondItem="iSG-UB-4ze" secondAttribute="top" id="HZw-3M-efa"/>
-                                    <constraint firstItem="eSv-wY-NWI" firstAttribute="leading" secondItem="iSG-UB-4ze" secondAttribute="leading" id="L9M-5K-jnj"/>
-                                    <constraint firstItem="eSv-wY-NWI" firstAttribute="centerX" secondItem="iSG-UB-4ze" secondAttribute="centerX" id="pDa-WU-Yze"/>
-                                    <constraint firstItem="eSv-wY-NWI" firstAttribute="centerY" secondItem="iSG-UB-4ze" secondAttribute="centerY" id="u0J-hf-ZfW"/>
-                                </constraints>
-                            </scrollView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="this is a dummy view" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QTr-O1-VKi">
+                                <rect key="frame" x="221" y="289" width="159" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstAttribute="trailing" secondItem="iSG-UB-4ze" secondAttribute="trailing" id="Wd9-j0-DDx"/>
-                            <constraint firstItem="iSG-UB-4ze" firstAttribute="bottom" secondItem="J1d-ma-Fs5" secondAttribute="top" id="ilI-1g-BKD"/>
-                            <constraint firstItem="iSG-UB-4ze" firstAttribute="top" secondItem="mhw-Fv-kW7" secondAttribute="top" id="mci-pY-h0Z"/>
-                            <constraint firstItem="iSG-UB-4ze" firstAttribute="leading" secondItem="mhw-Fv-kW7" secondAttribute="leading" id="qer-of-3rM"/>
-                        </constraints>
                     </view>
-                    <connections>
-                        <outlet property="descriptionTextField" destination="mFY-fd-rMl" id="jdi-aF-XAo"/>
-                        <outlet property="exhibitorImage" destination="zIJ-a9-ska" id="AWS-Em-GqZ"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zYb-bd-VVg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
