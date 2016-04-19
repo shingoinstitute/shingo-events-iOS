@@ -161,8 +161,8 @@ public class AppData {
                 if item["Session_Abstract__c"] != nil {
                     session.abstract = item["Session_Abstract__c"].string! as String
                 }
-                if item["Rich_Description"] != nil {
-                    session.richAbstract = item["Rich_Description"].string! as String
+                if item["Rich_Session_Abstract"] != nil {
+                    session.richAbstract = item["Rich_Session_Abstract"].string! as String
                 }
                 if item["Session_Notes__c"] != nil {
                     session.notes = item["Session_Notes__c"].string! as String

@@ -111,7 +111,7 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
         {
 
             do {
-                let htmlString = "<font size=\"5\">" + session.richAbstract! + "</font>"
+                let htmlString = "<!DOCTYPE html><html><body><font size=\"5\">" + session.richAbstract! + "</font></body></html>"
                 let attrString = try NSAttributedString(data: htmlString.dataUsingEncoding(NSUTF8StringEncoding)!,
                                                         options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
                                                                     NSCharacterEncodingDocumentAttribute : NSUTF8StringEncoding],
@@ -147,6 +147,7 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
         
         contentView.autoPinEdgeToSuperviewEdge(.Top)
         contentView.autoPinEdgeToSuperviewEdge(.Left)
+        contentView.autoSetDimension(.Width, toSize: view.frame.width)
         contentView.autoPinEdgeToSuperviewEdge(.Right)
         
         if session.speaker_ids.count != 0
@@ -161,20 +162,20 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
             contentView.autoPinEdgeToSuperviewEdge(.Bottom)
         }
         
-        titleLabel.autoSetDimension(.Width, toSize: view.frame.width)
+//        titleLabel.autoSetDimension(.Width, toSize: view.frame.width)
         titleLabel.autoPinEdge(.Top, toEdge: .Top, ofView: contentView, withOffset: 8.0)
         titleLabel.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 8.0)
-        titleLabel.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: 8.0)
+        titleLabel.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -8.0)
         
-        roomLabel.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 42)
+//        roomLabel.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 42)
         roomLabel.autoPinEdge(.Top, toEdge: .Bottom, ofView: titleLabel, withOffset: 8.0)
         roomLabel.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 8.0)
-        roomLabel.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: 8.0)
+        roomLabel.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -8.0)
         
-        summaryLabel.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 42)
+//        summaryLabel.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 42)
         summaryLabel.autoPinEdge(.Top, toEdge: .Bottom, ofView: roomLabel, withOffset: 8.0)
         summaryLabel.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: 8.0)
-        summaryLabel.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 8.0)
+        summaryLabel.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: -8.0)
         
         
         textField.sizeToFit()
