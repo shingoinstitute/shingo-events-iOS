@@ -142,7 +142,6 @@ class SpeakerDetailsViewController: UIViewController {
                 biographyView.autoPinEdge(.Top, toEdge: .Bottom, ofView: previousView)
                 biographyView.autoPinEdgeToSuperviewEdge(.Left)
                 biographyView.autoPinEdgeToSuperviewEdge(.Bottom)
-//                biographyView.contentSize = biographyView.sizeThatFits(CGSize(width: view.frame.width, height: CGFloat(MAXFLOAT)))
             }
             
             didSetupConstraints = true

@@ -65,7 +65,12 @@ class AfilliateViewController: UIViewController {
             logoImage.contentMode = .ScaleAspectFit
         }
         
+            
         if affiliate.richAbstract != nil {
+            
+            if affiliate.richAbstract == "" || affiliate.richAbstract == "null" {
+                affiliate.richAbstract = "Description not available.\n"
+            }
             
             var plainText = String()
             let attrs = [NSFontAttributeName : UIFont.systemFontOfSize(16.0),
@@ -101,6 +106,12 @@ class AfilliateViewController: UIViewController {
             abstractTextField.attributedText = richText
             
         } else {
+            
+            if affiliate.abstract! == "" || affiliate.abstract! == "null"
+            {
+                affiliate.abstract = "Description not available.\n"
+            }
+            
             if affiliate.name != nil {
                 abstractTextField.text = affiliate.name
             } else {
