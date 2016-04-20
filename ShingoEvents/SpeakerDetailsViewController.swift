@@ -80,7 +80,6 @@ class SpeakerDetailsViewController: UIViewController {
                 }
 //                biographyView.textColor = .whiteColor()
                 biographyView.editable = false
-                biographyView.selectable = false
                 biographyView.backgroundColor = .whiteColor()
                 biographyView.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
                 biographyView.frame = CGRect(x: 0, y: 0, width: biographyView.frame.width, height: biographyView.contentSize.height)
