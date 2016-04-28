@@ -23,7 +23,6 @@ class SpeakerDetailsViewController: UIViewController {
     override func loadView()
     {
         view = UIView()
-//        view.backgroundColor = .whiteColor()
         view.backgroundColor = UIColor(netHex: 0x002f56)
         scrollView = UIScrollView.newAutoLayoutView()
         view.addSubview(scrollView)
