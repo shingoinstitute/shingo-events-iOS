@@ -97,8 +97,10 @@ class SpeakerDetailsViewController: UIViewController {
                 speakerImageView.image = UIImage(named: "silhouette")
                 speakerImageView.contentMode = UIViewContentMode.ScaleAspectFit
             }
-            speakerImageView.layer.borderColor = UIColor.blackColor().CGColor
+            speakerImageView.layer.borderColor = UIColor.clearColor().CGColor
             speakerImageView.layer.cornerRadius = 5.0
+            speakerImageView.layer.borderWidth = 1
+            speakerImageView.clipsToBounds = true
             speakerImageView.backgroundColor = .whiteColor()
             scrollView.addSubview(speakerImageView)
             
