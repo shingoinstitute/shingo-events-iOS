@@ -181,7 +181,8 @@ public class AppData {
                     }
                 }
                 if item["Session_Date__c"] != nil && item["Session_Time__c"] != nil {
-                    session.start_end_date = self.sessionDateParser(item["Session_Date__c"].string! as String, time: item["Session_Time__c"].string! as String)
+                    let start_end_date = self.sessionDateParser(item["Session_Date__c"].string! as String, time: item["Session_Time__c"].string! as String)
+                    session.start_end_date = start_end_date
                 }
                 if item["Session_Format__c"] != nil {
                     session.format = item["Session_Format__c"].string! as String
@@ -198,13 +199,24 @@ public class AppData {
     func sessionDateParser(date:String, time:String) -> (NSDate, NSDate) {
         let formatter = NSDateFormatter()
         formatter.dateFormat = "yyyy-MM-dd hh:mm a"
+        formatter.timeZone = NSTimeZone.localTimeZone()
         let split_date = time.characters.split("-")
         let start_date_time:String = date + " " + String(split_date[0])
         let end_date_time:String = date + String(split_date[1])
         let start_date = formatter.dateFromString(start_date_time)
         let end_date = formatter.dateFromString(end_date_time)
         
-        return (start_date!, end_date!)
+        var dataToSend = (NSDate(), NSDate())
+        
+        if let start_date = start_date {
+            dataToSend.0 = start_date
+        }
+        
+        if let end_date = end_date {
+            dataToSend.1 = end_date
+        }
+        
+        return dataToSend
     }
     
     
