@@ -200,6 +200,7 @@ public class AppData {
         let formatter = NSDateFormatter()
         formatter.dateFormat = "yyyy-MM-dd hh:mm a"
         formatter.timeZone = NSTimeZone.localTimeZone()
+        formatter.locale = NSLocale(localeIdentifier: "en-US")
         let split_date = time.characters.split("-")
         let start_date_time:String = date + " " + String(split_date[0])
         let end_date_time:String = date + String(split_date[1])
