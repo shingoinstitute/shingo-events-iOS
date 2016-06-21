@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AD2DE87AE9123BED1D49E86F /* Pods_Shingo_Events.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 832BF946A2EB65A14E44B1B8 /* Pods_Shingo_Events.framework */; };
 		C2130BD81C987650009B3BB8 /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2130BD71C987650009B3BB8 /* ActivityView.swift */; };
 		C21ECE281C5FB21500689FDE /* AffiliateListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21ECE271C5FB21500689FDE /* AffiliateListTableViewController.swift */; };
 		C21ECE2A1C5FB22A00689FDE /* AfilliateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21ECE291C5FB22A00689FDE /* AfilliateViewController.swift */; };
@@ -46,7 +47,6 @@
 		C2FF6B1E1CB2E2CF00331ED2 /* VenueMapsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FF6B1D1CB2E2CF00331ED2 /* VenueMapsCollectionView.swift */; };
 		C2FF6B221CB2E43200331ED2 /* VenueMapCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FF6B211CB2E43200331ED2 /* VenueMapCollectionCell.swift */; };
 		C2FF6B261CB4313200331ED2 /* VenueMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FF6B251CB4313200331ED2 /* VenueMapViewController.swift */; };
-		E39DC986E2F1148F54AF12E5 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D372B05CBBB2E7BF78EA707 /* Pods.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,8 +67,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		1478ADAA210BB3436DBA32E0 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		123253927F6A0ACB6BD05ADD /* Pods-Shingo Events.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shingo Events.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Shingo Events/Pods-Shingo Events.debug.xcconfig"; sourceTree = "<group>"; };
+		13374E1759B8C8BD4B955D55 /* Pods-Shingo Events.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shingo Events.release.xcconfig"; path = "Pods/Target Support Files/Pods-Shingo Events/Pods-Shingo Events.release.xcconfig"; sourceTree = "<group>"; };
 		2D372B05CBBB2E7BF78EA707 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		832BF946A2EB65A14E44B1B8 /* Pods_Shingo_Events.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Shingo_Events.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C2130BD71C987650009B3BB8 /* ActivityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
 		C21ECE271C5FB21500689FDE /* AffiliateListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AffiliateListTableViewController.swift; sourceTree = "<group>"; };
 		C21ECE291C5FB22A00689FDE /* AfilliateViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AfilliateViewController.swift; sourceTree = "<group>"; };
@@ -115,7 +117,6 @@
 		C2FF6B1D1CB2E2CF00331ED2 /* VenueMapsCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VenueMapsCollectionView.swift; sourceTree = "<group>"; };
 		C2FF6B211CB2E43200331ED2 /* VenueMapCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VenueMapCollectionCell.swift; sourceTree = "<group>"; };
 		C2FF6B251CB4313200331ED2 /* VenueMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VenueMapViewController.swift; sourceTree = "<group>"; };
-		D3318F049617AA94144DE98E /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,7 +125,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C2986DC01C640DE900ADCF40 /* MapKit.framework in Frameworks */,
-				E39DC986E2F1148F54AF12E5 /* Pods.framework in Frameworks */,
+				AD2DE87AE9123BED1D49E86F /* Pods_Shingo_Events.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -145,15 +146,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		8D378D81D8A4A4DC1B4AA8A2 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				D3318F049617AA94144DE98E /* Pods.debug.xcconfig */,
-				1478ADAA210BB3436DBA32E0 /* Pods.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 		C224CDF71CB6C960003147F0 /* Menus */ = {
 			isa = PBXGroup;
 			children = (
@@ -208,8 +200,8 @@
 				C22AB2A51C2484E800A7F3B1 /* ShingoEventsTests */,
 				C22AB2B01C2484E800A7F3B1 /* ShingoEventsUITests */,
 				C22AB28F1C2484E800A7F3B1 /* Products */,
-				8D378D81D8A4A4DC1B4AA8A2 /* Pods */,
 				CB0A5FDCC55BAF34E0CAECA2 /* Frameworks */,
+				EA223845B895A80F2472F737 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -302,8 +294,18 @@
 			children = (
 				C2986DBF1C640DE900ADCF40 /* MapKit.framework */,
 				2D372B05CBBB2E7BF78EA707 /* Pods.framework */,
+				832BF946A2EB65A14E44B1B8 /* Pods_Shingo_Events.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		EA223845B895A80F2472F737 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				123253927F6A0ACB6BD05ADD /* Pods-Shingo Events.debug.xcconfig */,
+				13374E1759B8C8BD4B955D55 /* Pods-Shingo Events.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -313,13 +315,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C22AB2B61C2484E900A7F3B1 /* Build configuration list for PBXNativeTarget "Shingo Events" */;
 			buildPhases = (
-				3C0A378285287D97ACAA38D9 /* Check Pods Manifest.lock */,
+				DE04C9AF366BE1225FE6A303 /* 📦 Check Pods Manifest.lock */,
 				C22AB28A1C2484E800A7F3B1 /* Sources */,
 				C22AB28B1C2484E800A7F3B1 /* Frameworks */,
 				C22AB28C1C2484E800A7F3B1 /* Resources */,
-				907C4FFF67EF636897321E7F /* Embed Pods Frameworks */,
-				91086E1D4A4D7F313E77FF20 /* Copy Pods Resources */,
 				C2986DC51C65210C00ADCF40 /* ShellScript */,
+				6FE41935A9E231C8C73F0097 /* 📦 Embed Pods Frameworks */,
+				58069F19D052AD7AD78AC4B7 /* 📦 Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -438,49 +440,34 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		3C0A378285287D97ACAA38D9 /* Check Pods Manifest.lock */ = {
+		58069F19D052AD7AD78AC4B7 /* 📦 Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "📦 Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Shingo Events/Pods-Shingo Events-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		907C4FFF67EF636897321E7F /* Embed Pods Frameworks */ = {
+		6FE41935A9E231C8C73F0097 /* 📦 Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "📦 Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		91086E1D4A4D7F313E77FF20 /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Shingo Events/Pods-Shingo Events-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C2986DC51C65210C00ADCF40 /* ShellScript */ = {
@@ -495,6 +482,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Fabric/run\" 7b270db836d504381374de50e898a9c6867f3861 2dd662d8fd61bbd5a615d488ee87ec2bf64be464102108108024761cdf55fb48";
+		};
+		DE04C9AF366BE1225FE6A303 /* 📦 Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -660,7 +662,7 @@
 		};
 		C22AB2B71C2484E900A7F3B1 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D3318F049617AA94144DE98E /* Pods.debug.xcconfig */;
+			baseConfigurationReference = 123253927F6A0ACB6BD05ADD /* Pods-Shingo Events.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -681,7 +683,7 @@
 		};
 		C22AB2B81C2484E900A7F3B1 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1478ADAA210BB3436DBA32E0 /* Pods.release.xcconfig */;
+			baseConfigurationReference = 13374E1759B8C8BD4B955D55 /* Pods-Shingo Events.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
