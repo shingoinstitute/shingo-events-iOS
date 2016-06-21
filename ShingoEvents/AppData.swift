@@ -26,7 +26,7 @@ enum URLTYPE {
     ERROR
 }
 
-public struct ShingoColors {
+struct ShingoColors {
     let shingoBlue = UIColor(netHex: 0x002f56)
     let shingoRed = UIColor(netHex: 0x650820)
 }
@@ -181,7 +181,8 @@ public class AppData {
                     }
                 }
                 if item["Session_Date__c"] != nil && item["Session_Time__c"] != nil {
-                    session.start_end_date = self.sessionDateParser(item["Session_Date__c"].string! as String, time: item["Session_Time__c"].string! as String)
+                    let start_end_date = self.sessionDateParser(item["Session_Date__c"].string! as String, time: item["Session_Time__c"].string! as String)
+                    session.start_end_date = start_end_date
                 }
                 if item["Session_Format__c"] != nil {
                     session.format = item["Session_Format__c"].string! as String
@@ -198,13 +199,27 @@ public class AppData {
     func sessionDateParser(date:String, time:String) -> (NSDate, NSDate) {
         let formatter = NSDateFormatter()
         formatter.dateFormat = "yyyy-MM-dd hh:mm a"
-        let split_date = time.characters.split("-")
-        let start_date_time:String = date + " " + String(split_date[0])
-        let end_date_time:String = date + String(split_date[1])
-        let start_date = formatter.dateFromString(start_date_time)
-        let end_date = formatter.dateFromString(end_date_time)
+        formatter.timeZone = NSTimeZone.localTimeZone()
+        formatter.locale = NSLocale(localeIdentifier: "en-US")
         
-        return (start_date!, end_date!)
+        let timeSplit = time.characters.split("-")
+        let startTime = String(timeSplit[0]).trim()
+        let endTime = String(timeSplit[1]).trim()
+        
+        let raw_startDateTime = "\(date) \(startTime)"
+        let raw_endDateTime = "\(date) \(endTime)"
+        
+        var dates = (NSDate(), NSDate())
+        
+        if let startDateTime : NSDate = formatter.dateFromString(raw_startDateTime) {
+            dates.0 = startDateTime
+        }
+        
+        if let endDateTime : NSDate = formatter.dateFromString(raw_endDateTime) {
+            dates.1 = endDateTime
+        }
+        
+        return dates
     }
     
     
