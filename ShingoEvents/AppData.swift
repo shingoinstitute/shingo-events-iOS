@@ -26,7 +26,7 @@ enum URLTYPE {
     ERROR
 }
 
-public struct ShingoColors {
+struct ShingoColors {
     let shingoBlue = UIColor(netHex: 0x002f56)
     let shingoRed = UIColor(netHex: 0x650820)
 }
@@ -201,23 +201,25 @@ public class AppData {
         formatter.dateFormat = "yyyy-MM-dd hh:mm a"
         formatter.timeZone = NSTimeZone.localTimeZone()
         formatter.locale = NSLocale(localeIdentifier: "en-US")
-        let split_date = time.characters.split("-")
-        let start_date_time:String = date + " " + String(split_date[0])
-        let end_date_time:String = date + String(split_date[1])
-        let start_date = formatter.dateFromString(start_date_time)
-        let end_date = formatter.dateFromString(end_date_time)
         
-        var dataToSend = (NSDate(), NSDate())
+        let timeSplit = time.characters.split("-")
+        let startTime = String(timeSplit[0]).trim()
+        let endTime = String(timeSplit[1]).trim()
         
-        if let start_date = start_date {
-            dataToSend.0 = start_date
+        let raw_startDateTime = "\(date) \(startTime)"
+        let raw_endDateTime = "\(date) \(endTime)"
+        
+        var dates = (NSDate(), NSDate())
+        
+        if let startDateTime : NSDate = formatter.dateFromString(raw_startDateTime) {
+            dates.0 = startDateTime
         }
         
-        if let end_date = end_date {
-            dataToSend.1 = end_date
+        if let endDateTime : NSDate = formatter.dateFromString(raw_endDateTime) {
+            dates.1 = endDateTime
         }
         
-        return dataToSend
+        return dates
     }
     
     
