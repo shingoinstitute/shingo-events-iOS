@@ -29,6 +29,7 @@ enum URLTYPE {
 struct ShingoColors {
     let shingoBlue = UIColor(netHex: 0x002f56)
     let shingoRed = UIColor(netHex: 0x650820)
+    let darkShingoBlue = UIColor(netHex: 0x0e2145)
 }
 
 public class AppData {
@@ -99,9 +100,7 @@ public class AppData {
                             upcoming_event.venueMaps.append(venueMap)
                         }
                     }
-                    self.upcomingEvents.append(upcoming_event)
-
-                    
+                    self.upcomingEvents.append(upcoming_event)              
                 }
             }
             callback()
@@ -207,7 +206,7 @@ public class AppData {
         let endTime = String(timeSplit[1]).trim()
         
         let raw_startDateTime = "\(date) \(startTime)"
-        let raw_endDateTime = "\(date) \(endTime)"
+        let raw_endDateTime   = "\(date) \(endTime)"
         
         var dates = (NSDate(), NSDate())
         
@@ -243,7 +242,6 @@ public class AppData {
             if json["day"]["Sessions"]["records"] != nil {
                 for session in json["day"]["Sessions"]["records"].array!
                 {
-                    
                     for item in self.event!.eventSessions!
                     {
                         if item.session_id == session["Id"].string! as String
@@ -256,13 +254,8 @@ public class AppData {
             }
             callback(day: day)
         }
-        
-        
     }
-    
-    
 
-    
     public func getSpeakers(callback: () -> Void) {
         
         if self.event.eventSpeakers != nil
@@ -389,20 +382,23 @@ public class AppData {
                         recipient.logo_book_cover_image = image
                     }
                 }
+                
                 switch recipient.award {
                 case "Research Award":
-                    recipient.award_type = .Research
+                    recipient.awardType = .Research
                     self.researchRecipients.append(recipient)
                 case "Shingo Prize":
-                    recipient.award_type = .ShingoAward
+                    recipient.awardType = .ShingoAward
                     self.shingoPrizeRecipients.append(recipient)
                 case "Silver Medallion":
-                    recipient.award_type = .Silver
+                    recipient.awardType = .Silver
                     self.silverRecipients.append(recipient)
                 case "Bronze Medallion":
-                    recipient.award_type = .Bronze
+                    recipient.awardType = .Bronze
                     self.bronzeRecipients.append(recipient)
-                default: print("ERROR: Recipient type not found @func AppData::getRecipient !")
+                default:
+                    recipient.awardType = .NonType
+                    print("WARNING AppData::parseRecipientData, Recipient type not found")
                 }
                 
             }
@@ -651,10 +647,9 @@ public class AppData {
                 print("HTTP REQUEST ERROR: @ \(self.getUrl(url)) \(response.result.error)")
                 callback(json: nil)
             }
-
         }
-        
     }
+    
     
     func POST(url: URLTYPE, parameters: [String:String]?, callback: (json: JSON) -> Void){
         

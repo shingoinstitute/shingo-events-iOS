@@ -83,7 +83,7 @@ class RecipientsTableViewController: UITableViewController {
         if cell.recipient != nil
         {
             recipientToSend = cell.recipient
-            if recipientToSend.award_type == .Research
+            if recipientToSend.awardType == .Research
             {
                 performSegueWithIdentifier("ResearchInfoView", sender: self)
             }

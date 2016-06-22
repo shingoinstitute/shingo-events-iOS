@@ -11,7 +11,6 @@ import Alamofire
 
 class ContactUsViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
 
-    @IBOutlet weak var emailAddressLabel: UILabel!
     @IBOutlet weak var emailAddressTF: UITextField!
     @IBOutlet weak var messageLabel: UILabel!
     @IBOutlet weak var messageTF: UITextView!
@@ -25,10 +24,21 @@ class ContactUsViewController: UIViewController, UITextFieldDelegate, UITextView
         return view
     }()
 
-    
+    var didTouchInsideTextField = false
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        sendMessageButton.layer.cornerRadius = 5
+        sendMessageButton.backgroundColor = ShingoColors().shingoBlue
+        sendMessageButton.layer.borderColor = ShingoColors().darkShingoBlue.CGColor
+        sendMessageButton.layer.borderWidth = 1
+        
+        sendMessageButton.layer.shadowColor = UIColor.darkGrayColor().CGColor
+        sendMessageButton.layer.shadowOffset = CGSizeMake(2.0, 2.0)
+        sendMessageButton.layer.shadowOpacity = 1.0
+        sendMessageButton.layer.shadowRadius = 1
+        
+        
         view.addSubview(backgroundImage)
         backgroundImage.autoPinToTopLayoutGuideOfViewController(self, withInset: 0)
         backgroundImage.autoPinEdgeToSuperviewEdge(.Right)
@@ -42,7 +52,6 @@ class ContactUsViewController: UIViewController, UITextFieldDelegate, UITextView
         messageTF.text = "Enter message here."
         
         view.bringSubviewToFront(emailAddressTF)
-        view.bringSubviewToFront(emailAddressLabel)
         view.bringSubviewToFront(messageTF)
         view.bringSubviewToFront(messageLabel)
         view.bringSubviewToFront(sendMessageButton)
@@ -53,8 +62,7 @@ class ContactUsViewController: UIViewController, UITextFieldDelegate, UITextView
     }
 
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
-        if text == "\n"
-        {
+        if text == "\n" {
             textView.resignFirstResponder()
             return false
         }
@@ -67,12 +75,11 @@ class ContactUsViewController: UIViewController, UITextFieldDelegate, UITextView
     }
     
     func textViewDidBeginEditing(textView: UITextView) {
-        if textView.text == "Enter message here."
-        {
+        if !didTouchInsideTextField {
+            
             textView.text = ""
             textView.textColor = .blackColor()
-            let size:CGSize = textView.text.sizeWithAttributes([NSFontAttributeName: UIFont.systemFontOfSize(12.0)])
-            print(size)
+            textView.text.sizeWithAttributes([NSFontAttributeName: UIFont.systemFontOfSize(12.0)])
         }
     }
     
@@ -81,9 +88,9 @@ class ContactUsViewController: UIViewController, UITextFieldDelegate, UITextView
     @IBAction func sendMessage(sender: AnyObject) {
         if !messageSent
         {
-            if messageTF.text == "" || messageTF.text == "Enter message here."
+            if messageTF.text == "" || !didTouchInsideTextField
             {
-                let alert = UIAlertController(title: "Oops!", message: "The message field is still empty!.", preferredStyle: .Alert)
+                let alert = UIAlertController(title: "Empty Message", message: "The message field is still empty!", preferredStyle: .Alert)
                 let action = UIAlertAction(title: "Okay", style: .Default, handler: nil)
                 alert.addAction(action)
                 

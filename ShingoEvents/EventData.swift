@@ -89,15 +89,15 @@ public class Speaker: AppDataImage {
 
 public class Recipient: AppDataImage {
     
-    enum RECIP_TYPE {
+    enum RecipientType {
         case ShingoAward,
         Silver,
         Bronze,
         Research,
-        NULL
+        NonType
     }
     
-    var award_type: RECIP_TYPE? = nil
+    var awardType: RecipientType? = nil
     var recipient_id: String!
     var name: String!
     var abstract: String!

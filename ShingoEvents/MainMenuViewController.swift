@@ -25,7 +25,9 @@ class MainMenuViewController: UIViewController {
         return view
     }()
     
-    let contentView: UIView = {
+    var shingoLogoImageView : UIImageView = UIImageView.newAutoLayoutView()
+    
+    var contentView: UIView = {
         let view = UIView.newAutoLayoutView()
         view.backgroundColor = UIColor(red: 0, green: 47.0/255.0, blue: 86.0/255.0, alpha: 0.5)
         return view
@@ -35,6 +37,16 @@ class MainMenuViewController: UIViewController {
     var request:Alamofire.Request!
     
     var contentViewHeightConstraint: NSLayoutConstraint?
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBarHidden = true
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(true)
+        navigationController?.navigationBarHidden = false
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,6 +68,11 @@ class MainMenuViewController: UIViewController {
         view.addSubview(menuBackgroundImage)
         view.addSubview(contentView)
         view.bringSubviewToFront(contentView)
+        view.addSubview(self.shingoLogoImageView)
+        view.bringSubviewToFront(self.shingoLogoImageView)
+        
+        shingoLogoImageView.image = UIImage(named: "Shingo logo with Home BIG")
+        shingoLogoImageView.contentMode = .ScaleAspectFit
         
         menuBackgroundImage.autoPinToTopLayoutGuideOfViewController(self, withInset: 0)
         menuBackgroundImage.autoPinEdge(.Left, toEdge: .Left, ofView: view)
@@ -63,7 +80,7 @@ class MainMenuViewController: UIViewController {
         menuBackgroundImage.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: view)
         
         contentView.autoSetDimension(.Height, toSize: 265)
-        contentViewHeightConstraint = contentView.autoAlignAxis(.Horizontal, toSameAxisOfView: view, withOffset: view.frame.height)
+        contentViewHeightConstraint = contentView.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: view, withOffset: -view.frame.height)//(.Horizontal, toSameAxisOfView: view, withOffset: -view.frame.height)
         contentView.autoPinEdge(.Left, toEdge: .Left, ofView: view, withOffset: 5.0)
         contentView.autoPinEdge(.Right, toEdge: .Right, ofView: view, withOffset: -5.0)
 
@@ -87,6 +104,10 @@ class MainMenuViewController: UIViewController {
         reloadEventsBtn.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 5)
         reloadEventsBtn.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -5)
         
+        shingoLogoImageView.autoSetDimension(.Height, toSize: 150)
+        shingoLogoImageView.autoPinToTopLayoutGuideOfViewController(self, withInset: 8)
+        shingoLogoImageView.autoPinEdgeToSuperviewEdge(.Left, withInset: 8)
+        shingoLogoImageView.autoPinEdgeToSuperviewEdge(.Right, withInset: 8)
         
         let buttons:NSArray = [eventsBtn, shingoModelBtn, settingsBtn, reloadEventsBtn]
         for button in buttons
@@ -126,8 +147,8 @@ class MainMenuViewController: UIViewController {
     }
     
     func animateLayout() {
-        contentViewHeightConstraint?.constant = 0
-        UIView.animateWithDuration(1.5, delay: 0.2, usingSpringWithDamping: 0.7, initialSpringVelocity: 0, options: UIViewAnimationOptions(), animations: {
+        contentViewHeightConstraint?.constant = -80
+        UIView.animateWithDuration(1.5, delay: 0.2, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: UIViewAnimationOptions(), animations: {
             self.view.layoutIfNeeded()
             }, completion: nil)
     }
