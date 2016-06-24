@@ -16,32 +16,23 @@ class ExhibitorInfoViewController: UIViewController {
     var scrollView = UIScrollView.newAutoLayoutView()
     var backdrop: UIView = {
         let view = UIView()
-        view.backgroundColor = ShingoColors().shingoBlue
+        view.backgroundColor = SIColor().shingoBlueColor
         return view
     }()
     
-    var exhibitor:Exhibitor!
+    var exhibitor: SIExhibitor!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.navigationItem.title = exhibitor.name
         
-        exhibitorImage.layer.cornerRadius = 5.0
-
-        if exhibitor.logo_image != nil {
-            exhibitorImage.image = exhibitor.logo_image
-            exhibitorImage.contentMode = .ScaleAspectFit
-            exhibitorImage.autoSetDimension(.Height, toSize: 150.0)
-            exhibitorImage.autoSetDimension(.Width, toSize: view.frame.width - 16.0)
-        }
-        
-        descriptionTextField.text = "";
+        descriptionTextField.text = ""
         
         if exhibitor.richDescription != nil {
-            descriptionForRichText()
+            getDescriptionForRichText()
         } else {
-            descriptionForPlainText()
+            getDescriptionForPlainText()
         }
     
         
@@ -57,21 +48,24 @@ class ExhibitorInfoViewController: UIViewController {
         scrollView.addSubview(descriptionTextField)
         view.bringSubviewToFront(scrollView)
         
+        exhibitorImage.image = exhibitor.logoImage
+        exhibitorImage.contentMode = .ScaleAspectFit
+        exhibitorImage.autoSetDimension(.Height, toSize: 150.0)
         exhibitorImage.autoPinEdgeToSuperviewEdge(.Top, withInset: 8)
-        exhibitorImage.autoPinEdgeToSuperviewEdge(.Left, withInset: 8)
-        exhibitorImage.autoPinEdgeToSuperviewEdge(.Right, withInset: 8)
-//        exhibitorImage.autoSetDimension(.Height, toSize: 200)
+        exhibitorImage.autoAlignAxisToSuperviewAxis(.Vertical)
+        exhibitorImage.layer.cornerRadius = 3
+        exhibitorImage.clipsToBounds = true
         
-        descriptionTextField.autoPinEdge(.Top, toEdge: .Bottom, ofView: exhibitorImage, withOffset: 8.0)
-        descriptionTextField.autoPinEdge(.Left, toEdge: .Left, ofView: view, withOffset: 0)
-        descriptionTextField.autoPinEdge(.Right, toEdge: .Right, ofView: view, withOffset: 0)
+        descriptionTextField.autoPinEdge(.Top, toEdge: .Bottom, ofView: exhibitorImage, withOffset: 8)
+        descriptionTextField.autoPinEdge(.Left, toEdge: .Left, ofView: view)
+        descriptionTextField.autoPinEdge(.Right, toEdge: .Right, ofView: view)
         descriptionTextField.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: scrollView, withOffset: 0)
         descriptionTextField.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
-        descriptionTextField.backgroundColor = ShingoColors().shingoBlue
+        descriptionTextField.backgroundColor = SIColor().shingoBlueColor
         descriptionTextField.editable = false
         descriptionTextField.dataDetectorTypes = [UIDataDetectorTypes.Link, UIDataDetectorTypes.PhoneNumber]
         
-        backdrop.autoPinEdge(.Top, toEdge: .Bottom, ofView: exhibitorImage, withOffset: 0)
+        backdrop.autoPinEdge(.Top, toEdge: .Top, ofView: descriptionTextField)
         backdrop.autoPinEdgeToSuperviewEdge(.Right)
         backdrop.autoPinEdgeToSuperviewEdge(.Left)
         backdrop.autoPinEdgeToSuperviewEdge(.Bottom)
@@ -85,7 +79,7 @@ class ExhibitorInfoViewController: UIViewController {
     
     
     
-    func descriptionForRichText() {
+    func getDescriptionForRichText() {
         let richText = NSMutableAttributedString();
         let attrs = [NSFontAttributeName : UIFont.systemFontOfSize(16.0),
                      NSForegroundColorAttributeName : UIColor.whiteColor()]
@@ -127,18 +121,14 @@ class ExhibitorInfoViewController: UIViewController {
         descriptionTextField.attributedText = richText;
     }
     
-    func descriptionForPlainText() {
-        if exhibitor.name != nil
-        {
+    func getDescriptionForPlainText() {
+        if exhibitor.name != nil {
             descriptionTextField.text = exhibitor.name + "\n"
         }
         
-        if exhibitor.email != nil
-        {
+        if exhibitor.email != nil {
             descriptionTextField.text! += "Email: " + exhibitor.email! + "\n"
-        }
-        else
-        {
+        } else {
             descriptionTextField.text! += "Email: Not available\n"
         }
         
@@ -148,17 +138,13 @@ class ExhibitorInfoViewController: UIViewController {
             descriptionTextField.text! += "Phone: Not available\n\n"
         }
         
-        if exhibitor.description != nil
-        {
+        if exhibitor.description != nil {
             descriptionTextField.text! += exhibitor.description + "\n"
-        }
-        else
-        {
+        } else {
             descriptionTextField.text! += "Company description coming soon.\n"
         }
         
-        if exhibitor.website != nil
-        {
+        if exhibitor.website != nil {
             descriptionTextField.text! += "Visit " + exhibitor.name + "'s website at " + exhibitor.website + "\n"
         }
     }

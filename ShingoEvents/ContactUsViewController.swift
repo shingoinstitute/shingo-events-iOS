@@ -28,15 +28,16 @@ class ContactUsViewController: UIViewController, UITextFieldDelegate, UITextView
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        sendMessageButton.layer.cornerRadius = 5
-        sendMessageButton.backgroundColor = ShingoColors().shingoBlue
-        sendMessageButton.layer.borderColor = ShingoColors().darkShingoBlue.CGColor
-        sendMessageButton.layer.borderWidth = 1
+//        sendMessageButton.layer.cornerRadius = 5
+//        sendMessageButton.backgroundColor = ShingoColors().shingoBlue
+//        sendMessageButton.layer.borderColor = ShingoColors().darkShingoBlue.CGColor
+//        sendMessageButton.layer.borderWidth = 1
+        sendMessageButton.imageView?.image = UIImage(named: "send button")
         
-        sendMessageButton.layer.shadowColor = UIColor.darkGrayColor().CGColor
-        sendMessageButton.layer.shadowOffset = CGSizeMake(2.0, 2.0)
-        sendMessageButton.layer.shadowOpacity = 1.0
-        sendMessageButton.layer.shadowRadius = 1
+//        sendMessageButton.layer.shadowColor = UIColor.darkGrayColor().CGColor
+//        sendMessageButton.layer.shadowOffset = CGSizeMake(2.0, 2.0)
+//        sendMessageButton.layer.shadowOpacity = 1.0
+//        sendMessageButton.layer.shadowRadius = 1
         
         
         view.addSubview(backgroundImage)

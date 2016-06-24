@@ -41,9 +41,9 @@ class AboutPageViewController: UIViewController {
         aboutTextField.font = UIFont.systemFontOfSize(16.0)
         aboutTextField.sizeToFit()
         aboutTextField.layoutIfNeeded()
-        let frame = aboutTextField.contentSize
-        aboutTextField.frame = CGRectMake(0, 0, frame.width, frame.height)
-        aboutTextField.autoSetDimension(.Height, toSize: frame.height)
+//        let frame = aboutTextField.contentSize
+//        aboutTextField.frame = CGRectMake(0, 0, frame.width, frame.height)
+//        aboutTextField.autoSetDimension(.Height, toSize: frame.height)
         aboutTextField.clipsToBounds = true
         aboutTextField.layer.borderColor = UIColor.grayColor().CGColor
         aboutTextField.layer.borderWidth = 1.0

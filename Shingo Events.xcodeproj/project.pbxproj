@@ -41,6 +41,7 @@
 		C2CFC3101C481EAB0036E485 /* MainMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CFC30F1C481EAB0036E485 /* MainMenuViewController.swift */; };
 		C2CFC3141C483C1C0036E485 /* SchedulesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CFC3131C483C1C0036E485 /* SchedulesTableViewController.swift */; };
 		C2CFC3181C4954C20036E485 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C2CFC3171C4954C20036E485 /* Main.storyboard */; };
+		C2E9508D1D1C83F500178C03 /* SharedCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E9508C1D1C83F500178C03 /* SharedCode.swift */; };
 		C2F17FA81C6AAFCF0028062C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C2F17FA71C6AAFCF0028062C /* Assets.xcassets */; };
 		C2F358081C500B2500AE62D0 /* SessionListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F358071C500B2500AE62D0 /* SessionListTableViewController.swift */; };
 		C2FF6B1E1CB2E2CF00331ED2 /* VenueMapsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FF6B1D1CB2E2CF00331ED2 /* VenueMapsCollectionView.swift */; };
@@ -109,6 +110,7 @@
 		C2CFC30F1C481EAB0036E485 /* MainMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMenuViewController.swift; sourceTree = "<group>"; };
 		C2CFC3131C483C1C0036E485 /* SchedulesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchedulesTableViewController.swift; sourceTree = "<group>"; };
 		C2CFC3171C4954C20036E485 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		C2E9508C1D1C83F500178C03 /* SharedCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedCode.swift; sourceTree = "<group>"; };
 		C2F17F661C655DAA0028062C /* Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		C2F17FA71C6AAFCF0028062C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C2F358071C500B2500AE62D0 /* SessionListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionListTableViewController.swift; sourceTree = "<group>"; };
@@ -158,6 +160,7 @@
 			isa = PBXGroup;
 			children = (
 				C2494E251C88E4F600E2969D /* ShingoIconImages.swift */,
+				C2E9508C1D1C83F500178C03 /* SharedCode.swift */,
 				C2A695231C35E30F00F6E0B8 /* SwiftyJSON.swift */,
 				C2494E271C89FBFE00E2969D /* Reachability.swift */,
 			);
@@ -254,8 +257,8 @@
 				C2CFC3171C4954C20036E485 /* Main.storyboard */,
 				C21B3ED11D1B078800C54FA4 /* Supporting Files */,
 				C2FF6B231CB2E50900331ED2 /* Classes */,
-				C2FF6B241CB2E52400331ED2 /* Settings Views */,
 				C2FF6B201CB2E3E700331ED2 /* Maps */,
+				C2FF6B241CB2E52400331ED2 /* Settings Views */,
 				C224CDF71CB6C960003147F0 /* Menus */,
 				C224CDF81CB6C9C8003147F0 /* Session Information */,
 				C224CDF91CB6C9DF003147F0 /* Recipients */,
@@ -542,6 +545,7 @@
 				C2130BD81C987650009B3BB8 /* ActivityView.swift in Sources */,
 				C2A695111C35AC2900F6E0B8 /* AppDelegate.swift in Sources */,
 				C2C021231C6272D3008732DC /* SponsorsTableViewController.swift in Sources */,
+				C2E9508D1D1C83F500178C03 /* SharedCode.swift in Sources */,
 				C262DCBA1C861BA900712D4E /* SessionDetailViewController.swift in Sources */,
 				C264CCF21C5834EC005CDB11 /* ResearchInfoViewController.swift in Sources */,
 			);

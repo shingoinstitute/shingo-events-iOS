@@ -11,7 +11,7 @@ import XCTest
 
 class ShingoEventsTests: XCTestCase {
     
-//    var sum : Int = 0
+    var sum : Int = 0
     
     override func setUp() {
         super.setUp()

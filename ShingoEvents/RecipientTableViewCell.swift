@@ -10,7 +10,7 @@ import UIKit
 
 class RecipientTableViewCell: UITableViewCell {
 
-    var recipient:Recipient! {
+    var recipient: SIRecipient! {
         didSet {
             updateCell()
         }
@@ -36,7 +36,7 @@ class RecipientTableViewCell: UITableViewCell {
         recipientLabel.text = recipient.name
         
         recipientImage.contentMode = UIViewContentMode.ScaleAspectFit
-        if let image = recipient.logo_book_cover_image
+        if let image = recipient.logoBookCoverImage
         {
             recipientImage.image = image
         }

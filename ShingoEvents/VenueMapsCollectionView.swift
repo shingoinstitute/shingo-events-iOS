@@ -12,14 +12,20 @@ private let CellIdentifier = "VenueMapCell"
 
 class VenueMapsCollectionView: UIViewController {
 
-    var venueMaps: [VenueMap]! = nil
+    var venueMaps: [SIVenueMap]! = nil
     @IBOutlet weak var collectionView: UICollectionView!
     
-    var dataToSend: VenueMap!
+    var dataToSend: SIVenueMap!
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        let value = UIInterfaceOrientation.Portrait.rawValue
+        UIDevice.currentDevice().setValue(value, forKey: "orientation")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         let backgroundImage = UIImageView()
         backgroundImage.image = ShingoIconImages().shingoIconForDevice()
         backgroundImage.contentMode = UIViewContentMode.ScaleAspectFill
@@ -27,6 +33,10 @@ class VenueMapsCollectionView: UIViewController {
         
     }
 
+    override func shouldAutorotate() -> Bool {
+        return true
+    }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "MapView"
         {

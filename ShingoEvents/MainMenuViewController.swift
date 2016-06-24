@@ -29,7 +29,7 @@ class MainMenuViewController: UIViewController {
     
     var contentView: UIView = {
         let view = UIView.newAutoLayoutView()
-        view.backgroundColor = UIColor(red: 0, green: 47.0/255.0, blue: 86.0/255.0, alpha: 0.5)
+        view.backgroundColor = SIColor().prussianBlueColor.colorWithAlphaComponent(0.5)
         return view
     }()
     
@@ -47,10 +47,12 @@ class MainMenuViewController: UIViewController {
         super.viewWillDisappear(true)
         navigationController?.navigationBarHidden = false
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        
+        
         self.navigationItem.title = "Shingo Events"
         
         eventsBtn.removeFromSuperview()
@@ -80,7 +82,7 @@ class MainMenuViewController: UIViewController {
         menuBackgroundImage.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: view)
         
         contentView.autoSetDimension(.Height, toSize: 265)
-        contentViewHeightConstraint = contentView.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: view, withOffset: -view.frame.height)//(.Horizontal, toSameAxisOfView: view, withOffset: -view.frame.height)
+        contentViewHeightConstraint = contentView.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: view, withOffset: -view.frame.height)
         contentView.autoPinEdge(.Left, toEdge: .Left, ofView: view, withOffset: 5.0)
         contentView.autoPinEdge(.Right, toEdge: .Right, ofView: view, withOffset: -5.0)
 
@@ -104,16 +106,16 @@ class MainMenuViewController: UIViewController {
         reloadEventsBtn.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 5)
         reloadEventsBtn.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -5)
         
-        shingoLogoImageView.autoSetDimension(.Height, toSize: 150)
+        shingoLogoImageView.autoSetDimension(.Height, toSize: 125)
         shingoLogoImageView.autoPinToTopLayoutGuideOfViewController(self, withInset: 8)
         shingoLogoImageView.autoPinEdgeToSuperviewEdge(.Left, withInset: 8)
         shingoLogoImageView.autoPinEdgeToSuperviewEdge(.Right, withInset: 8)
         
         let buttons:NSArray = [eventsBtn, shingoModelBtn, settingsBtn, reloadEventsBtn]
-        for button in buttons
-        {
-            contentView.bringSubviewToFront(button as! UIView)
-            (button as! UIButton).backgroundColor = UIColor(white: 0.9, alpha: 0.9)
+        for button in buttons as! [UIButton] {
+            contentView.bringSubviewToFront(button)
+            button.backgroundColor = UIColor(white: 0.9, alpha: 0.9)
+            button.setTitleColor(SIColor().darkShingoBlueColor, forState: .Normal)
         }
 
     }

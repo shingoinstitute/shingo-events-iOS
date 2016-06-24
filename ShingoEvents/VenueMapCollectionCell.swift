@@ -10,7 +10,7 @@ import UIKit
 
 class VenueMapCollectionCell: UICollectionViewCell {
     
-    var venueMap: VenueMap! {
+    var venueMap: SIVenueMap! {
         didSet {
             updateCell()
         }

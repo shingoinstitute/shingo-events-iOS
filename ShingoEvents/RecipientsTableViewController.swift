@@ -11,7 +11,7 @@ import UIKit
 class RecipientsTableViewController: UITableViewController {
 
     var appData: AppData!
-    var recipientToSend:Recipient!
+    var recipientToSend: SIRecipient!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,9 +70,9 @@ class RecipientsTableViewController: UITableViewController {
                 cell.recipient = appData.researchRecipients[indexPath.row]
             }
         default:
-            let recipient = Recipient()
+            let recipient = SIRecipient()
             recipient.name = "No Recipient"
-            recipient.logo_book_cover_image = UIImage(named: "shingo_icon")
+            recipient.logoBookCoverImage = UIImage(named: "shingo_icon")
             cell.recipient = recipient
         }
         return cell
@@ -83,7 +83,7 @@ class RecipientsTableViewController: UITableViewController {
         if cell.recipient != nil
         {
             recipientToSend = cell.recipient
-            if recipientToSend.awardType == .Research
+            if recipientToSend.awardType! == .Research
             {
                 performSegueWithIdentifier("ResearchInfoView", sender: self)
             }

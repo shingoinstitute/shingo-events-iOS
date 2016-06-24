@@ -13,19 +13,25 @@ class EventTableViewCell: UITableViewCell {
     
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var dateRangeLabel: UILabel!
-    var event:Event!
+    var event: SIEvent!
+    
+    func updateCellProperties(dateRangeText dateRange: String, event: SIEvent) {
+        self.event = event
+        self.nameLabel.text = event.name
+        self.dateRangeLabel.text = dateRange
+    }
+    
 }
 
 
 class EventsTableViewController: UITableViewController {
     
-    var appData:AppData!
-    var cell_index_path:NSIndexPath!
+    var appData: AppData!
+    var cell_index_path: NSIndexPath!
     var number_of_async_tasks = 7
     var async_tasks_completed = 0
     var progress:Float = 0
     
-//    var activityViewController:ActivityViewController!
     var activityView = ActivityView()
     
     override func viewDidLoad() {
@@ -33,7 +39,7 @@ class EventsTableViewController: UITableViewController {
         self.dismissViewControllerAnimated(true, completion: nil)
         if appData == nil {
             let alert = UIAlertController(title: "Oops!",
-                message: "We were unable to fetch any data for you. Please check your internet connection and try reloading our upcoming events in the previous menu.",
+                message: "We were unable to fetch any data for you. Please check your internet connection and try reloading our upcoming events in the main menu.",
                 preferredStyle: UIAlertControllerStyle.Alert)
             let action = UIAlertAction(title: "OK", style: .Default, handler: nil)
             alert.addAction(action)
@@ -50,18 +56,10 @@ class EventsTableViewController: UITableViewController {
             let cell = tableView.cellForRowAtIndexPath(cell_index_path) as! EventTableViewCell
             cell.event = self.appData.event
             self.performSegueWithIdentifier("EventMenu", sender: self)
-//            self.dismissViewControllerAnimated(true, completion: nil)
             activityView.removeActivityViewFromDisplay()
-        }
-        else
-        {
+        } else {
             progress += Float(1.0) / Float(number_of_async_tasks + 1)
             activityView.progressIndicator.progress += progress
-//            if activityViewController != nil
-//            {
-//                progress += Float(1.0) / Float(number_of_async_tasks + 1)
-//                activityViewController.updateProgress(progress)
-//            }
         }
     }
     
@@ -87,20 +85,18 @@ class EventsTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("EventsCell", forIndexPath: indexPath) as! EventTableViewCell
-        // Configure the cell...
         let event = appData.upcomingEvents[indexPath.row]
-        cell.event = event
-        cell.nameLabel.text = event.name
         
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         dateFormatter.dateStyle = .MediumStyle
+        let dateRangeText = "\(dateFormatter.stringFromDate(event.eventStartDate)) - \(dateFormatter.stringFromDate(event.eventEndDate))"
         
-        cell.dateRangeLabel.text = dateFormatter.stringFromDate(cell.event.event_start_date) + " - " + dateFormatter.stringFromDate(cell.event.event_end_date)
+        let cell = tableView.dequeueReusableCellWithIdentifier("EventsCell", forIndexPath: indexPath) as! EventTableViewCell
         
+        cell.updateCellProperties(dateRangeText: dateRangeText, event: event)
+            
         return cell
-        
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -113,10 +109,11 @@ class EventsTableViewController: UITableViewController {
         cell_index_path = indexPath
         self.async_tasks_completed = 0
         
-        if cell.event.eventSessions == nil
-        {
+        if !cell.event.didLoadSessions {
+            
             activityView.displayActivityView(message: "Loading Conference Data...", forView: self.view, withRequest: nil)
-            appData.getEventSessions() { // appData.eventSessions should be populated before calling other tasks
+            // appData.eventSessions should have data populated before making other API calls
+            appData.getEventSessions() {
                 self.asyncTaskDidComplete()
                 self.appData.getAgenda() {
                     self.asyncTaskDidComplete()
@@ -136,11 +133,11 @@ class EventsTableViewController: UITableViewController {
                 self.appData.getSponsors() {
                     self.asyncTaskDidComplete()
                 }
-                
             }
-        }
-        else
-        {
+            
+            cell.event.didLoadSessions = true
+            
+        } else {
             self.performSegueWithIdentifier("EventMenu", sender: self)
         }
 

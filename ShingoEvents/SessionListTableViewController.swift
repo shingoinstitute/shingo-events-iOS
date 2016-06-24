@@ -11,28 +11,96 @@ import UIKit
 
 class SessionTableViewCell: UITableViewCell {
     
-    var session:EventSession? = nil
+    var session: SIEventSession!
     @IBOutlet weak var sessionTitleLabel: UILabel!
     @IBOutlet weak var sessionTimeLabel: UILabel!
     @IBOutlet weak var speakerLabel: UILabel!
-
+    
+    func updateCellProperties(session session: SIEventSession) {
+        
+        self.session = session
+        
+        var speakerLabelText = ""
+        if let speaker = session.sessionSpeakers.first {
+            
+            if !session.format.isEmpty {
+                speakerLabelText = session.format + ": "
+            }
+            
+            if !speaker.name.isEmpty {
+                speakerLabelText += speaker.name + ", "
+            }
+            
+            if !speaker.title.isEmpty {
+                speakerLabelText += speaker.title + ", "
+            }
+            
+            if !speaker.organization.isEmpty {
+                speakerLabelText += speaker.organization
+            }
+        }
+        
+        var timeLabelText = ""
+        if !session.startEndDate.0.isNotionallyEmpty() {
+            let start_date = session.startEndDate.0
+            let end_date = session.startEndDate.1
+            let calendar = NSCalendar.currentCalendar()
+            let comp_start = calendar.components([.Hour, .Minute], fromDate: start_date)
+            let comp_end = calendar.components([.Hour, .Minute], fromDate: end_date)
+            let start_time:String = getTimeStringFromComponents(comp_start.hour, minute: comp_start.minute)
+            let end_time:String = getTimeStringFromComponents(comp_end.hour, minute: comp_end.minute)
+            
+            timeLabelText = "\(start_time) - \(end_time)"
+        }
+        
+        self.sessionTimeLabel.text = timeLabelText
+        self.sessionTitleLabel.text = session.name
+        self.speakerLabel.text = speakerLabelText
+        
+        if speakerLabelText.isEmpty {
+            speakerLabel.text = session.name
+            sessionTitleLabel.text = ""
+        }
+        
+    }
+    
+    func getTimeStringFromComponents(hour: Int, minute:Int) -> String {
+        var hour = hour
+        var time = ""
+        var am_pm = ""
+        if hour > 12 {
+            hour = hour - 12
+            am_pm = " pm"
+        } else if hour == 12 {
+            am_pm = " pm"
+        } else {
+            am_pm = " am"
+        }
+        time = String(hour) + ":"
+        
+        if minute < 10 {
+            time += "0" + String(minute) + am_pm
+        } else {
+            time += String(minute) + am_pm
+        }
+        return time
+    }
 }
 
 class SessionListTableViewController: UITableViewController {
     
-    var sessions:[EventSession]!
-    var dataToSend:EventSession!
-    var event:Event!
+    var sessions: [SIEventSession]!
+    var sessionToSend: SIEventSession!
+    var event: SIEvent!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
     }
     
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let cell = tableView.cellForRowAtIndexPath(indexPath) as! SessionTableViewCell
-        dataToSend = cell.session
+        sessionToSend = cell.session
         performSegueWithIdentifier("SessionDetailView", sender: self)
     }
     
@@ -52,7 +120,7 @@ class SessionListTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let session_date = sessions![0].start_end_date!.0
+        let session_date = sessions![0].startEndDate.0
         let formatter = NSDateFormatter()
         formatter.dateStyle = .MediumStyle
         let date_string = formatter.stringFromDate(session_date)
@@ -68,49 +136,8 @@ class SessionListTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("SessionCell", forIndexPath: indexPath) as! SessionTableViewCell
         
-        cell.session = sessions[indexPath.row]
+        cell.updateCellProperties(session: sessions[indexPath.row])
         
-        if let speaker = sessions[indexPath.row].sessionSpeakers.first
-        {
-            var text = String()
-            if cell.session?.format != nil
-            {
-                text = (cell.session?.format)! + ": "
-            }
-            if speaker?.name != nil
-            {
-                text += (speaker?.name)! + ", "
-            }
-            if speaker?.title != nil
-            {
-                text += (speaker?.title)! + ", "
-            }
-            if speaker?.organization != nil
-            {
-                text += (speaker?.organization)!
-            }
-            cell.speakerLabel.text = text
-            cell.sessionTitleLabel?.text = sessions[indexPath.row].name
-        }
-        else
-        {
-            cell.speakerLabel.text = sessions[indexPath.row].name
-            cell.sessionTitleLabel.text = ""
-        }
-        
-        if sessions![indexPath.row].start_end_date != nil
-        {
-            let start_date = sessions![indexPath.row].start_end_date!.0
-            let end_date = sessions![indexPath.row].start_end_date!.1
-            let calendar = NSCalendar.currentCalendar()
-            let comp_start = calendar.components([.Hour, .Minute], fromDate: start_date)
-            let comp_end = calendar.components([.Hour, .Minute], fromDate: end_date)
-            let start_time:String = timeStringFromComponents(comp_start.hour, minute: comp_start.minute)
-            let end_time:String = timeStringFromComponents(comp_end.hour, minute: comp_end.minute)
-            
-            cell.sessionTimeLabel.text = start_time + " - " + end_time
-        }
-
         return cell
     }
     
@@ -124,36 +151,11 @@ class SessionListTableViewController: UITableViewController {
 
         if segue.identifier == "SessionDetailView" {
             let dest_vc = segue.destinationViewController as! SessionDetailViewController
-            if dest_vc.session == nil {
-                dest_vc.session = dataToSend
-                dest_vc.speakers = self.event.eventSpeakers
-            }
+            dest_vc.session = sessionToSend
+            dest_vc.speakers = self.event.eventSpeakers
         }
         
     }
 
-    // MARK: - Custom Functions
-    
-    func timeStringFromComponents(hour: Int, minute:Int) -> String {
-        var hour = hour
-        var time:String = String()
-        var am_pm:String = String()
-        if hour > 12 {
-            hour = hour - 12
-            am_pm = " pm"
-        } else if hour == 12 {
-            am_pm = " pm"
-        } else {
-            am_pm = " am"
-        }
-        time = String(hour) + ":"
-        
-        if minute < 10 {
-            time += "0" + String(minute) + am_pm
-        } else {
-            time += String(minute) + am_pm
-        }
-        return time
-    }
     
 }

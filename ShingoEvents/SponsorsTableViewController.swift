@@ -13,11 +13,11 @@ class SponsorsTableViewController: UITableViewController {
 
     let cellIdentifier = "SponsorCell"
     
-    var friends:[Sponsor]!
-    var supporters:[Sponsor]!
-    var benefactors:[Sponsor]!
-    var champions:[Sponsor]!
-    var presidents:[Sponsor]!
+    var friends:[SISponsor]!
+    var supporters:[SISponsor]!
+    var benefactors:[SISponsor]!
+    var champions:[SISponsor]!
+    var presidents:[SISponsor]!
     
     var sectionTitles = [String]()
     
@@ -97,27 +97,27 @@ class SponsorsTableViewController: UITableViewController {
         switch sectionTitles[indexPath.section] {
         case "Friends":
             if (friends?.count > 0) {
-                cell.bannerImage.image = friends[indexPath.row].banner_image
+                cell.bannerImage.image = friends[indexPath.row].bannerImage
                 cell.sponsor = friends[indexPath.row]
             }
         case "Supporters":
             if (supporters?.count > 0) {
-                cell.bannerImage.image = supporters[indexPath.row].banner_image
+                cell.bannerImage.image = supporters[indexPath.row].bannerImage
                 cell.sponsor = supporters[indexPath.row]
             }
         case "Benefactors":
             if (benefactors?.count > 0) {
-                cell.bannerImage.image = benefactors[indexPath.row].banner_image
+                cell.bannerImage.image = benefactors[indexPath.row].bannerImage
                 cell.sponsor = benefactors[indexPath.row]
             }
         case "Champions":
             if (champions?.count > 0) {
-                cell.bannerImage.image = champions[indexPath.row].banner_image
+                cell.bannerImage.image = champions[indexPath.row].bannerImage
                 cell.sponsor = champions[indexPath.row]
             }
         case "Presidents":
             if (presidents?.count > 0) {
-                cell.bannerImage.image = presidents[indexPath.row].banner_image
+                cell.bannerImage.image = presidents[indexPath.row].bannerImage
                 cell.sponsor = presidents[indexPath.row]
             }
         default: break
@@ -143,7 +143,7 @@ class SponsorsTableViewController: UITableViewController {
 
 class SponsorTableViewCell:UITableViewCell {
     
-    var sponsor:Sponsor!
+    var sponsor:SISponsor!
     
     let horizontalInsets:CGFloat = 15.0
     let verticalInsets:CGFloat = 10.0
@@ -153,23 +153,13 @@ class SponsorTableViewCell:UITableViewCell {
     var bannerImage:UIImageView = UIImageView.newAutoLayoutView()
     var testView:UIView = UIView.newAutoLayoutView()
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String!)
-    {
+    override init(style: UITableViewCellStyle, reuseIdentifier: String!) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        setupViews()
-    }
-    
-    required init?(coder aDecoder: NSCoder)
-    {
-        super.init(coder: aDecoder)
-        
-        setupViews()
-    }
-    
-    func setupViews()
-    {
         contentView.addSubview(bannerImage)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
     }
     
     override func updateConstraints() {
@@ -178,18 +168,11 @@ class SponsorTableViewCell:UITableViewCell {
             NSLayoutConstraint.autoSetPriority(UILayoutPriorityRequired) {
                 self.bannerImage.autoSetContentCompressionResistancePriorityForAxis(.Vertical)
             }
-
-            if let image = self.sponsor.banner_image
-            {
+            
+            if let image = self.sponsor.logoImage {
                 bannerImage.image = image
-            }
-            else if let image = self.sponsor.logo_image
-            {
+            } else if let image = self.sponsor.bannerImage {
                 bannerImage.image = image
-            }
-            else
-            {
-                bannerImage.image = UIImage(named: "sponsor_banner_pl")
             }
             
             bannerImage.contentMode = UIViewContentMode.ScaleAspectFit

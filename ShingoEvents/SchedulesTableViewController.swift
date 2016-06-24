@@ -10,7 +10,7 @@ import UIKit
 
 class  SchedulesTableViewCell: UITableViewCell {
     
-    var sessions:[EventSession]!
+    var sessions:[SIEventSession]!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -24,9 +24,9 @@ class  SchedulesTableViewCell: UITableViewCell {
 
 class SchedulesTableViewController: UITableViewController {
 
-    var event:Event!
+    var event: SIEvent!
 
-    var dataToSend = [EventSession]()
+    var dataToSend = [SIEventSession]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,7 +47,7 @@ class SchedulesTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
-            return self.event!.eventAgenda.days_array.count
+            return self.event.eventAgenda.agendaArray.count
         } else {
             return 1
         }
@@ -58,13 +58,13 @@ class SchedulesTableViewController: UITableViewController {
         
         switch indexPath.section {
         case 0:
-            cell.sessions = self.event.eventAgenda.days_array[indexPath.row].sessions
+            cell.sessions = self.event.eventAgenda.agendaArray[indexPath.row].sessions
             
             let formatter = NSDateFormatter()
             formatter.dateStyle = .MediumStyle
-            let date_string = formatter.stringFromDate(cell.sessions[0].start_end_date!.0)
+            let date_string = formatter.stringFromDate(cell.sessions[0].startEndDate!.0)
             
-            cell.textLabel?.text = (self.event?.eventAgenda.days_array[indexPath.row].dayOfWeek)! + " " + date_string
+            cell.textLabel?.text = (self.event?.eventAgenda.agendaArray[indexPath.row].dayOfWeek)! + " " + date_string
         default:
             break
         }
@@ -112,23 +112,23 @@ class SchedulesTableViewController: UITableViewController {
     
     // MARK: - Custom functions
     
-    func sortSessionsByDate(inout sessions:[EventSession]) {
+    func sortSessionsByDate(inout sessions:[SIEventSession]) {
     
         for i in 0 ..< sessions.count - 1 {
             for j in 0 ..< sessions.count - i - 1 {
             
-                if sessions[j].start_end_date == nil { continue }
+                if sessions[j].startEndDate == nil { continue }
                 
-                if sessions[j].start_end_date!.0.timeIntervalSince1970 > sessions[j+1].start_end_date!.0.timeIntervalSince1970
+                if sessions[j].startEndDate!.0.timeIntervalSince1970 > sessions[j+1].startEndDate!.0.timeIntervalSince1970
                 {
                     let temp = sessions[j]
                     sessions[j] = sessions[j+1]
                     sessions[j+1] = temp
                 }
                 
-                if sessions[j].start_end_date!.0.timeIntervalSince1970 == sessions[j+1].start_end_date!.0.timeIntervalSince1970
+                if sessions[j].startEndDate!.0.timeIntervalSince1970 == sessions[j+1].startEndDate!.0.timeIntervalSince1970
                 {
-                    if sessions[j].start_end_date!.1.timeIntervalSince1970 > sessions[j+1].start_end_date!.1.timeIntervalSince1970
+                    if sessions[j].startEndDate!.1.timeIntervalSince1970 > sessions[j+1].startEndDate!.1.timeIntervalSince1970
                     {
                         let temp = sessions[j]
                         sessions[j] = sessions[j+1]

@@ -15,7 +15,7 @@ class ResearchInfoViewController: UIViewController {
     var scrollView: UIScrollView = UIScrollView.newAutoLayoutView()
     var backdrop = UIView.newAutoLayoutView()
     
-    var recipient:Recipient!
+    var recipient: SIRecipient!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,8 +58,8 @@ class ResearchInfoViewController: UIViewController {
         
         self.automaticallyAdjustsScrollViewInsets = false
 
-        if recipient.logo_book_cover_image != nil {
-             bookImage.image = recipient.logo_book_cover_image
+        if recipient.logoBookCoverImage != nil {
+             bookImage.image = recipient.logoBookCoverImage
         } else {
             bookImage.image = UIImage(named: "shingo_icon")
         }

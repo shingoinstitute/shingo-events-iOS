@@ -15,7 +15,7 @@ class ChallengerInfoViewController: UIViewController {
     var scrollView: UIScrollView = UIScrollView.newAutoLayoutView()
     var backgroundView = UIView.newAutoLayoutView()
     
-    var recipient:Recipient!
+    var recipient: SIRecipient!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,9 +59,9 @@ class ChallengerInfoViewController: UIViewController {
         abstractTextField.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         self.automaticallyAdjustsScrollViewInsets = false
         logoImage.contentMode = UIViewContentMode.ScaleAspectFit
-        if recipient.logo_book_cover_image != nil
+        if recipient.logoBookCoverImage != nil
         {
-            logoImage.image = recipient.logo_book_cover_image
+            logoImage.image = recipient.logoBookCoverImage
         }
         else
         {

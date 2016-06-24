@@ -9,7 +9,7 @@
 import UIKit
 
 class SpeakerListCell: UITableViewCell {
-    var speaker:Speaker!
+    var speaker: SISpeaker!
     @IBOutlet weak var speakerNameLabel: UILabel!
     @IBOutlet weak var speakerImage: UIImageView!
 }
@@ -17,8 +17,8 @@ class SpeakerListCell: UITableViewCell {
 
 class SpeakerListTableViewController: UITableViewController {
 
-    var speakers:[Speaker]!
-    var dataToSend:Speaker!
+    var speakers: [SISpeaker]!
+    var dataToSend: SISpeaker!
     
     override func viewDidLoad()
     {
@@ -63,7 +63,7 @@ class SpeakerListTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
     {
         let cell = tableView.dequeueReusableCellWithIdentifier("SpeakerListCell", forIndexPath: indexPath) as! SpeakerListCell
-        cell.speakerNameLabel.text = speakers![indexPath.row].display_name
+        cell.speakerNameLabel.text = speakers![indexPath.row].displayName
         cell.speaker = speakers![indexPath.row]
         if cell.speaker.image != nil
         {

@@ -13,24 +13,12 @@ public class AffiliateTableViewCell: UITableViewCell {
     var logoImage:UIImageView = UIImageView.newAutoLayoutView()
     var nameLabel:UILabel = UILabel.newAutoLayoutView()
     
-    var affiliate:Affiliate!
+    var affiliate: SIAffiliate!
     
     var didSetupConstraints = false
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String!)
-    {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-    }
-    
-    required public init?(coder aDecoder: NSCoder)
-    {
-        super.init(coder: aDecoder)
-    }
-    
-    
     override public func updateConstraints() {
-        if !didSetupConstraints
-        {
+        if !didSetupConstraints {
             logoImage.removeFromSuperview()
             nameLabel.removeFromSuperview()
             contentView.addSubview(logoImage)
@@ -40,7 +28,7 @@ public class AffiliateTableViewCell: UITableViewCell {
                 self.logoImage.autoSetContentCompressionResistancePriorityForAxis(.Vertical)
             }
             
-            logoImage.image = affiliate.logo_image
+            logoImage.image = affiliate.logoImage
             nameLabel.text = affiliate.name
   
             logoImage.contentMode = .ScaleAspectFit
@@ -63,10 +51,10 @@ public class AffiliateTableViewCell: UITableViewCell {
 
 class AffiliateListTableViewController: UITableViewController {
 
-    var affiliates:[Affiliate]!
-    var sectionInfo:[(String, [Affiliate])]!
+    var affiliates: [SIAffiliate]!
+    var sectionInfo:[(String, [SIAffiliate])]!
     
-    var dataToSend:Affiliate!
+    var dataToSend: SIAffiliate!
     
     let cellHeight:CGFloat = 117.0
     
@@ -115,7 +103,6 @@ class AffiliateListTableViewController: UITableViewController {
         header.autoPinEdgesToSuperviewEdgesWithInsets(UIEdgeInsets.init(top: 0, left: 8, bottom: 0, right: 0))
         
         return view
-        
     }
     
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -128,7 +115,7 @@ class AffiliateListTableViewController: UITableViewController {
         
         let affiliate = sectionInfo[indexPath.section].1[indexPath.row]
         cell.affiliate = affiliate
-        cell.logoImage.image = affiliate.logo_image
+        cell.logoImage.image = affiliate.logoImage
         cell.nameLabel.text = affiliate.name
         
         cell.accessoryType = .DisclosureIndicator

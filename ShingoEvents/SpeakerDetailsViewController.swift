@@ -17,7 +17,7 @@ class SpeakerDetailsViewController: UIViewController {
     var biographyView: UITextView!
     var speakerImageView: UIImageView!
     
-    var speaker:Speaker!
+    var speaker: SISpeaker!
     var didSetupConstraints = false
     var scrollView: UIScrollView!
     override func loadView()
@@ -28,12 +28,12 @@ class SpeakerDetailsViewController: UIViewController {
         view.addSubview(scrollView)
         if speaker != nil {
             speakerNameLabel = UILabel.newAutoLayoutView()
-            if speaker.display_name != nil && speaker.title != nil {
-                speakerNameLabel.text = speaker.display_name + ", " + speaker.title
+            if speaker.displayName != nil && speaker.title != nil {
+                speakerNameLabel.text = speaker.displayName + ", " + speaker.title
             }
-            else if speaker.display_name != nil
+            else if speaker.displayName != nil
             {
-                speakerNameLabel.text = speaker.display_name
+                speakerNameLabel.text = speaker.displayName
             }
             else
             {

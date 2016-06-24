@@ -10,12 +10,24 @@ import UIKit
 
 class VenueMapViewController: UIViewController, UIScrollViewDelegate {
 
-    var venueMap: VenueMap! = nil
+    var venueMap: SIVenueMap! = nil
     
     var scrollView = UIScrollView()
     var image = UIImageView()
     
     var didUpdateConstraints = false
+    
+    let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        delegate.shouldSupportAllOrientation = true
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        delegate.shouldSupportAllOrientation = false
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

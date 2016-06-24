@@ -73,24 +73,29 @@ class EventMenuViewController: UIViewController {
         return view
     }()
     
+    let BUTTON_WIDTH: CGFloat = 110.0
+    let BUTTON_HEIGHT: CGFloat = 110.0
     var appData:AppData!
-    var sectionHeaders:[(Character, [Exhibitor])]!
+    var sectionHeaders:[(Character, [SIExhibitor])]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // do some sorting! Yay!
+        // do some sorting
         sortResearchRecipientsByName()
         sortPrizeRecipientsByName()
         sortSpeakersByLastName()
         sortAffiliatesByName()
         
         contentView.backgroundColor = .clearColor()
+        eventNameLabel.backgroundColor = SIColor().prussianBlueColor.colorWithAlphaComponent(0.5)
+        eventNameLabel.textColor = UIColor.whiteColor()
         
         eventNameLabel.text = appData.event.name
         contentView.addSubview(eventNameLabel)
+        contentView.addSubview(backgroundImage)
         
-        let buttonViews:NSArray = [
+        let buttonViews = [
             scheduleButton,
             venuePhotosButton,
             recipientsButton,
@@ -101,36 +106,22 @@ class EventMenuViewController: UIViewController {
             sponsorsButton
         ]
         
-        // add custom built UIButtons to contentView
-        for button in buttonViews
-        {
-            contentView.addSubview(button as! UIButton)
+        // add label and custom built UIButtons to contentView
+        contentView.bringSubviewToFront(eventNameLabel)
+        for button in buttonViews {
+            contentView.addSubview(button)
+            contentView.bringSubviewToFront(button)
+            
+            // set dimensions of buttons
+            button.autoSetDimension(.Height, toSize: BUTTON_WIDTH)
+            button.autoSetDimension(.Width, toSize: BUTTON_HEIGHT)
         }
-        
-        // height and width constraints for buttons
-        for button in buttonViews
-        {
-            button.autoSetDimension(.Height, toSize: 110)
-            button.autoSetDimension(.Width, toSize: 110)
-        }
-        
+
         // constraints for view
-        contentView.addSubview(backgroundImage)
-        
         backgroundImage.autoPinToTopLayoutGuideOfViewController(self, withInset: 0)
         backgroundImage.autoPinEdge(.Left, toEdge: .Left, ofView: view)
         backgroundImage.autoPinEdge(.Right, toEdge: .Right, ofView: view)
         backgroundImage.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: view)
-        
-        contentView.bringSubviewToFront(eventNameLabel)
-        contentView.bringSubviewToFront(scheduleButton)
-        contentView.bringSubviewToFront(venuePhotosButton)
-        contentView.bringSubviewToFront(recipientsButton)
-        contentView.bringSubviewToFront(exhibitorsButton)
-        contentView.bringSubviewToFront(speakerButton)
-        contentView.bringSubviewToFront(directionsButton)
-        contentView.bringSubviewToFront(affiliatesButton)
-        contentView.bringSubviewToFront(sponsorsButton)
         
         // Add targets to all buttons
         scheduleButton.addTarget(self, action: #selector(EventMenuViewController.didTapSchedule(_:)), forControlEvents: UIControlEvents.TouchUpInside)
@@ -142,126 +133,42 @@ class EventMenuViewController: UIViewController {
         affiliatesButton.addTarget(self, action: #selector(EventMenuViewController.didTapAffiliates(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         sponsorsButton.addTarget(self, action: #selector(EventMenuViewController.didTapSponsors(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
-        setButtonConstraints()
+        setButtonConstraintsToBottomOfView()
+        eventNameLabel.autoPinEdge(.Bottom, toEdge: .Top, ofView: scheduleButton, withOffset: -12)
         
     }
     
     // constraints for UIButtons
-    func setButtonConstraints() {
+    func setButtonConstraintsToBottomOfView() {
         
-        let leftButtons:NSArray = [
-            scheduleButton,
-            venuePhotosButton,
-            recipientsButton,
-            exhibitorsButton,
-        ]
+        // calculate button spacing from edge
+        let edgeSpacing = (view.frame.width * (1/4)) - (BUTTON_WIDTH / 2) + 10
+        let verticalButtonSpacing: CGFloat = -10
         
-        let rightButtons:NSArray = [
-            speakerButton,
-            directionsButton,
-            affiliatesButton,
-            sponsorsButton
-        ]
+        // Set up constraints from bottom left to top right
+        exhibitorsButton.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: contentView, withOffset: verticalButtonSpacing)
+        exhibitorsButton.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: edgeSpacing)
         
-        let quarter = self.view.frame.width * 0.25 // calculate 1/4 width of parent view
-
-        var horizontalConstraint = NSLayoutConstraint(
-            item: leftButtons.firstObject as! UIButton,
-            attribute: NSLayoutAttribute.CenterX,
-            relatedBy: NSLayoutRelation.Equal,
-            toItem: contentView,
-            attribute: NSLayoutAttribute.CenterX,
-            multiplier: 1,
-            constant: quarter * -1 + 10.0)
-        contentView.addConstraint(horizontalConstraint)
+        sponsorsButton.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: contentView, withOffset: verticalButtonSpacing)
+        sponsorsButton.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -edgeSpacing)
         
-        var verticalConstraint = NSLayoutConstraint(
-            item: leftButtons.firstObject as! UIButton,
-            attribute: NSLayoutAttribute.Top,
-            relatedBy: .Equal,
-            toItem: eventNameLabel,
-            attribute: NSLayoutAttribute.Bottom,
-            multiplier: 1,
-            constant: 10.0)
-        scrollView.addConstraint(verticalConstraint)
+        recipientsButton.autoPinEdge(.Bottom, toEdge: .Top, ofView: exhibitorsButton, withOffset: verticalButtonSpacing)
+        recipientsButton.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: edgeSpacing)
         
-        var previousButton:UIButton!
-        for item in leftButtons
-        {
-            if let previousButton = previousButton
-            {
-                let verticalConstraint = NSLayoutConstraint(
-                    item: item,
-                    attribute: NSLayoutAttribute.Top,
-                    relatedBy: .Equal,
-                    toItem: previousButton,
-                    attribute: NSLayoutAttribute.Bottom,
-                    multiplier: 1,
-                    constant: 0)
-                contentView.addConstraint(verticalConstraint)
-                
-                // Even numbered indecies get offset from center of contentView by (quarter * -1 + 10)
-                let horizontalConstraint = NSLayoutConstraint(
-                    item: item,
-                    attribute: NSLayoutAttribute.CenterX,
-                    relatedBy: NSLayoutRelation.Equal,
-                    toItem: contentView,
-                    attribute: NSLayoutAttribute.CenterX,
-                    multiplier: 1,
-                    constant: quarter * -1 + 10)
-                contentView.addConstraint(horizontalConstraint)
-            }
-            previousButton = item as! UIButton
-        }
+        affiliatesButton.autoPinEdge(.Bottom, toEdge: .Top, ofView: sponsorsButton, withOffset: verticalButtonSpacing)
+        affiliatesButton.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -edgeSpacing)
         
-        horizontalConstraint = NSLayoutConstraint(
-            item: rightButtons.firstObject as! UIButton,
-            attribute: NSLayoutAttribute.CenterX,
-            relatedBy: NSLayoutRelation.Equal,
-            toItem: contentView,
-            attribute: NSLayoutAttribute.CenterX,
-            multiplier: 1,
-            constant: quarter - 10)
-        contentView.addConstraint(horizontalConstraint)
+        venuePhotosButton.autoPinEdge(.Bottom, toEdge: .Top, ofView: recipientsButton, withOffset: verticalButtonSpacing)
+        venuePhotosButton.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: edgeSpacing)
         
-        verticalConstraint = NSLayoutConstraint(
-            item: rightButtons.firstObject as! UIButton,
-            attribute: NSLayoutAttribute.Top,
-            relatedBy: .Equal,
-            toItem: eventNameLabel,
-            attribute: NSLayoutAttribute.Bottom,
-            multiplier: 1,
-            constant: 10.0)
-        contentView.addConstraint(verticalConstraint)
+        directionsButton.autoPinEdge(.Bottom, toEdge: .Top, ofView: affiliatesButton, withOffset: verticalButtonSpacing)
+        directionsButton.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -edgeSpacing)
         
-        previousButton = nil
-        for item in rightButtons
-        {
-            if let previousButton = previousButton
-            {
-                let verticalConstraint = NSLayoutConstraint(
-                    item: item,
-                    attribute: NSLayoutAttribute.Top,
-                    relatedBy: .Equal,
-                    toItem: previousButton,
-                    attribute: NSLayoutAttribute.Bottom,
-                    multiplier: 1,
-                    constant: 0)
-                contentView.addConstraint(verticalConstraint)
-                
-                let horizontalConstraint = NSLayoutConstraint(
-                    item: item,
-                    attribute: NSLayoutAttribute.CenterX,
-                    relatedBy: NSLayoutRelation.Equal,
-                    toItem: contentView,
-                    attribute: NSLayoutAttribute.CenterX,
-                    multiplier: 1,
-                    constant: quarter - 10)
-                contentView.addConstraint(horizontalConstraint)
-            }
-            previousButton = item as! UIButton
-        }
+        scheduleButton.autoPinEdge(.Bottom, toEdge: .Top, ofView: venuePhotosButton, withOffset: verticalButtonSpacing)
+        scheduleButton.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: edgeSpacing)
         
+        speakerButton.autoPinEdge(.Bottom, toEdge: .Top, ofView: directionsButton, withOffset: verticalButtonSpacing)
+        speakerButton.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -edgeSpacing)
     }
     
     func didTapSchedule(sender: AnyObject) {
@@ -282,17 +189,8 @@ class EventMenuViewController: UIViewController {
     
     func didTapExhibitors(sender: AnyObject) {
         // Ensure each exhibitor has an image assigned to it
-        if sectionHeaders == nil
-        {
-            sectionHeaders = [(Character, [Exhibitor])]()
-            
-            for exhibitor in self.appData.exhibitors
-            {
-                if exhibitor.logo_image == nil
-                {
-                    exhibitor.logo_image = UIImage(named: "sponsor_banner_pl")
-                }
-            }
+        if sectionHeaders == nil {
+            sectionHeaders = [(Character, [SIExhibitor])]()
             
             // Alphabetically sort exhibitors by company name
             for i in 0 ..< appData.exhibitors.count - 1
@@ -311,7 +209,7 @@ class EventMenuViewController: UIViewController {
 
             // Create dictionary to set section headers in ExhibitorTableViewController
             if var char = appData.exhibitors[0].name.characters.first {
-                var exhibitorList = [Exhibitor]()
+                var exhibitorList = [SIExhibitor]()
                 exhibitorList.append(appData.exhibitors[0])
                 sectionHeaders.append((char, exhibitorList))
                 var count = 0
@@ -324,7 +222,7 @@ class EventMenuViewController: UIViewController {
                     }
                     else
                     {
-                        var nextList = [Exhibitor]()
+                        var nextList = [SIExhibitor]()
                         nextList.append(appData.exhibitors[i])
                         sectionHeaders.append((char, nextList))
                         count += 1
@@ -353,19 +251,19 @@ class EventMenuViewController: UIViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         if segue.identifier == "SchedulesView" {
-            let dest_vc = segue.destinationViewController as! SchedulesTableViewController
-            self.appData.event?.eventAgenda.days_array = sortWeekByDay(self.appData!.event!.eventAgenda.days_array)
-            dest_vc.event = self.appData!.event!
+            let destination = segue.destinationViewController as! SchedulesTableViewController
+            self.appData.event.eventAgenda.agendaArray = sortWeekByDay(self.appData.event.eventAgenda.agendaArray)
+            destination.event = appData.event
         }
         
         if segue.identifier == "SpeakerList" {
-            let dest_vc = segue.destinationViewController as! SpeakerListTableViewController
-            dest_vc.speakers = appData.event.eventSpeakers
+            let destination = segue.destinationViewController as! SpeakerListTableViewController
+            destination.speakers = appData.event.eventSpeakers
         }
         
         if segue.identifier == "RecipientsView" {
-            let dest_vc = segue.destinationViewController as! RecipientsTableViewController
-            dest_vc.appData = self.appData
+            let destination = segue.destinationViewController as! RecipientsTableViewController
+            destination.appData = appData
         }
         
         if segue.identifier == "MapView" {
@@ -380,10 +278,10 @@ class EventMenuViewController: UIViewController {
         }
         
         if segue.identifier == "AffiliatesListView" {
-            var sectionInfo = [(String, [Affiliate])]()
+            var sectionInfo = [(String, [SIAffiliate])]()
             
             if var char:String = String(appData.affiliates[0].name.characters.first!) {
-                var affiliateList = [Affiliate]()
+                var affiliateList = [SIAffiliate]()
                 affiliateList.append(appData.affiliates[0])
                 sectionInfo.append((char, affiliateList))
                 var count = 0
@@ -397,7 +295,7 @@ class EventMenuViewController: UIViewController {
                     }
                     else
                     {
-                        var nextList = [Affiliate]()
+                        var nextList = [SIAffiliate]()
                         nextList.append(appData.affiliates[i])
                         sectionInfo.append((char, nextList))
                         count += 1
@@ -417,7 +315,6 @@ class EventMenuViewController: UIViewController {
         }
         
         if segue.identifier == "SponsorsView" {
-            // This is a pointless comment!
             let destination = segue.destinationViewController as! SponsorsTableViewController
             destination.friends = appData.friendSponsors            //sponsors_array[0]
             destination.supporters = appData.supportersSponsors     //sponsors_array[1]
@@ -430,14 +327,14 @@ class EventMenuViewController: UIViewController {
     
     // MARK: - Custom Functions
     
-    func sortWeekByDay(eventDayList:[EventDay]) -> [EventDay] {
+    func sortWeekByDay(eventDayList:[SIEventDay]) -> [SIEventDay] {
         var days = eventDayList
         for i in 0 ..< days.count - 1
         {
             for j in 0 ..< (days.count - i - 1)
             {
                 
-                if days[j].sessions[0].start_end_date.0 != days[j].sessions[0].start_end_date.0.earlierDate(days[j+1].sessions[0].start_end_date.0)
+                if days[j].sessions[0].startEndDate.0 != days[j].sessions[0].startEndDate.0.earlierDate(days[j+1].sessions[0].startEndDate.0)
                 {
                     let temp = days[j]
                     days[j] = days[j+1]
@@ -448,29 +345,6 @@ class EventMenuViewController: UIViewController {
         }
         return days
     }
-    
-//    func valueOfDay(day:String) -> Int {
-//        let day = day.lowercaseString
-//        switch day {
-//        case "monday":
-//            return 1
-//        case "tuesday":
-//            return 2
-//        case "wednesday":
-//            return 3
-//        case "thursday":
-//            return 4
-//        case "friday":
-//            return 5
-//        case "saturday":
-//            return 6
-//        case "sunday":
-//            return 7
-//        default:
-//            print("ERROR: EventMenuViewController::valueOfDay, invalid string passed into parameter!")
-//            return 0
-//        }
-//    }
     
     
     // Some simple bubble sorting functions
@@ -560,28 +434,5 @@ class EventMenuViewController: UIViewController {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

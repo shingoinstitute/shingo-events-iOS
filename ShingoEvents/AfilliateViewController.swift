@@ -15,7 +15,7 @@ class AfilliateViewController: UIViewController {
     var scrollView = UIScrollView.newAutoLayoutView()
     var backdrop = UIView.newAutoLayoutView()
     
-    var affiliate:Affiliate!
+    var affiliate: SIAffiliate!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,8 +60,8 @@ class AfilliateViewController: UIViewController {
         backdrop.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: view, withOffset: 0)
         backdrop.backgroundColor = shingoBlue
         
-        if affiliate.logo_image != nil {
-            logoImage.image = affiliate.logo_image
+        if affiliate.logoImage != nil {
+            logoImage.image = affiliate.logoImage
             logoImage.contentMode = .ScaleAspectFit
         }
         
@@ -132,8 +132,8 @@ class AfilliateViewController: UIViewController {
                 abstractTextField.text! += affiliate.abstract + newline
             }
             
-            if affiliate.website_url != nil {
-                abstractTextField.text! += "Visit \(affiliate.name)'s website at "  + affiliate.website_url
+            if affiliate.websiteUrl != nil {
+                abstractTextField.text! += "Visit \(affiliate.name)'s website at "  + affiliate.websiteUrl
             }
         }
 

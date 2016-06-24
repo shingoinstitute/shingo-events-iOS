@@ -23,37 +23,49 @@ enum URLTYPE {
     GetExhibitors,
     GetAffiliates,
     GetSponsors,
-    ERROR
+    NonType
 }
 
-struct ShingoColors {
-    let shingoBlue = UIColor(netHex: 0x002f56)
-    let shingoRed = UIColor(netHex: 0x650820)
-    let darkShingoBlue = UIColor(netHex: 0x0e2145)
-}
+class AppData {
 
-public class AppData {
+    var upcomingEvents:[SIEvent]!
+    var event:SIEvent!
+    var exhibitors:[SIExhibitor]!
+    var affiliates:[SIAffiliate]!
+    
+    var friendSponsors:[SISponsor]!
+    var supportersSponsors:[SISponsor]!
+    var benefactorsSponsors:[SISponsor]!
+    var championsSponsors:[SISponsor]!
+    var presidentsSponsors:[SISponsor]!
+    
+    var researchRecipients : [SIRecipient]!
+    var shingoPrizeRecipients : [SIRecipient]!
+    var silverRecipients : [SIRecipient]!
+    var bronzeRecipients : [SIRecipient]!
+    
+    
+    init() {
+        upcomingEvents = [SIEvent]()
+        event = SIEvent()
+        exhibitors = [SIExhibitor]()
+        affiliates = [SIAffiliate]()
+        
+        friendSponsors = [SISponsor]()
+        supportersSponsors = [SISponsor]()
+        benefactorsSponsors = [SISponsor]()
+        championsSponsors = [SISponsor]()
+        presidentsSponsors = [SISponsor]()
+        
+        researchRecipients = [SIRecipient]()
+        shingoPrizeRecipients = [SIRecipient]()
+        silverRecipients = [SIRecipient]()
+        bronzeRecipients = [SIRecipient]()
+    }
+    
+    func getUpcomingEvents(callback: () -> Void) {
 
-    var upcomingEvents:[Event]!
-    var event:Event!
-    var exhibitors:[Exhibitor]!
-    var affiliates:[Affiliate]!
-    
-    var friendSponsors:[Sponsor]!
-    var supportersSponsors:[Sponsor]!
-    var benefactorsSponsors:[Sponsor]!
-    var championsSponsors:[Sponsor]!
-    var presidentsSponsors:[Sponsor]!
-    
-    var researchRecipients = [Recipient]()
-    var shingoPrizeRecipients = [Recipient]()
-    var silverRecipients = [Recipient]()
-    var bronzeRecipients = [Recipient]()
-    
-    
-    public func getUpcomingEvents(callback: () -> Void) {
-        self.upcomingEvents = nil
-        self.upcomingEvents = [Event]()
+        self.upcomingEvents = [SIEvent]()
         
         GET(.GetUpcomingEvents) {
             json in
@@ -62,45 +74,42 @@ public class AppData {
                 let dateFormatter = NSDateFormatter()
                 dateFormatter.dateFormat = "yyyy-MM-dd"
                 for item in json["events"]["records"].array! {
-                    let upcoming_event = Event()
+                    let upcomingEvent = SIEvent()
                     if item["Id"] != nil {
-                        upcoming_event.event_id = item["Id"].string! as String
+                        upcomingEvent.id = item["Id"].string! as String
                     }
                     if item["Name"] != nil {
-                        upcoming_event.name = item["Name"].string! as String
+                        upcomingEvent.name = item["Name"].string! as String
                     }
                     if item["Event_Start_Date__c"] != nil {
-                        upcoming_event.event_start_date = dateFormatter.dateFromString(item["Event_Start_Date__c"].string! as String)!
+                        upcomingEvent.eventStartDate = dateFormatter.dateFromString(item["Event_Start_Date__c"].string! as String)!
                     }
                     if item["Event_End_Date__c"] != nil {
-                        upcoming_event.event_end_date = dateFormatter.dateFromString(item["Event_End_Date__c"].string! as String)!
+                        upcomingEvent.eventEndDate = dateFormatter.dateFromString(item["Event_End_Date__c"].string! as String)!
                     }
                     if item["Host_Organization__c"] != nil {
-                        upcoming_event.host_organization = item["Host_Organization__c"].string! as String
+                        upcomingEvent.hostOrganization = item["Host_Organization__c"].string! as String
                     }
                     if item["Host_City__c"] != nil {
-                        upcoming_event.host_city = item["Host_City__c"].string! as String
+                        upcomingEvent.hostCity = item["Host_City__c"].string! as String
                     }
                     if item["Event_Type__c"] != nil {
-                        upcoming_event.event_type = item["Event_Type__c"].string! as String
+                        upcomingEvent.eventType = item["Event_Type__c"].string! as String
                     }
                     if item["LatLng__c"] != nil {
-                        upcoming_event.location = CLLocationCoordinate2D(latitude: item["LatLng__c"]["latitude"].double! as Double, longitude: item["LatLng__c"]["longitude"].double! as Double)
+                        upcomingEvent.location = CLLocationCoordinate2D(latitude: item["LatLng__c"]["latitude"].double! as Double, longitude: item["LatLng__c"]["longitude"].double! as Double)
                     }
                     
                     if item["Venue_Maps"] != nil {
-                        upcoming_event.venueMaps = [VenueMap]()
+                        upcomingEvent.venueMaps = [SIVenueMap]()
                         for map in item["Venue_Maps"].array! {
-                            
-                            // an FYI - This class constructor makes an http request to get the venue picture when initialized
-                            let venueMap = VenueMap(
-                                name: map["name"].string! as String,
-                                url: map["url"].string! as String
-                            )
-                            upcoming_event.venueMaps.append(venueMap)
+
+                            let venueMap = SIVenueMap(name: map["name"].string! as String, url: map["url"].string! as String)
+                            venueMap.getVenueMapImage(venueMap.url)
+                            upcomingEvent.venueMaps.append(venueMap)
                         }
                     }
-                    self.upcomingEvents.append(upcoming_event)              
+                    self.upcomingEvents.append(upcomingEvent)
                 }
             }
             callback()
@@ -108,9 +117,10 @@ public class AppData {
     }
     
     
-    public func getAgenda(callback: () -> Void) {
+    func getAgenda(callback: () -> Void) {
+        
         let parameters = [
-            "event_id": self.event!.event_id
+            "event_id": event.id!
         ]
         
         POST(.GetAgenda, parameters: parameters) {
@@ -118,17 +128,15 @@ public class AppData {
             
             if json["agenda"]["Days"]["records"] != nil {
                 
-                self.event!.eventAgenda.agenda_id = json["agenda"]["Id"].string! as String
+                self.event!.eventAgenda.id = json["agenda"]["Id"].string! as String
                 let days = json["agenda"]["Days"]["records"].array!
                 
-                for day in days
-                {
+                for day in days {
                     let dayId = day["Id"].string! as String
                 
-                    self.getDay(dayId)
-                    {
+                    self.getDay(dayId) {
                         item in
-                        self.event.eventAgenda.days_array.append(item)
+                        self.event.eventAgenda.agendaArray.append(item)
                     }
                 }
                 callback()
@@ -137,22 +145,20 @@ public class AppData {
     }
 
     
-    public func getEventSessions (callback: () -> Void) {
-        self.event.eventSessions = nil
-        self.event.eventSessions = [EventSession]()
+    func getEventSessions (callback: () -> Void) {
         
         let parameters = [
-            "event_id": self.event!.event_id
+            "event_id": event.id!
         ]
         
         POST(.GetEventSessions, parameters: parameters) {
             json in
             
             for item in json["sessions"]["records"].array! {
-                let session = EventSession()
+                let session = SIEventSession()
                 
-                if item["Id"] != nil {
-                    session.session_id = item["Id"].string! as String
+                if item["Id"].isExists() {
+                    session.id = item["Id"].string! as String
                 }
                 if item["Name"] != nil {
                     session.name = item["Name"].string! as String
@@ -172,16 +178,15 @@ public class AppData {
                 if item["Speakers"]["records"] != nil {
                     let event_speakers = item["Speakers"]["records"].array!
                     for event_speaker in event_speakers {
-                        if event_speaker["Id"] != nil
-                        {
+                        if event_speaker["Id"] != nil {
                             let id = event_speaker["Id"].string! as String
-                            session.speaker_ids.append(id)
+                            session.speakerIds.append(id)
                         }
                     }
                 }
                 if item["Session_Date__c"] != nil && item["Session_Time__c"] != nil {
-                    let start_end_date = self.sessionDateParser(item["Session_Date__c"].string! as String, time: item["Session_Time__c"].string! as String)
-                    session.start_end_date = start_end_date
+                    let start_end_date = self.sessionDateParser(String(item["Session_Date__c"].string!), time: String(item["Session_Time__c"].string!))
+                    session.startEndDate = start_end_date
                 }
                 if item["Session_Format__c"] != nil {
                     session.format = item["Session_Format__c"].string! as String
@@ -223,18 +228,18 @@ public class AppData {
     
     
     
-    public func getDay(day_id:String, callback: (day:EventDay) -> Void) {
+    func getDay(dayId:String, callback: (day:SIEventDay) -> Void) {
         
         let parameters = [
-            "day_id": day_id
+            "day_id": dayId
         ]
         
         POST(.GetDay, parameters: parameters) {
             json in
             
-            let day = EventDay()
+            let day = SIEventDay()
             if json["day"]["Id"] != nil {
-                day.day_id = json["day"]["Id"].string! as String
+                day.id = json["day"]["Id"].string! as String
             }
             if json["day"]["Name"] != nil {
                 day.dayOfWeek = json["day"]["Name"].string! as String
@@ -244,7 +249,7 @@ public class AppData {
                 {
                     for item in self.event!.eventSessions!
                     {
-                        if item.session_id == session["Id"].string! as String
+                        if item.id == session["Id"].string! as String
                         {
                             day.sessions.append(item)
                         }
@@ -256,19 +261,16 @@ public class AppData {
         }
     }
 
-    public func getSpeakers(callback: () -> Void) {
+    
+    func getSpeakers(callback: () -> Void) {
         
-        if self.event.eventSpeakers != nil
-        {
+        if !event.eventSpeakers.isEmpty {
+            callback()
             return
-        }
-        else
-        {
-            self.event.eventSpeakers = [Speaker]()
         }
         
         let parameters = [
-            "event_id": self.event!.event_id
+            "event_id": event.id!
         ]
         
         POST(.GetSpeakers, parameters: parameters) {
@@ -276,10 +278,10 @@ public class AppData {
             
             if json["speakers"]["records"] != nil {
                 for item in json["speakers"]["records"].array! {
-                    let speaker = Speaker()
+                    let speaker = SISpeaker()
                     
                     if item["Id"] != nil {
-                        speaker.speaker_id = item["Id"].string! as String
+                        speaker.id = item["Id"].string! as String
                     }
                     if item["Biography__c"] != nil {
                         speaker.biography = item["Biography__c"].string! as String
@@ -288,11 +290,11 @@ public class AppData {
                         speaker.richBiography = item["Rich_Biography"].string! as String
                     }
                     if item["Speaker_Image__c"] != nil {
-                        speaker.image_url = item["Speaker_Image__c"].string! as String
-                        speaker.getImage(speaker.image_url)
+                        speaker.imageUrl = item["Speaker_Image__c"].string! as String
+                        speaker.getSpeakerImage(speaker.imageUrl)
                     }
                     if item["Speaker_Display_Name__c"] != nil {
-                        speaker.display_name = item["Speaker_Display_Name__c"].string! as String
+                        speaker.displayName = item["Speaker_Display_Name__c"].string! as String
                     }
                     if item["Name"] != nil {
                         speaker.name = item["Name"].string! as String
@@ -304,7 +306,7 @@ public class AppData {
                         speaker.organization = item["Organization"].string! as String
                     }
                     self.event.eventSpeakers.append(speaker)
-                    print("Speaker Name: \(speaker.display_name) | ID: \(speaker.speaker_id)")
+                    print("Speaker Name: \(speaker.displayName) | ID: \(speaker.id)")
                 }
             }
             self.populateSessionSpeakers()
@@ -313,13 +315,10 @@ public class AppData {
     }
     
     func populateSessionSpeakers() {
-        for session in event.eventSessions
-        {
-            for id in session.speaker_ids
-            {
-                for speaker in event.eventSpeakers
-                {
-                    if id == speaker.speaker_id {
+        for session in event.eventSessions {
+            for id in session.speakerIds {
+                for speaker in event.eventSpeakers {
+                    if id == speaker.id {
                         session.sessionSpeakers.append(speaker)
                     }
                 }
@@ -327,10 +326,10 @@ public class AppData {
         }
     }
     
-    public func getRecipients(callback: () -> Void) {
+    func getRecipients(callback: () -> Void) {
         
         let parameters = [
-            "event_id": self.event!.event_id
+            "event_id": event.id!
         ]
         
         POST(.GetRecipients, parameters: parameters) {
@@ -350,9 +349,9 @@ public class AppData {
     func parseRecipientData(json: JSON) {
         if json.array != nil {
             for item in json.array! {
-                let recipient = Recipient()
+                let recipient = SIRecipient()
                 if item["Id"] != nil {
-                    recipient.recipient_id = item["Id"].string! as String
+                    recipient.id = item["Id"].string! as String
                 }
                 if item["Name"] != nil {
                     recipient.name = item["Name"].string! as String
@@ -364,7 +363,7 @@ public class AppData {
                     recipient.richAbstract = item["Rich_Abstract"].string! as String
                 }
                 if item["Event__c"] != nil {
-                    recipient.event_id = item["Event__c"].string! as String
+                    recipient.eventId = item["Event__c"].string! as String
                 }
                 if item["Award__c"] != nil {
                     recipient.award = item["Award__c"].string! as String
@@ -375,12 +374,9 @@ public class AppData {
                     recipient.authors = item["Author_s__c"].string! as String
                 }
                 if item["Logo_Book_Cover__c"] != nil {
-                    let image_url = item["Logo_Book_Cover__c"].string! as String
-                    recipient.logo_book_cover_url = image_url
-                    recipient.getRecipientImage(image_url) {
-                        image in
-                        recipient.logo_book_cover_image = image
-                    }
+                    let imageUrl = item["Logo_Book_Cover__c"].string! as String
+                    recipient.logoBookCoverUrl = imageUrl
+                    recipient.getRecipientImage(imageUrl)
                 }
                 
                 switch recipient.award {
@@ -407,30 +403,28 @@ public class AppData {
     }
     
     
-    public func getExhibitors(callback: () -> Void) {
+    func getExhibitors(callback: () -> Void) {
+        
+        if !exhibitors.isEmpty {
+            callback()
+            return
+        }
         
         let parameters = [
-            "event_id": self.event!.event_id
+            "event_id": event.id!
         ]
         
         POST(.GetExhibitors, parameters: parameters) {
             json in
             
-            if self.exhibitors == nil {
-                self.exhibitors = [Exhibitor]()
-            } else {
-                callback()
-                return
-            }
-            
             if json["exhibitors"]["records"] != nil {
                 let exhibitors = json["exhibitors"]["records"].array
                 
                 for item in exhibitors! {
-                    let exhibitor = Exhibitor()
+                    let exhibitor = SIExhibitor()
                     
                     if item["id"] != nil {
-                        exhibitor.SF_id = item["Id"].string! as String
+                        exhibitor.id = item["Id"].string! as String
                     }
                     if item["Name"] != nil {
                         exhibitor.name = item["Name"].string! as String
@@ -451,16 +445,13 @@ public class AppData {
                         exhibitor.website = item["Website__c"].string! as String
                     }
                     if item["Logo__c"] != nil {
-                        exhibitor.logo_url = item["Logo__c"].string! as String
-                        exhibitor.getImage(item["Logo__c"].string! as String) {
-                            image in
-                            exhibitor.logo_image = image
-                        }
+                        exhibitor.logoUrl = item["Logo__c"].string! as String
+                        exhibitor.getExhibitorImage(exhibitor.logoUrl)
                     }
                     if item["Event__c"] != nil {
-                        exhibitor.event_id = item["Event__c"].string! as String
+                        exhibitor.eventId = item["Event__c"].string! as String
                     }
-                    self.exhibitors?.append(exhibitor)
+                    self.exhibitors.append(exhibitor)
                 }
             }
             callback()
@@ -469,15 +460,12 @@ public class AppData {
     }
     
     
-    public func getAffiliates(callback: () -> Void) {
+    func getAffiliates(callback: () -> Void) {
         
-        if self.affiliates != nil
-        {
+        if !affiliates.isEmpty {
             callback()
             return
         }
-        
-        self.affiliates = [Affiliate]()
         
         self.GET(.GetAffiliates) {
             json in
@@ -487,7 +475,7 @@ public class AppData {
                 
                 
                 for item in affiliates! {
-                    let affiliate = Affiliate()
+                    let affiliate = SIAffiliate()
                     
                     if !(item["Id"].object is NSNull) {
                         affiliate.id = item["Id"].string! as String
@@ -502,14 +490,11 @@ public class AppData {
                         affiliate.richAbstract = item["Rich_App_Abstract"].string! as String
                     }
                     if !(item["Logo__c"].object is NSNull) {
-                        affiliate.logo_url = item["Logo__c"].string! as String
-                        affiliate.getImage(item["Logo__c"].string! as String) {
-                            image in
-                            affiliate.logo_image = image
-                        }
+                        affiliate.logoUrl = item["Logo__c"].string! as String
+                        affiliate.getAffiliateImage(affiliate.logoUrl)
                     }
                     if !(item["Website"].object is NSNull) {
-                        affiliate.website_url = item["Website"].string! as String
+                        affiliate.websiteUrl = item["Website"].string! as String
                     }
                     if !(item["Phone"].object is NSNull) {
                         affiliate.phone = item["Phone"].string! as String
@@ -517,7 +502,7 @@ public class AppData {
                     if !(item["Public_Contact_Email__c"].object is NSNull) {
                         affiliate.email = item["Public_Contact_Email__c"].string! as String
                     }
-                    self.affiliates?.append(affiliate)
+                    self.affiliates.append(affiliate)
                 }
             }
             callback()
@@ -525,10 +510,10 @@ public class AppData {
     }
     
     
-    public func getSponsors(callback: () -> Void) {
+    func getSponsors(callback: () -> Void) {
         
         let parameters = [
-            "event_id": self.event.event_id
+            "event_id": event.id!
         ]
         
         POST(.GetSponsors, parameters: parameters) {
@@ -536,42 +521,42 @@ public class AppData {
             
             if json["sponsors"] != nil {
                 let sponsors = json["sponsors"]
-                var sponsors_new = [Sponsor]()
+                var sponsorsNew = [SISponsor]()
                 
                 if sponsors["friends"] != nil {
-                    sponsors_new = self.parseSponsorData(sponsors["friends"]["records"])
-                    for item in sponsors_new {
-                        item.sponsor_type = .Friend
+                    sponsorsNew = self.parseSponsorData(sponsors["friends"]["records"])
+                    for item in sponsorsNew {
+                        item.sponsorType = .Friend
                     }
-                    self.friendSponsors = sponsors_new
+                    self.friendSponsors = sponsorsNew
                 }
                 if sponsors["supporters"] != nil {
-                    sponsors_new = self.parseSponsorData(sponsors["supporters"]["records"])
-                    for item in sponsors_new {
-                        item.sponsor_type = .Supporter
+                    sponsorsNew = self.parseSponsorData(sponsors["supporters"]["records"])
+                    for item in sponsorsNew {
+                        item.sponsorType = .Supporter
                     }
-                    self.supportersSponsors = sponsors_new
+                    self.supportersSponsors = sponsorsNew
                 }
                 if sponsors["benefactors"] != nil {
-                    sponsors_new = self.parseSponsorData(sponsors["benefactors"]["records"])
-                    for item in sponsors_new {
-                        item.sponsor_type = .Benefactor
+                    sponsorsNew = self.parseSponsorData(sponsors["benefactors"]["records"])
+                    for item in sponsorsNew {
+                        item.sponsorType = .Benefactor
                     }
-                    self.benefactorsSponsors = sponsors_new
+                    self.benefactorsSponsors = sponsorsNew
                 }
                 if sponsors["champions"] != nil {
-                    sponsors_new = self.parseSponsorData(sponsors["champions"]["records"])
-                    for item in sponsors_new {
-                        item.sponsor_type = .Champion
+                    sponsorsNew = self.parseSponsorData(sponsors["champions"]["records"])
+                    for item in sponsorsNew {
+                        item.sponsorType = .Champion
                     }
-                    self.championsSponsors = sponsors_new
+                    self.championsSponsors = sponsorsNew
                 }
                 if sponsors["presidents"] != nil {
-                    sponsors_new = self.parseSponsorData(sponsors["presidents"]["records"])
-                    for item in sponsors_new {
-                        item.sponsor_type = .President
+                    sponsorsNew = self.parseSponsorData(sponsors["presidents"]["records"])
+                    for item in sponsorsNew {
+                        item.sponsorType = .President
                     }
-                    self.presidentsSponsors = sponsors_new
+                    self.presidentsSponsors = sponsorsNew
                 }
             }
             callback()
@@ -579,37 +564,31 @@ public class AppData {
     }
     
     
-    func parseSponsorData(json:JSON) -> [Sponsor] {
-        var sponsors = [Sponsor]()
+    func parseSponsorData(json:JSON) -> [SISponsor] {
+        var sponsors = [SISponsor]()
         
         for item in json.array! {
-            let sponsor = Sponsor()
+            let sponsor = SISponsor()
             if item["Id"] != nil {
                 sponsor.id = item["Id"].string! as String
             }
             if item["MDF_Amount__c"] != nil {
-                sponsor.mdf_amount = item["MDF_Amount__c"].int! as Int
+                sponsor.mdfAmount = Double(item["MDF_Amount__c"].double!)
             }
             if item["Banner__c"] != nil {
-                let banner_url = item["Banner__c"].string! as String
-                sponsor.banner_url = banner_url
-                sponsor.getSponsorImage(banner_url) {
-                    image in
-                    sponsor.banner_image = image
-                }
+                let banner_url = String(item["Banner__c"].string!)
+                sponsor.bannerUrl = banner_url
+                sponsor.getBannerImage(sponsor.bannerUrl)
             }
             if item["Logo__c"] != nil {
-                sponsor.logo_url = item["Logo__c"].string! as String
-                sponsor.getSponsorImage(item["Logo__c"].string! as String) {
-                    image in
-                    sponsor.logo_image = image
-                }
+                sponsor.logoUrl = item["Logo__c"].string! as String
+                sponsor.getSponsorImage(sponsor.logoUrl)
             }
             if item["Level__c"] != nil {
                 sponsor.level = item["Level__c"].string! as String
             }
             if item["Event__c"] != nil {
-                sponsor.event_id = item["Event__c"].string! as String
+                sponsor.eventId = item["Event__c"].string! as String
             }
             if item["Name"] != nil {
                 print(item["Name"].string! as String)
@@ -680,15 +659,13 @@ public class AppData {
         }
     }
     
-    
-    
     func getUrl(type: URLTYPE) -> String {
-        var type = type
-//        let base_url = "https://shingo-events.herokuapp.com/api"
-        let CLIENT_ID_SECRET = "client_id=6cd61ca33e7f2f94d460b1e9f2cb73&client_secret=bb313eea59bd309a4443c38b29"
-        let base_url = "http://api.shingo.org:5000/api"
+        
 //        let base_url = "http://104.131.77.136:5000/api"
         
+        let CLIENT_ID_SECRET = "client_id=6cd61ca33e7f2f94d460b1e9f2cb73&client_secret=bb313eea59bd309a4443c38b29"
+        let base_url = "http://api.shingo.org:5000/api"
+
         var url = ""
         
         switch (type) {
@@ -715,44 +692,45 @@ public class AppData {
         case .GetSponsors:
             url = "/sfevents/sponsors?"
         default:
-            type = .ERROR
             break
         }
-        
-        if type != .ERROR {
-            print("Making request to: \(url) | Request Type: .\(String(type))")
-             return base_url + url + CLIENT_ID_SECRET
-        } else {
-            print("ERROR: Invalid HTTP request | URL: \(url)")
-            return ""
-        }
-        
+
+        return base_url + url + CLIENT_ID_SECRET
     }
     
     // MARK: - Custom Functions
     
-    public func sortSessionsByDate(inout sessions:[EventSession]) {
+    func sortSessionsByDate(inout sessions:[SIEventSession]) {
         for i in 0 ..< sessions.count - 1
         {
             for j in 0 ..< sessions.count - i - 1
             {
             
-                if sessions[j].start_end_date!.0.timeIntervalSince1970 > sessions[j+1].start_end_date!.0.timeIntervalSince1970 {
-                    let temp = sessions[j].start_end_date!
-                    sessions[j].start_end_date! = sessions[j+1].start_end_date!
-                    sessions[j+1].start_end_date! = temp
+                let date = NSDate(timeIntervalSince1970: sessions[j].startEndDate!.0.timeIntervalSince1970)
+                let nextDate = NSDate(timeIntervalSince1970: sessions[j+1].startEndDate!.0.timeIntervalSince1970)
+                
+                // If date1 is greater than date2, swap the dates
+                if date.isGreaterThanDate(nextDate) {
+                    let temp = sessions[j].startEndDate!
+                    sessions[j].startEndDate! = sessions[j+1].startEndDate!
+                    sessions[j+1].startEndDate! = temp
                 }
                 
-                if sessions[j].start_end_date!.0.timeIntervalSince1970 == sessions[j+1].start_end_date!.0.timeIntervalSince1970 {
-                    if sessions[j].start_end_date!.1.timeIntervalSince1970 > sessions[j+1].start_end_date!.1.timeIntervalSince1970 {
-                        let temp = sessions[j].start_end_date!
-                        sessions[j].start_end_date! = sessions[j+1].start_end_date!
-                        sessions[j+1].start_end_date! = temp
+                // If date1 and date2 are on the same day and time, compare what time they end, and swap accordingly
+                if date.equalToDate(nextDate) {
+                    
+                    let endTime = NSDate(timeIntervalSince1970: sessions[j].startEndDate!.1.timeIntervalSince1970)
+                    let nextEndTime = NSDate(timeIntervalSince1970: sessions[j+1].startEndDate!.1.timeIntervalSince1970)
+                    
+                    if endTime.isGreaterThanDate(nextEndTime) {
+                        let temp = sessions[j].startEndDate!
+                        sessions[j].startEndDate! = sessions[j+1].startEndDate!
+                        sessions[j+1].startEndDate! = temp
                     }
                 }
             }
         }
-        self.event!.eventSessions = sessions
+        event.eventSessions = sessions
     }
     
 }
