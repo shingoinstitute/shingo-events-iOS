@@ -159,6 +159,7 @@
 		C21B3ED11D1B078800C54FA4 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				C2130BD71C987650009B3BB8 /* ActivityView.swift */,
 				C2494E251C88E4F600E2969D /* ShingoIconImages.swift */,
 				C2E9508C1D1C83F500178C03 /* SharedCode.swift */,
 				C2A695231C35E30F00F6E0B8 /* SwiftyJSON.swift */,
@@ -181,7 +182,6 @@
 			isa = PBXGroup;
 			children = (
 				C2CFC30F1C481EAB0036E485 /* MainMenuViewController.swift */,
-				C2130BD71C987650009B3BB8 /* ActivityView.swift */,
 				C2986DC31C65136600ADCF40 /* ShingoModelViewController.swift */,
 				C262CA8C1C3B1C29005845AF /* EventsTableViewController.swift */,
 				C28B67F21C406BDE00AC9193 /* EventMenuViewController.swift */,
@@ -255,11 +255,11 @@
 				C2F17FA71C6AAFCF0028062C /* Assets.xcassets */,
 				C2A695081C35AC2900F6E0B8 /* AppDelegate.swift */,
 				C2CFC3171C4954C20036E485 /* Main.storyboard */,
-				C21B3ED11D1B078800C54FA4 /* Supporting Files */,
+				C224CDF71CB6C960003147F0 /* Menus */,
 				C2FF6B231CB2E50900331ED2 /* Classes */,
+				C21B3ED11D1B078800C54FA4 /* Supporting Files */,
 				C2FF6B201CB2E3E700331ED2 /* Maps */,
 				C2FF6B241CB2E52400331ED2 /* Settings Views */,
-				C224CDF71CB6C960003147F0 /* Menus */,
 				C224CDF81CB6C9C8003147F0 /* Session Information */,
 				C224CDF91CB6C9DF003147F0 /* Recipients */,
 				C224CDFA1CB6CA0A003147F0 /* Orgs */,

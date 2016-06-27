@@ -210,7 +210,7 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return (session?.speakerIds.count)!
+        return session.speakerIds.count
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -225,9 +225,9 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
         
         let cell = tableView.dequeueReusableCellWithIdentifier("SpeakerCell", forIndexPath: indexPath) as! SessionSpeakerCell
         
-        let speaker_id = session?.speakerIds[indexPath.row]
+        let speaker_id = session.speakerIds[indexPath.row]
         for speaker in speakers! {
-            if speaker.id == speaker_id! {
+            if speaker.id == speaker_id {
                 cell.speakerNameLabel.text = speaker.displayName
                 cell.speakerImage.image = speaker.image
                 cell.speaker = speaker

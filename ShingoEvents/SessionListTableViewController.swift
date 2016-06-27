@@ -24,26 +24,30 @@ class SessionTableViewCell: UITableViewCell {
         if let speaker = session.sessionSpeakers.first {
             
             if !session.format.isEmpty {
-                speakerLabelText = session.format + ": "
+                speakerLabelText = "\(session.format): "
             }
             
             if !speaker.name.isEmpty {
-                speakerLabelText += speaker.name + ", "
+                speakerLabelText += "\(speaker.name), "
             }
             
             if !speaker.title.isEmpty {
-                speakerLabelText += speaker.title + ", "
+                speakerLabelText += "\(speaker.title), "
             }
             
             if !speaker.organization.isEmpty {
-                speakerLabelText += speaker.organization
+                speakerLabelText += "\(speaker.organization)"
             }
         }
         
         var timeLabelText = ""
-        if !session.startEndDate.0.isNotionallyEmpty() {
-            let start_date = session.startEndDate.0
-            let end_date = session.startEndDate.1
+        
+        let startDate = session.startEndDate.first
+        let endDate = session.startEndDate.last
+        
+        if !startDate.isNotionallyEmpty() {
+            let start_date = startDate
+            let end_date = endDate
             let calendar = NSCalendar.currentCalendar()
             let comp_start = calendar.components([.Hour, .Minute], fromDate: start_date)
             let comp_end = calendar.components([.Hour, .Minute], fromDate: end_date)
@@ -65,9 +69,11 @@ class SessionTableViewCell: UITableViewCell {
     }
     
     func getTimeStringFromComponents(hour: Int, minute:Int) -> String {
+        
         var hour = hour
         var time = ""
         var am_pm = ""
+        
         if hour > 12 {
             hour = hour - 12
             am_pm = " pm"
@@ -76,13 +82,14 @@ class SessionTableViewCell: UITableViewCell {
         } else {
             am_pm = " am"
         }
-        time = String(hour) + ":"
+        time = "\(hour):"
         
         if minute < 10 {
             time += "0" + String(minute) + am_pm
         } else {
             time += String(minute) + am_pm
         }
+        
         return time
     }
 }
@@ -111,16 +118,13 @@ class SessionListTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if sessions != nil {
-            return (sessions?.count)!
-        } else {
-            return 1
-        }
+        if sessions != nil { return sessions.count }
+        else { return 1 }
 
     }
     
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let session_date = sessions![0].startEndDate.0
+        let session_date = sessions![0].startEndDate.first
         let formatter = NSDateFormatter()
         formatter.dateStyle = .MediumStyle
         let date_string = formatter.stringFromDate(session_date)
@@ -150,9 +154,9 @@ class SessionListTableViewController: UITableViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
 
         if segue.identifier == "SessionDetailView" {
-            let dest_vc = segue.destinationViewController as! SessionDetailViewController
-            dest_vc.session = sessionToSend
-            dest_vc.speakers = self.event.eventSpeakers
+            let destination = segue.destinationViewController as! SessionDetailViewController
+            destination.session = sessionToSend
+            destination.speakers = self.event.eventSpeakers
         }
         
     }

@@ -186,7 +186,7 @@ class AppData {
                 }
                 if item["Session_Date__c"] != nil && item["Session_Time__c"] != nil {
                     let start_end_date = self.sessionDateParser(String(item["Session_Date__c"].string!), time: String(item["Session_Time__c"].string!))
-                    session.startEndDate = start_end_date
+                    session.startEndDate = SIDateTuple(firstAndLast: start_end_date)
                 }
                 if item["Session_Format__c"] != nil {
                     session.format = item["Session_Format__c"].string! as String
@@ -661,16 +661,13 @@ class AppData {
     
     func getUrl(type: URLTYPE) -> String {
         
-//        let base_url = "http://104.131.77.136:5000/api"
-        
-        let CLIENT_ID_SECRET = "client_id=6cd61ca33e7f2f94d460b1e9f2cb73&client_secret=bb313eea59bd309a4443c38b29"
-        let base_url = "http://api.shingo.org:5000/api"
+        let base_url = "https://api.shingo.org"
 
         var url = ""
         
         switch (type) {
         case .GetUpcomingEvents:
-            url = "/sfevents/?"
+            url = "/events"
         case .GetSession:
             url = "/sfevents/session?"
         case .GetSpeakers:
@@ -695,19 +692,19 @@ class AppData {
             break
         }
 
-        return base_url + url + CLIENT_ID_SECRET
+        return base_url + url
     }
     
-    // MARK: - Custom Functions
+    // MARK: - Sorting
     
     func sortSessionsByDate(inout sessions:[SIEventSession]) {
         for i in 0 ..< sessions.count - 1
         {
             for j in 0 ..< sessions.count - i - 1
             {
-            
-                let date = NSDate(timeIntervalSince1970: sessions[j].startEndDate!.0.timeIntervalSince1970)
-                let nextDate = NSDate(timeIntervalSince1970: sessions[j+1].startEndDate!.0.timeIntervalSince1970)
+                
+                let date = NSDate(timeIntervalSince1970: sessions[j].startEndDate!.first.timeIntervalSince1970)
+                let nextDate = NSDate(timeIntervalSince1970: sessions[j+1].startEndDate!.last.timeIntervalSince1970)
                 
                 // If date1 is greater than date2, swap the dates
                 if date.isGreaterThanDate(nextDate) {
@@ -719,8 +716,8 @@ class AppData {
                 // If date1 and date2 are on the same day and time, compare what time they end, and swap accordingly
                 if date.equalToDate(nextDate) {
                     
-                    let endTime = NSDate(timeIntervalSince1970: sessions[j].startEndDate!.1.timeIntervalSince1970)
-                    let nextEndTime = NSDate(timeIntervalSince1970: sessions[j+1].startEndDate!.1.timeIntervalSince1970)
+                    let endTime = NSDate(timeIntervalSince1970: sessions[j].startEndDate!.last.timeIntervalSince1970)
+                    let nextEndTime = NSDate(timeIntervalSince1970: sessions[j+1].startEndDate!.last.timeIntervalSince1970)
                     
                     if endTime.isGreaterThanDate(nextEndTime) {
                         let temp = sessions[j].startEndDate!

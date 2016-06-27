@@ -316,11 +316,11 @@ class EventMenuViewController: UIViewController {
         
         if segue.identifier == "SponsorsView" {
             let destination = segue.destinationViewController as! SponsorsTableViewController
-            destination.friends = appData.friendSponsors            //sponsors_array[0]
-            destination.supporters = appData.supportersSponsors     //sponsors_array[1]
-            destination.benefactors = appData.benefactorsSponsors   //sponsors_array[2]
-            destination.champions = appData.championsSponsors       //sponsors_array[3]
-            destination.presidents = appData.presidentsSponsors     //sponsors_array[4]
+            destination.friends = appData.friendSponsors            //sponsorsArray[0]
+            destination.supporters = appData.supportersSponsors     //sponsorsArray[1]
+            destination.benefactors = appData.benefactorsSponsors   //sponsorsArray[2]
+            destination.champions = appData.championsSponsors       //sponsorsArray[3]
+            destination.presidents = appData.presidentsSponsors     //sponsorsArray[4]
         }
         
     }
@@ -328,21 +328,21 @@ class EventMenuViewController: UIViewController {
     // MARK: - Custom Functions
     
     func sortWeekByDay(eventDayList:[SIEventDay]) -> [SIEventDay] {
+        
         var days = eventDayList
-        for i in 0 ..< days.count - 1
-        {
-            for j in 0 ..< (days.count - i - 1)
-            {
-                
-                if days[j].sessions[0].startEndDate.0 != days[j].sessions[0].startEndDate.0.earlierDate(days[j+1].sessions[0].startEndDate.0)
-                {
+        
+        for i in 0 ..< days.count - 1 {
+            
+            for j in 0 ..< (days.count - i - 1) {
+            
+                if days[j].isOnLaterDay(days[j+1]) {
                     let temp = days[j]
                     days[j] = days[j+1]
                     days[j+1] = temp
                 }
-
             }
         }
+        
         return days
     }
     

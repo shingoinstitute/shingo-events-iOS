@@ -28,7 +28,7 @@ class SIObject {
                 print("Success! Image downloaded, size: \(image.size.width)x\(image.size.height)")
                 callback(image: image)
             } else {
-                print("WARNING Image download failed\nRequest from \(url), for SIObject \(self.name)")
+                print("WARNING Image download failed\nRequest from \(url), for SIObject \"\(self.name)\".")
                 callback(image: nil)
             }
         }
@@ -52,8 +52,8 @@ class SIEvent: SIObject {
     override init() {
         super.init()
         eventSessions = [SIEventSession]()
-        eventStartDate = NSDate.init(timeIntervalSince1970: 0)
-        eventEndDate = NSDate.init(timeIntervalSince1970: 0)
+        eventStartDate = NSDate().notionallyEmptyDate()
+        eventEndDate = NSDate().notionallyEmptyDate()
         hostOrganization = ""
         hostCity = ""
         eventType = ""
@@ -88,12 +88,20 @@ class SIEventDay: SIObject {
         sessions = [SIEventSession]()
     }
     
+    func isOnLaterDay(eventDay: SIEventDay) -> Bool {
+        if sessions[0].startEndDate.first != sessions[0].startEndDate.first.earlierDate(eventDay.sessions[0].startEndDate.first) {
+            return true
+        } else {
+            return false
+        }
+    }
+
 }
 
 class SIEventSession: SIObject {
 
     var abstract : String!
-    var startEndDate : (NSDate, NSDate)!
+    var startEndDate : SIDateTuple!
     var room : String!
     var notes : String!
     var status : String!
@@ -106,11 +114,11 @@ class SIEventSession: SIObject {
     override init() {
         super.init()
         abstract = ""
-        startEndDate = (NSDate.init(timeIntervalSince1970: 0), NSDate.init(timeIntervalSince1970: 0))
+        startEndDate = SIDateTuple()
         room = ""
         notes = ""
         status = ""
-        time = NSDate.init(timeIntervalSince1970: 0)
+        time = NSDate().notionallyEmptyDate()
         format = ""
         richAbstract = nil
         sessionSpeakers = [SISpeaker]()

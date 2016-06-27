@@ -150,7 +150,12 @@ class MainMenuViewController: UIViewController {
     
     func animateLayout() {
         contentViewHeightConstraint?.constant = -80
-        UIView.animateWithDuration(1.5, delay: 0.2, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: UIViewAnimationOptions(), animations: {
+        
+//        Uncomment the line below to make constraints appear animated (for deployment)
+//        UIView.animateWithDuration(1.5, delay: 0.2, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: UIViewAnimationOptions(), animations: {
+        
+//        Uncomment the line below to make menu options appear instantly (for production)
+        UIView.animateWithDuration(0, delay: 0, usingSpringWithDamping: 0, initialSpringVelocity: 0, options: UIViewAnimationOptions(), animations: {
             self.view.layoutIfNeeded()
             }, completion: nil)
     }

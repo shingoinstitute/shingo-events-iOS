@@ -62,7 +62,7 @@ class SchedulesTableViewController: UITableViewController {
             
             let formatter = NSDateFormatter()
             formatter.dateStyle = .MediumStyle
-            let date_string = formatter.stringFromDate(cell.sessions[0].startEndDate!.0)
+            let date_string = formatter.stringFromDate(cell.sessions[0].startEndDate!.first)
             
             cell.textLabel?.text = (self.event?.eventAgenda.agendaArray[indexPath.row].dayOfWeek)! + " " + date_string
         default:
@@ -116,25 +116,13 @@ class SchedulesTableViewController: UITableViewController {
     
         for i in 0 ..< sessions.count - 1 {
             for j in 0 ..< sessions.count - i - 1 {
-            
-                if sessions[j].startEndDate == nil { continue }
                 
-                if sessions[j].startEndDate!.0.timeIntervalSince1970 > sessions[j+1].startEndDate!.0.timeIntervalSince1970
-                {
+                if sessions[j].startEndDate > sessions[j+1].startEndDate {
                     let temp = sessions[j]
                     sessions[j] = sessions[j+1]
                     sessions[j+1] = temp
                 }
                 
-                if sessions[j].startEndDate!.0.timeIntervalSince1970 == sessions[j+1].startEndDate!.0.timeIntervalSince1970
-                {
-                    if sessions[j].startEndDate!.1.timeIntervalSince1970 > sessions[j+1].startEndDate!.1.timeIntervalSince1970
-                    {
-                        let temp = sessions[j]
-                        sessions[j] = sessions[j+1]
-                        sessions[j+1] = temp
-                    }
-                }
             }
         }
     }
