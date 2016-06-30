@@ -12,10 +12,7 @@ private let CellIdentifier = "VenueMapCell"
 
 class VenueMapsCollectionView: UIViewController {
 
-    var venueMaps: [SIVenueMap]! = nil
     @IBOutlet weak var collectionView: UICollectionView!
-    
-    var dataToSend: SIVenueMap!
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -41,7 +38,7 @@ class VenueMapsCollectionView: UIViewController {
         if segue.identifier == "MapView"
         {
             let destination = segue.destinationViewController as! VenueMapViewController
-            destination.venueMap = dataToSend
+            // Send a value
         }
     }
 
@@ -58,7 +55,8 @@ extension VenueMapsCollectionView: UICollectionViewDataSource {
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return venueMaps.count
+        // WARNING, not implemented
+        return 0
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
@@ -66,14 +64,12 @@ extension VenueMapsCollectionView: UICollectionViewDataSource {
         cell.layer.borderColor = UIColor.grayColor().CGColor
         cell.layer.borderWidth = 1.0
         cell.layer.cornerRadius = 3
-        cell.venueMap = venueMaps[indexPath.row]
         
         return cell
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let cell = collectionView.cellForItemAtIndexPath(indexPath) as! VenueMapCollectionCell
-        dataToSend = cell.venueMap
         self.performSegueWithIdentifier("MapView", sender: self)
     }
     

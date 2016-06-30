@@ -11,20 +11,20 @@ import UIKit
 
 class SessionTableViewCell: UITableViewCell {
     
-    var session: SIEventSession!
+    var session: SISession!
     @IBOutlet weak var sessionTitleLabel: UILabel!
     @IBOutlet weak var sessionTimeLabel: UILabel!
     @IBOutlet weak var speakerLabel: UILabel!
     
-    func updateCellProperties(session session: SIEventSession) {
+    func updateCellProperties(session session: SISession) {
         
         self.session = session
         
         var speakerLabelText = ""
         if let speaker = session.sessionSpeakers.first {
             
-            if !session.format.isEmpty {
-                speakerLabelText = "\(session.format): "
+            if !session.sessionType.isEmpty {
+                speakerLabelText = "\(session.sessionType): "
             }
             
             if !speaker.name.isEmpty {
@@ -42,8 +42,8 @@ class SessionTableViewCell: UITableViewCell {
         
         var timeLabelText = ""
         
-        let startDate = session.startEndDate.first
-        let endDate = session.startEndDate.last
+        let startDate = session.startDate
+        let endDate = session.endDate
         
         if !startDate.isNotionallyEmpty() {
             let start_date = startDate
@@ -96,8 +96,8 @@ class SessionTableViewCell: UITableViewCell {
 
 class SessionListTableViewController: UITableViewController {
     
-    var sessions: [SIEventSession]!
-    var sessionToSend: SIEventSession!
+    var sessions: [SISession]!
+    var sessionToSend: SISession!
     var event: SIEvent!
     
     override func viewDidLoad() {
@@ -124,7 +124,7 @@ class SessionListTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let session_date = sessions![0].startEndDate.first
+        let session_date = sessions![0].startDate
         let formatter = NSDateFormatter()
         formatter.dateStyle = .MediumStyle
         let date_string = formatter.stringFromDate(session_date)
@@ -155,8 +155,8 @@ class SessionListTableViewController: UITableViewController {
 
         if segue.identifier == "SessionDetailView" {
             let destination = segue.destinationViewController as! SessionDetailViewController
-            destination.session = sessionToSend
-            destination.speakers = self.event.eventSpeakers
+            // Send some data
+            
         }
         
     }

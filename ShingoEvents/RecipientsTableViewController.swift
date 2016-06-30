@@ -10,8 +10,7 @@ import UIKit
 
 class RecipientsTableViewController: UITableViewController {
 
-    var appData: AppData!
-    var recipientToSend: SIRecipient!
+    var recipients : SIRecipients!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,27 +25,31 @@ class RecipientsTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        var numOfRows = 0
-        if appData != nil {
+
+        if let recipients = recipients {
             switch section {
             case 0:
-                numOfRows = appData.shingoPrizeRecipients.count
+                if let recipients = recipients.shingoPrizeRecipients {
+                    return recipients.count
+                }
             case 1:
-                numOfRows = appData.silverRecipients.count
+                if let recipients = recipients.silverRecipients {
+                    return recipients.count
+                }
             case 2:
-                numOfRows = appData.bronzeRecipients.count
+                if let recipients = recipients.bronzeRecipients {
+                    return recipients.count
+                }
             case 3:
-                numOfRows = appData.researchRecipients.count
+                if let recipients = recipients.researchRecipients {
+                    return recipients.count
+                }
             default: break
                 
             }
         }
-        if numOfRows < 1 {
-            return 1
-        } else {
-            return numOfRows
-        }
         
+        return 1
     }
 
     
@@ -54,20 +57,20 @@ class RecipientsTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier("RecipientCell", forIndexPath: indexPath) as! RecipientTableViewCell
         switch indexPath.section {
         case 0:
-            if !appData.shingoPrizeRecipients.isEmpty {
-                cell.recipient = appData.shingoPrizeRecipients[indexPath.row]
+            if let recipient = recipients.shingoPrizeRecipients {
+                cell.recipient = recipient[indexPath.row]
             }
         case 1:
-            if !appData.silverRecipients.isEmpty {
-                cell.recipient = appData.silverRecipients[indexPath.row]
+            if let recipient = recipients.silverRecipients {
+                cell.recipient = recipient[indexPath.row]
             }
         case 2:
-            if !appData.bronzeRecipients.isEmpty {
-                cell.recipient = appData.bronzeRecipients[indexPath.row]
+            if let recipient = recipients.bronzeRecipients {
+                cell.recipient = recipient[indexPath.row]
             }
         case 3:
-            if !appData.researchRecipients.isEmpty {
-                cell.recipient = appData.researchRecipients[indexPath.row]
+            if let recipient = recipients.researchRecipients {
+                cell.recipient = recipient[indexPath.row]
             }
         default:
             let recipient = SIRecipient()
@@ -79,20 +82,11 @@ class RecipientsTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let cell = tableView.cellForRowAtIndexPath(indexPath) as! RecipientTableViewCell
-        if cell.recipient != nil
-        {
-            recipientToSend = cell.recipient
-            if recipientToSend.awardType! == .Research
-            {
-                performSegueWithIdentifier("ResearchInfoView", sender: self)
-            }
-            else
-            {
-                performSegueWithIdentifier("ChallengerInfoView", sender: self)
-            }
-            tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        }
+//        let cell = tableView.cellForRowAtIndexPath(indexPath) as! RecipientTableViewCell
+//        if let recipient = cell.recipient {
+//            // Do something with recipient
+//            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+//        }
     }
     
     
@@ -107,7 +101,6 @@ class RecipientsTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
         view.backgroundColor = UIColor(netHex: 0xcd8931)
-//        view.backgroundColor = .orangeColor()
         
         let header = UILabel()
         header.font = UIFont.boldSystemFontOfSize(18)
@@ -138,14 +131,21 @@ class RecipientsTableViewController: UITableViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         if segue.identifier == "ChallengerInfoView" {
-            let dest_vc = segue.destinationViewController as! ChallengerInfoViewController
-            dest_vc.navigationController?.topViewController?.title = recipientToSend.award
-            dest_vc.recipient = recipientToSend
+            let destination = segue.destinationViewController as! ChallengerInfoViewController
+            if let recipient = sender as? SIRecipient {
+                destination.navigationController?.topViewController?.title = recipient.name
+                // Send something
+            }
         }
         
         if segue.identifier == "ResearchInfoView" {
-            let dest_vc = segue.destinationViewController as! ResearchInfoViewController
-            dest_vc.recipient = recipientToSend
+            let destination = segue.destinationViewController as! ResearchInfoViewController
+            
+            if let recipient = sender as? SIRecipient {
+                destination.navigationController?.topViewController?.title = recipient.name
+                // Send something
+            }
+            
         }
         
     }

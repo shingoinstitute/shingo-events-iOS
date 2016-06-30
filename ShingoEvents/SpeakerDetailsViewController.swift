@@ -20,91 +20,73 @@ class SpeakerDetailsViewController: UIViewController {
     var speaker: SISpeaker!
     var didSetupConstraints = false
     var scrollView: UIScrollView!
-    override func loadView()
-    {
+    override func loadView() {
         view = UIView()
         view.backgroundColor = UIColor(netHex: 0x002f56)
         scrollView = UIScrollView.newAutoLayoutView()
         view.addSubview(scrollView)
-        if speaker != nil {
-            speakerNameLabel = UILabel.newAutoLayoutView()
-            if speaker.displayName != nil && speaker.title != nil {
-                speakerNameLabel.text = speaker.displayName + ", " + speaker.title
-            }
-            else if speaker.displayName != nil
-            {
-                speakerNameLabel.text = speaker.displayName
-            }
-            else
-            {
-                speakerNameLabel.text = "Name not available"
-            }
-            speakerNameLabel.textColor = .whiteColor()
-            speakerNameLabel.numberOfLines = 2
-            speakerNameLabel.lineBreakMode = .ByWordWrapping
-            scrollView.addSubview(speakerNameLabel)
 
-            if speaker.organization != nil
-            {
-                organizationLabel = UILabel.newAutoLayoutView()
-                organizationLabel.text = "From " + speaker.organization
-                organizationLabel.numberOfLines = 2
-                organizationLabel.textColor = .whiteColor()
-                organizationLabel.lineBreakMode = .ByWordWrapping
-                scrollView.addSubview(organizationLabel)
-            }
-
-            if speaker.biography != nil
-            {
-                biographyView = UITextView.newAutoLayoutView()
-                if speaker.richBiography != nil {
-                    var htmlString = speaker.richBiography!
-                    do {
-                        htmlString = "<font size=\"5\">" + htmlString + "</font>"
-                        let attributedText = try NSMutableAttributedString(data: htmlString.dataUsingEncoding(NSUTF8StringEncoding)!,
-                                                                options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
-                                                                    NSCharacterEncodingDocumentAttribute : NSUTF8StringEncoding],
-                                                                documentAttributes: nil)
-                        biographyView.attributedText = attributedText
-                        
-                    } catch {
-                        print("Error in SpeakerDetailsViewController")
-                    }
-                    
-                } else {
-                    
-                    biographyView.text = speaker.biography
-                    biographyView.editable = true // Keep this here or the font size will not change while the view is not editable
-                    biographyView.font = UIFont.systemFontOfSize(15.0)
-                }
-//                biographyView.textColor = .whiteColor()
-                biographyView.editable = false
-                biographyView.backgroundColor = .whiteColor()
-                biographyView.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
-                biographyView.frame = CGRect(x: 0, y: 0, width: biographyView.frame.width, height: biographyView.contentSize.height)
-                biographyView.scrollEnabled = false
-                scrollView.addSubview(biographyView)
-            }
-            
-            if speaker.image != nil
-            {
-                speakerImageView = UIImageView.newAutoLayoutView()
-                speakerImageView.image = speaker.image
-            }
-            else
-            {
-                speakerImageView.image = UIImage(named: "silhouette")
-                speakerImageView.contentMode = UIViewContentMode.ScaleAspectFit
-            }
-            speakerImageView.layer.borderColor = UIColor.clearColor().CGColor
-            speakerImageView.layer.cornerRadius = 5.0
-            speakerImageView.layer.borderWidth = 1
-            speakerImageView.clipsToBounds = true
-            speakerImageView.backgroundColor = .whiteColor()
-            scrollView.addSubview(speakerImageView)
-            
-            setScrollViewContentHeight()
+        // Get correct text for speaker label
+        speakerNameLabel = UILabel.newAutoLayoutView()
+        if (!speaker.name.isEmpty && !speaker.title.isEmpty) {
+            speakerNameLabel.text = speaker.name + ", " + speaker.title
+        } else if !speaker.name.isEmpty {
+            speakerNameLabel.text = speaker.name
+        } else {
+            speakerNameLabel.text = "Name not available"
         }
+        
+        speakerNameLabel.textColor = .whiteColor()
+        speakerNameLabel.numberOfLines = 2
+        speakerNameLabel.lineBreakMode = .ByWordWrapping
+        scrollView.addSubview(speakerNameLabel)
+
+        if speaker.organization != nil {
+            organizationLabel = UILabel.newAutoLayoutView()
+            organizationLabel.text = "From " + speaker.organization
+            organizationLabel.numberOfLines = 2
+            organizationLabel.textColor = .whiteColor()
+            organizationLabel.lineBreakMode = .ByWordWrapping
+            scrollView.addSubview(organizationLabel)
+        }
+
+        if !speaker.biography.isEmpty {
+            biographyView = UITextView.newAutoLayoutView()
+            if !speaker.biography.isEmpty {
+                var htmlString = speaker.biography!
+                do {
+                    htmlString = "<font size=\"5\">" + htmlString + "</font>"
+                    let attributedText = try NSMutableAttributedString(data: htmlString.dataUsingEncoding(NSUTF8StringEncoding)!,
+                                                            options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
+                                                                NSCharacterEncodingDocumentAttribute : NSUTF8StringEncoding],
+                                                            documentAttributes: nil)
+                    biographyView.attributedText = attributedText
+                    
+                } catch {
+                    print("Error in SpeakerDetailsViewController")
+                }
+                
+            }
+
+            biographyView.editable = false
+            biographyView.backgroundColor = .whiteColor()
+            biographyView.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+            biographyView.frame = CGRect(x: 0, y: 0, width: biographyView.frame.width, height: biographyView.contentSize.height)
+            biographyView.scrollEnabled = false
+            scrollView.addSubview(biographyView)
+        }
+        
+        speakerImageView.image = speaker.getSpeakerImage()
+        speakerImageView.contentMode = UIViewContentMode.ScaleAspectFit
+        speakerImageView.layer.borderColor = UIColor.clearColor().CGColor
+        speakerImageView.layer.cornerRadius = 5.0
+        speakerImageView.layer.borderWidth = 1
+        speakerImageView.clipsToBounds = true
+        speakerImageView.backgroundColor = .whiteColor()
+        scrollView.addSubview(speakerImageView)
+        
+        setScrollViewContentHeight()
+        
 
         view.setNeedsUpdateConstraints()
     }

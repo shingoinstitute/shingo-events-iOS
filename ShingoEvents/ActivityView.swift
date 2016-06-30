@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import Alamofire
 
-public class ActivityView: UIView {
+class ActivityView: UIView {
     
     let activityView:UIView = UIView.newAutoLayoutView()
     let cancelButton:UIButton = UIButton.newAutoLayoutView()
@@ -20,7 +20,7 @@ public class ActivityView: UIView {
     
     var request:Alamofire.Request!
     
-    public func displayActivityView(message message:String, forView view: UIView, withRequest request: Alamofire.Request?) {
+    func displayActivityView(message message:String, forView view: UIView, withRequest request: Alamofire.Request?) {
         if let request = request {
             self.request = request
         }
@@ -73,7 +73,23 @@ public class ActivityView: UIView {
         
     }
     
-    public func cancelRequest() {
+    var time: Float = 0
+    var timer : NSTimer!
+    var progress : Float = 0
+    func animateProgress(progress: Float) {
+        self.progress = progress
+        timer = NSTimer.scheduledTimerWithTimeInterval(0.02, target: self, selector: #selector(ActivityView.updateProgressBarAnimation), userInfo: nil, repeats: true)
+    }
+    
+    @objc private func updateProgressBarAnimation() {
+        time += 0.01
+        progressIndicator.setProgress(time, animated: false)
+        if (time / progress) >= 1 {
+            timer.invalidate()
+        }
+    }
+    
+    func cancelRequest() {
         print("Canceling http request.")
         if self.request != nil {
             self.request.cancel()
@@ -82,7 +98,7 @@ public class ActivityView: UIView {
     }
 
     
-    public func removeActivityViewFromDisplay() {
+    func removeActivityViewFromDisplay() {
         activityView.removeFromSuperview()
         cancelButton.removeFromSuperview()
     }

@@ -28,7 +28,6 @@ class EventsTableViewController: UITableViewController {
     
     let NUMBER_OF_API_REQUESTS : Double = 7
     
-    var appData : AppData!
     var cellIndexPath : NSIndexPath!
     var numberOfAPIRequestCompleted : Double = 0 {
         didSet {
@@ -48,15 +47,15 @@ class EventsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.dismissViewControllerAnimated(true, completion: nil)
-        if appData == nil {
-            let alert = UIAlertController(title: "Oops!",
-                message: "We were unable to fetch any data for you. Please check your internet connection and try reloading our upcoming events in the main menu.",
-                preferredStyle: UIAlertControllerStyle.Alert)
-            let action = UIAlertAction(title: "OK", style: .Default, handler: nil)
-            alert.addAction(action)
-            presentViewController(alert, animated: true, completion: nil)
-            appData = AppData()
-        }
+//        if appData == nil {
+//            let alert = UIAlertController(title: "Oops!",
+//                message: "We were unable to fetch any data for you. Please check your internet connection and try reloading our upcoming events in the main menu.",
+//                preferredStyle: UIAlertControllerStyle.Alert)
+//            let action = UIAlertAction(title: "OK", style: .Default, handler: nil)
+//            alert.addAction(action)
+//            presentViewController(alert, animated: true, completion: nil)
+//            appData = AppData()
+//        }
         
     }
     
@@ -67,28 +66,31 @@ class EventsTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let events = appData.upcomingEvents
-        if events != nil {
-            return events.count
-        } else {
-            return 0
-        }
+//        let events = appData.upcomingEvents
+//        if events != nil {
+//            return events.count
+//        } else {
+//            return 0
+//        }
+        
+        // Need to implement!!!
+        return 0
     }
     
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let event = appData.upcomingEvents[indexPath.row]
-        
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        dateFormatter.dateStyle = .MediumStyle
-        let dateRangeText = "\(dateFormatter.stringFromDate(event.eventStartDate)) - \(dateFormatter.stringFromDate(event.eventEndDate))"
-        
+//        let event = appData.upcomingEvents[indexPath.row]
+//        
+//        let dateFormatter = NSDateFormatter()
+//        dateFormatter.dateFormat = "yyyy-MM-dd"
+//        dateFormatter.dateStyle = .MediumStyle
+//        let dateRangeText = "\(dateFormatter.stringFromDate(event.eventStartDate)) - \(dateFormatter.stringFromDate(event.eventEndDate))"
+//        
         let cell = tableView.dequeueReusableCellWithIdentifier("EventsCell", forIndexPath: indexPath) as! EventTableViewCell
-        
-        cell.updateCellProperties(dateRangeText: dateRangeText, event: event)
-            
+//
+//        cell.updateCellProperties(dateRangeText: dateRangeText, event: event)
+//            
         return cell
     }
     
@@ -97,22 +99,22 @@ class EventsTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let cell = tableView.cellForRowAtIndexPath(indexPath) as! EventTableViewCell
-        appData.event = cell.event
-        cellIndexPath = indexPath
-        self.numberOfAPIRequestCompleted = 0
-        
-        if !cell.event.didLoadSessions {
-            
-            activityView.displayActivityView(message: "Loading Conference Data...", forView: self.view, withRequest: nil)
-            
-            loadEventData()
-            
-            cell.event.didLoadSessions = true
-            
-        } else {
-            self.performSegueWithIdentifier("EventMenu", sender: self)
-        }
+//        let cell = tableView.cellForRowAtIndexPath(indexPath) as! EventTableViewCell
+//        appData.event = cell.event
+//        cellIndexPath = indexPath
+//        self.numberOfAPIRequestCompleted = 0
+//        
+//        if !cell.event.didLoadSessions {
+//            
+//            activityView.displayActivityView(message: "Loading Conference Data...", forView: self.view, withRequest: nil)
+//            
+//            loadEventData()
+//            
+//            cell.event.didLoadSessions = true
+//            
+//        } else {
+//            self.performSegueWithIdentifier("EventMenu", sender: self)
+//        }
 
         
     }
@@ -121,14 +123,14 @@ class EventsTableViewController: UITableViewController {
     
     func APICallDidComplete() -> Void {
         
-        if APICallsCompleted() {
-            let cell = tableView.cellForRowAtIndexPath(cellIndexPath) as! EventTableViewCell
-            cell.event = self.appData.event
-            self.performSegueWithIdentifier("EventMenu", sender: self)
-            activityView.removeActivityViewFromDisplay()
-        } else {
-            activityView.progressIndicator.progress += Float(numberOfAPIRequestCompleted / NUMBER_OF_API_REQUESTS)
-        }
+//        if APICallsCompleted() {
+//            let cell = tableView.cellForRowAtIndexPath(cellIndexPath) as! EventTableViewCell
+//            cell.event = self.appData.event
+//            self.performSegueWithIdentifier("EventMenu", sender: self)
+//            activityView.removeActivityViewFromDisplay()
+//        } else {
+//            activityView.progressIndicator.progress += Float(numberOfAPIRequestCompleted / NUMBER_OF_API_REQUESTS)
+//        }
     }
     
     func APICallsCompleted() -> Bool {
@@ -145,23 +147,23 @@ class EventsTableViewController: UITableViewController {
     func loadEventData() {
         
         // appData.eventSessions needs to have data populated first before making other API calls
-        appData.getEventSessions() {
-            
-            self.gotEventSessions = true
-            
-            self.appData.getAgenda() { self.gotAgenda = true; self.numberOfAPIRequestCompleted.increment() }
-            
-            self.appData.getSpeakers() { self.gotSpeakers = true; self.numberOfAPIRequestCompleted.increment() }
-            
-            self.appData.getRecipients() { self.gotRecipients = true; self.numberOfAPIRequestCompleted.increment()  }
-            
-            self.appData.getExhibitors() { self.gotExhibitors = true; self.numberOfAPIRequestCompleted.increment()  }
-            
-            self.appData.getAffiliates() { self.gotAffiliates = true; self.numberOfAPIRequestCompleted.increment()  }
-            
-            self.appData.getSponsors() { self.gotSponsors = true; self.numberOfAPIRequestCompleted.increment()  }
-            
-        }
+//        appData.getEventSessions() {
+//            
+//            self.gotEventSessions = true
+//            
+//            self.appData.getAgenda() { self.gotAgenda = true; self.numberOfAPIRequestCompleted.increment() }
+//            
+//            self.appData.getSpeakers() { self.gotSpeakers = true; self.numberOfAPIRequestCompleted.increment() }
+//            
+//            self.appData.getRecipients() { self.gotRecipients = true; self.numberOfAPIRequestCompleted.increment()  }
+//            
+//            self.appData.getExhibitors() { self.gotExhibitors = true; self.numberOfAPIRequestCompleted.increment()  }
+//            
+//            self.appData.getAffiliates() { self.gotAffiliates = true; self.numberOfAPIRequestCompleted.increment()  }
+//            
+//            self.appData.getSponsors() { self.gotSponsors = true; self.numberOfAPIRequestCompleted.increment()  }
+//            
+//        }
         
     }
     
@@ -173,9 +175,8 @@ class EventsTableViewController: UITableViewController {
         if segue.identifier == "EventMenu" {
             
             let destination = segue.destinationViewController as! EventMenuViewController
-            
-            destination.appData = self.appData
             navigationItem.backBarButtonItem?.title = "Back"
+            // Do other cool stuff
         }
     }
     

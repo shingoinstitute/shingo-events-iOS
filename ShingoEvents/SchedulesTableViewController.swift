@@ -10,7 +10,7 @@ import UIKit
 
 class  SchedulesTableViewCell: UITableViewCell {
     
-    var sessions:[SIEventSession]!
+    var sessions:[SISession]!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -26,7 +26,7 @@ class SchedulesTableViewController: UITableViewController {
 
     var event: SIEvent!
 
-    var dataToSend = [SIEventSession]()
+    var dataToSend = [SISession]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,28 +46,31 @@ class SchedulesTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return self.event.eventAgenda.agendaArray.count
-        } else {
-            return 1
-        }
+//        if section == 0 {
+//            return self.event.eventAgenda.agendaArray.count
+//        } else {
+//            return 1
+//        }
+        
+        // Need to implement!!!
+        return 0
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("ScheduleCell", forIndexPath: indexPath) as! SchedulesTableViewCell
         
-        switch indexPath.section {
-        case 0:
-            cell.sessions = self.event.eventAgenda.agendaArray[indexPath.row].sessions
-            
-            let formatter = NSDateFormatter()
-            formatter.dateStyle = .MediumStyle
-            let date_string = formatter.stringFromDate(cell.sessions[0].startEndDate!.first)
-            
-            cell.textLabel?.text = (self.event?.eventAgenda.agendaArray[indexPath.row].dayOfWeek)! + " " + date_string
-        default:
-            break
-        }
+//        switch indexPath.section {
+//        case 0:
+//            cell.sessions = self.event.eventAgenda.agendaArray[indexPath.row].sessions
+//            
+//            let formatter = NSDateFormatter()
+//            formatter.dateStyle = .MediumStyle
+//            let date_string = formatter.stringFromDate(cell.sessions[0].startEndDate!.first)
+//            
+//            cell.textLabel?.text = (self.event?.eventAgenda.agendaArray[indexPath.row].dayOfWeek)! + " " + date_string
+//        default:
+//            break
+//        }
         return cell
     }
 
@@ -112,15 +115,15 @@ class SchedulesTableViewController: UITableViewController {
     
     // MARK: - Custom functions
     
-    func sortSessionsByDate(inout sessions:[SIEventSession]) {
+    func sortSessionsByDate(inout sessions:[SISession]) {
     
         for i in 0 ..< sessions.count - 1 {
             for j in 0 ..< sessions.count - i - 1 {
                 
-                if sessions[j].startEndDate > sessions[j+1].startEndDate {
-                    let temp = sessions[j]
+                if sessions[j].startDate > sessions[j+1].startDate {
+                    let date = sessions[j]
                     sessions[j] = sessions[j+1]
-                    sessions[j+1] = temp
+                    sessions[j+1] = date
                 }
                 
             }

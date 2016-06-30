@@ -18,21 +18,16 @@ class SpeakerListCell: UITableViewCell {
 class SpeakerListTableViewController: UITableViewController {
 
     var speakers: [SISpeaker]!
-    var dataToSend: SISpeaker!
     
-    override func viewDidLoad()
-    {
+    override func viewDidLoad() {
         super.viewDidLoad()
 
     }
     
-    override func tableView(tableView: UITableView, accessoryButtonTappedForRowWithIndexPath indexPath: NSIndexPath)
-    {
+    override func tableView(tableView: UITableView, accessoryButtonTappedForRowWithIndexPath indexPath: NSIndexPath) {
         let cell = tableView.cellForRowAtIndexPath(indexPath) as! SpeakerListCell
-        if cell.speaker != nil
-        {
-            dataToSend = cell.speaker
-            performSegueWithIdentifier("SpeakerDetails", sender: self)
+        if let speaker = cell.speaker {
+            performSegueWithIdentifier("SpeakerDetails", sender: speaker)
         }
  
     }
@@ -40,15 +35,12 @@ class SpeakerListTableViewController: UITableViewController {
     
     // MARK: - Table view data source
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int
-    {
+    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
-    {
-        switch section
-        {
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        switch section {
         case 0:
             return speakers.count
         case 1:
@@ -60,21 +52,10 @@ class SpeakerListTableViewController: UITableViewController {
     
 
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
-    {
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("SpeakerListCell", forIndexPath: indexPath) as! SpeakerListCell
-        cell.speakerNameLabel.text = speakers![indexPath.row].displayName
-        cell.speaker = speakers![indexPath.row]
-        if cell.speaker.image != nil
-        {
-            cell.speakerImage.image = cell.speaker.image
-            cell.speakerImage.layer.cornerRadius = 5.0
-            cell.speakerImage.layer.borderColor = UIColor.blackColor().CGColor
-        }
-        else
-        {
-            cell.speakerImage.image = UIImage(named: "silhouette")
-        }
+        
+        cell.speaker = speakers[indexPath.row]
 
         return cell
     }
@@ -89,8 +70,8 @@ class SpeakerListTableViewController: UITableViewController {
     {
         if segue.identifier == "SpeakerDetails"
         {
-            let dest_vc = segue.destinationViewController as! SpeakerDetailsViewController
-            dest_vc.speaker = self.dataToSend
+            let desination = segue.destinationViewController as! SpeakerDetailsViewController
+            // Send something, ANYTHING!!!
         }
     }
 
