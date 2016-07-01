@@ -78,10 +78,12 @@ class EventMenuViewController: UIViewController {
     let BUTTON_WIDTH: CGFloat = 110.0
     let BUTTON_HEIGHT: CGFloat = 110.0
     
-    var sectionHeaders:[(Character, [SIExhibitor])]!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if event == nil {
+            fatalError()
+        }
         
         // do some sorting
         sortResearchRecipientsByName()
@@ -140,6 +142,15 @@ class EventMenuViewController: UIViewController {
         
     }
     
+    func displayBadRequestNotification() {
+        let alert = UIAlertController(title: "Oops!",
+                                      message: "We were unable to fetch any data for you. Please make sure you have an internet connection.",
+                                      preferredStyle: UIAlertControllerStyle.Alert)
+        let action = UIAlertAction(title: "OK", style: .Default, handler: nil)
+        alert.addAction(action)
+        presentViewController(alert, animated: true, completion: nil)
+    }
+    
     // constraints for UIButtons
     func setButtonConstraintsToBottomOfView() {
         
@@ -174,7 +185,18 @@ class EventMenuViewController: UIViewController {
     }
     
     func didTapSchedule(sender: AnyObject) {
-        self.performSegueWithIdentifier("SchedulesView", sender: self)
+        
+        SIRequest().requestDays(eventId: event.id, callback: { agenda in
+          
+            guard let agenda = agenda else {
+                self.displayBadRequestNotification()
+                return
+            }
+            
+            self.performSegueWithIdentifier("SchedulesView", sender: agenda)
+            
+        })
+
     }
     
     func didTapSpeakers(sender: AnyObject) {
@@ -190,49 +212,6 @@ class EventMenuViewController: UIViewController {
     }
     
     func didTapExhibitors(sender: AnyObject) {
-        // Ensure each exhibitor has an image assigned to it
-        if sectionHeaders == nil {
-            sectionHeaders = [(Character, [SIExhibitor])]()
-            
-            // Alphabetically sort exhibitors by company name
-//            for i in 0 ..< appData.exhibitors.count - 1
-//            {
-//                for j in 0 ..< appData.exhibitors.count - i - 1
-//                {
-//                    if appData.exhibitors[j].name > appData.exhibitors[j+1].name
-//                    {
-//                        let temp = appData.exhibitors[j]
-//                        appData.exhibitors[j] = appData.exhibitors[j+1]
-//                        appData.exhibitors[j+1] = temp
-//                    }
-//                }
-//            }
-            
-
-            // Create dictionary to set section headers in ExhibitorTableViewController
-//            if var char = appData.exhibitors[0].name.characters.first {
-//                var exhibitorList = [SIExhibitor]()
-//                exhibitorList.append(appData.exhibitors[0])
-//                sectionHeaders.append((char, exhibitorList))
-//                var count = 0
-//                for i in 1 ..< appData.exhibitors.count
-//                {
-//                    char = appData.exhibitors[i].name.characters.first!
-//                    if char == sectionHeaders[count].0
-//                    {
-//                        sectionHeaders[count].1.append(appData.exhibitors[i])
-//                    }
-//                    else
-//                    {
-//                        var nextList = [SIExhibitor]()
-//                        nextList.append(appData.exhibitors[i])
-//                        sectionHeaders.append((char, nextList))
-//                        count += 1
-//                    }
-//                }
-//            }
-            
-        }
         self.performSegueWithIdentifier("ExhibitorsListView", sender: self)
     }
     
@@ -254,7 +233,8 @@ class EventMenuViewController: UIViewController {
         
         if segue.identifier == "SchedulesView" {
             let destination = segue.destinationViewController as! SchedulesTableViewController
-            // send something. Possibly need to do some sorting
+            destination.agenda = sender as! [SIAgenda]
+            destination.eventName = self.event.name
         }
         
         if segue.identifier == "SpeakerList" {
@@ -274,40 +254,12 @@ class EventMenuViewController: UIViewController {
         
         if segue.identifier == "ExhibitorsListView" {
             let destination = segue.destinationViewController as! ExhibitorTableViewController
-            destination.sectionInformation = self.sectionHeaders
-            // send something
+            // do stuff...
         }
         
         if segue.identifier == "AffiliatesListView" {
-            var sectionInfo = [(String, [SIAffiliate])]()
-            
-//            if var char:String = String(appData.affiliates[0].name.characters.first!) {
-//                var affiliateList = [SIAffiliate]()
-//                affiliateList.append(appData.affiliates[0])
-//                sectionInfo.append((char, affiliateList))
-//                var count = 0
-//                for i in 1 ..< appData.affiliates.count
-//                {
-//                    let affiliate = appData.affiliates[i]
-//                    char = String(affiliate.name.characters.first!)
-//                    if char == sectionInfo[count].0
-//                    {
-//                        sectionInfo[count].1.append(appData.affiliates[i])
-//                    }
-//                    else
-//                    {
-//                        var nextList = [SIAffiliate]()
-//                        nextList.append(appData.affiliates[i])
-//                        sectionInfo.append((char, nextList))
-//                        count += 1
-//                    }
-//                }
-//            }
-            
             let destination = segue.destinationViewController as! AffiliateListTableViewController
-            // send stuff
-            destination.sectionInfo = sectionInfo
-            
+            // do stuff...
         }
         
         if segue.identifier == "VenueView" {
@@ -317,11 +269,6 @@ class EventMenuViewController: UIViewController {
         
         if segue.identifier == "SponsorsView" {
             let destination = segue.destinationViewController as! SponsorsTableViewController
-//            destination.friends = appData.friendSponsors            //sponsorsArray[0]
-//            destination.supporters = appData.supportersSponsors     //sponsorsArray[1]
-//            destination.benefactors = appData.benefactorsSponsors   //sponsorsArray[2]
-//            destination.champions = appData.championsSponsors       //sponsorsArray[3]
-//            destination.presidents = appData.presidentsSponsors     //sponsorsArray[4]
         }
         
     }
@@ -350,89 +297,19 @@ class EventMenuViewController: UIViewController {
     
     // Some simple bubble sorting functions
     func sortSpeakersByLastName() {
-//        var speakers = event.eventSpeakers
-//        if speakers.count > 1
-//        {
-//            for i in 0 ..< speakers.count - 1
-//            {
-//                for j in 0 ..< speakers.count - i - 1
-//                {
-//                    let name1 = speakers[j].name.characters.split{$0 == " "}.map(String.init);
-//                    let name2 = speakers[j+1].name.characters.split{$0 == " "}.map(String.init);
-//                    if name1.last > name2.last
-//                    {
-//                        let temp = speakers[j]
-//                        speakers[j] = speakers[j+1]
-//                        speakers[j+1] = temp
-//                    }
-//                }
-//            }
-//            event.eventSpeakers = speakers
-//        }
         
     }
     
     func sortResearchRecipientsByName() {
-//        var researchRecipients = appData.researchRecipients
-//        if researchRecipients.count > 1
-//        {
-//            for i in 0 ..< researchRecipients.count - 1
-//            {
-//                for j in 0 ..< researchRecipients.count - i - 1
-//                {
-//                    if researchRecipients[j].name > researchRecipients[j+1].name
-//                    {
-//                        let temp = researchRecipients[j]
-//                        researchRecipients[j] = researchRecipients[j+1]
-//                        researchRecipients[j+1] = temp
-//                    }
-//                }
-//            }
-//            appData.researchRecipients = researchRecipients
-//        }
-        
+
     }
     
     func sortPrizeRecipientsByName() {
-//        var prizeRecipients = appData.shingoPrizeRecipients
-//        if prizeRecipients.count > 1
-//        {
-//            for i in 0 ..< prizeRecipients.count - 1
-//            {
-//                for j in 0 ..< prizeRecipients.count - i - 1
-//                {
-//                    if prizeRecipients[j].name > prizeRecipients[j+1].name
-//                    {
-//                        let temp = prizeRecipients[j]
-//                        prizeRecipients[j] = prizeRecipients[j+1]
-//                        prizeRecipients[j+1] = temp
-//                    }
-//                }
-//            }
-//            appData.shingoPrizeRecipients = prizeRecipients
-//        }
         
     }
  
     func sortAffiliatesByName() {
-//        var affiliates = appData.affiliates
-//        if affiliates.count > 1
-//        {
-//            for i in 0 ..< affiliates.count - 1
-//            {
-//                for j in 0 ..< affiliates.count - i - 1
-//                {
-//                    
-//                    if affiliates[j].name > affiliates[j+1].name
-//                    {
-//                        let temp = affiliates[j]
-//                        affiliates[j] = affiliates[j+1]
-//                        affiliates[j+1] = temp
-//                    }
-//                }
-//            }
-//            appData.affiliates = affiliates
-//        }
+
     }
 }
 

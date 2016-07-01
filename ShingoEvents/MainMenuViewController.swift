@@ -157,14 +157,12 @@ class MainMenuViewController: UIViewController {
 //        UIView.animateWithDuration(1.5, delay: 0.2, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: UIViewAnimationOptions(), animations: {
         
 //        Uncomment the line below to make menu options appear instantly (for production)
-        UIView.animateWithDuration(0.01, delay: 0, usingSpringWithDamping: 0.01, initialSpringVelocity: 0, options: UIViewAnimationOptions(), animations: {
-            self.view.layoutIfNeeded()
-            }, completion: nil)
-    }
-    
-    
-    override func didReceiveMemoryWarning() {
-        print("Hey, yeah you, the one with the face. You got a memory warning.")
+        UIView.animateWithDuration(0.01, delay: 0,
+                                   usingSpringWithDamping: 0.01,
+                                   initialSpringVelocity: 0, 
+                                   options: UIViewAnimationOptions(), 
+                                   animations: { self.view.layoutIfNeeded() },
+                                   completion: nil)
     }
     
     @IBAction func didTapEvents(sender: AnyObject) {
@@ -192,16 +190,15 @@ class MainMenuViewController: UIViewController {
             
             // Present loading indicator, make request to server for upcoming events
             activityView.displayActivityView(message: "Loading Upcoming Conferences...", forView: self.view, withRequest: self.request)
-            
             activityView.animateProgress(0.5)
             
             SIRequest().requestEvents() { events in
-                self.activityView.removeActivityViewFromDisplay()
+                self.activityView.progressIndicator.setProgress(1.0, animated: false)
                 self.disableButtons(shouldDisable: false)
+                self.activityView.removeActivityViewFromDisplay()
+                self.performSegueWithIdentifier("EventsView", sender: events)
             }
-            
         }
-        
     }
     
     
@@ -214,10 +211,11 @@ class MainMenuViewController: UIViewController {
 
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if (segue.identifier == "EventsView")
-        {
-            let desination = segue.destinationViewController as! EventsTableViewController
-            // do something
+        if (segue.identifier == "EventsView") {
+            let destination = segue.destinationViewController as! EventsTableViewController
+            if let events = sender as? [SIEvent] {
+                destination.events = events
+            }
         }
         
     }

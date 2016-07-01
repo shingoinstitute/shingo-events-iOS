@@ -29,7 +29,6 @@ class SpeakerListTableViewController: UITableViewController {
         if let speaker = cell.speaker {
             performSegueWithIdentifier("SpeakerDetails", sender: speaker)
         }
- 
     }
     
     
@@ -66,14 +65,18 @@ class SpeakerListTableViewController: UITableViewController {
     
     // MARK: - Navigation
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?)
-    {
-        if segue.identifier == "SpeakerDetails"
-        {
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "SpeakerDetails" {
             let desination = segue.destinationViewController as! SpeakerDetailsViewController
             // Send something, ANYTHING!!!
         }
     }
 
-
 }
+
+
+
+
+
+
+

@@ -122,7 +122,7 @@ class ExhibitorInfoViewController: UIViewController {
     }
     
     func getDescriptionForPlainText() {
-        if exhibitor.name != nil {
+        if !exhibitor.name.isEmpty {
             descriptionTextField.text = exhibitor.name + "\n"
         }
         

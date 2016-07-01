@@ -14,8 +14,8 @@ import MapKit
 
 class SIObject {
     
-    var name : String!
-    var id : String!
+    var name : String
+    var id : String
     var image : UIImage?
     
     init() {
@@ -41,18 +41,18 @@ class SIObject {
 
 class SIEvent: SIObject {
     
-    var didLoadSessions : Bool!
+    var didLoadSessions : Bool
     
     // related objects
-    var agendaItems : [SIAgenda]!
+    var agendaItems : [SIAgenda]
     
     
     // event specific properties
-    var startDate : NSDate!
-    var endDate : NSDate!
-    var eventType : String!
-    var salesText : String!
-    var bannerImageURL : String! {
+    var startDate : NSDate
+    var endDate : NSDate
+    var eventType : String
+    var salesText : String
+    var bannerImageURL : String {
         didSet {
             if !bannerImageURL.isEmpty {
                 requestBannerImage()
@@ -61,13 +61,14 @@ class SIEvent: SIObject {
     }
     
     override init() {
-        super.init()
+        agendaItems = [SIAgenda]()
         didLoadSessions = false
         startDate = NSDate().notionallyEmptyDate()
         endDate = NSDate().notionallyEmptyDate()
         salesText = ""
         eventType = ""
         bannerImageURL = ""
+        super.init()
     }
     
     func requestBannerImage() {
@@ -84,17 +85,17 @@ class SIEvent: SIObject {
 class SIAgenda: SIObject {
     
     // related objects
-    var sessions : [SISession]!
+    var sessions : [SISession]
     
     // agenda specific properties
-    var displayName : String!
-    var date : NSDate!
+    var displayName : String
+    var date : NSDate
     
     override init() {
-        super.init()
         sessions = [SISession]()
         displayName = ""
         date = NSDate().notionallyEmptyDate()
+        super.init()
     }
     
     func isOnLaterDay(eventDay: SIAgenda) -> Bool {
@@ -106,18 +107,18 @@ class SIAgenda: SIObject {
 
 class SISession: SIObject {
     
-    var sessionSpeakers : [SISpeaker]!
+    var sessionSpeakers : [SISpeaker]
     
-    var displayName : String!
-    var startDate : NSDate!
-    var endDate : NSDate!
-    var sessionType : String!
-    var sessionTrack : String!
-    var summary : String!
-    var room : String!
+    var displayName : String
+    var sessionType : String
+    var sessionTrack : String
+    var summary : String
+    var room : String
+    var startDate : NSDate
+    var endDate : NSDate
     
     override init() {
-        super.init()
+        self.sessionSpeakers = [SISpeaker]()
         displayName = ""
         startDate = NSDate().notionallyEmptyDate()
         endDate = NSDate().notionallyEmptyDate()
@@ -125,6 +126,7 @@ class SISession: SIObject {
         sessionTrack = ""
         summary = ""
         room = ""
+        super.init()
     }
     
 }
@@ -132,28 +134,28 @@ class SISession: SIObject {
 class SISpeaker: SIObject {
     
     // related object id's
-    var associatedSessionIds : [String]!
+    var associatedSessionIds : [String]
     
     // speaker specific properties
-    var title : String!
-    var pictureURL : String! {
+    var title : String
+    var pictureURL : String {
         didSet {
             if !pictureURL.isEmpty {
                 requestSpeakerImage()
             }
         }
     }
-    var biography : String!
-    var organization : String!
+    var biography : String
+    var organization : String
     
     
     override init() {
-        super.init()
         title = ""
         pictureURL = ""
         biography = ""
         organization = ""
         associatedSessionIds = [String]()
+        super.init()
     }
     
     func requestSpeakerImage() {

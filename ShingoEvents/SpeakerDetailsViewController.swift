@@ -41,7 +41,7 @@ class SpeakerDetailsViewController: UIViewController {
         speakerNameLabel.lineBreakMode = .ByWordWrapping
         scrollView.addSubview(speakerNameLabel)
 
-        if speaker.organization != nil {
+        if !speaker.organization.isEmpty {
             organizationLabel = UILabel.newAutoLayoutView()
             organizationLabel.text = "From " + speaker.organization
             organizationLabel.numberOfLines = 2
@@ -53,7 +53,7 @@ class SpeakerDetailsViewController: UIViewController {
         if !speaker.biography.isEmpty {
             biographyView = UITextView.newAutoLayoutView()
             if !speaker.biography.isEmpty {
-                var htmlString = speaker.biography!
+                var htmlString = speaker.biography
                 do {
                     htmlString = "<font size=\"5\">" + htmlString + "</font>"
                     let attributedText = try NSMutableAttributedString(data: htmlString.dataUsingEncoding(NSUTF8StringEncoding)!,

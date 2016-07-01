@@ -88,7 +88,7 @@ class AfilliateViewController: UIViewController {
                 print("Error with richText in affiliateViewController")
             }
             
-            if affiliate.name != nil {
+            if !affiliate.name.isEmpty {
                 plainText = newline + newline + affiliate.name + newline
             } else {
                 plainText = newline + newline + "Company name not available" + newline
@@ -112,7 +112,7 @@ class AfilliateViewController: UIViewController {
                 affiliate.abstract = "Description not available.\n"
             }
             
-            if affiliate.name != nil {
+            if !affiliate.name.isEmpty {
                 abstractTextField.text = affiliate.name
             } else {
                 abstractTextField.text = "Company name not available"

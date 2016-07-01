@@ -32,7 +32,6 @@
 		C2986DC01C640DE900ADCF40 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C2986DBF1C640DE900ADCF40 /* MapKit.framework */; };
 		C2986DC41C65136600ADCF40 /* ShingoModelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2986DC31C65136600ADCF40 /* ShingoModelViewController.swift */; };
 		C2A695111C35AC2900F6E0B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A695081C35AC2900F6E0B8 /* AppDelegate.swift */; };
-		C2A695141C35AC2900F6E0B8 /* AppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A6950B1C35AC2900F6E0B8 /* AppData.swift */; };
 		C2A695241C35E30F00F6E0B8 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A695231C35E30F00F6E0B8 /* SwiftyJSON.swift */; };
 		C2B7EB401C7B813100162AFB /* ContactUsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B7EB3F1C7B813100162AFB /* ContactUsViewController.swift */; };
 		C2B7EB421C7CD89900162AFB /* ReportABugViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B7EB411C7CD89900162AFB /* ReportABugViewController.swift */; };
@@ -43,7 +42,6 @@
 		C2CFC3181C4954C20036E485 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C2CFC3171C4954C20036E485 /* Main.storyboard */; };
 		C2E9508D1D1C83F500178C03 /* SharedCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E9508C1D1C83F500178C03 /* SharedCode.swift */; };
 		C2E9508F1D22E8F100178C03 /* APIRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E9508E1D22E8F100178C03 /* APIRequests.swift */; };
-		C2E950911D23090100178C03 /* ShingoEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E950901D23090100178C03 /* ShingoEvent.swift */; };
 		C2F17FA81C6AAFCF0028062C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C2F17FA71C6AAFCF0028062C /* Assets.xcassets */; };
 		C2F358081C500B2500AE62D0 /* SessionListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F358071C500B2500AE62D0 /* SessionListTableViewController.swift */; };
 		C2FF6B1E1CB2E2CF00331ED2 /* VenueMapsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FF6B1D1CB2E2CF00331ED2 /* VenueMapsCollectionView.swift */; };
@@ -102,7 +100,6 @@
 		C2986DBF1C640DE900ADCF40 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		C2986DC31C65136600ADCF40 /* ShingoModelViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShingoModelViewController.swift; sourceTree = "<group>"; };
 		C2A695081C35AC2900F6E0B8 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		C2A6950B1C35AC2900F6E0B8 /* AppData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppData.swift; sourceTree = "<group>"; };
 		C2A6950C1C35AC2900F6E0B8 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C2A695231C35E30F00F6E0B8 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
 		C2B7EB3F1C7B813100162AFB /* ContactUsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactUsViewController.swift; sourceTree = "<group>"; };
@@ -114,7 +111,6 @@
 		C2CFC3171C4954C20036E485 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		C2E9508C1D1C83F500178C03 /* SharedCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedCode.swift; sourceTree = "<group>"; };
 		C2E9508E1D22E8F100178C03 /* APIRequests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIRequests.swift; sourceTree = "<group>"; };
-		C2E950901D23090100178C03 /* ShingoEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShingoEvent.swift; sourceTree = "<group>"; };
 		C2F17F661C655DAA0028062C /* Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		C2F17FA71C6AAFCF0028062C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C2F358071C500B2500AE62D0 /* SessionListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionListTableViewController.swift; sourceTree = "<group>"; };
@@ -186,9 +182,9 @@
 			isa = PBXGroup;
 			children = (
 				C2CFC30F1C481EAB0036E485 /* MainMenuViewController.swift */,
-				C2986DC31C65136600ADCF40 /* ShingoModelViewController.swift */,
 				C262CA8C1C3B1C29005845AF /* EventsTableViewController.swift */,
 				C28B67F21C406BDE00AC9193 /* EventMenuViewController.swift */,
+				C2986DC31C65136600ADCF40 /* ShingoModelViewController.swift */,
 			);
 			name = Menus;
 			sourceTree = "<group>";
@@ -296,8 +292,6 @@
 			isa = PBXGroup;
 			children = (
 				C28B67E81C3F0BD700AC9193 /* EventData.swift */,
-				C2E950901D23090100178C03 /* ShingoEvent.swift */,
-				C2A6950B1C35AC2900F6E0B8 /* AppData.swift */,
 				C2E9508E1D22E8F100178C03 /* APIRequests.swift */,
 			);
 			name = Classes;
@@ -542,11 +536,9 @@
 				C264CCB41C57ECA7005CDB11 /* RecipientsTableViewController.swift in Sources */,
 				C2CFC3041C4576D00036E485 /* SettingsTableViewController.swift in Sources */,
 				C2F358081C500B2500AE62D0 /* SessionListTableViewController.swift in Sources */,
-				C2E950911D23090100178C03 /* ShingoEvent.swift in Sources */,
 				C2CFC3141C483C1C0036E485 /* SchedulesTableViewController.swift in Sources */,
 				C2FF6B1E1CB2E2CF00331ED2 /* VenueMapsCollectionView.swift in Sources */,
 				C234BD561C5293CF002E9814 /* SpeakerListTableViewController.swift in Sources */,
-				C2A695141C35AC2900F6E0B8 /* AppData.swift in Sources */,
 				C2B7EB401C7B813100162AFB /* ContactUsViewController.swift in Sources */,
 				C2FF6B261CB4313200331ED2 /* VenueMapViewController.swift in Sources */,
 				C224C8981C92138700F4E393 /* AboutPageViewController.swift in Sources */,

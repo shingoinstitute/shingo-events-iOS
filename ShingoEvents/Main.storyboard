@@ -1075,6 +1075,9 @@
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="agendaLabel" destination="5Oz-lF-59s" id="VSC-bG-cGN"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>

@@ -15,58 +15,12 @@ let EVENTS_URL = BASE_URL + "/salesforce/events"
 
 class SIRequest {
     
-    var dateFormatter : NSDateFormatter!
-    
-    init() {
-        dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-    }
-    
-    // make HTTP POST request
-    private func postRequest(url url: String, parameters: [String:String], callback: (value: JSON?) -> ())  {
-        Alamofire.request(.POST, url, parameters: parameters).responseJSON { response in
-            
-            guard response.result.isSuccess else {
-                print("Error while performing API POST request: \(response.result.error)")
-                callback(value: nil)
-                return
-            }
-            
-            guard let response = response.result.value else {
-                print("Error while performing API POST request: Invalid response")
-                callback(value: nil)
-                return
-            }
-            
-            let responseJSON = JSON(response)
-            print(responseJSON)
-            callback(value: responseJSON)
-        }
-    }
-    
-    // make HTTP GET request
-    private func getRequest(url url: String, callback: (value: JSON?) -> ()) {
-        Alamofire.request(.GET, url).responseJSON { response in
-            
-            guard response.result.isSuccess else {
-                print("Error while performing API GET request: \(response.result.error)")
-                callback(value: nil)
-                return
-            }
-            
-            guard let response = response.result.value else {
-                print("Error while performing API GET request: Invalid response")
-                callback(value: nil)
-                return
-            }
-            
-            let responseJSON = JSON(response)
-            print(responseJSON)
-            callback(value: responseJSON)
-        }
-    }
+    // MARK: - Properties
+    var dateFormatter = NSDateFormatter(locale: "en_US_POSIX", dateFormat: "yyyy-MM-dd")
+    var sessionDateFormatter = NSDateFormatter(locale: "en_US_POSIX", dateFormat: "yyyy-MM-dd'T'HH:mm:ss.SSS")
     
     
+    // MARK: - API Calls
     ///////////////
     // API Calls //
     ///////////////
@@ -94,11 +48,16 @@ class SIRequest {
                         }
                         
                         if let startDate = record["Start_Date__c"].string {
-                            event.startDate = self.dateFormatter.dateFromString(startDate)
+                            if let startDate = self.dateFormatter.dateFromString(startDate) {
+                                event.startDate = startDate
+                            }
+                            
                         }
                         
                         if let endDate = record["End_Date__c"].string {
-                            event.endDate = self.dateFormatter.dateFromString(endDate)
+                            if let endDate = self.dateFormatter.dateFromString(endDate) {
+                                event.endDate = endDate
+                            }
                         }
                         
                         if let eventType = record["Event_Type__c"].string {
@@ -114,39 +73,50 @@ class SIRequest {
     }
     
     // Gets an event from Salesforce by id
-    func requestEvent(id: String, callback: (event: SIEvent) -> Void) {
+    func requestEvent(id: String, callback: (event: SIEvent?) -> Void) {
         
         getRequest(url: EVENTS_URL + "/\(id)") { json in
             
             let event = SIEvent()
             
-            if let json = json {
+            guard let json = json else {
+                callback(event: nil)
+                return
+            }
+            
+            if json["event"].isExists() {
                 
-                if let id = json["Id"].string {
+                let eventJSON = json["event"]
+                
+                if let id = eventJSON["Id"].string {
                     event.id = id
                 }
                 
-                if let name = json["Name"].string {
+                if let name = eventJSON["Name"].string {
                     event.name = name
                 }
                 
-                if let startDate = json["Start_Date__c"].string {
-                    event.startDate = self.dateFormatter.dateFromString(startDate)
+                if let startDate = eventJSON["Start_Date__c"].string {
+                    if let startDate = self.dateFormatter.dateFromString(startDate) {
+                        event.startDate = startDate
+                    }
                 }
                 
-                if let endDate = json["End_Date__c"].string {
-                    event.endDate = self.dateFormatter.dateFromString(endDate)
+                if let endDate = eventJSON["End_Date__c"].string {
+                    if let endDate = self.dateFormatter.dateFromString(endDate) {
+                        event.endDate = endDate
+                    }
                 }
                 
-                if let type = json["Event_Type__c"].string {
+                if let type = eventJSON["Event_Type__c"].string {
                     event.eventType = type
                 }
                 
-                if let bannerURL = json["Banner_URL__c"].string {
+                if let bannerURL = eventJSON["Banner_URL__c"].string {
                     event.bannerImageURL = bannerURL
                 }
                 
-                if let salesText = json["Sales_Text__c"].string {
+                if let salesText = eventJSON["Sales_Text__c"].string {
                     event.salesText = salesText
                 }
                 
@@ -159,7 +129,7 @@ class SIRequest {
     // Gets all days for a single event
     func requestDays(eventId eventId: String, callback: (agendas: [SIAgenda]?) -> Void) {
         
-        postRequest(url: EVENTS_URL + "/days", parameters: ["event_id": eventId]) { json in
+        getRequest(url: EVENTS_URL + "/days?event_id=\(eventId)") { json in
             
             guard let json = json else {
                 callback(agendas: nil)
@@ -204,6 +174,12 @@ class SIRequest {
                 
                 if let displayName = record["Display_Name__c"].string {
                     agenda.displayName = displayName
+                }
+                
+                if let date = record["Agenda_Date__c"].string {
+                    if let date = self.dateFormatter.dateFromString(date) {
+                        agenda.date = date
+                    }
                 }
                 
                 agendas.append(agenda)
@@ -258,11 +234,15 @@ class SIRequest {
                         }
                         
                         if let startDate = record["Start_Date_Time__c"].string {
-                            session.startDate = self.dateFormatter.dateFromString(startDate)
+                            if let startDate = self.sessionDateFormatter.dateFromString(startDate) {
+                                session.startDate = startDate
+                            }
                         }
                         
                         if let endDate = record["End_Date_Time__c"].string {
-                            session.endDate = self.dateFormatter.dateFromString(endDate)
+                            if let endDate = self.sessionDateFormatter.dateFromString(endDate) {
+                                session.endDate = endDate
+                            }
                         }
                         
                         if let type = record["Session_Type__c"].string {
@@ -281,7 +261,7 @@ class SIRequest {
     
     // Gets all sessions from for a single event
     func requestSessions(id id: String, callback: (sessions: [SISession]?) -> ()) {
-        postRequest(url: EVENTS_URL + "/sessions", parameters: ["agenda_id":id]) { json in
+        getRequest(url: EVENTS_URL + "/sessions?agenda_id=\(id)") { json in
             
             guard let json = json else {
                 callback(sessions: nil)
@@ -311,6 +291,9 @@ class SIRequest {
     func parseSessionResponse(json: JSON) -> [SISession] {
         
         var sessions = [SISession]()
+        
+        
+        
         if json["sessions"].isExists() {
             
             for record in json["sessions"].array! {
@@ -328,12 +311,17 @@ class SIRequest {
                     session.displayName = displayName
                 }
                 
-                if let startDate = record["Start_Date_Time__c"].string {
-                    session.startDate = self.dateFormatter.dateFromString(startDate)
-                }
                 
+                if let startDate = record["Start_Date_Time__c"].string {
+                    if let startDate = self.sessionDateFormatter.dateFromString(sessionDateTimeStringParser(rawDate: startDate)) {
+                        session.startDate = startDate
+                    }
+                }
+            
                 if let endDate = record["End_Date_Time__c"].string {
-                    session.endDate = self.dateFormatter.dateFromString(endDate)
+                    if let endDate = self.sessionDateFormatter.dateFromString(sessionDateTimeStringParser(rawDate: endDate)) {
+                        session.endDate = endDate
+                    }
                 }
                 
                 if let type = record["Session_Type__c"].string {
@@ -349,7 +337,7 @@ class SIRequest {
     // Gets a single session by id
     func requestSession(id: String, callback: (session: SISession?) -> ()) {
         
-        getRequest(url: EVENTS_URL + "sessions/\(id)") { json in
+        getRequest(url: EVENTS_URL + "/sessions/\(id)") { json in
             
             guard let json = json else {
                 callback(session: nil)
@@ -374,11 +362,15 @@ class SIRequest {
                 }
                 
                 if let startDate = record["Start_Date_Time__c"].string {
-                    session.startDate = self.dateFormatter.dateFromString(startDate)
+                    if let startDate = self.sessionDateFormatter.dateFromString(startDate) {
+                        session.startDate = startDate
+                    }
                 }
                 
                 if let endDate = record["End_Date_Time__c"].string {
-                    session.endDate = self.dateFormatter.dateFromString(endDate)
+                    if let endDate = self.sessionDateFormatter.dateFromString(endDate) {
+                        session.endDate = endDate
+                    }
                 }
                 
                 if let type = record["Session_Type__c"].string {
@@ -407,7 +399,7 @@ class SIRequest {
     // Gets all speakers from Salesforce
     func requestSpeakers(sessionId id: String, callback: (speakers: [SISpeaker]?) -> ()) {
         
-        postRequest(url: EVENTS_URL + "/speakers", parameters: ["session_id":id]) { json in
+        getRequest(url: EVENTS_URL + "/speakers?session_id=\(id)") { json in
             
             guard let json = json else {
                 callback(speakers: nil)
@@ -459,12 +451,10 @@ class SIRequest {
                 
                 if record["Session_Speaker_Associations__r"]["records"].isExists() {
                     for assoc in record["Session_Speaker_Associations__r"]["records"].array! {
-                        
                         if let id = assoc["Session__r"]["Id"].string {
                             speaker.associatedSessionIds.append(id)
                         }
                     }
-                    
                 }
                 
                 speakers.append(speaker)
@@ -530,7 +520,70 @@ class SIRequest {
         }
         
     }
-
+    
+    // MARK: - Supporting Functions
+    //////////////////////////
+    // Supporting Functions //
+    //////////////////////////
+    
+    func sessionDateTimeStringParser(rawDate r: String) -> String {
+        // The API returns a string that looks like "2016-09-21T19:30:00.000+0000"
+        // The "+0000" in the returned string needs to be removed for self.sessionDateFormatter
+        // to correctly parse the date
+        return r.split("+")[0]
+    }
+    
+    // make HTTP POST request
+    private func postRequest(url url: String, parameters: [String:String], callback: (value: JSON?) -> ())  {
+        Alamofire.request(.POST, url, parameters: parameters).responseJSON { response in
+            
+            guard response.result.isSuccess else {
+                print("Error while performing API POST request: \(response.result.error)")
+                callback(value: nil)
+                return
+            }
+            
+            guard let response = response.result.value else {
+                print("Error while performing API POST request: Invalid response")
+                callback(value: nil)
+                return
+            }
+            
+            let responseJSON = JSON(response)
+            print(responseJSON)
+            callback(value: responseJSON)
+        }
+    }
+    
+    // make HTTP GET request
+    private func getRequest(url url: String, callback: (value: JSON?) -> ()) {
+        Alamofire.request(.GET, url).responseJSON { response in
+            
+            guard response.result.isSuccess else {
+                print("Error while performing API GET request: \(response.result.error!)")
+                callback(value: nil)
+                return
+            }
+            
+            guard let response = response.result.value else {
+                print("Error while performing API GET request: Invalid response")
+                callback(value: nil)
+                return
+            }
+            
+            let responseJSON = JSON(response)
+            
+            if let success = responseJSON["success"].bool {
+                if !success {
+                    callback(value: nil)
+                    return
+                }
+            }
+            
+            print(responseJSON)
+            callback(value: responseJSON)
+        }
+    }
 
     
 }

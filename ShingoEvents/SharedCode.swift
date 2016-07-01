@@ -51,6 +51,10 @@ extension String {
         return self.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
     }
     
+    func split(character: Character) -> [String]{
+        return self.characters.split{$0 == character}.map(String.init)
+    }
+    
 }
 
 ///////////////////////
@@ -89,12 +93,22 @@ extension NSDate {
     }
     
     func notionallyEmptyDate() -> NSDate {
-        return NSDate.init(timeIntervalSince1970: -9999999999.999999999)
+        return NSDate.init(timeIntervalSince1970: 0)
     }
     
 }
 
+// NSDateFormatter Extension
 
+extension NSDateFormatter {
+    
+    convenience init(locale: String, dateFormat: String) {
+        self.init()
+        self.locale = NSLocale(localeIdentifier: locale)
+        self.dateFormat = dateFormat
+    }
+    
+}
 
 
 
