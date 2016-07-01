@@ -31,7 +31,6 @@ class SpeakerListTableViewController: UITableViewController {
         }
     }
     
-    
     // MARK: - Table view data source
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -67,7 +66,7 @@ class SpeakerListTableViewController: UITableViewController {
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "SpeakerDetails" {
-            let desination = segue.destinationViewController as! SpeakerDetailsViewController
+            let destination = segue.destinationViewController as! SpeakerDetailsViewController
             // Send something, ANYTHING!!!
         }
     }

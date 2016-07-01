@@ -200,7 +200,24 @@ class EventMenuViewController: UIViewController {
     }
     
     func didTapSpeakers(sender: AnyObject) {
+        
+        // This needs to be a dictionary
+        var speakers = [SISpeaker]()
+        
+        for agenda in event.agendaItems {
+            for session in agenda.sessions {
+                
+                SIRequest().requestSpeakers(sessionId: session.id, callback: { s in
+                    if let s = s {
+                        speakers += s
+                    }
+                })
+                
+            }
+        }
+        
         self.performSegueWithIdentifier("SpeakerList", sender: self)
+        
     }
     
     func didTapRecipients(sender: AnyObject) {
