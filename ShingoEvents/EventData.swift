@@ -41,7 +41,9 @@ class SIObject {
 
 class SIEvent: SIObject {
     
+    var didLoadEventData : Bool
     var didLoadSessions : Bool
+    var didLoadAgendaSessions : Bool
     
     // related objects
     var agendaItems : [SIAgenda]
@@ -61,14 +63,35 @@ class SIEvent: SIObject {
     }
     
     override init() {
-        agendaItems = [SIAgenda]()
+        didLoadEventData = false
         didLoadSessions = false
+        didLoadAgendaSessions = false
+        agendaItems = [SIAgenda]()
         startDate = NSDate().notionallyEmptyDate()
         endDate = NSDate().notionallyEmptyDate()
         salesText = ""
         eventType = ""
         bannerImageURL = ""
         super.init()
+    }
+    
+    /// Gets basic information about an events agenda objects.
+    func requestAgendas(callback: () -> ()) {
+        SIRequest().requestAgendaDays(eventId: id, callback: { agendas in
+            
+            if let agendas = agendas {
+                self.didLoadAgendaSessions = true
+                self.agendaItems = agendas
+                
+                for agenda in agendas {
+                    agenda.requestAgendaInformation() {
+                        
+                    }
+                }
+                callback()
+            }
+            
+        });
     }
     
     func requestBannerImage() {
@@ -81,7 +104,7 @@ class SIEvent: SIObject {
     
 }
 
-// An Event "day"
+// An Event Day
 class SIAgenda: SIObject {
     
     // related objects
@@ -98,6 +121,30 @@ class SIAgenda: SIObject {
         super.init()
     }
     
+    /// Gets additional information about agenda object.
+    func requestAgendaInformation(callback: () -> ()) {
+        SIRequest().requestAgendaDay(agendaId: id) { (agenda) in
+            if let agenda = agenda {
+                self.displayName = agenda.displayName
+                self.date = agenda.date
+                self.name = agenda.name
+                self.id = agenda.id
+            }
+            callback()
+        }
+        requestSessionsForDay()
+    }
+    
+    private func requestSessionsForDay() {
+        SIRequest().requestSessions(agendaId: id, callback: { sessions in
+            
+            if let sessions = sessions {
+                self.sessions = sessions
+            }
+            
+        });
+    }
+    
     func isOnLaterDay(eventDay: SIAgenda) -> Bool {
         // Needs implementation
         return false
@@ -107,7 +154,8 @@ class SIAgenda: SIObject {
 
 class SISession: SIObject {
     
-    var sessionSpeakers : [SISpeaker]
+    var didLoadSpeakers : Bool
+    var speakers : [SISpeaker]
     
     var displayName : String
     var sessionType : String
@@ -118,7 +166,8 @@ class SISession: SIObject {
     var endDate : NSDate
     
     override init() {
-        self.sessionSpeakers = [SISpeaker]()
+        didLoadSpeakers = false
+        speakers = [SISpeaker]()
         displayName = ""
         startDate = NSDate().notionallyEmptyDate()
         endDate = NSDate().notionallyEmptyDate()
@@ -127,6 +176,32 @@ class SISession: SIObject {
         summary = ""
         room = ""
         super.init()
+    }
+    
+    /// Gets additional information about the session object.
+    func requestSessionInformation(callback:() -> ()) {
+        SIRequest().requestSession(id, callback: { session in
+            if let session = session {
+                self.displayName = session.displayName
+                self.startDate = session.startDate
+                self.endDate = session.endDate
+                self.sessionType = session.sessionType
+                self.sessionTrack = session.sessionTrack
+                self.summary = session.summary
+                self.room = session.room
+                self.name = session.name
+                self.id = session.id
+            }
+        });
+    }
+    
+    /// Gets all speakers associated with the session object.
+    func requestSpeakers(callback: () -> ()) {
+        SIRequest().requestSpeakers(sessionId: id) { (speakers) in
+            if let speakers = speakers {
+                self.speakers = speakers
+            }
+        }
     }
     
 }
@@ -148,7 +223,6 @@ class SISpeaker: SIObject {
     var biography : String
     var organization : String
     
-    
     override init() {
         title = ""
         pictureURL = ""
@@ -156,6 +230,25 @@ class SISpeaker: SIObject {
         organization = ""
         associatedSessionIds = [String]()
         super.init()
+    }
+    
+    /// Gets additional information about the speaker object.
+    func requestSpeakerInformation(callback: () -> ()) {
+        SIRequest().requestSpeaker(speakerId: id) { (speaker) in
+            if let speaker = speaker {
+                self.title = speaker.title
+                
+                if self.pictureURL.isEmpty {
+                    self.pictureURL = speaker.pictureURL
+                }
+                
+                self.biography = speaker.biography
+                self.organization = speaker.organization
+                self.associatedSessionIds = speaker.associatedSessionIds
+                self.name = speaker.name
+                self.id = speaker.id
+            }
+        }
     }
     
     func requestSpeakerImage() {
@@ -176,6 +269,68 @@ class SISpeaker: SIObject {
     
 }
 
+class SIExhibitor: SIObject {
+    
+    var summary : String
+    var contactEmail : String
+    var website : String
+    var logoURL : String
+    var bannerURL : String
+    var mapCoordinate : (Double, Double)
+    var bannerImage : UIImage?
+    
+    override init() {
+        summary = ""
+        contactEmail = ""
+        website = ""
+        logoURL = ""
+        bannerURL = ""
+        mapCoordinate = (0, 0)
+        bannerImage = nil
+        super.init()
+    }
+    
+    func requestExhibitorLogoImage(url:String) {
+        requestImage(url) { image in
+            if let image = image as UIImage? {
+                self.image = image
+            }
+        }
+    }
+    
+    func requestExhibitorBannerImage(url: String) {
+        requestImage(url, callback: { image in
+            if let image = image as UIImage? {
+                self.bannerImage = image
+            }
+        });
+    }
+    
+    func getLogoImage() -> UIImage {
+        guard let image = self.image else {
+            return UIImage(named: "logoComingSoon")!
+        }
+        
+        if image.isEmpty() {
+            return UIImage(named: "logoComingSoon")!
+        }
+        
+        return image
+    }
+    
+    func getBannerImage() -> UIImage {
+        guard let image = self.bannerImage else {
+            return UIImage(named: "logoComingSoon")!
+        }
+        
+        if image.isEmpty() {
+            return UIImage(named: "logoComingSoon")!
+        }
+        
+        return image
+    }
+    
+}
 
 /////////////////
 // got to here //
@@ -237,38 +392,7 @@ class SIRecipient: SIObject {
     
 }
 
-class SIExhibitor: SIObject {
-    
-    var description:String!
-    var richDescription: String?
-    var phone:String!
-    var email:String!
-    var website:String!
-    var logoUrl:String!
-    var logoImage:UIImage!
-    var eventId:String!
-    
-    override init() {
-        super.init()
-        description = ""
-        richDescription = nil
-        phone = ""
-        email = ""
-        website = ""
-        logoUrl = ""
-        logoImage = UIImage(named: "sponsor_banner_pl")
-        eventId = ""
-    }
-    
-    func requestExhibitorImage(url:String) {
-        requestImage(url) { image in
-            if let image = image as UIImage? {
-                self.logoImage = image
-            }
-        }
-    }
-    
-}
+
 
 
 class SIAffiliate: SIObject {

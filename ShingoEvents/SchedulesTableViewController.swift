@@ -27,7 +27,7 @@ class SchedulesTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
-        SIRequest().requestSessions(id: agenda[indexPath.row].id, callback: { sessions in
+        SIRequest().requestSessions(agendaId: agenda[indexPath.row].id, callback: { sessions in
             if let sessions = sessions {
                 self.performSegueWithIdentifier("SessionListView", sender: sessions)
             }

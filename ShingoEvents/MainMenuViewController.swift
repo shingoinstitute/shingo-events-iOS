@@ -16,9 +16,10 @@ class MainMenuViewController: UIViewController {
     
     // Activity view used for loading screen
     let activityView = ActivityView()
-    
-    // used to check for internet connection
-    var request:Alamofire.Request!
+    var eventsDidLoad = false
+    var timer : NSTimer!
+    var time : Double = 0
+    var events : [SIEvent]?
     
     // used to set inital placement of menu items off screen so they can later be animated
     var contentViewHeightConstraint: NSLayoutConstraint?
@@ -42,6 +43,19 @@ class MainMenuViewController: UIViewController {
         return view
     }()
 
+    
+    // MARK: - class methods
+    
+    override func loadView() {
+        super.loadView()
+        
+        SIRequest().requestEvents({ events in
+            self.events = events
+            self.eventsDidLoad = true
+        })
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -126,21 +140,9 @@ class MainMenuViewController: UIViewController {
         }
     }
     
-    // Check for internet connectivity
-    func checkForInternetConnection() -> Bool {
-        let status = Reach().connectionStatus()
-        switch status {
-        case .Unknown, .Offline:
-            displayInternetAlert()
-            return false
-        case .Online(.WWAN), .Online(.WiFi):
-            return true
-        }
-    }
-    
     func displayInternetAlert() {
         let alert = UIAlertController(
-            title: "No Internet Connection",
+            title: "No Internet Connection Detected",
             message: "Your device must be connected to the internet to use this app.",
             preferredStyle: UIAlertControllerStyle.Alert)
         let action = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel) { _ in
@@ -170,8 +172,14 @@ class MainMenuViewController: UIViewController {
     }
     
     @IBAction func reloadEventData(sender: AnyObject) {
-        activityView.progressIndicator.progress = 0;
-        loadUpcomingEvents()
+//        activityView.progressIndicator.progress = 0
+//        activityView.animateProgress(0.9)
+        activityView.displayActivityView(message: "Loading Upcoming Conferences", forView: self.view)
+        SIRequest().requestEvents({ events in
+            self.activityView.removeActivityViewFromDisplay()
+            self.events = events
+            self.eventsDidLoad = true
+        })
     }
     @IBAction func didTapShingoModel(sender: AnyObject) {
         self.performSegueWithIdentifier("ShingoModel", sender: self)
@@ -182,25 +190,48 @@ class MainMenuViewController: UIViewController {
     }
 
     func loadUpcomingEvents() {
-
-        if checkForInternetConnection() {
-            
+        activityView.displayActivityView(message: "Loading Upcoming Conferences...", forView: self.view)
+        if !SIRequest().checkForInternetConnection() {
+            print("No internet connection detected")
+            displayBadRequestNotification()
+        } else if eventsDidLoad {
+            self.performSegueWithIdentifier("EventsView", sender: self.events)
+        } else {
             // Make buttons non clickable while loading indicator is present
             disableButtons(shouldDisable: true)
+            // Show loading indicator, make request to server for upcoming events
+            activityView.displayActivityView(message: "Loading Upcoming Conferences...", forView: self.view)
+//            activityView.animateProgress(0.9)
             
-            // Present loading indicator, make request to server for upcoming events
-            activityView.displayActivityView(message: "Loading Upcoming Conferences...", forView: self.view, withRequest: self.request)
-            activityView.animateProgress(0.5)
-            
-            SIRequest().requestEvents() { events in
-                self.activityView.progressIndicator.setProgress(1.0, animated: false)
-                self.disableButtons(shouldDisable: false)
-                self.activityView.removeActivityViewFromDisplay()
-                self.performSegueWithIdentifier("EventsView", sender: events)
-            }
+            time = 0
+            timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: #selector(MainMenuViewController.checkOnRequestStatus), userInfo: nil, repeats: true)
         }
     }
     
+    func displayBadRequestNotification() {
+        let alert = UIAlertController(title: "There seems to be a problem.",
+                                      message: "We were unable to fetch any data for you. Please make sure you are connected to the internet.",
+                                      preferredStyle: UIAlertControllerStyle.Alert)
+        let action = UIAlertAction(title: "OK", style: .Default, handler: nil)
+        alert.addAction(action)
+        presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    func checkOnRequestStatus() {
+        time += 0.1
+        
+        if eventsDidLoad {
+            timer.invalidate()
+            activityView.removeActivityViewFromDisplay()
+            performSegueWithIdentifier("EventsView", sender: self.events)
+        }
+        
+        if time > 12.0 {
+            timer.invalidate()
+            activityView.removeActivityViewFromDisplay()
+            displayBadRequestNotification()
+        }
+    }
     
     func disableButtons(shouldDisable disable:Bool){
         eventsBtn.enabled = !disable

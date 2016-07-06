@@ -11,6 +11,7 @@ import Foundation
 
 class EventTableViewCell: UITableViewCell {
     
+    // MARK: - Properties
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var dateRangeLabel: UILabel!
     var event: SIEvent!
@@ -31,9 +32,27 @@ class EventTableViewCell: UITableViewCell {
 
 class EventsTableViewController: UITableViewController {
     
+    // MARK: - Properties
     var events = [SIEvent]()
+    var event : SIEvent?
+    var time : Double = 0
+    var timer : NSTimer!
 
     var activityView = ActivityView()
+    
+    override func loadView() {
+        super.loadView()
+        for i in 0 ..< events.count {
+            SIRequest().requestEvent(eventId: events[i].id, callback: { event in
+                if let event = event {
+                    event.didLoadEventData = true
+                    self.events[i] = event
+                }
+            })
+        }
+        
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,21 +99,45 @@ class EventsTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         let activityView = ActivityView()
-        activityView.displayActivityView(message: "Loading Event Data...", forView: self.view, withRequest: nil)
-        activityView.animateProgress(1.0)
-        SIRequest().requestEvent(events[indexPath.row].id) { event in
-            
+        activityView.displayActivityView(message: "Loading Event Data...", forView: self.view)
+
+        let event = events[indexPath.row]
+        if event.didLoadEventData {
             activityView.removeActivityViewFromDisplay()
-            
-            if let event = event {
-                self.performSegueWithIdentifier("EventMenu", sender: event)
-            } else {
-                self.displayBadRequestNotification()
-            }
+            self.performSegueWithIdentifier("EventMenu", sender: event)
+        } else {
+            self.event = event
+            time = 0
+            timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: #selector(EventsTableViewController.checkRequestStatus), userInfo: nil, repeats: true)
         }
-        
     }
     
+    @objc func checkRequestStatus() {
+        
+        guard let event = self.event else {
+            fatalError()
+        }
+        
+        time += 0.1
+        
+        if self.events.count == 0 {
+            timer.invalidate()
+            activityView.removeActivityViewFromDisplay()
+            return
+        }
+        
+        if event.didLoadEventData {
+            timer.invalidate()
+            activityView.removeActivityViewFromDisplay()
+            performSegueWithIdentifier("EventMenu", sender: event)
+        }
+        
+        if time > 12.0 {
+            timer.invalidate()
+            activityView.removeActivityViewFromDisplay()
+            displayBadRequestNotification()
+        }
+    }
     
     // MARK: - Navigation
     
@@ -109,12 +152,6 @@ class EventsTableViewController: UITableViewController {
     
     
 }
-
-
-
-
-
-
 
 
 

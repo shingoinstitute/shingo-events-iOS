@@ -112,7 +112,7 @@ class SessionTableViewCell: UITableViewCell {
         self.session = session
         
         var speakerLabelText = ""
-        if let speaker = session.sessionSpeakers.first {
+        if let speaker = session.speakers.first {
             
             if !session.sessionType.isEmpty {
                 speakerLabelText = "\(session.sessionType): "

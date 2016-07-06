@@ -120,7 +120,7 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
         contentView.addSubview(summaryLabel)
         contentView.addSubview(textField)
         scrollView.addSubview(contentView)
-        if session.sessionSpeakers.count > 0 {
+        if session.speakers.count > 0 {
             scrollView.addSubview(tableView)
         }
         view.addSubview(scrollView)
@@ -133,7 +133,7 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
         contentView.autoSetDimension(.Width, toSize: view.frame.width)
         contentView.autoPinEdgeToSuperviewEdge(.Right)
         
-        if session.sessionSpeakers.count != 0 {
+        if session.speakers.count != 0 {
             tableView.autoPinEdge(.Top, toEdge: .Bottom, ofView: contentView)
             tableView.autoPinEdgeToSuperviewEdge(.Left)
             tableView.autoPinEdgeToSuperviewEdge(.Right)
@@ -166,9 +166,9 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
         textField.autoPinEdge(.Top, toEdge: .Bottom, ofView: summaryLabel, withOffset: 0)
         textField.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: contentView, withOffset: 0.0)
         
-        if session.sessionSpeakers.count > 0 {
+        if session.speakers.count > 0 {
             let tableViewCellHeight:CGFloat = 117.0
-            let tableViewHeight:CGFloat = CGFloat(tableView.contentSize.height) + (CGFloat(tableViewCellHeight) * CGFloat(session.sessionSpeakers.count))
+            let tableViewHeight:CGFloat = CGFloat(tableView.contentSize.height) + (CGFloat(tableViewCellHeight) * CGFloat(session.speakers.count))
             tableView.autoSetDimension(.Height, toSize: tableViewHeight)
             tableView.autoPinEdge(.Top, toEdge: .Bottom, ofView: contentView, withOffset: 0.0)
             tableView.autoPinEdgeToSuperviewEdge(.Left)
@@ -185,7 +185,7 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return session.sessionSpeakers.count
+        return session.speakers.count
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -200,7 +200,7 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
         
         let cell = tableView.dequeueReusableCellWithIdentifier("SpeakerCell", forIndexPath: indexPath) as! SessionSpeakerCell
         
-        cell.updateCell(session.sessionSpeakers[indexPath.row])
+        cell.updateCell(session.speakers[indexPath.row])
         
         return cell
         

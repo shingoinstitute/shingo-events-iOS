@@ -13,6 +13,8 @@ import PureLayout
 class EventMenuViewController: UIViewController {
     
     var event : SIEvent!
+//    var eventSpeakers = [SISpeaker]()
+    var eventSpeakers = [String:SISpeaker]()
     
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var eventNameLabel: UILabel!
@@ -77,6 +79,46 @@ class EventMenuViewController: UIViewController {
     
     let BUTTON_WIDTH: CGFloat = 110.0
     let BUTTON_HEIGHT: CGFloat = 110.0
+    
+    override func loadView() {
+        super.loadView()
+        
+        // Load Event Information
+        event.requestAgendas({
+            for agenda in self.event.agendaItems {
+                agenda.requestAgendaInformation() {
+                    for session in agenda.sessions {
+                        session.requestSessionInformation({
+                            
+                        });
+                        session.requestSpeakers({
+                            for speaker in session.speakers {
+                                speaker.requestSpeakerInformation({
+                                    guard let _ = self.eventSpeakers[speaker.name] else {
+                                        self.eventSpeakers[speaker.name] = speaker
+                                        return
+                                    }
+                                });
+                            }
+                        });
+                    }
+                }
+            }
+        });
+        
+        // Load Speakers for entire event
+        
+        // Load venue photos
+        
+        // Load Recipient information
+        
+        // Load Affiliate information
+        
+        // Load Exhibitor information
+        
+        // Load Sponsors information
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -186,7 +228,7 @@ class EventMenuViewController: UIViewController {
     
     func didTapSchedule(sender: AnyObject) {
         
-        SIRequest().requestDays(eventId: event.id, callback: { agenda in
+        SIRequest().requestAgendaDays(eventId: event.id, callback: { agenda in
           
             guard let agenda = agenda else {
                 self.displayBadRequestNotification()
@@ -200,24 +242,7 @@ class EventMenuViewController: UIViewController {
     }
     
     func didTapSpeakers(sender: AnyObject) {
-        
-        // This needs to be a dictionary
-        var speakers = [SISpeaker]()
-        
-        for agenda in event.agendaItems {
-            for session in agenda.sessions {
-                
-                SIRequest().requestSpeakers(sessionId: session.id, callback: { s in
-                    if let s = s {
-                        speakers += s
-                    }
-                })
-                
-            }
-        }
-        
-        self.performSegueWithIdentifier("SpeakerList", sender: self)
-        
+        self.performSegueWithIdentifier("SpeakerList", sender: self.eventSpeakers)
     }
     
     func didTapRecipients(sender: AnyObject) {
@@ -256,7 +281,7 @@ class EventMenuViewController: UIViewController {
         
         if segue.identifier == "SpeakerList" {
             let destination = segue.destinationViewController as! SpeakerListTableViewController
-            // send something
+            destination.speakers = Array(eventSpeakers.values)
         }
         
         if segue.identifier == "RecipientsView" {
