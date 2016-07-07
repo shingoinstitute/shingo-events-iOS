@@ -19,7 +19,7 @@ public class ShingoIconImages: UIImage {
     
     public func shingoIconForDevice() -> UIImage {
         switch UIDevice.currentDevice().modelName {
-            case "iPad Pro":            return UIImage(named: "shingoIcon_iPadPro_Res")!
+            case "iPad Pro":        return UIImage(named: "shingoIcon_iPadPro_Res")!
             case "iPad 2",
             "iPad 3",
             "iPad 4",
@@ -28,21 +28,21 @@ public class ShingoIconImages: UIImage {
             "iPad Mini",
             "iPad Mini 2",
             "iPad Mini 3",
-            "iPad Mini 4":             return UIImage(named: "shingoIcon_iPadAir_Mini_Res")!
+            "iPad Mini 4":          return UIImage(named: "shingoIcon_iPadAir_Mini_Res")!
             case "iPhone 6 Plus",
-            "iPhone 6s Plus":          return UIImage(named: "shingo_icon_iPhone6plus_Res")!
+            "iPhone 6s Plus":       return UIImage(named: "shingo_icon_iPhone6plus_Res")!
             case "iPhone 6",
             "iPhone 6s",
-            "iPod Touch 6":               return UIImage(named: "shingo_icon_iPhone6_Res")!
+            "iPod Touch 6":         return UIImage(named: "shingo_icon_iPhone6_Res")!
             case "iPhone 5",
             "iPhone 5c",
             "iPhone 5s",
-            "iPod Touch 5":  return UIImage(named: "shingoIcon_iPhone5_Res")!
+            "iPod Touch 5":         return UIImage(named: "shingoIcon_iPhone5_Res")!
             case "iPhone 4",
-            "iPhone 4s":               return UIImage(named: "shingoIcon_iPhone4_Res")!
-            case "Simulator":          return UIImage(named: "shingoIcon_iPadPro_Res")!
-        default:
-            return UIImage(named: "shingo_icon_iPhone6plus_Res")!
+            "iPhone 4s":            return UIImage(named: "shingoIcon_iPhone4_Res")!
+            case "Simulator":       return UIImage(named: "shingo_icon_iPhone6_Res")!
+            default:
+                                    return UIImage(named: "shingo_icon_iPhone6plus_Res")!
         }
     }
 }

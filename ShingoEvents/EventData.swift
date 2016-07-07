@@ -16,7 +16,7 @@ class SIObject {
     
     var name : String
     var id : String
-    var image : UIImage?
+    private var image : UIImage?
     
     init() {
         name = ""
@@ -24,7 +24,7 @@ class SIObject {
         image = nil
     }
     
-    func requestImage(url : String, callback: (image : UIImage?) -> Void) {
+    private func requestImage(url : String, callback: (image : UIImage?) -> Void) {
         Alamofire.request(.GET, url).responseImage { response in
             
             guard let image = response.result.value else {
@@ -38,6 +38,7 @@ class SIObject {
         }
     }
 }
+
 
 class SIEvent: SIObject {
     
@@ -77,20 +78,17 @@ class SIEvent: SIObject {
     
     /// Gets basic information about an events agenda objects.
     func requestAgendas(callback: () -> ()) {
-        SIRequest().requestAgendaDays(eventId: id, callback: { agendas in
+        SIRequest().requestAgendaDays(eventId: self.id, callback: { agendas in
             
-            if let agendas = agendas {
-                self.didLoadAgendaSessions = true
-                self.agendaItems = agendas
-                
-                for agenda in agendas {
-                    agenda.requestAgendaInformation() {
-                        
-                    }
-                }
+            guard let agendas = agendas else {
                 callback()
+                return
             }
             
+            self.agendaItems = agendas
+            self.didLoadAgendaSessions = true
+            
+            callback()
         });
     }
     
@@ -102,7 +100,17 @@ class SIEvent: SIObject {
         }
     }
     
+    func getBannerImage() -> UIImage {
+        guard let image = self.image else {
+            requestBannerImage()
+            return UIImage()
+        }
+        
+        return image
+    }
+    
 }
+
 
 // An Event Day
 class SIAgenda: SIObject {
@@ -123,7 +131,7 @@ class SIAgenda: SIObject {
     
     /// Gets additional information about agenda object.
     func requestAgendaInformation(callback: () -> ()) {
-        SIRequest().requestAgendaDay(agendaId: id) { (agenda) in
+        SIRequest().requestAgendaDay(agendaId: id) { agenda in
             if let agenda = agenda {
                 self.displayName = agenda.displayName
                 self.date = agenda.date
@@ -145,16 +153,13 @@ class SIAgenda: SIObject {
         });
     }
     
-    func isOnLaterDay(eventDay: SIAgenda) -> Bool {
-        // Needs implementation
-        return false
-    }
-    
 }
+
 
 class SISession: SIObject {
     
     var didLoadSpeakers : Bool
+    var didLoadSessionInformation : Bool
     var speakers : [SISpeaker]
     
     var displayName : String
@@ -167,8 +172,9 @@ class SISession: SIObject {
     
     override init() {
         didLoadSpeakers = false
+        didLoadSessionInformation = false
         speakers = [SISpeaker]()
-        displayName = ""
+        self.displayName = "No Display Name"
         startDate = NSDate().notionallyEmptyDate()
         endDate = NSDate().notionallyEmptyDate()
         sessionType = ""
@@ -191,6 +197,8 @@ class SISession: SIObject {
                 self.room = session.room
                 self.name = session.name
                 self.id = session.id
+                
+                self.didLoadSessionInformation = true
             }
         });
     }
@@ -205,6 +213,7 @@ class SISession: SIObject {
     }
     
 }
+
 
 class SISpeaker: SIObject {
     
@@ -260,14 +269,17 @@ class SISpeaker: SIObject {
     }
     
     func getSpeakerImage() -> UIImage {
-        if let image = self.image {
-            return image
-        } else {
+        
+        guard let image = self.image else {
+            requestSpeakerImage()
             return UIImage(named: "silhouette")!
         }
+        
+        return image
     }
     
 }
+
 
 class SIExhibitor: SIObject {
     
@@ -277,7 +289,7 @@ class SIExhibitor: SIObject {
     var logoURL : String
     var bannerURL : String
     var mapCoordinate : (Double, Double)
-    var bannerImage : UIImage?
+    private var bannerImage : UIImage?
     
     override init() {
         summary = ""
@@ -332,68 +344,156 @@ class SIExhibitor: SIObject {
     
 }
 
-/////////////////
-// got to here //
-/////////////////
 
-struct SIRecipients {
-    var shingoPrizeRecipients: [SIRecipient]?
-    var silverRecipients: [SIRecipient]?
-    var bronzeRecipients: [SIRecipient]?
-    var researchRecipients: [SIRecipient]?
+class SIHotel: SIObject {
     
-    init() {
-        shingoPrizeRecipients = nil
-        silverRecipients = nil
-        bronzeRecipients = nil
-        researchRecipients = nil
+    var address : String
+    var phone : String
+    var website : String
+    var associatedEventId : String
+    var hotelCode : String
+    var travelInformation : String
+    var prices : [Double]
+    
+    
+    override init() {
+        address = ""
+        phone = ""
+        website = ""
+        associatedEventId = ""
+        hotelCode = ""
+        travelInformation = ""
+        prices = [Double]()
+        super.init()
     }
     
 }
+
 
 class SIRecipient: SIObject {
     
-    enum RecipientType {
-        case ShingoAward,
+    enum AwardType {
+        case ShingoPrize,
         Silver,
         Bronze,
         Research,
-        NonType
+        Publication,
+        None
+    }
+
+    var awardType : AwardType
+    var organization : String
+    var photoList : String //Comma separated list of URLs to photos
+    var videoList : String //Comma separated list of URLs to videos
+    var pressRelease : String
+    var profile : String
+    var summary : String
+    var logoURL : String {
+        didSet {
+            requestRecipientImage(self.logoURL)
+        }
+    }
+
+    override init() {
+        awardType = AwardType.None
+        organization = ""
+        logoURL = ""
+        photoList = ""
+        videoList = ""
+        pressRelease = ""
+        profile = ""
+        summary = ""
+        super.init()
     }
     
-    var awardType : RecipientType!
-    var abstract : String!
-    var richAbstract : String?
-    var eventId : String!
-    var award : String!
-    var authors : String!
-    var logoBookCoverUrl : String!
-    var logoBookCoverImage : UIImage!
+    func requestRecipientImage(url:String) {
+        requestImage(url) { image in
+            guard let image = image else {
+                self.image = UIImage(named: "logoComingSoon500x500")
+                return
+            }
+            
+            self.image = image
+        }
+    }
+    
+    func getRecipientImage() -> UIImage {
+        guard let image = image else {
+            return UIImage(named: "logoComingSoon500x500")!
+        }
+        
+        return image
+    }
+    
+    func parsePhotoList() -> [UIImage]? {
+        // Needs to be implemented
+        return nil
+    }
+    
+    func parseVideoList() -> [String]? {
+        // Needs to be implemented
+        return nil
+    }
+    
+}
+
+class SIRoom: SIObject {
+    
+    var mapCoordinate : (Double, Double)
     
     override init() {
+        mapCoordinate = (Double(), Double())
         super.init()
-        awardType = RecipientType.NonType
-        abstract = ""
-        richAbstract = nil
-        eventId = ""
-        award = ""
-        authors = ""
-        logoBookCoverUrl = ""
-        logoBookCoverImage = UIImage(named: "shingo_icon_skinny")
-    }
-    
-    func getRecipientImage(url:String) {
-        requestImage(url) { image in
-            if let image = image as UIImage? {
-                self.logoBookCoverImage = image
-            }
-        }
     }
     
 }
 
 
+class SISponsor: SIObject {
+    
+    enum SPONSOR_TYPE : Int {
+        case None = 0,
+        Friend = 1,
+        Supporter = 2,
+        Benefactor = 3,
+        Champion = 4,
+        President = 5
+    }
 
+    
+//    override init() {
+//        super.init()
+//        sponsorType = .NonType
+//        mdfAmount = 0.0
+//        logoUrl = ""
+//        logoImage = UIImage(named: "sponsor_banner_pl")
+//        bannerUrl = ""
+//        bannerImage = UIImage(named: "sponsor_banner_pl")
+//        level = ""
+//        eventId = ""
+//    }
+//    
+//    func requestSponsorImage(url:String) {
+//        self.requestImage(url) { image in
+//            if let image = image as UIImage? {
+//                self.logoImage = image
+//            }
+//        }
+//    }
+//    
+//    func requestBannerImage(url:String) {
+//        requestImage(url) { image in
+//            if let image = image as UIImage? {
+//                self.bannerImage = image
+//            }
+//        }
+//    }
+    
+}
+
+////////////////////////////////////
+// Depracted code below this line //
+////////////////////////////////////
 
 class SIAffiliate: SIObject {
     
@@ -426,59 +526,11 @@ class SIAffiliate: SIObject {
     
 }
 
-class SISponsor: SIObject {
-    
-    enum SPONSOR_TYPE {
-        case Friend,
-        Supporter,
-        Benefactor,
-        Champion,
-        President,
-        NonType
-    }
-    
-    var sponsorType:SPONSOR_TYPE!
-    var mdfAmount:Double!
-    var logoUrl:String!
-    var logoImage:UIImage!
-    var bannerUrl:String!
-    var bannerImage:UIImage!
-    var level:String!
-    var eventId:String!
-    
-    override init() {
-        super.init()
-        sponsorType = .NonType
-        mdfAmount = 0.0
-        logoUrl = ""
-        logoImage = UIImage(named: "sponsor_banner_pl")
-        bannerUrl = ""
-        bannerImage = UIImage(named: "sponsor_banner_pl")
-        level = ""
-        eventId = ""
-    }
-    
-    func requestSponsorImage(url:String) {
-        self.requestImage(url) { image in
-            if let image = image as UIImage? {
-                self.logoImage = image
-            }
-        }
-    }
-    
-    func requestBannerImage(url:String) {
-        requestImage(url) { image in
-            if let image = image as UIImage? {
-                self.bannerImage = image
-            }
-        }
-    }
-}
 
 
 class SIVenue: SIObject {
     var url:String!
-    
+    var rooms : [SIRoom]!
     override init() {
         super.init()
         self.url = ""
@@ -491,12 +543,28 @@ class SIVenue: SIObject {
         self.url = url
     }
     
-    func getVenueMapImage(url:String) {
+    private func requestVenueMapImage(url:String) {
         requestImage(url) { image in
             if let image = image as UIImage? {
                 self.image = image
             }
         }
+    }
+    
+    func getVenueMapImage() -> UIImage {
+        guard let image = image else {
+            return UIImage(named: "shingo_icon_skinny")!
+        }
+        
+        if image.isEmpty() {
+            return UIImage(named: "shingo_icon_skinny")!
+        }
+        
+        return image
+    }
+    
+    func getRooms() {
+        // Needs to be implemented
     }
 }
 

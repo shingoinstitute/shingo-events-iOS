@@ -31,19 +31,12 @@ class RecipientTableViewCell: UITableViewCell {
 
     }
     
-    func updateCell()
-    {
+    func updateCell() {
         recipientLabel.text = recipient.name
         
         recipientImage.contentMode = UIViewContentMode.ScaleAspectFit
-        if let image = recipient.logoBookCoverImage
-        {
-            recipientImage.image = image
-        }
-        else
-        {
-            recipientImage.image = UIImage(named: "logoComingSoon")
-        }
+        recipientImage.image = recipient.getRecipientImage()
+        
     }
     
 }

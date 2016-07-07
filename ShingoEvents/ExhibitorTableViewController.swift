@@ -130,7 +130,7 @@ class ExhibitorTableViewController: UITableViewController {
         let cell :ExhibitorCell = ExhibitorCell()
         let exhibitor = sectionInformation[indexPath.section].1[indexPath.row]
         cell.exhibitor = exhibitor
-        cell.exhibitorImage.image = exhibitor.logoImage
+        cell.exhibitorImage.image = exhibitor.getLogoImage()
         cell.contentView.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 150)
         cell.setNeedsUpdateConstraints()
         cell.updateConstraintsIfNeeded()

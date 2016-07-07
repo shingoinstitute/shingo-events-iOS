@@ -228,17 +228,23 @@ class EventMenuViewController: UIViewController {
     
     func didTapSchedule(sender: AnyObject) {
         
-        SIRequest().requestAgendaDays(eventId: event.id, callback: { agenda in
-          
-            guard let agenda = agenda else {
-                self.displayBadRequestNotification()
-                return
-            }
-            
-            self.performSegueWithIdentifier("SchedulesView", sender: agenda)
-            
-        })
-
+//        if event.didLoadAgendaSessions {
+//            self.performSegueWithIdentifier("SchedulesView", sender: nil)
+//        }
+//        } else {
+//        
+            SIRequest().requestAgendaDays(eventId: event.id, callback: { agendas in
+              
+                guard let agendas = agendas else {
+                    self.displayBadRequestNotification()
+                    return
+                }
+                
+                self.event.agendaItems = agendas
+                self.performSegueWithIdentifier("SchedulesView", sender: nil)
+                
+            });
+//        }
     }
     
     func didTapSpeakers(sender: AnyObject) {
@@ -275,8 +281,9 @@ class EventMenuViewController: UIViewController {
         
         if segue.identifier == "SchedulesView" {
             let destination = segue.destinationViewController as! SchedulesTableViewController
-            destination.agenda = sender as! [SIAgenda]
-            destination.eventName = self.event.name
+            sortAgendaDays()
+            destination.agendas = event.agendaItems
+            destination.eventName = event.name
         }
         
         if segue.identifier == "SpeakerList" {
@@ -315,27 +322,22 @@ class EventMenuViewController: UIViewController {
         
     }
     
-    // MARK: - Custom Functions
+    // MARK: - Other Functions
     
-    func sortWeekByDay(eventDayList:[SIAgenda]) -> [SIAgenda] {
+    func sortAgendaDays() {
         
-        var days = eventDayList
-        
-        for i in 0 ..< days.count - 1 {
+        for i in 0 ..< event.agendaItems.count - 1{
             
-            for j in 0 ..< (days.count - i - 1) {
-            
-                if days[j].isOnLaterDay(days[j+1]) {
-                    let temp = days[j]
-                    days[j] = days[j+1]
-                    days[j+1] = temp
+            for n in 0 ..< event.agendaItems.count - i - 1 {
+                
+                if event.agendaItems[n].date.isGreaterThanDate(event.agendaItems[n+1].date) {
+                    let day = event.agendaItems[n]
+                    event.agendaItems[n] = event.agendaItems[n+1]
+                    event.agendaItems[n+1] = day
                 }
             }
         }
-        
-        return days
     }
-    
     
     // Some simple bubble sorting functions
     func sortSpeakersByLastName() {

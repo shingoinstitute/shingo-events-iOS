@@ -94,34 +94,34 @@ class SponsorsTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
 //        let cell = tableView.dequeueReusableCellWithIdentifier("SponsorCell", forIndexPath: indexPath) as! SponsorTableViewCell
         let cell = SponsorTableViewCell()
-        switch sectionTitles[indexPath.section] {
-        case "Friends":
-            if (friends?.count > 0) {
-                cell.bannerImage.image = friends[indexPath.row].bannerImage
-                cell.sponsor = friends[indexPath.row]
-            }
-        case "Supporters":
-            if (supporters?.count > 0) {
-                cell.bannerImage.image = supporters[indexPath.row].bannerImage
-                cell.sponsor = supporters[indexPath.row]
-            }
-        case "Benefactors":
-            if (benefactors?.count > 0) {
-                cell.bannerImage.image = benefactors[indexPath.row].bannerImage
-                cell.sponsor = benefactors[indexPath.row]
-            }
-        case "Champions":
-            if (champions?.count > 0) {
-                cell.bannerImage.image = champions[indexPath.row].bannerImage
-                cell.sponsor = champions[indexPath.row]
-            }
-        case "Presidents":
-            if (presidents?.count > 0) {
-                cell.bannerImage.image = presidents[indexPath.row].bannerImage
-                cell.sponsor = presidents[indexPath.row]
-            }
-        default: break
-        }
+//        switch sectionTitles[indexPath.section] {
+//        case "Friends":
+//            if (friends?.count > 0) {
+//                cell.bannerImage.image = friends[indexPath.row].getRecipientImage()
+//                cell.sponsor = friends[indexPath.row]
+//            }
+//        case "Supporters":
+//            if (supporters?.count > 0) {
+//                cell.bannerImage.image = supporters[indexPath.row].getRecipientImage()
+//                cell.sponsor = supporters[indexPath.row]
+//            }
+//        case "Benefactors":
+//            if (benefactors?.count > 0) {
+//                cell.bannerImage.image = benefactors[indexPath.row].getRecipientImage()
+//                cell.sponsor = benefactors[indexPath.row]
+//            }
+//        case "Champions":
+//            if (champions?.count > 0) {
+//                cell.bannerImage.image = champions[indexPath.row].getRecipientImage()
+//                cell.sponsor = champions[indexPath.row]
+//            }
+//        case "Presidents":
+//            if (presidents?.count > 0) {
+//                cell.bannerImage.image = presidents[indexPath.row].getRecipientImage()
+//                cell.sponsor = presidents[indexPath.row]
+//            }
+//        default: break
+//        }
         cell.selectionStyle = .None
         cell.contentView.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 150.0)
         cell.setNeedsUpdateConstraints()
@@ -169,11 +169,11 @@ class SponsorTableViewCell:UITableViewCell {
                 self.bannerImage.autoSetContentCompressionResistancePriorityForAxis(.Vertical)
             }
             
-            if let image = self.sponsor.logoImage {
-                bannerImage.image = image
-            } else if let image = self.sponsor.bannerImage {
-                bannerImage.image = image
-            }
+//            if let image = self.sponsor.logoImage {
+//                bannerImage.image = image
+//            } else if let image = self.sponsor.bannerImage {
+//                bannerImage.image = image
+//            }
             
             bannerImage.contentMode = UIViewContentMode.ScaleAspectFit
             

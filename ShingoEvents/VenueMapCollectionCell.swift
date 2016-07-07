@@ -21,6 +21,6 @@ class VenueMapCollectionCell: UICollectionViewCell {
     
     private func updateCell() {
         mapNameLabel.text = self.venueMap.name
-        venueImage.image = self.venueMap.image
+        venueImage.image = self.venueMap.getVenueMapImage()
     }
 }

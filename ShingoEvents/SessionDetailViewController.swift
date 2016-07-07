@@ -230,7 +230,7 @@ class SessionSpeakerCell: UITableViewCell {
         self.speaker = speaker
         
         speakerNameLabel.text = speaker.name
-        speakerImage.image = speaker.image
+        speakerImage.image = speaker.getSpeakerImage()
         speakerImage.layer.cornerRadius = 3.0
     }
     

@@ -29,12 +29,7 @@ class ExhibitorInfoViewController: UIViewController {
         
         descriptionTextField.text = ""
         
-        if exhibitor.richDescription != nil {
-            getDescriptionForRichText()
-        } else {
-            getDescriptionForPlainText()
-        }
-    
+        getDescriptionForRichText()
         
         view.addSubview(scrollView)
         view.addSubview(backdrop)
@@ -48,7 +43,7 @@ class ExhibitorInfoViewController: UIViewController {
         scrollView.addSubview(descriptionTextField)
         view.bringSubviewToFront(scrollView)
         
-        exhibitorImage.image = exhibitor.logoImage
+        exhibitorImage.image = exhibitor.getLogoImage()
         exhibitorImage.contentMode = .ScaleAspectFit
         exhibitorImage.autoSetDimension(.Height, toSize: 150.0)
         exhibitorImage.autoPinEdgeToSuperviewEdge(.Top, withInset: 8)
@@ -87,8 +82,8 @@ class ExhibitorInfoViewController: UIViewController {
                                                    NSUnderlineStyleAttributeName : NSUnderlineStyle.StyleSingle.rawValue]
                                                    
         
-        if exhibitor.richDescription != nil {
-            let htmlString: String! = "<style>body{color:white;}</style><font size=\"5\">" + exhibitor.richDescription! + "</font></style>";
+        if !exhibitor.summary.isEmpty {
+            let htmlString: String! = "<style>body{color:white;}</style><font size=\"5\">" + exhibitor.summary + "</font></style>";
             do {
             let description = try NSAttributedString(data: htmlString.dataUsingEncoding(NSUTF8StringEncoding)!,
                                                         options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
@@ -104,49 +99,16 @@ class ExhibitorInfoViewController: UIViewController {
         richText.appendAttributedString(NSAttributedString(string: "\n\n"))
         
         
-        if exhibitor.website != nil {
+        if !exhibitor.website.isEmpty  {
             richText.appendAttributedString(NSAttributedString(string: String("Website: " + exhibitor.website + "\n"), attributes: attrs))
         }
-        if exhibitor.email != nil {
-            richText.appendAttributedString(NSAttributedString(string: String("Email: " + exhibitor.email + "\n"), attributes: attrs))
+        if !exhibitor.contactEmail.isEmpty {
+            richText.appendAttributedString(NSAttributedString(string: String("Email: " + exhibitor.contactEmail + "\n"), attributes: attrs))
         } else {
             richText.appendAttributedString(NSAttributedString(string: "Email: Not available\n", attributes: attrs))
         }
-        if exhibitor.phone != nil {
-            richText.appendAttributedString(NSAttributedString(string: String("Phone: " + exhibitor.phone + "\n"), attributes: attrs))
-        } else {
-            richText.appendAttributedString(NSAttributedString(string: "Phone: Not available\n", attributes: attrs))
-        }
         
         descriptionTextField.attributedText = richText;
-    }
-    
-    func getDescriptionForPlainText() {
-        if !exhibitor.name.isEmpty {
-            descriptionTextField.text = exhibitor.name + "\n"
-        }
-        
-        if exhibitor.email != nil {
-            descriptionTextField.text! += "Email: " + exhibitor.email! + "\n"
-        } else {
-            descriptionTextField.text! += "Email: Not available\n"
-        }
-        
-        if let phoneText = exhibitor?.phone {
-            descriptionTextField.text! += "Phone: " + phoneText + "\n\n"
-        } else {
-            descriptionTextField.text! += "Phone: Not available\n\n"
-        }
-        
-        if exhibitor.description != nil {
-            descriptionTextField.text! += exhibitor.description + "\n"
-        } else {
-            descriptionTextField.text! += "Company description coming soon.\n"
-        }
-        
-        if exhibitor.website != nil {
-            descriptionTextField.text! += "Visit " + exhibitor.name + "'s website at " + exhibitor.website + "\n"
-        }
     }
     
 

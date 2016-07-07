@@ -13,6 +13,23 @@ class SessionListTableViewController: UITableViewController {
     
     var sessions: [SISession]!
     
+    var timer : NSTimer!
+    var time : Double = 0
+    var selectedCellIndexPath : NSIndexPath!
+    
+    override func loadView() {
+        
+        for i in 0 ..< sessions.count {
+            sessions[i].requestSessionInformation({
+                let cell = self.tableView.cellForRowAtIndexPath(NSIndexPath(forRow: i, inSection: 0)) as! SessionTableViewCell
+                cell.updateCellProperties(session: self.sessions[i])
+                cell.setNeedsDisplay()
+            });
+        }
+        
+        super.loadView()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -22,20 +39,59 @@ class SessionListTableViewController: UITableViewController {
         
     }
     
-
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func checkOnRequestStatus() {
+        time += 0.1
         
-        SIRequest().requestSession(sessions[indexPath.row].id, callback: { session in
-            guard let session = session else {
-                print("Warning, could not segue to Session Detail View with nil SISession")
-                return
-            }
-            self.performSegueWithIdentifier("SessionDetailView", sender: session)
-        })
+        if sessions[selectedCellIndexPath.row].didLoadSessionInformation {
+            timer.invalidate()
+            performSegueWithIdentifier("SessionDetailView", sender: sessions[selectedCellIndexPath.row])
+            return
+        }
+        
+        if time > 12.0 {
+            timer.invalidate()
+            time = 0
+            print("WARNING: COULD NOT GET SESSION DATA")
+        }
         
     }
     
+    // MARK: - Navigation
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if segue.identifier == "SessionDetailView" {
+            let destination = segue.destinationViewController as! SessionDetailViewController
+            destination.session = sender as! SISession
+        }
+        
+    }
+    
+}
+
+extension SessionListTableViewController {
+    
     // MARK: - Table view data source
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if sessions[indexPath.row].didLoadSessionInformation {
+            self.performSegueWithIdentifier("SessionDetailView", sender: sessions[indexPath.row])
+        } else {
+            self.selectedCellIndexPath = indexPath
+            self.time = 0
+            self.timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: #selector(SessionListTableViewController.checkOnRequestStatus), userInfo: nil, repeats: true)
+        }
+        
+//        SIRequest().requestSession(sessions[indexPath.row].id, callback: { session in
+//            guard let session = session else {
+//                print("Warning, could not segue to Session Detail View with nil SISession")
+//                return
+//            }
+//            self.performSegueWithIdentifier("SessionDetailView", sender: session)
+//        })
+        
+    }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
@@ -62,7 +118,7 @@ class SessionListTableViewController: UITableViewController {
                     
         }
         
-        return "No sessions for this day yet."
+        return "No sessions have been registered for this day yet."
         
     }
     
@@ -83,18 +139,6 @@ class SessionListTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 130.0
     }
-    
-    // MARK: - Navigation
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-
-        if segue.identifier == "SessionDetailView" {
-            let destination = segue.destinationViewController as! SessionDetailViewController
-            destination.session = sender as! SISession
-        }
-        
-    }
-
     
 }
 

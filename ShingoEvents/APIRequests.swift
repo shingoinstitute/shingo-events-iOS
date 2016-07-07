@@ -16,9 +16,12 @@ let EVENTS_URL = BASE_URL + "/salesforce/events"
 class SIRequest {
     
     // MARK: - Properties
-    var dateFormatter = NSDateFormatter(locale: "en_US_POSIX", dateFormat: "yyyy-MM-dd")
-    var sessionDateFormatter = NSDateFormatter(locale: "en_US_POSIX", dateFormat: "yyyy-MM-dd'T'HH:mm:ss.SSS")
-    
+    var dateFormatter = NSDateFormatter(locale: "en_US_POSIX",
+                                        dateFormat: "yyyy-MM-dd",
+                                        timeZone: "UTC")
+    var sessionDateFormatter = NSDateFormatter(locale: "en_US_POSIX",
+                                               dateFormat: "yyyy-MM-dd'T'HH:mm:ss.SSS",
+                                               timeZone: "UTC")
     
     // MARK: - API Calls
     ///////////////
@@ -128,7 +131,7 @@ class SIRequest {
     
     /// Gets all days for a single event using an event ID.
     func requestAgendaDays(eventId eventId: String, callback: (agendas: [SIAgenda]?) -> Void) {
-        
+
         getRequest(url: EVENTS_URL + "/days?event_id=\(eventId)") { json in
             
             guard let json = json else {
@@ -189,9 +192,9 @@ class SIRequest {
     }
     
     /// Gets a single day using an agenda ID.
-    func requestAgendaDay(agendaId id: String, callback: (agenda: SIAgenda?) -> ()) {
+    func requestAgendaDay(agendaId id: String, callback: (agenda: SIAgenda?) -> Void) {
         
-        getRequest(url: EVENTS_URL + "/days?\(id)") { json in
+        getRequest(url: EVENTS_URL + "/days/\(id)") { json in
             
             guard let json = json else {
                 callback(agenda: nil)
@@ -362,13 +365,13 @@ class SIRequest {
                 }
                 
                 if let startDate = record["Start_Date_Time__c"].string {
-                    if let startDate = self.sessionDateFormatter.dateFromString(startDate) {
+                    if let startDate = self.sessionDateFormatter.dateFromString(self.sessionDateTimeStringParser(rawDate: startDate)) {
                         session.startDate = startDate
                     }
                 }
                 
                 if let endDate = record["End_Date_Time__c"].string {
-                    if let endDate = self.sessionDateFormatter.dateFromString(endDate) {
+                    if let endDate = self.sessionDateFormatter.dateFromString(self.sessionDateTimeStringParser(rawDate: endDate)) {
                         session.endDate = endDate
                     }
                 }
@@ -467,7 +470,7 @@ class SIRequest {
     /// Gets a single speaker using a speaker ID.
     func requestSpeaker(speakerId id: String, callback: (speaker: SISpeaker?) -> ()) {
         
-        getRequest(url: EVENTS_URL + "/speakers/\(id)", { json in
+        getRequest(url: EVENTS_URL + "/speakers/\(id)", callback: { json in
             
             guard let json = json else {
                 callback(speaker: nil)
@@ -547,7 +550,7 @@ class SIRequest {
                     }
                     
                     if let logoURL = record["Organization__r"]["Logo__c"].string {
-                        exhibitor.logoUrl = logoURL
+                        exhibitor.logoURL = logoURL
                     }
                     
                     exhibitors.append(exhibitor)
@@ -621,39 +624,285 @@ class SIRequest {
         
     }
     
-    func requestHotels(eventId id: String, callback: () -> ()) {
+    func requestHotels(eventId id: String, callback: (hotels: [SIHotel]?) -> ()) {
         
+        getRequest(url: EVENTS_URL + "/hotels?event_id=\(id)", callback: { json in
         
+            guard let json = json else {
+                callback(hotels: nil)
+                return
+            }
+            
+            var hotels = [SIHotel]()
+            
+            if json["hotels"].isExists() {
+                
+                for record in json["hotels"].array! {
+                    
+                    let hotel = SIHotel()
+                    
+                    if let id = record["Id"].string {
+                        hotel.id = id
+                    }
+                    
+                    if let name = record["Name"].string {
+                        hotel.name = name
+                    }
+                    
+                    if let address = record["Address__c"].string {
+                        hotel.address = address
+                    }
+                    
+                    if let phone = record["Hotel_Phone__c"].string {
+                        hotel.phone = phone
+                    }
+                    
+                    if let website = record["Hotel_Website__c"].string {
+                        hotel.website = website
+                    }
+                    
+//                     Need to ask Dustin about the API response for this  field.
+//                    if let eventId = record["Event_Hotel_Associations__r"] {
+//                        
+//                    }
+                    
+                    hotels.append(hotel)
+                }
+            }
+            
+            callback(hotels: hotels)
+            
+        });
         
     }
     
-    func requestHotel(hotelId id: String, callback: () -> Void) {
+    func requestHotel(hotelId id: String, callback: (hotel: SIHotel?) -> Void) {
         
+        getRequest(url: EVENTS_URL + "/hotels/\(id)", callback: { json in
         
+            guard let json = json else {
+                callback(hotel: nil)
+                return
+            }
+            
+            let hotel = SIHotel()
+            
+            if json["hotel"].isExists() {
+                
+                let record = json["hotel"]
+                
+                if let id = record["Id"].string {
+                    hotel.id = id
+                }
+                
+                if let name = record["Name"].string {
+                    hotel.name = name
+                }
+                
+                if let address = record["Address__c"].string {
+                    hotel.address = address
+                }
+                
+                if record["Shingo_Prices__r"]["totalSize"].int! > 0 {
+                    for record in record["Shingo_Prices__r"]["records"].array! {
+                        if let price = record["Price__c"].double {
+                            hotel.prices.append(price)
+                        }
+                    }
+                }
+            }
+            
+            callback(hotel: hotel)
+            
+        });
         
     }
     
-    func requestRecipients(eventId id: String, callback: () -> Void) {
+    func requestRecipients(eventId id: String, callback: (recipients: [SIRecipient]?) -> Void) {
         
+        getRequest(url: EVENTS_URL + "/recipients?event_id=\(id)", callback: { json in
         
+            guard let json = json else {
+                callback(recipients: nil)
+                return
+            }
+            
+            var recipients = [SIRecipient]()
+            
+            if json["recipient"].isExists() {
+                
+                let record = json["recipient"]
+                let recipient = SIRecipient()
+                
+                if let id = record["Id"].string {
+                    recipient.id = id
+                }
+                
+                if let name = record["Organization__r"]["Name"].string {
+                    recipient.name = name
+                }
+                
+                if let awardType = record["Award_Type__c"].string {
+                    recipient.awardType = self.parseRecipientAwardType(awardType)
+                }
+                
+                recipients.append(recipient)
+            }
+            
+            callback(recipients: recipients)
+            
+        });
         
     }
     
-    func requestRecipient(recipientId id: String, callback: () -> Void) {
+    func requestRecipient(recipientId id: String, callback: (recipient: SIRecipient?) -> Void) {
         
+        getRequest(url: EVENTS_URL + "/recipients/\(id)", callback: { json in
         
+            guard let json = json else {
+                callback(recipient: nil)
+                return
+            }
+            
+            let recipient = SIRecipient()
+            
+            if json["recipient"].isExists() {
+                
+                let record = json["recipient"]
+                
+                if let id = record["Id"].string {
+                    recipient.id = id
+                }
+                
+                if let name = record["Organization"]["Name"].string {
+                    recipient.name = name
+                }
+                
+                if let logoURL = record["Organization"]["Logo__c"].string {
+                    recipient.logoURL = logoURL
+                }
+                
+                if let awardType = record["Award_Type__c"].string {
+                    recipient.awardType = self.parseRecipientAwardType(awardType)
+                }
+                
+                if let photoList = record["List_of_Photos__c"].string {
+                    recipient.photoList = photoList
+                }
+                
+                if let videoList = record["List_of_Videos__c"].string {
+                    recipient.videoList = videoList
+                }
+                
+                if let pressRelease = record["Press_Release__c"].string {
+                    recipient.pressRelease = pressRelease
+                }
+                
+                if let profile = record["Profile__c"].string {
+                    recipient.profile = profile
+                }
+                
+                if let summary = record["Summary__c"].string {
+                    recipient.summary = summary
+                }
+            }
+            
+            callback(recipient: recipient)
+            
+        });
         
     }
     
-    func requestRooms(venueId id: String, callback: () -> Void) {
+    private func parseRecipientAwardType(awardType: String) -> SIRecipient.AwardType {
+        switch awardType {
+            case "Shingo Prize":
+                return .ShingoPrize
+            case "Silver Medallion":
+                return .Silver
+            case "Bronze Medallion":
+                return .Bronze
+            case "Research":
+                return .Research
+            case "Publication":
+                return .Publication
+            default:
+                return .None
+        }
+    }
+    
+    func requestRooms(venueId id: String, callback: (rooms: [SIRoom]?) -> Void) {
         
+        getRequest(url: EVENTS_URL + "/rooms?venue_id=\(id)", callback: { json in
         
+            guard let json = json else {
+                callback(rooms: nil)
+                return
+            }
+            
+            var rooms = [SIRoom]()
+            
+            if let records = json["rooms"].array {
+                
+                for record in records {
+                    
+                    let room = SIRoom()
+                    
+                    if let id = record["Id"].string {
+                        room.id = id
+                    }
+                    
+                    if let name = record["Name"].string {
+                        room.name = name
+                    }
+                 
+                    rooms.append(room)
+                    
+                }
+                
+            }
+            
+            callback(rooms: rooms)
+            
+        });
         
     }
     
-    func requestRoom(roomId id: String, callback: () -> Void) {
+    func requestRoom(roomId id: String, callback: (room: SIRoom?) -> Void) {
         
+        getRequest(url: EVENTS_URL + "/rooms/\(id)", callback: { json in
         
+            guard let json = json else {
+                callback(room: nil)
+                return
+            }
+            
+            let room = SIRoom()
+            
+            if json["room"].isExists() {
+                
+                let record = json["room"]
+                
+                if let id = record["Id"].string {
+                    room.id = id
+                }
+                
+                if let name = record["Name"].string {
+                    room.name = name
+                }
+                
+                if let x = record["Map_Coordinate__c"]["latitude"].double {
+                    room.mapCoordinate.0 = x
+                }
+                
+                if let y = record["Map_Coordinate__c"]["longitude"].double {
+                    room.mapCoordinate.1 = y
+                }
+
+            }
+
+            callback(room: room)
+            
+        });
         
     }
     

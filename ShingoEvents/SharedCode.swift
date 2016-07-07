@@ -102,10 +102,12 @@ extension NSDate {
 
 extension NSDateFormatter {
     
-    convenience init(locale: String, dateFormat: String) {
+    /// Returns an object initialized with a set locale, date format, and time zone.
+    convenience init(locale: String, dateFormat: String, timeZone: String) {
         self.init()
         self.locale = NSLocale(localeIdentifier: locale)
         self.dateFormat = dateFormat
+        self.timeZone = NSTimeZone(abbreviation: timeZone)
     }
     
 }

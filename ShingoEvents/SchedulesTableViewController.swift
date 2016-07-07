@@ -10,7 +10,7 @@ import UIKit
 
 class SchedulesTableViewController: UITableViewController {
 
-    var agenda : [SIAgenda]!
+    var agendas : [SIAgenda]!
     var eventName : String!
 
     var dataToSend = [SISession]()
@@ -18,7 +18,7 @@ class SchedulesTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if agenda == nil || eventName == nil {
+        if agendas == nil || eventName == nil {
             fatalError()
         }
         
@@ -27,7 +27,7 @@ class SchedulesTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
-        SIRequest().requestSessions(agendaId: agenda[indexPath.row].id, callback: { sessions in
+        SIRequest().requestSessions(agendaId: agendas[indexPath.row].id, callback: { sessions in
             if let sessions = sessions {
                 self.performSegueWithIdentifier("SessionListView", sender: sessions)
             }
@@ -43,13 +43,13 @@ class SchedulesTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return agenda.count
+        return agendas.count
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("ScheduleCell", forIndexPath: indexPath) as! SchedulesTableViewCell
         
-        cell.updateCell(agenda[indexPath.row])
+        cell.updateCell(agendas[indexPath.row])
         
         return cell
     }
@@ -84,15 +84,34 @@ class SchedulesTableViewController: UITableViewController {
         if segue.identifier == "SessionListView" {
             let destination = segue.destinationViewController as! SessionListTableViewController
             if let sessions = sender as? [SISession] {
-                destination.sessions = sessions
+                destination.sessions = self.sortSessionsByDate(sessions)
             }
         }
+    }
+    
+    // MARK: - Other Functions
+    
+    func sortSessionsByDate(sender: [SISession]) -> [SISession] {
+        var sessions = sender
+        for i in 0 ..< sessions.count - 1 {
+            
+            for n in 0 ..< sessions.count - i - 1 {
+                
+                if sessions[n].startDate.isGreaterThanDate(sessions[n+1].startDate) {
+                    let session = sessions[n]
+                    sessions[n] = sessions[n+1]
+                    sessions[n+1] = session
+                }
+            }
+        }
+        
+        return sessions
     }
     
 }
 
 
-class  SchedulesTableViewCell: UITableViewCell {
+class SchedulesTableViewCell: UITableViewCell {
     
     @IBOutlet weak var agendaLabel: UILabel!
     var agenda : SIAgenda!

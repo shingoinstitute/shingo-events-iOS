@@ -10,14 +10,24 @@ import UIKit
 
 class RecipientsTableViewController: UITableViewController {
 
-    var recipients : SIRecipients!
+    var recipients : [SIRecipient]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
     }
 
-
+    func getRecipientAwardTypeCount(awardType type: SIRecipient.AwardType) -> Int {
+        var count : Int = 0
+        for recipient in recipients {
+            if recipient.awardType == type {
+                count += 1
+            }
+        }
+        
+        return count
+    }
+    
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -26,24 +36,18 @@ class RecipientsTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
-        if let recipients = recipients {
+        if recipients != nil {
             switch section {
             case 0:
-                if let recipients = recipients.shingoPrizeRecipients {
-                    return recipients.count
-                }
+                return getRecipientAwardTypeCount(awardType: .ShingoPrize)
             case 1:
-                if let recipients = recipients.silverRecipients {
-                    return recipients.count
-                }
+                return getRecipientAwardTypeCount(awardType: .Silver)
             case 2:
-                if let recipients = recipients.bronzeRecipients {
-                    return recipients.count
-                }
+                return getRecipientAwardTypeCount(awardType: .Bronze)
             case 3:
-                if let recipients = recipients.researchRecipients {
-                    return recipients.count
-                }
+                return getRecipientAwardTypeCount(awardType: .Research)
+            case 4:
+                return getRecipientAwardTypeCount(awardType: .Publication)
             default: break
                 
             }
@@ -55,29 +59,29 @@ class RecipientsTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("RecipientCell", forIndexPath: indexPath) as! RecipientTableViewCell
-        switch indexPath.section {
-        case 0:
-            if let recipient = recipients.shingoPrizeRecipients {
-                cell.recipient = recipient[indexPath.row]
-            }
-        case 1:
-            if let recipient = recipients.silverRecipients {
-                cell.recipient = recipient[indexPath.row]
-            }
-        case 2:
-            if let recipient = recipients.bronzeRecipients {
-                cell.recipient = recipient[indexPath.row]
-            }
-        case 3:
-            if let recipient = recipients.researchRecipients {
-                cell.recipient = recipient[indexPath.row]
-            }
-        default:
-            let recipient = SIRecipient()
-            recipient.name = "No Recipient"
-            recipient.logoBookCoverImage = UIImage(named: "shingo_icon")
-            cell.recipient = recipient
-        }
+//        switch indexPath.section {
+//        case 0:
+//            if let recipient = recipients.shingoPrizeRecipients {
+//                cell.recipient = recipient[indexPath.row]
+//            }
+//        case 1:
+//            if let recipient = recipients.silverRecipients {
+//                cell.recipient = recipient[indexPath.row]
+//            }
+//        case 2:
+//            if let recipient = recipients.bronzeRecipients {
+//                cell.recipient = recipient[indexPath.row]
+//            }
+//        case 3:
+//            if let recipient = recipients.researchRecipients {
+//                cell.recipient = recipient[indexPath.row]
+//            }
+//        default:
+//            let recipient = SIRecipient()
+//            recipient.name = "No Recipient"
+//            recipient.logoBookCoverImage = UIImage(named: "shingo_icon")
+//            cell.recipient = recipient
+//        }
         return cell
     }
     

@@ -35,7 +35,7 @@ class VenueMapViewController: UIViewController, UIScrollViewDelegate {
         self.navigationItem.title = venue.name
         
         if venue != nil {
-            image.image = venue.image
+            image.image = venue.getVenueMapImage()
         }
         
         image.contentMode = UIViewContentMode.ScaleAspectFit
