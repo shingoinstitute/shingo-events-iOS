@@ -9,9 +9,17 @@
 import UIKit
 
 class SpeakerListCell: UITableViewCell {
+    
     var speaker: SISpeaker!
     @IBOutlet weak var speakerNameLabel: UILabel!
     @IBOutlet weak var speakerImage: UIImageView!
+    
+    func updateCellProperties(speaker: SISpeaker) {
+        self.speaker = speaker
+        speakerNameLabel.text = speaker.name
+        speakerImage.image = speaker.getSpeakerImage()
+    }
+    
 }
 
 
@@ -52,8 +60,8 @@ class SpeakerListTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("SpeakerListCell", forIndexPath: indexPath) as! SpeakerListCell
-        
-        cell.speaker = speakers[indexPath.row]
+        let speaker = speakers[indexPath.row]
+        cell.updateCellProperties(speaker)
 
         return cell
     }
@@ -67,7 +75,9 @@ class SpeakerListTableViewController: UITableViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "SpeakerDetails" {
             let destination = segue.destinationViewController as! SpeakerDetailsViewController
-            // Send something, ANYTHING!!!
+            if let speaker = sender as? SISpeaker {
+                destination.speaker = speaker
+            }
         }
     }
 

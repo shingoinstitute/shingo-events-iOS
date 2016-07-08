@@ -9,6 +9,7 @@
 import Foundation
 import Alamofire
 import AlamofireImage
+import MapKit
 
 let BASE_URL = "https://api.shingo.org"
 let EVENTS_URL = BASE_URL + "/salesforce/events"
@@ -399,8 +400,25 @@ class SIRequest {
         
     }
     
-    /// Gets all speakers from Salesforce, or use session ID to get all speakers for a session
-    func requestSpeakers(sessionId id: String, callback: (speakers: [SISpeaker]?) -> ()) {
+    ///Gets all speakers from Salesforce, or use event ID to get all speakers for an event.
+    func requestSpeakers(eventId id: String, callback: (speakers: [SISpeaker]?) -> Void) {
+        
+        getRequest(url: EVENTS_URL + "/speakers?event_id=\(id)", callback: { json in
+            
+            guard let json = json else {
+                callback(speakers: nil)
+                return
+            }
+            
+            callback(speakers: self.parseSpeakerResponse(json))
+            
+        });
+        
+    }
+    
+    
+    ///Gets all speakers from Salesforce, or use session ID to get all speakers for a session.
+    func requestSpeakers(sessionId id: String, callback: (speakers: [SISpeaker]?) -> Void) {
         
         getRequest(url: EVENTS_URL + "/speakers?session_id=\(id)") { json in
             
@@ -416,7 +434,7 @@ class SIRequest {
     }
     
     /// Gets all speakers for a single session
-    func requestSpeakers(callback: (speakers: [SISpeaker]?) -> ()) {
+    func requestSpeakers(callback: (speakers: [SISpeaker]?) -> Void) {
         
         getRequest(url: EVENTS_URL + "/speakers") { json in
             
@@ -451,6 +469,24 @@ class SIRequest {
                 if let title = record["Speaker_Title__c"].string {
                     speaker.title = title
                 }
+                
+                if let pictureURL = record["Picture_URL__c"].string {
+                    speaker.pictureURL = pictureURL
+                }
+                
+                if let biography = record["Speaker_Biography__c"].string {
+                    speaker.biography = biography
+                }
+                
+                if let contactEmail = record["Contact__r"]["Email"].string {
+                    speaker.contactEmail = contactEmail
+                }
+                
+                if let organization = record["Organization__r"]["Name"].string {
+                    speaker.organizationName = organization
+                }
+                
+                
                 
                 if record["Session_Speaker_Associations__r"]["records"].isExists() {
                     for assoc in record["Session_Speaker_Associations__r"]["records"].array! {
@@ -504,7 +540,7 @@ class SIRequest {
                 }
                 
                 if let organization = record["Organization__r"].string {
-                    speaker.organization = organization
+                    speaker.organizationName = organization
                 }
             
                 if record["Session_Speaker_Associations__r"]["records"].isExists() {
@@ -906,30 +942,207 @@ class SIRequest {
         
     }
     
-    func requestSponsors(eventId id: String, callback: () -> Void) {
+    func requestSponsors(eventId id: String, callback: (sponsors: [SISponsor]?) -> Void) {
         
+        getRequest(url: EVENTS_URL + "/sponsors?event_id=\(id)", callback: { json in
         
+            guard let json = json else {
+                callback(sponsors: nil)
+                return
+            }
+            
+            var sponsors = [SISponsor]()
+            
+            if json["sponsors"].isExists() {
+                
+                for record in json["sponsors"].array! {
+                    
+                    let sponsor = SISponsor()
+                    
+                    if let id = record["Id"].string {
+                        sponsor.id = id
+                    }
+                    
+                    if let organization = record["Organization__r"]["Name"].string {
+                        sponsor.organizationName = organization
+                    }
+                    
+                    if let logoURL = record["Organization__r"]["Logo__c"].string {
+                        sponsor.logoURL = logoURL
+                    }
+                    
+                    sponsors.append(sponsor)
+                }
+            }
+            
+            callback(sponsors: sponsors)
+            
+        });
         
     }
     
-    func requestSponsor(sponsorId id: String, callback: () -> Void) {
+    func requestSponsor(sponsorId id: String, callback: (sponsor: SISponsor?) -> Void) {
        
+        getRequest(url: EVENTS_URL + "/sponsors/\(id)", callback: { json in
         
+            guard let json = json else {
+                callback(sponsor: nil)
+                return
+            }
+            
+            let sponsor = SISponsor()
+            
+            if json["sponsor"].isExists() {
+                
+                let record = json["sponsor"]
+                
+                if let id = record["Id"].string {
+                    sponsor.id = id
+                }
+                
+                if let name = record["Name"].string {
+                    sponsor.name = name
+                }
+                
+                if let logoURL = record["Logo__c"].string {
+                    sponsor.logoURL = logoURL
+                }
+                
+                if let summary = record["App_Abstract__c"].string {
+                    sponsor.summary = summary
+                }
+                
+                if let bannerURL = record["Banner_URL__c"].string {
+                    sponsor.bannerURL = bannerURL
+                }
+                
+                if let splashScreenURL = record["Splash_Screen_URL__c"].string {
+                    sponsor.splashScreenURL = splashScreenURL
+                }
+                
+                if let type = record["Sponsor_Level__c"].string {
+                    sponsor.sponsorType = self.parseSponsorType(type: type)
+                }
+            }
+            
+            callback(sponsor: sponsor)
+            
+        });
         
     }
     
-    func requestVenues(eventId id: String, callback: () -> Void) {
+    private func parseSponsorType(type type: String) -> SISponsor.SponsorType {
+        switch type {
+            case "President": return .President
+            case "Champion" : return .Champion
+            case "Benefactor": return .Benefactor
+            case "Supporter": return .Supporter
+            case "Friend": return .Friend
+            default: return .None
+        }
+    }
+    
+    func requestVenues(eventId id: String, callback: (venues: [SIVenue]?) -> Void) {
        
+        getRequest(url: EVENTS_URL + "/venues?event_id=\(id)", callback: { json in
         
+            guard let json = json else {
+                callback(venues: nil)
+                return
+            }
+            
+            var venues = [SIVenue]()
+            
+            if json["venues"].isExists() {
+                
+                for record in json["venues"].array! {
+                    
+                    let venue = SIVenue()
+                    
+                    if let id = record["Id"].string {
+                        venue.id = id
+                    }
+                    
+                    if let name = record["Name"].string {
+                        venue.name = name
+                    }
+                    
+                    if let address = record["Address__c"].string {
+                        venue.address = address
+                    }
+                    
+                    venues.append(venue)
+                }
+            }
+            
+            callback(venues: venues)
+            
+        });
         
     }
     
-    func requestVenue(venueId id: String, callback: () -> Void) {
+    func requestVenue(venueId id: String, callback: (venue: SIVenue?) -> Void) {
         
+        getRequest(url: EVENTS_URL + "/venues/\(id)", callback: { json in
         
+            guard let json = json else {
+                callback(venue: nil)
+                return
+            }
+            
+            let venue = SIVenue()
+            
+            if json["venue"].isExists() {
+                
+                let record = json["venue"]
+                
+                if let id = record["Id"].string {
+                    venue.id = id
+                }
+                
+                if let name = record["Name"].string {
+                    venue.name = name
+                }
+                
+                if let address = record["Address__c"].string {
+                    venue.address = address
+                }
+                
+                if let x = record["Venue_Location__c"]["longitude"].float {
+                    if let y = record["Venue_Location__c"]["latitude"].float {
+                        venue.location = CLLocationCoordinate2D(latitude: CLLocationDegrees.init(x), longitude: CLLocationDegrees.init(y))
+                    }
+                }
+                
+                if let type = record["Venue_Type__c"].string {
+                    venue.venueType = self.parseVenueType(type: type)
+                }
+
+//                 Do we even need this?
+//                for record in record["Shingo_Event_Venue_Associations__r"]["records"].array! {
+//                    
+//                }
+                
+            }
+            
+            callback(venue: venue)
+            
+        });
         
     }
     
+    private func parseVenueType(type type: String) -> SIVenue.VenueType{
+        
+        switch type {
+            case "Convention Center": return .ConventionCenter
+            case "Hotel": return .Hotel
+            case "Museum": return .Museum
+            case "Restaurant": return .Restaurant
+            case "Other": return .Other
+            default: return .None
+        }
+        
+    }
     
     // MARK: - Supporting Functions
     //////////////////////////

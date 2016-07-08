@@ -244,6 +244,7 @@ class MainMenuViewController: UIViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if (segue.identifier == "EventsView") {
             let destination = segue.destinationViewController as! EventsTableViewController
+            activityView.removeActivityViewFromDisplay()
             if let events = sender as? [SIEvent] {
                 destination.events = events
             }

@@ -230,13 +230,15 @@ class SISpeaker: SIObject {
         }
     }
     var biography : String
-    var organization : String
+    var organizationName : String
+    var contactEmail : String
     
     override init() {
         title = ""
         pictureURL = ""
         biography = ""
-        organization = ""
+        organizationName = ""
+        contactEmail = ""
         associatedSessionIds = [String]()
         super.init()
     }
@@ -252,7 +254,7 @@ class SISpeaker: SIObject {
                 }
                 
                 self.biography = speaker.biography
-                self.organization = speaker.organization
+                self.organizationName = speaker.organizationName
                 self.associatedSessionIds = speaker.associatedSessionIds
                 self.name = speaker.name
                 self.id = speaker.id
@@ -261,9 +263,11 @@ class SISpeaker: SIObject {
     }
     
     func requestSpeakerImage() {
-        requestImage(pictureURL) { image in
-            if let image = image as UIImage? {
-                self.image = image
+        if !pictureURL.isEmpty {
+            requestImage(pictureURL) { image in
+                if let image = image as UIImage? {
+                    self.image = image
+                }
             }
         }
     }
@@ -271,7 +275,6 @@ class SISpeaker: SIObject {
     func getSpeakerImage() -> UIImage {
         
         guard let image = self.image else {
-            requestSpeakerImage()
             return UIImage(named: "silhouette")!
         }
         
@@ -451,7 +454,7 @@ class SIRoom: SIObject {
 
 class SISponsor: SIObject {
     
-    enum SPONSOR_TYPE : Int {
+    enum SponsorType : Int {
         case None = 0,
         Friend = 1,
         Supporter = 2,
@@ -460,34 +463,136 @@ class SISponsor: SIObject {
         President = 5
     }
 
+    var organizationName : String
+    var summary : String
+    var sponsorType : SponsorType
+    var logoURL : String {
+        didSet {
+            if !self.logoURL.isEmpty {
+                self.requestLogoImage(url: self.logoURL)
+            }
+        }
+    }
+    var bannerURL : String {
+        didSet {
+            if !self.bannerURL.isEmpty {
+                self.requestBannerImage(url: self.bannerURL)
+            }
+        }
+    }
+    var splashScreenURL : String {
+        didSet {
+            if !self.splashScreenURL.isEmpty {
+                self.requestSplashScreenImage(url: self.splashScreenURL)
+            }
+        }
+    }
+    private var bannerImage : UIImage?
+    private var splashScreenImage : UIImage?
     
-//    override init() {
-//        super.init()
-//        sponsorType = .NonType
-//        mdfAmount = 0.0
-//        logoUrl = ""
-//        logoImage = UIImage(named: "sponsor_banner_pl")
-//        bannerUrl = ""
-//        bannerImage = UIImage(named: "sponsor_banner_pl")
-//        level = ""
-//        eventId = ""
-//    }
-//    
-//    func requestSponsorImage(url:String) {
-//        self.requestImage(url) { image in
-//            if let image = image as UIImage? {
-//                self.logoImage = image
-//            }
-//        }
-//    }
-//    
-//    func requestBannerImage(url:String) {
-//        requestImage(url) { image in
-//            if let image = image as UIImage? {
-//                self.bannerImage = image
-//            }
-//        }
-//    }
+    override init() {
+        sponsorType = .None
+        organizationName = ""
+        summary = ""
+        logoURL = ""
+        bannerURL = ""
+        splashScreenURL = ""
+        bannerImage = nil
+        splashScreenImage = nil
+        super.init()
+    }
+    
+    func requestLogoImage(url url:String?) {
+        
+        var imageURL = url
+        if imageURL == nil {
+            imageURL = self.logoURL
+        }
+        
+        self.requestImage(imageURL!) { image in
+            if let image = image as UIImage? {
+                self.image = image
+            }
+        }
+    }
+    
+    func requestBannerImage(url url:String?) {
+        
+        var imageURL = url
+        if imageURL == nil {
+            imageURL = self.bannerURL
+        }
+        
+        requestImage(imageURL!) { image in
+            if let image = image as UIImage? {
+                self.bannerImage = image
+            }
+        }
+    }
+    
+    func requestSplashScreenImage(url url: String?) {
+        
+        var imageURL = url
+        if imageURL == nil {
+            imageURL = self.splashScreenURL
+        }
+        
+        requestImage(imageURL!, callback: { image in
+            if let image = image as UIImage? {
+                self.splashScreenImage = image
+            }
+        });
+    }
+    
+    func getLogoImage() -> UIImage {
+        guard let image = self.image else {
+            return UIImage(named: "sponsor_banner_pl")!
+        }
+        
+        return image
+    }
+    
+    func getBannerImage() -> UIImage {
+        guard let image = self.bannerImage else {
+            return UIImage(named: "sponsor_banner_pl")!
+        }
+        
+        return image
+    }
+    
+    func getSplashScreenImage() -> UIImage? {
+        guard let image = self.splashScreenImage else {
+            return nil
+        }
+        
+        return image
+    }
+}
+
+class SIVenue: SIObject {
+    //            return UIImage(named: "shingo_icon_skinny")!
+    
+    enum VenueType : Int {
+        case None = 0,
+        ConventionCenter = 1,
+        Hotel = 2,
+        Museum = 3,
+        Restaurant = 4,
+        Other = 5
+    }
+    
+    var venuePhotos : [UIImage]?
+    var address : String
+    var location : CLLocationCoordinate2D?
+    var venueType : VenueType
+    
+    override init() {
+        address = ""
+        venuePhotos = nil
+        location = nil
+        venueType = .None
+        super.init()
+    }
     
 }
 
@@ -528,45 +633,7 @@ class SIAffiliate: SIObject {
 
 
 
-class SIVenue: SIObject {
-    var url:String!
-    var rooms : [SIRoom]!
-    override init() {
-        super.init()
-        self.url = ""
-        self.image = UIImage()
-    }
-    
-    convenience init(name: String, url:String) {
-        self.init()
-        self.name = name
-        self.url = url
-    }
-    
-    private func requestVenueMapImage(url:String) {
-        requestImage(url) { image in
-            if let image = image as UIImage? {
-                self.image = image
-            }
-        }
-    }
-    
-    func getVenueMapImage() -> UIImage {
-        guard let image = image else {
-            return UIImage(named: "shingo_icon_skinny")!
-        }
-        
-        if image.isEmpty() {
-            return UIImage(named: "shingo_icon_skinny")!
-        }
-        
-        return image
-    }
-    
-    func getRooms() {
-        // Needs to be implemented
-    }
-}
+
 
 
 

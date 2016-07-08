@@ -91,19 +91,21 @@ class EventMenuViewController: UIViewController {
                         session.requestSessionInformation({
                             
                         });
-                        session.requestSpeakers({
-                            for speaker in session.speakers {
-                                speaker.requestSpeakerInformation({
-                                    guard let _ = self.eventSpeakers[speaker.name] else {
-                                        self.eventSpeakers[speaker.name] = speaker
-                                        return
-                                    }
-                                });
-                            }
-                        });
                     }
                 }
             }
+            SIRequest().requestSpeakers(eventId: self.event.id, callback: { speakers in
+            
+                if let speakers = speakers {
+                    for speaker in speakers {
+                        guard let _ = self.eventSpeakers[speaker.name] else {
+                            self.eventSpeakers[speaker.name] = speaker
+                            continue
+                        }
+                    }
+                }
+                
+            });
         });
         
         // Load Speakers for entire event
@@ -288,7 +290,8 @@ class EventMenuViewController: UIViewController {
         
         if segue.identifier == "SpeakerList" {
             let destination = segue.destinationViewController as! SpeakerListTableViewController
-            destination.speakers = Array(eventSpeakers.values)
+            let speakers = Array(eventSpeakers.values)
+            destination.speakers = speakers
         }
         
         if segue.identifier == "RecipientsView" {
