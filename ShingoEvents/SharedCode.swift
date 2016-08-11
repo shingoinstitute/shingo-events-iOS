@@ -51,7 +51,7 @@ extension String {
         return self.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
     }
     
-    func split(character: Character) -> [String]{
+    func split(character: Character) -> [String?]{
         return self.characters.split{$0 == character}.map(String.init)
     }
     

@@ -17,7 +17,15 @@ class SessionListTableViewController: UITableViewController {
     var time : Double = 0
     var selectedCellIndexPath : NSIndexPath!
     
-    override func loadView() {
+//    override func loadView() {
+//        
+//        
+//        
+//        super.loadView()
+//    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
         for i in 0 ..< sessions.count {
             sessions[i].requestSessionInformation({
@@ -27,11 +35,7 @@ class SessionListTableViewController: UITableViewController {
             });
         }
         
-        super.loadView()
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+//        dismissViewControllerAnimated(true, completion: nil)
         
         if sessions == nil {
             fatalError()
@@ -170,8 +174,8 @@ class SessionTableViewCell: UITableViewCell {
                 speakerLabelText += "\(speaker.title), "
             }
             
-            if !speaker.organization.isEmpty {
-                speakerLabelText += "\(speaker.organization)"
+            if !speaker.organizationName.isEmpty {
+                speakerLabelText += "\(speaker.organizationName)"
             }
         }
         

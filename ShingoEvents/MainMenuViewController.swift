@@ -214,7 +214,9 @@ class MainMenuViewController: UIViewController {
                                       preferredStyle: UIAlertControllerStyle.Alert)
         let action = UIAlertAction(title: "OK", style: .Default, handler: nil)
         alert.addAction(action)
-        presentViewController(alert, animated: true, completion: nil)
+        presentViewController(alert, animated: true, completion: {
+            self.activityView.removeActivityViewFromDisplay()
+        })
     }
     
     func checkOnRequestStatus() {

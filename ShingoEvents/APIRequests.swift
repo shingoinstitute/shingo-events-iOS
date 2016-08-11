@@ -68,6 +68,10 @@ class SIRequest {
                             event.eventType = eventType
                         }
                         
+                        if let bannerURL = record["Banner_URL__c"].string {
+                            event.bannerURL = bannerURL
+                        }
+                        
                         events.append(event)
                     }
                 }
@@ -117,7 +121,7 @@ class SIRequest {
                 }
                 
                 if let bannerURL = eventJSON["Banner_URL__c"].string {
-                    event.bannerImageURL = bannerURL
+                    event.bannerURL = bannerURL
                 }
                 
                 if let salesText = eventJSON["Sales_Text__c"].string {
@@ -221,8 +225,8 @@ class SIRequest {
                 }
                 
                 // Sessions for the recieved day
-                if day["Shingo_Sessions__r"]["records"].isExists() {
-                    for record in day["Shingo_Sessions__r"]["records"].array! {
+                if let records = day["Shingo_Sessions__r"]["records"].array {
+                    for record in records {
                         let session = SISession()
                         
                         if let id = record["Id"].string {
@@ -315,21 +319,44 @@ class SIRequest {
                     session.displayName = displayName
                 }
                 
-                
                 if let startDate = record["Start_Date_Time__c"].string {
-                    if let startDate = self.sessionDateFormatter.dateFromString(sessionDateTimeStringParser(rawDate: startDate)) {
+                    if let startDate = self.sessionDateFormatter.dateFromString(startDate.split("+")[0]!) {
                         session.startDate = startDate
                     }
                 }
             
                 if let endDate = record["End_Date_Time__c"].string {
-                    if let endDate = self.sessionDateFormatter.dateFromString(sessionDateTimeStringParser(rawDate: endDate)) {
+                    if let endDate = self.sessionDateFormatter.dateFromString(endDate.split("+")[0]!) {
                         session.endDate = endDate
                     }
                 }
                 
                 if let type = record["Session_Type__c"].string {
                     session.sessionType = type
+                }
+                
+                if let track = record["Track__c"].string {
+                    session.sessionTrack = track
+                }
+                
+                if let room = record["Room__r"].string {
+                    session.room = room
+                }
+                
+                if let summary = record["Summary__c"].string {
+                    session.summary = summary
+                }
+                
+                if let speakers = record["Session_Speaker_Associations__r"]["records"].array {
+                    
+                    for record in speakers {
+                        let speaker = SISpeaker()
+                        
+                        if let id = record["Speaker__r"]["Id"].string {
+                            speaker.id = id
+                        }
+                        session.speakers.append(speaker)
+                    }
                 }
                 
                 sessions.append(session)
@@ -366,13 +393,13 @@ class SIRequest {
                 }
                 
                 if let startDate = record["Start_Date_Time__c"].string {
-                    if let startDate = self.sessionDateFormatter.dateFromString(self.sessionDateTimeStringParser(rawDate: startDate)) {
+                    if let startDate = self.sessionDateFormatter.dateFromString(startDate.split("+")[0]!) {
                         session.startDate = startDate
                     }
                 }
                 
                 if let endDate = record["End_Date_Time__c"].string {
-                    if let endDate = self.sessionDateFormatter.dateFromString(self.sessionDateTimeStringParser(rawDate: endDate)) {
+                    if let endDate = self.sessionDateFormatter.dateFromString(endDate.split("+")[0]!) {
                         session.endDate = endDate
                     }
                 }
@@ -485,11 +512,9 @@ class SIRequest {
                 if let organization = record["Organization__r"]["Name"].string {
                     speaker.organizationName = organization
                 }
-                
-                
-                
-                if record["Session_Speaker_Associations__r"]["records"].isExists() {
-                    for assoc in record["Session_Speaker_Associations__r"]["records"].array! {
+
+                if let assocs = record["Session_Speaker_Associations__r"]["records"].array {
+                    for assoc in assocs {
                         if let id = assoc["Session__r"]["Id"].string {
                             speaker.associatedSessionIds.append(id)
                         }
@@ -1108,9 +1133,9 @@ class SIRequest {
                     venue.address = address
                 }
                 
-                if let x = record["Venue_Location__c"]["longitude"].float {
-                    if let y = record["Venue_Location__c"]["latitude"].float {
-                        venue.location = CLLocationCoordinate2D(latitude: CLLocationDegrees.init(x), longitude: CLLocationDegrees.init(y))
+                if let xCoord = record["Venue_Location__c"]["longitude"].float {
+                    if let yCoord = record["Venue_Location__c"]["latitude"].float {
+                        venue.location = CLLocationCoordinate2D(latitude: CLLocationDegrees.init(yCoord), longitude: CLLocationDegrees.init(xCoord))
                     }
                 }
                 
@@ -1118,10 +1143,25 @@ class SIRequest {
                     venue.venueType = self.parseVenueType(type: type)
                 }
 
-//                 Do we even need this?
-//                for record in record["Shingo_Event_Venue_Associations__r"]["records"].array! {
-//                    
-//                }
+                if let maps__r = record["Maps__r"]["records"].array {
+                    for map in maps__r {
+                        
+                        let venueMap = SIVenueMap()
+                        
+                        if let name = map["Name"].string {
+                            venueMap.name = name
+                        }
+                        
+                        if let floor = map["Floor__c"].int {
+                            venueMap.floor = floor
+                        }
+                        
+                        if let mapURL = map["URL__c"].string {
+                            venueMap.mapURL = mapURL
+                        }
+                        venue.venueMaps.append(venueMap)
+                    }
+                }
                 
             }
             
@@ -1144,6 +1184,50 @@ class SIRequest {
         
     }
     
+    func requestAffiliates(callback: (affiliates: [SIAffiliate]?) -> ()) {
+        
+        getRequest(url: BASE_URL + "/salesforce/affiliates") { (json) in
+            guard let json = json else {
+                callback(affiliates: nil)
+                return
+            }
+            
+            var affiliates = [SIAffiliate]()
+            
+            if let records = json["affiliates"].array {
+                for record in records {
+                    
+                    let affiliate = SIAffiliate()
+                    
+                    if let id = record["Id"].string {
+                        affiliate.id = id
+                    }
+                    
+                    if let name = record["Name"].string {
+                        affiliate.name = name
+                    }
+                    
+                    if let logoURL = record["Logo__c"].string {
+                        affiliate.logoURL = logoURL
+                    }
+                    
+                    if let websiteURL = record["Website"].string {
+                        affiliate.websiteURL = websiteURL
+                    }
+                    
+                    if let summary = record["App_Abstract__c"].string {
+                        affiliate.summary = summary
+                    }
+                    
+                    affiliates.append(affiliate)
+                }
+            }
+            
+            callback(affiliates: affiliates)
+        }
+        
+    }
+    
     // MARK: - Supporting Functions
     //////////////////////////
     // Supporting Functions //
@@ -1160,12 +1244,12 @@ class SIRequest {
         }
     }
     
-    func sessionDateTimeStringParser(rawDate r: String) -> String {
-        // The API returns a string that looks like "2016-09-21T19:30:00.000+0000"
-        // The "+0000" in the returned string needs to be removed for self.sessionDateFormatter
-        // to correctly parse the date
-        return r.split("+")[0]
-    }
+//    func sessionDateTimeStringParser(rawDate r: String) -> String {
+//        // The API returns a string that looks like "2016-09-21T19:30:00.000+0000"
+//        // The "+0000" in the returned string needs to be removed for self.sessionDateFormatter
+//        // to correctly parse the date
+//        return r.split("+")[0]!
+//    }
     
     // make HTTP POST request
     private func postRequest(url url: String, parameters: [String:String], callback: (value: JSON?) -> ())  {

@@ -17,23 +17,29 @@ class SchedulesTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        if agendas == nil || eventName == nil {
-            fatalError()
-        }
-        
     }
     
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+       
+//        agendas[indexPath.row].requestAgendaInformation() {
+//            self.performSegueWithIdentifier("SessionListView", sender: self.agendas[indexPath.row].sessions)
+//        }
         
-        SIRequest().requestSessions(agendaId: agendas[indexPath.row].id, callback: { sessions in
-            if let sessions = sessions {
-                self.performSegueWithIdentifier("SessionListView", sender: sessions)
+        if agendas[indexPath.row].didLoadSessions {
+            self.performSegueWithIdentifier("SessionListView", sender: agendas[indexPath.row].sessions)
+        } else {
+            
+            self.modalPresentationStyle = .CurrentContext
+            
+            let av = ActivityViewController()
+            presentViewController(av, animated: true, completion: nil)
+
+            self.agendas[indexPath.row].requestAgendaInformation() {
+                self.performSegueWithIdentifier("SessionListView", sender: self.agendas[indexPath.row].sessions)
+                self.dismissViewControllerAnimated(true, completion: nil)
             }
-        })
-        
-        
+        }
     }
     
     // MARK: - Table view data source
@@ -81,6 +87,9 @@ class SchedulesTableViewController: UITableViewController {
     // MARK: - Navigation
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+//        dismissViewControllerAnimated(true, completion: nil)
+        
         if segue.identifier == "SessionListView" {
             let destination = segue.destinationViewController as! SessionListTableViewController
             if let sessions = sender as? [SISession] {

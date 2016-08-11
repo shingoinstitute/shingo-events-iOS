@@ -12,6 +12,8 @@ private let CellIdentifier = "VenueMapCell"
 
 class VenueMapsCollectionView: UIViewController {
 
+    var venue : SIVenue!
+    
     @IBOutlet weak var collectionView: UICollectionView!
     
     override func viewWillAppear(animated: Bool) {
@@ -22,7 +24,7 @@ class VenueMapsCollectionView: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         let backgroundImage = UIImageView()
         backgroundImage.image = ShingoIconImages().shingoIconForDevice()
         backgroundImage.contentMode = UIViewContentMode.ScaleAspectFill
@@ -35,10 +37,13 @@ class VenueMapsCollectionView: UIViewController {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "MapView"
-        {
+        if segue.identifier == "MapView" {
             let destination = segue.destinationViewController as! VenueMapViewController
-            // Send a value
+            if let venueMap = sender as? SIVenueMap {
+                destination.venueMap = venueMap
+            } else {
+                destination.venueMap = SIVenueMap()
+            }
         }
     }
 
@@ -55,22 +60,51 @@ extension VenueMapsCollectionView: UICollectionViewDataSource {
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // WARNING, not implemented
-        return 0
+        // The number of cells is the number of venue maps plus 1. The +1 cell is for displaying the venue address.
+        if venue.venueMaps.isEmpty {
+            return 2
+        }
+        
+        return venue.venueMaps.count + 1
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(CellIdentifier, forIndexPath: indexPath) as! VenueMapCollectionCell
-        cell.layer.borderColor = UIColor.grayColor().CGColor
-        cell.layer.borderWidth = 1.0
-        cell.layer.cornerRadius = 3
         
-        return cell
+        switch indexPath.row {
+        // The first cell displays information about the venue
+        case 0:
+            let cell = collectionView.dequeueReusableCellWithReuseIdentifier("informationCell", forIndexPath: indexPath) as! VenueMapInformationCell
+            cell.venue = venue
+            return cell
+        default:
+        // The rest of the cells display maps for the venue
+            let cell = collectionView.dequeueReusableCellWithReuseIdentifier(CellIdentifier, forIndexPath: indexPath) as! VenueMapCollectionCell
+        
+            if cell.venueMap != nil {
+                return cell
+            }
+            
+            if self.venue.venueMaps.isEmpty {
+                cell.venueMap = SIVenueMap()
+            } else {
+                cell.venueMap = self.venue.venueMaps[indexPath.row - 1]
+            }
+            
+            return cell
+        }
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        let cell = collectionView.cellForItemAtIndexPath(indexPath) as! VenueMapCollectionCell
-        self.performSegueWithIdentifier("MapView", sender: self)
+        if indexPath.row > 0 {
+            let cell = collectionView.cellForItemAtIndexPath(indexPath) as! VenueMapCollectionCell
+            self.performSegueWithIdentifier("MapView", sender: cell.venueMap)
+        }
+        
     }
     
 }
+
+
+
+
+

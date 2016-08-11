@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-public class ShingoIconImages: UIImage {
+class ShingoIconImages: UIImage {
 //    let iPadPro = UIImage(named: "shingoIcon_iPadPro_Res")
 //    let iPadAirMini = UIImage(named: "shingoIcon_iPadAir_Mini_Res")
 //    let iPhone6Plus = UIImage(named: "shingo_icon_iPhone6plus_Res")
@@ -17,7 +17,7 @@ public class ShingoIconImages: UIImage {
 //    let iPhone5 = UIImage(named: "shingoIcon_iPhone5_Res")
 //    let iPhone4 = UIImage(named: "shingoIcon_iPhone4_Res")
     
-    public func shingoIconForDevice() -> UIImage {
+    func shingoIconForDevice() -> UIImage {
         switch UIDevice.currentDevice().modelName {
             case "iPad Pro":        return UIImage(named: "shingoIcon_iPadPro_Res")!
             case "iPad 2",

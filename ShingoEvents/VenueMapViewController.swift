@@ -10,7 +10,7 @@ import UIKit
 
 class VenueMapViewController: UIViewController, UIScrollViewDelegate {
 
-    var venue: SIVenue!
+    var venueMap: SIVenueMap!
     
     var scrollView = UIScrollView()
     var image = UIImageView()
@@ -31,13 +31,10 @@ class VenueMapViewController: UIViewController, UIScrollViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        self.navigationItem.title = venue.name
         
-        if venue != nil {
-            image.image = venue.getVenueMapImage()
-        }
+        navigationItem.title = venueMap.name
         
+        image.image = venueMap.getVenueMapImage()
         image.contentMode = UIViewContentMode.ScaleAspectFit
         
         scrollView.delegate = self

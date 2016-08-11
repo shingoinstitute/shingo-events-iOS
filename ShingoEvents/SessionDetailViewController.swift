@@ -43,13 +43,12 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
         let label = UILabel.newAutoLayoutView()
         let style = NSMutableParagraphStyle()
         style.alignment = NSTextAlignment.Center
-        let attributes = [NSUnderlineStyleAttributeName : NSUnderlineStyle.StyleSingle.rawValue,
-                          NSParagraphStyleAttributeName : style]
-        let attrText = NSAttributedString(string: "Summary", attributes: attributes)
+//        let attributes = [NSUnderlineStyleAttributeName : NSUnderlineStyle.StyleSingle.rawValue,
+//                          NSParagraphStyleAttributeName : style]
+        let attrText = NSAttributedString(string: "Summary", attributes: nil)
         label.attributedText = attrText
         label.textAlignment = .Center
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .Center
         label.textColor = .whiteColor()
         label.backgroundColor = .clearColor()
         return label
@@ -85,16 +84,16 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if session == nil { fatalError() }
-        
         tableView.removeFromSuperview() // remove tableView before re-adding it... because...
         
-        scrollView.backgroundColor = SIColor().shingoRedColor
+        scrollView.backgroundColor = SIColor().shingoBlueColor
         tableView.backgroundColor = SIColor().shingoRedColor
         
         // Load data
         titleLabel.text = session.displayName
-        roomLabel.text = "Location: " + session.room
+        if !session.room.isEmpty {
+            roomLabel.text = "Location: " + session.room
+        }
         
         if session.summary.isEmpty {
             textField.text = "Session details coming soon."

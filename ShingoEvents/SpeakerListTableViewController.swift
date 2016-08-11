@@ -22,7 +22,6 @@ class SpeakerListCell: UITableViewCell {
     
 }
 
-
 class SpeakerListTableViewController: UITableViewController {
 
     var speakers: [SISpeaker]!
@@ -33,6 +32,13 @@ class SpeakerListTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, accessoryButtonTappedForRowWithIndexPath indexPath: NSIndexPath) {
+        let cell = tableView.cellForRowAtIndexPath(indexPath) as! SpeakerListCell
+        if let speaker = cell.speaker {
+            performSegueWithIdentifier("SpeakerDetails", sender: speaker)
+        }
+    }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let cell = tableView.cellForRowAtIndexPath(indexPath) as! SpeakerListCell
         if let speaker = cell.speaker {
             performSegueWithIdentifier("SpeakerDetails", sender: speaker)
@@ -56,8 +62,6 @@ class SpeakerListTableViewController: UITableViewController {
         }
     }
     
-
-    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("SpeakerListCell", forIndexPath: indexPath) as! SpeakerListCell
         let speaker = speakers[indexPath.row]
@@ -65,10 +69,6 @@ class SpeakerListTableViewController: UITableViewController {
 
         return cell
     }
-
-
-
-
     
     // MARK: - Navigation
 

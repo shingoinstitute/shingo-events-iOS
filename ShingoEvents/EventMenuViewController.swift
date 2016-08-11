@@ -14,7 +14,7 @@ class EventMenuViewController: UIViewController {
     
     var event : SIEvent!
 //    var eventSpeakers = [SISpeaker]()
-    var eventSpeakers = [String:SISpeaker]()
+    var eventSpeakers = [String : SISpeaker]()
     
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var eventNameLabel: UILabel!
@@ -83,42 +83,28 @@ class EventMenuViewController: UIViewController {
     override func loadView() {
         super.loadView()
         
-        // Load Event Information
-        event.requestAgendas({
-            for agenda in self.event.agendaItems {
-                agenda.requestAgendaInformation() {
-                    for session in agenda.sessions {
-                        session.requestSessionInformation({
-                            
-                        });
-                    }
-                }
-            }
-            SIRequest().requestSpeakers(eventId: self.event.id, callback: { speakers in
-            
-                if let speakers = speakers {
-                    for speaker in speakers {
-                        guard let _ = self.eventSpeakers[speaker.name] else {
-                            self.eventSpeakers[speaker.name] = speaker
-                            continue
-                        }
-                    }
-                }
-                
-            });
-        });
+        // Load Agenda
+        event.requestAgendas() {}
+        
+        // Load Sessions (after loading agendas?)
         
         // Load Speakers for entire event
+        event.requestSpeakers() {self.event.didLoadSpeakers = true}
         
         // Load venue photos
+        event.requestVenues() {self.event.didLoadVenues = true}
         
         // Load Recipient information
+        event.requestRecipients() {self.event.didLoadRecipients  = true}
         
         // Load Affiliate information
+        event.requestAffiliates() {self.event.didLoadAffiliates = true}
         
         // Load Exhibitor information
+        event.requestExhibitors() {self.event.didLoadExhibitors = true}
         
         // Load Sponsors information
+        event.requestSponsors() {self.event.didLoadSponsors = true}
         
     }
     
@@ -229,52 +215,96 @@ class EventMenuViewController: UIViewController {
     }
     
     func didTapSchedule(sender: AnyObject) {
-        
-//        if event.didLoadAgendaSessions {
-//            self.performSegueWithIdentifier("SchedulesView", sender: nil)
-//        }
-//        } else {
-//        
-            SIRequest().requestAgendaDays(eventId: event.id, callback: { agendas in
-              
-                guard let agendas = agendas else {
-                    self.displayBadRequestNotification()
-                    return
-                }
-                
-                self.event.agendaItems = agendas
-                self.performSegueWithIdentifier("SchedulesView", sender: nil)
-                
-            });
-//        }
+        if event.didLoadAgendaSessions {
+            self.performSegueWithIdentifier("SchedulesView", sender: self.event.agendaItems)
+        } else {
+            event.requestAgendas() {
+                self.performSegueWithIdentifier("SchedulesView", sender: self.event.agendaItems)
+            }
+        }
     }
     
     func didTapSpeakers(sender: AnyObject) {
-        self.performSegueWithIdentifier("SpeakerList", sender: self.eventSpeakers)
+        if event.didLoadSpeakers  {
+            self.performSegueWithIdentifier("SpeakerList", sender: self.eventSpeakers)
+        } else {
+            event.requestSpeakers() {
+                self.performSegueWithIdentifier("SpeakerList", sender: self.eventSpeakers)
+            }
+        }
+        
     }
     
     func didTapRecipients(sender: AnyObject) {
-        self.performSegueWithIdentifier("RecipientsView", sender: self)
+        if event.didLoadRecipients {
+            self.performSegueWithIdentifier("RecipientsView", sender: self.event.recipients)
+        } else {
+            event.requestRecipients() {
+                self.performSegueWithIdentifier("RecipientsView", sender: self.event.recipients)
+                return
+            }
+        }
     }
     
     func didTapDirections(sender: AnyObject) {
-        self.performSegueWithIdentifier("MapView", sender: self)
+        if event.didLoadVenues {
+            let venues = self.event.venues
+            if !venues.isEmpty {
+                self.performSegueWithIdentifier("MapView", sender: venues[0])
+            }
+        }
     }
     
     func didTapExhibitors(sender: AnyObject) {
-        self.performSegueWithIdentifier("ExhibitorsListView", sender: self)
+        if event.didLoadExhibitors {
+            self.performSegueWithIdentifier("ExhibitorsListView", sender: self.event.exhibitors)
+        } else {
+            event.requestExhibitors({ 
+                self.performSegueWithIdentifier("ExhibitorsListView", sender: self.event.exhibitors)
+            });
+        }
     }
     
     func didTapAffiliates(sender: AnyObject) {
-        self.performSegueWithIdentifier("AffiliatesListView", sender: self)
+        
+        if event.didLoadAffiliates {
+            self.performSegueWithIdentifier("AffiliatesListView", sender: self.event.affiliates)
+        } else {
+            event.requestAffiliates() {
+                self.performSegueWithIdentifier("AffiliatesListView", sender: self.event.affiliates)
+            }
+        }
     }
     
     func didTapVenue(sender: AnyObject) {
-        self.performSegueWithIdentifier("VenueView", sender: self)
+        
+        if event.didLoadVenues {
+            
+            if self.event.venues.count > 0 {
+                self.performSegueWithIdentifier("VenueView", sender: self.event.venues)
+            }
+    
+        } else {
+            event.requestVenues() {
+                
+                if self.event.venues.count > 0 {
+                    self.performSegueWithIdentifier("VenueView", sender: self.event.venues)
+                }
+                
+            }
+        }
+        
+        
     }
     
     func didTapSponsors(sender: AnyObject) {
-        self.performSegueWithIdentifier("SponsorsView", sender: self)
+        if event.didLoadSponsors {
+            self.performSegueWithIdentifier("SponsorsView", sender: self.event.sponsors)
+        } else {
+            event.requestSponsors {
+                self.performSegueWithIdentifier("SponsorsView", sender: self.event.sponsors)
+            }
+        }
     }
     
     // MARK: - Navigation
@@ -290,37 +320,198 @@ class EventMenuViewController: UIViewController {
         
         if segue.identifier == "SpeakerList" {
             let destination = segue.destinationViewController as! SpeakerListTableViewController
-            let speakers = Array(eventSpeakers.values)
-            destination.speakers = speakers
+            destination.speakers = self.sortSpeakersByLastName()
         }
         
         if segue.identifier == "RecipientsView" {
             let destination = segue.destinationViewController as! RecipientsTableViewController
-            // send something
+            if let recipients = sender as? [SIRecipient] {
+                destination.recipients = recipients
+            }
         }
         
         if segue.identifier == "MapView" {
             let destination = segue.destinationViewController as! MapViewController
-            // send something
+            if let venue = sender as? SIVenue {
+                if let location = venue.location {
+                    destination.location = location
+                }
+            }
         }
         
         if segue.identifier == "ExhibitorsListView" {
             let destination = segue.destinationViewController as! ExhibitorTableViewController
-            // do stuff...
+            if let exhibitors = sender as? [SIExhibitor] {
+                destination.exhibitors = exhibitors
+            }
         }
         
         if segue.identifier == "AffiliatesListView" {
             let destination = segue.destinationViewController as! AffiliateListTableViewController
-            // do stuff...
+            if let affiliates = sender as? [SIAffiliate] {
+                
+                // Populate section headers so affiliates can be presented alphabetically in seperate tableView sections
+                var sections = [String : [SIAffiliate]]()
+                
+                for affiliate in affiliates {
+                    
+                    // Get first letter of affiliate name
+                    
+                    let fullName : [String?] = affiliate.name.split(" ")
+                    var name = ""
+                    if let first = fullName[0] {
+                        if first.lowercaseString == "the" {
+                            if let second = fullName[1] {
+                                name = second
+                            }
+                        } else {
+                            name = first
+                        }
+                    }
+                    
+                    let char : Character = name.characters.first!
+                    var value : String = String(char).uppercaseString
+                    // If affiliate name begins with a number, change to the # character
+                    if Int(value) != nil {
+                        value = "#"
+                    }
+                    
+                    // Add to dictionary
+                    if var section = sections[value] {
+                        section.append(affiliate)
+                        sections[value] = section
+                    } else {
+                        sections[value] = [affiliate]
+                    }
+                }
+                
+                var affiliateSections = [(String, [SIAffiliate])]()
+                
+                if let section = sections["A"] {
+                    affiliateSections.append(("A", section))
+                }
+                if let section = sections["B"] {
+                    affiliateSections.append(("B", section))
+                }
+                if let section = sections["C"] {
+                    affiliateSections.append(("C", section))
+                }
+                if let section = sections["D"] {
+                    affiliateSections.append(("D", section))
+                }
+                if let section = sections["E"] {
+                    affiliateSections.append(("E", section))
+                }
+                if let section = sections["F"] {
+                    affiliateSections.append(("F", section))
+                }
+                if let section = sections["G"] {
+                    affiliateSections.append(("G", section))
+                }
+                if let section = sections["H"] {
+                    affiliateSections.append(("H", section))
+                }
+                if let section = sections["I"] {
+                    affiliateSections.append(("I", section))
+                }
+                if let section = sections["J"] {
+                    affiliateSections.append(("J", section))
+                }
+                if let section = sections["K"] {
+                    affiliateSections.append(("K", section))
+                }
+                if let section = sections["L"] {
+                    affiliateSections.append(("L", section))
+                }
+                if let section = sections["M"] {
+                    affiliateSections.append(("M", section))
+                }
+                if let section = sections["N"] {
+                    affiliateSections.append(("N", section))
+                }
+                if let section = sections["O"] {
+                    affiliateSections.append(("O", section))
+                }
+                if let section = sections["P"] {
+                    affiliateSections.append(("P", section))
+                }
+                if let section = sections["Q"] {
+                    affiliateSections.append(("Q", section))
+                }
+                if let section = sections["R"] {
+                    affiliateSections.append(("R", section))
+                }
+                if let section = sections["S"] {
+                    affiliateSections.append(("S", section))
+                }
+                if let section = sections["T"] {
+                    affiliateSections.append(("T", section))
+                }
+                if let section = sections["U"] {
+                    affiliateSections.append(("U", section))
+                }
+                if let section = sections["V"] {
+                    affiliateSections.append(("V", section))
+                }
+                if let section = sections["W"] {
+                    affiliateSections.append(("W", section))
+                }
+                if let section = sections["X"] {
+                    affiliateSections.append(("X", section))
+                }
+                if let section = sections["Y"] {
+                    affiliateSections.append(("Y", section))
+                }
+                if let section = sections["Z"] {
+                    affiliateSections.append(("Z", section))
+                }
+                if let section = sections["#"] {
+                    affiliateSections.append(("#", section))
+                }
+                
+                destination.affiliateSections = affiliateSections
+            }
         }
+        
+        
         
         if segue.identifier == "VenueView" {
             let destination = segue.destinationViewController as! VenueMapsCollectionView
-            // Send something
+            destination.venue = self.event.venues[0]
         }
         
         if segue.identifier == "SponsorsView" {
             let destination = segue.destinationViewController as! SponsorsTableViewController
+            if let sponsors = sender as? [SISponsor] {
+                
+                var sponsorTypes = [
+                    [SISponsor](),
+                    [SISponsor](),
+                    [SISponsor](),
+                    [SISponsor](),
+                    [SISponsor]()
+                ]
+                
+                for s in sponsors {
+                    if s.sponsorType == .Friend {
+                        sponsorTypes[0].append(s)
+                    } else if s.sponsorType == .Supporter {
+                        sponsorTypes[1].append(s)
+                    } else if s.sponsorType == .Benefactor {
+                        sponsorTypes[2].append(s)
+                    } else if s.sponsorType == .Champion {
+                        sponsorTypes[3].append(s)
+                    } else if s.sponsorType == .President {
+                        sponsorTypes[4].append(s)
+                    }
+                }
+                
+                destination.friends = sponsorTypes[0]
+                destination.supporters = sponsorTypes[1]
+                destination.benefactors = sponsorTypes[2]
+                destination.champions = sponsorTypes[3]
+                destination.presidents = sponsorTypes[4]
+            }
         }
         
     }
@@ -329,7 +520,7 @@ class EventMenuViewController: UIViewController {
     
     func sortAgendaDays() {
         
-        for i in 0 ..< event.agendaItems.count - 1{
+        for i in 0 ..< event.agendaItems.count - 1 {
             
             for n in 0 ..< event.agendaItems.count - i - 1 {
                 
@@ -343,8 +534,24 @@ class EventMenuViewController: UIViewController {
     }
     
     // Some simple bubble sorting functions
-    func sortSpeakersByLastName() {
+    func sortSpeakersByLastName() -> [SISpeaker]{
+        var speakers = Array(event.speakers.values)
+        if speakers.isEmpty { return [SISpeaker]() }
+        for i in 0 ..< speakers.count - 1 {
+            
+            for n in 0 ..< speakers.count - i - 1 {
+                
+                if speakers[n].getLastName() > speakers[n+1].getLastName() {
+                    let speaker = speakers[n]
+                    speakers[n] = speakers[n+1]
+                    speakers[n+1] = speaker
+                }
+                
+            }
+            
+        }
         
+        return speakers
     }
     
     func sortResearchRecipientsByName() {

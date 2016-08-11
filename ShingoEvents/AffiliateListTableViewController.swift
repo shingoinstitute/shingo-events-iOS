@@ -8,51 +8,9 @@
 
 import UIKit
 
-public class AffiliateTableViewCell: UITableViewCell {
-    
-    var logoImage:UIImageView = UIImageView.newAutoLayoutView()
-    var nameLabel:UILabel = UILabel.newAutoLayoutView()
-    
-    var affiliate: SIAffiliate!
-    
-    var didSetupConstraints = false
-    
-    override public func updateConstraints() {
-        if !didSetupConstraints {
-            logoImage.removeFromSuperview()
-            nameLabel.removeFromSuperview()
-            contentView.addSubview(logoImage)
-            contentView.addSubview(nameLabel)
-            
-            NSLayoutConstraint.autoSetPriority(UILayoutPriorityRequired) {
-                self.logoImage.autoSetContentCompressionResistancePriorityForAxis(.Vertical)
-            }
-            
-            logoImage.image = affiliate.logoImage
-            nameLabel.text = affiliate.name
-  
-            logoImage.contentMode = .ScaleAspectFit
-            logoImage.autoSetDimension(.Width, toSize: contentView.frame.width * 0.33)
-            logoImage.autoAlignAxis(.Horizontal, toSameAxisOfView: contentView, withOffset: 0)
-            logoImage.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 8.0)
-            
-            nameLabel.autoSetDimension(.Height, toSize: 42.0)
-            nameLabel.numberOfLines = 0
-            nameLabel.lineBreakMode = .ByWordWrapping
-            nameLabel.autoAlignAxis(.Horizontal, toSameAxisOfView: contentView)
-            nameLabel.autoPinEdge(.Left, toEdge: .Right, ofView: logoImage, withOffset: 8.0)
-            nameLabel.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -8.0)
-            
-            didSetupConstraints = true
-        }
-        super.updateConstraints()
-    }
-}
-
 class AffiliateListTableViewController: UITableViewController {
 
-    var affiliates: [SIAffiliate]!
-    var sectionInfo:[(String, [SIAffiliate])]!
+    var affiliateSections:[(String, [SIAffiliate])]!
     
     var dataToSend: SIAffiliate!
     
@@ -61,6 +19,17 @@ class AffiliateListTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if affiliateSections.isEmpty {
+            let notification = UILabel.newAutoLayoutView()
+            view.addSubview(notification)
+            notification.autoPinEdge(.Top, toEdge: .Top, ofView: view, withOffset: 50)
+            notification.autoAlignAxisToSuperviewAxis(.Vertical)
+            notification.text = "Content Not Available"
+            notification.textColor = UIColor.whiteColor()
+            notification.sizeToFit()
+        }
+        
     }
     
     // MARK: - User interaction
@@ -74,16 +43,16 @@ class AffiliateListTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        if sectionInfo != nil {
-            return sectionInfo.count
+        if affiliateSections != nil {
+            return affiliateSections.count
         } else {
             return 0
         }
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if sectionInfo != nil {
-            return sectionInfo[section].1.count
+        if affiliateSections != nil {
+            return affiliateSections[section].1.count
         } else {
             return 0
         }
@@ -91,10 +60,10 @@ class AffiliateListTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
-        view.backgroundColor = UIColor(netHex: 0xcd8931)
+        view.backgroundColor = SIColor().shingoOrangeColor
 //        view.backgroundColor = .orangeColor()
         let header = UILabel()
-        header.text = String(sectionInfo[section].0).uppercaseString
+        header.text = String(affiliateSections[section].0).uppercaseString
         header.textColor = .whiteColor()
         header.font = UIFont.boldSystemFontOfSize(16.0)
         header.backgroundColor = .clearColor()
@@ -113,9 +82,9 @@ class AffiliateListTableViewController: UITableViewController {
 //        let cell = tableView.dequeueReusableCellWithIdentifier("AffiliateCell", forIndexPath: indexPath) as! AffiliateTableViewCell
         let cell = AffiliateTableViewCell()
         
-        let affiliate = sectionInfo[indexPath.section].1[indexPath.row]
+        let affiliate = affiliateSections[indexPath.section].1[indexPath.row]
         cell.affiliate = affiliate
-        cell.logoImage.image = affiliate.logoImage
+        cell.logoImage.image = affiliate.getLogoImage()
         cell.nameLabel.text = affiliate.name
         
         cell.accessoryType = .DisclosureIndicator
@@ -141,4 +110,46 @@ class AffiliateListTableViewController: UITableViewController {
     }
 
 
+}
+
+
+public class AffiliateTableViewCell: UITableViewCell {
+    
+    var logoImage:UIImageView = UIImageView.newAutoLayoutView()
+    var nameLabel:UILabel = UILabel.newAutoLayoutView()
+    
+    var affiliate: SIAffiliate!
+    
+    var didSetupConstraints = false
+    
+    override public func updateConstraints() {
+        if !didSetupConstraints {
+            logoImage.removeFromSuperview()
+            nameLabel.removeFromSuperview()
+            contentView.addSubview(logoImage)
+            contentView.addSubview(nameLabel)
+            
+            NSLayoutConstraint.autoSetPriority(UILayoutPriorityRequired) {
+                self.logoImage.autoSetContentCompressionResistancePriorityForAxis(.Vertical)
+            }
+            
+            logoImage.image = affiliate.getLogoImage()
+            nameLabel.text = affiliate.name
+            
+            logoImage.contentMode = .ScaleAspectFit
+            logoImage.autoSetDimension(.Width, toSize: contentView.frame.width * 0.33)
+            logoImage.autoAlignAxis(.Horizontal, toSameAxisOfView: contentView, withOffset: 0)
+            logoImage.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 8.0)
+            
+            nameLabel.autoSetDimension(.Height, toSize: 42.0)
+            nameLabel.numberOfLines = 0
+            nameLabel.lineBreakMode = .ByWordWrapping
+            nameLabel.autoAlignAxis(.Horizontal, toSameAxisOfView: contentView)
+            nameLabel.autoPinEdge(.Left, toEdge: .Right, ofView: logoImage, withOffset: 8.0)
+            nameLabel.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -8.0)
+            
+            didSetupConstraints = true
+        }
+        super.updateConstraints()
+    }
 }

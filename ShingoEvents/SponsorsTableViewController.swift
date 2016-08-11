@@ -23,37 +23,88 @@ class SponsorsTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        friends.append(SISponsor(name: "Craig", type: .Friend))
+        supporters.append(SISponsor(name: "Case", type: .Supporter))
+        benefactors.append(SISponsor(name: "Top", type: .Benefactor))
+        champions.append(SISponsor(name: "Dustin", type: .Champion))
+        presidents.append(SISponsor(name: "Dom", type: .President))
+        
+        var sponsorListsIsEmpty = true
+        let sponsors = [friends, supporters, benefactors, champions, presidents]
+        for sponsorList in sponsors {
+            if !sponsorList.isEmpty {
+                sponsorListsIsEmpty = false
+                break
+            }
+        }
+        
+        if sponsorListsIsEmpty {
+            let label = UILabel.newAutoLayoutView()
+            label.text = "No Content Available"
+            label.textColor = UIColor.whiteColor()
+            
+            view.addSubview(label)
+            view.bringSubviewToFront(label)
+            
+            label.sizeToFit()
+            label.autoAlignAxis(.Horizontal, toSameAxisOfView: view)
+            label.autoAlignAxis(.Vertical, toSameAxisOfView: view)
+        }
+        
+//        addGradientLayer()
+    }
+    
+    private func addGradientLayer() {
+        
+        let gradient = CAGradientLayer()
+        tableView.backgroundColor = SIColor().shingoRedColor
+        
+        gradient.frame = view.bounds
+        
+        let color1 = SIColor().shingoRedColor.CGColor as CGColorRef
+        let color2 = SIColor().shingoRedColor.colorWithAlphaComponent(0.75).CGColor as CGColorRef
+        let color3 = SIColor().shingoRedColor.colorWithAlphaComponent(0.5).CGColor as CGColorRef
+        let color4 = SIColor().shingoRedColor.colorWithAlphaComponent(0.25).CGColor as CGColorRef
+        let color5 = SIColor().shingoBlueColor.CGColor as CGColorRef
+        let colors = [color1, color2, color3, color4, color5]
 
+        gradient.colors = colors
+        
+        let locations = [0.0, 0.25, 0.5 , 0.75, 1.0]
+        gradient.locations = locations
+        
+        self.tableView.layer.addSublayer(gradient)
     }
     
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         
-//        var numSections = 0
-//        if presidents.count > 0 {
-//            numSections += 1
-//            sectionTitles.append("Presidents")
-//        }
-//        if champions.count > 0 {
-//            numSections += 1
-//            sectionTitles.append("Champions")
-//        }
-//        if benefactors.count > 0 {
-//            numSections += 1
-//            sectionTitles.append("Benefactors")
-//        }
-//        if supporters.count > 0 {
-//            numSections += 1
-//            sectionTitles.append("Supporters")
-//        }
-//        if friends.count > 0 {
-//            numSections += 1
-//            sectionTitles.append("Friends")
-//        }
-//
-//        return numSections
-        return 0
+        var numSections = 0
+        if presidents.count > 0 {
+            numSections += 1
+            sectionTitles.append("Presidents")
+        }
+        if champions.count > 0 {
+            numSections += 1
+            sectionTitles.append("Champions")
+        }
+        if benefactors.count > 0 {
+            numSections += 1
+            sectionTitles.append("Benefactors")
+        }
+        if supporters.count > 0 {
+            numSections += 1
+            sectionTitles.append("Supporters")
+        }
+        if friends.count > 0 {
+            numSections += 1
+            sectionTitles.append("Friends")
+        }
+
+        return numSections
+        
     }
 
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -93,36 +144,36 @@ class SponsorsTableViewController: UITableViewController {
 
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCellWithIdentifier("SponsorCell", forIndexPath: indexPath) as! SponsorTableViewCell
-        let cell = SponsorTableViewCell()
-//        switch sectionTitles[indexPath.section] {
-//        case "Friends":
-//            if (friends?.count > 0) {
-//                cell.bannerImage.image = friends[indexPath.row].getRecipientImage()
-//                cell.sponsor = friends[indexPath.row]
-//            }
-//        case "Supporters":
-//            if (supporters?.count > 0) {
-//                cell.bannerImage.image = supporters[indexPath.row].getRecipientImage()
-//                cell.sponsor = supporters[indexPath.row]
-//            }
-//        case "Benefactors":
-//            if (benefactors?.count > 0) {
-//                cell.bannerImage.image = benefactors[indexPath.row].getRecipientImage()
-//                cell.sponsor = benefactors[indexPath.row]
-//            }
-//        case "Champions":
-//            if (champions?.count > 0) {
-//                cell.bannerImage.image = champions[indexPath.row].getRecipientImage()
-//                cell.sponsor = champions[indexPath.row]
-//            }
-//        case "Presidents":
-//            if (presidents?.count > 0) {
-//                cell.bannerImage.image = presidents[indexPath.row].getRecipientImage()
-//                cell.sponsor = presidents[indexPath.row]
-//            }
-//        default: break
-//        }
+        let cell = tableView.dequeueReusableCellWithIdentifier("SponsorCell", forIndexPath: indexPath) as! SponsorTableViewCell
+//        let cell = SponsorTableViewCell()
+        switch sectionTitles[indexPath.section] {
+        case "Friends":
+            if (friends.count > 0) {
+                cell.bannerImage.image = friends[indexPath.row].getBannerImage()
+                cell.sponsor = friends[indexPath.row]
+            }
+        case "Supporters":
+            if (supporters.count > 0) {
+                cell.bannerImage.image = supporters[indexPath.row].getBannerImage()
+                cell.sponsor = supporters[indexPath.row]
+            }
+        case "Benefactors":
+            if (benefactors.count > 0) {
+                cell.bannerImage.image = benefactors[indexPath.row].getBannerImage()
+                cell.sponsor = benefactors[indexPath.row]
+            }
+        case "Champions":
+            if (champions.count > 0) {
+                cell.bannerImage.image = champions[indexPath.row].getBannerImage()
+                cell.sponsor = champions[indexPath.row]
+            }
+        case "Presidents":
+            if (presidents.count > 0) {
+                cell.bannerImage.image = presidents[indexPath.row].getBannerImage()
+                cell.sponsor = presidents[indexPath.row]
+            }
+        default: break
+        }
         cell.selectionStyle = .None
         cell.contentView.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 150.0)
         cell.setNeedsUpdateConstraints()
@@ -152,11 +203,9 @@ class SponsorTableViewCell:UITableViewCell {
     var didSetupConstraints = false
 
     var bannerImage:UIImageView = UIImageView.newAutoLayoutView()
-    var testView:UIView = UIView.newAutoLayoutView()
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String!) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        contentView.addSubview(bannerImage)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -166,15 +215,10 @@ class SponsorTableViewCell:UITableViewCell {
     override func updateConstraints() {
         if !didSetupConstraints
         {
+            contentView.addSubview(bannerImage)
             NSLayoutConstraint.autoSetPriority(UILayoutPriorityRequired) {
                 self.bannerImage.autoSetContentCompressionResistancePriorityForAxis(.Vertical)
             }
-            
-//            if let image = self.sponsor.logoImage {
-//                bannerImage.image = image
-//            } else if let image = self.sponsor.bannerImage {
-//                bannerImage.image = image
-//            }
             
             bannerImage.contentMode = UIViewContentMode.ScaleAspectFit
             

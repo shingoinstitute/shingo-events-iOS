@@ -10,6 +10,32 @@ import Foundation
 import UIKit
 import Alamofire
 
+class ActivityViewController: UIViewController {
+    
+    var activityView = ActivityView()
+    var background = UIImageView()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        view.backgroundColor = UIColor.clearColor()
+        
+//        background.image = ShingoIconImages().shingoIconForDevice()
+        
+//        view.addSubview(background)
+//        background.autoPinEdgesToSuperviewEdges()
+//        background.contentMode = .ScaleAspectFill
+        
+        view.addSubview(activityView)
+        activityView.autoAlignAxis(.Horizontal, toSameAxisOfView: view)
+        activityView.autoAlignAxis(.Vertical, toSameAxisOfView: view)
+        activityView.displayActivityView(message: "Loading...", forView: view)
+        
+        
+    }
+    
+}
+
 class ActivityView: UIView {
     
     let activityView:UIView = UIView.newAutoLayoutView()

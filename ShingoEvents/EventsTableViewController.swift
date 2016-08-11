@@ -14,6 +14,8 @@ class EventTableViewCell: UITableViewCell {
     // MARK: - Properties
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var dateRangeLabel: UILabel!
+    @IBOutlet weak var eventImage: UIImageView!
+    
     var event: SIEvent!
     
     func updateCell(event event: SIEvent) {
@@ -25,6 +27,14 @@ class EventTableViewCell: UITableViewCell {
         dateFormatter.dateStyle = .MediumStyle
         let dates = "\(dateFormatter.stringFromDate(event.startDate)) - \(dateFormatter.stringFromDate(event.endDate))"
         self.dateRangeLabel.text = dates
+        
+        if let image = event.getBannerImage() {
+            eventImage.image = image
+            eventImage.contentMode = .ScaleAspectFill
+            eventImage.clipsToBounds = true
+            eventImage.layer.cornerRadius = 3.0
+        }
+        
     }
     
 }
@@ -56,6 +66,7 @@ class EventsTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = SIColor().prussianBlueColor
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
@@ -93,7 +104,12 @@ class EventsTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 93.0 as CGFloat
+        
+        if events[indexPath.row].getBannerImage() == nil {
+            return 75.0
+        }
+        
+        return 155.0 as CGFloat
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
