@@ -13,62 +13,30 @@ class SessionListTableViewController: UITableViewController {
     
     var sessions: [SISession]!
     
-    var timer : NSTimer!
-    var time : Double = 0
-    var selectedCellIndexPath : NSIndexPath!
-    
-//    override func loadView() {
-//        
-//        
-//        
-//        super.loadView()
-//    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        definesPresentationContext = true
+        providesPresentationContextTransitionStyle = true
+        
         for i in 0 ..< sessions.count {
             sessions[i].requestSessionInformation({
-                let cell = self.tableView.cellForRowAtIndexPath(NSIndexPath(forRow: i, inSection: 0)) as! SessionTableViewCell
-                cell.updateCellProperties(session: self.sessions[i])
-                cell.setNeedsDisplay()
+                if let cell = self.tableView.cellForRowAtIndexPath(NSIndexPath(forRow: i, inSection: 0)) as? SessionTableViewCell {
+                    cell.updateCellProperties(session: self.sessions[i])
+                    cell.setNeedsDisplay()
+                }
             });
-        }
-        
-//        dismissViewControllerAnimated(true, completion: nil)
-        
-        if sessions == nil {
-            fatalError()
-        }
-        
-    }
-    
-    func checkOnRequestStatus() {
-        time += 0.1
-        
-        if sessions[selectedCellIndexPath.row].didLoadSessionInformation {
-            timer.invalidate()
-            performSegueWithIdentifier("SessionDetailView", sender: sessions[selectedCellIndexPath.row])
-            return
-        }
-        
-        if time > 12.0 {
-            timer.invalidate()
-            time = 0
-            print("WARNING: COULD NOT GET SESSION DATA")
         }
         
     }
     
     // MARK: - Navigation
-    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         if segue.identifier == "SessionDetailView" {
             let destination = segue.destinationViewController as! SessionDetailViewController
             destination.session = sender as! SISession
         }
-        
     }
     
 }
@@ -76,24 +44,27 @@ class SessionListTableViewController: UITableViewController {
 extension SessionListTableViewController {
     
     // MARK: - Table view data source
-    
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
-        if sessions[indexPath.row].didLoadSessionInformation {
-            self.performSegueWithIdentifier("SessionDetailView", sender: sessions[indexPath.row])
-        } else {
-            self.selectedCellIndexPath = indexPath
-            self.time = 0
-            self.timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: #selector(SessionListTableViewController.checkOnRequestStatus), userInfo: nil, repeats: true)
-        }
+        let session : SISession = sessions[indexPath.row]
         
-//        SIRequest().requestSession(sessions[indexPath.row].id, callback: { session in
-//            guard let session = session else {
-//                print("Warning, could not segue to Session Detail View with nil SISession")
-//                return
-//            }
-//            self.performSegueWithIdentifier("SessionDetailView", sender: session)
-//        })
+        if session.didLoadSessionInformation && session.didLoadSpeakers {
+            
+            performSegueWithIdentifier("SessionDetailView", sender: session)
+            
+        } else {
+            
+            let av = ActivityViewController()
+            av.modalPresentationStyle = .OverCurrentContext
+            
+            presentViewController(av, animated: true, completion: {
+                session.requestSessionInformation() {
+                    self.dismissViewControllerAnimated(false, completion: {
+                        self.performSegueWithIdentifier("SessionDetailView", sender: session)
+                    });
+                }
+            });
+        }
         
     }
     
@@ -134,9 +105,7 @@ extension SessionListTableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("SessionCell", forIndexPath: indexPath) as! SessionTableViewCell
-        
         cell.updateCellProperties(session: sessions[indexPath.row])
-        
         return cell
     }
     
@@ -190,8 +159,8 @@ class SessionTableViewCell: UITableViewCell {
             let calendar = NSCalendar.currentCalendar()
             let comp_start = calendar.components([.Hour, .Minute], fromDate: start_date)
             let comp_end = calendar.components([.Hour, .Minute], fromDate: end_date)
-            let start_time:String = getTimeStringFromComponents(comp_start.hour, minute: comp_start.minute)
-            let end_time:String = getTimeStringFromComponents(comp_end.hour, minute: comp_end.minute)
+            let start_time:String = getTimeFromComponents(comp_start.hour, minute: comp_start.minute)
+            let end_time:String = getTimeFromComponents(comp_end.hour, minute: comp_end.minute)
             
             timeLabelText = "\(start_time) - \(end_time)"
         }
@@ -207,7 +176,7 @@ class SessionTableViewCell: UITableViewCell {
         
     }
     
-    func getTimeStringFromComponents(hour: Int, minute:Int) -> String {
+    private func getTimeFromComponents(hour: Int, minute:Int) -> String {
         
         var hour = hour
         var time = ""

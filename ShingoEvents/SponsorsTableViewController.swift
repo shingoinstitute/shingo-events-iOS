@@ -23,13 +23,7 @@ class SponsorsTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        friends.append(SISponsor(name: "Craig", type: .Friend))
-        supporters.append(SISponsor(name: "Case", type: .Supporter))
-        benefactors.append(SISponsor(name: "Top", type: .Benefactor))
-        champions.append(SISponsor(name: "Dustin", type: .Champion))
-        presidents.append(SISponsor(name: "Dom", type: .President))
-        
+      
         var sponsorListsIsEmpty = true
         let sponsors = [friends, supporters, benefactors, champions, presidents]
         for sponsorList in sponsors {
@@ -77,8 +71,11 @@ class SponsorsTableViewController: UITableViewController {
         self.tableView.layer.addSublayer(gradient)
     }
     
-    // MARK: - Table view data source
+}
 
+extension SponsorsTableViewController {
+    
+    // MARK: - Table view data source
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         
         var numSections = 0
@@ -144,36 +141,38 @@ class SponsorsTableViewController: UITableViewController {
 
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCellWithIdentifier("SponsorCell", forIndexPath: indexPath) as! SponsorTableViewCell
-//        let cell = SponsorTableViewCell()
+        
         switch sectionTitles[indexPath.section] {
-        case "Friends":
-            if (friends.count > 0) {
-                cell.bannerImage.image = friends[indexPath.row].getBannerImage()
-                cell.sponsor = friends[indexPath.row]
-            }
-        case "Supporters":
-            if (supporters.count > 0) {
-                cell.bannerImage.image = supporters[indexPath.row].getBannerImage()
-                cell.sponsor = supporters[indexPath.row]
-            }
-        case "Benefactors":
-            if (benefactors.count > 0) {
-                cell.bannerImage.image = benefactors[indexPath.row].getBannerImage()
-                cell.sponsor = benefactors[indexPath.row]
-            }
-        case "Champions":
-            if (champions.count > 0) {
-                cell.bannerImage.image = champions[indexPath.row].getBannerImage()
-                cell.sponsor = champions[indexPath.row]
-            }
-        case "Presidents":
-            if (presidents.count > 0) {
-                cell.bannerImage.image = presidents[indexPath.row].getBannerImage()
-                cell.sponsor = presidents[indexPath.row]
-            }
-        default: break
+            case "Friends":
+                if (friends.count > 0) {
+                    cell.bannerImage.image = friends[indexPath.row].getBannerImage()
+                    cell.sponsor = friends[indexPath.row]
+                }
+            case "Supporters":
+                if (supporters.count > 0) {
+                    cell.bannerImage.image = supporters[indexPath.row].getBannerImage()
+                    cell.sponsor = supporters[indexPath.row]
+                }
+            case "Benefactors":
+                if (benefactors.count > 0) {
+                    cell.bannerImage.image = benefactors[indexPath.row].getBannerImage()
+                    cell.sponsor = benefactors[indexPath.row]
+                }
+            case "Champions":
+                if (champions.count > 0) {
+                    cell.bannerImage.image = champions[indexPath.row].getBannerImage()
+                    cell.sponsor = champions[indexPath.row]
+                }
+            case "Presidents":
+                if (presidents.count > 0) {
+                    cell.bannerImage.image = presidents[indexPath.row].getBannerImage()
+                    cell.sponsor = presidents[indexPath.row]
+                }
+            default: break
         }
+        
         cell.selectionStyle = .None
         cell.contentView.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 150.0)
         cell.setNeedsUpdateConstraints()
@@ -193,6 +192,7 @@ class SponsorsTableViewController: UITableViewController {
 
 }
 
+
 class SponsorTableViewCell:UITableViewCell {
     
     var sponsor:SISponsor!
@@ -202,7 +202,11 @@ class SponsorTableViewCell:UITableViewCell {
     
     var didSetupConstraints = false
 
-    var bannerImage:UIImageView = UIImageView.newAutoLayoutView()
+    var bannerImage:UIImageView = {
+        let image = UIImageView.newAutoLayoutView()
+        image.contentMode = .ScaleAspectFit
+        return image
+    }()
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String!) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -213,14 +217,13 @@ class SponsorTableViewCell:UITableViewCell {
     }
     
     override func updateConstraints() {
-        if !didSetupConstraints
-        {
+        if !didSetupConstraints {
+            
             contentView.addSubview(bannerImage)
+            
             NSLayoutConstraint.autoSetPriority(UILayoutPriorityRequired) {
                 self.bannerImage.autoSetContentCompressionResistancePriorityForAxis(.Vertical)
             }
-            
-            bannerImage.contentMode = UIViewContentMode.ScaleAspectFit
             
             bannerImage.autoPinEdgesToSuperviewEdgesWithInsets(UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8))
             

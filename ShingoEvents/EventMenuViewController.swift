@@ -13,8 +13,14 @@ import PureLayout
 class EventMenuViewController: UIViewController {
     
     var event : SIEvent!
-//    var eventSpeakers = [SISpeaker]()
+
     var eventSpeakers = [String : SISpeaker]()
+    
+    var activityVC : ActivityViewController = {
+        let view = ActivityViewController()
+        view.modalPresentationStyle = .OverCurrentContext
+        return view
+    }()
     
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var eventNameLabel: UILabel!
@@ -84,9 +90,8 @@ class EventMenuViewController: UIViewController {
         super.loadView()
         
         // Load Agenda
-        event.requestAgendas() {}
-        
-        // Load Sessions (after loading agendas?)
+        // Note: requestAgendas will request session data underneath
+        event.requestAgendas() {self.event.didLoadAgendas = true}
         
         // Load Speakers for entire event
         event.requestSpeakers() {self.event.didLoadSpeakers = true}
@@ -103,19 +108,20 @@ class EventMenuViewController: UIViewController {
         // Load Exhibitor information
         event.requestExhibitors() {self.event.didLoadExhibitors = true}
         
-        // Load Sponsors information
-        event.requestSponsors() {self.event.didLoadSponsors = true}
+        // Load Sponsor information
+        event.requestSponsors() {
+            self.event.didLoadSponsors = true
+        }
         
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        definesPresentationContext = true
+        providesPresentationContextTransitionStyle = true
         
-        if event == nil {
-            fatalError()
-        }
-        
-        // do some sorting
+        // Sorting
         sortResearchRecipientsByName()
         sortPrizeRecipientsByName()
         sortSpeakersByLastName()
@@ -214,13 +220,23 @@ class EventMenuViewController: UIViewController {
         speakerButton.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -edgeSpacing)
     }
     
+    
+}
+
+extension EventMenuViewController {
+    
+    // MARK: - Button Outlet functions
     func didTapSchedule(sender: AnyObject) {
-        if event.didLoadAgendaSessions {
+        if event.didLoadAgendas {
             self.performSegueWithIdentifier("SchedulesView", sender: self.event.agendaItems)
         } else {
-            event.requestAgendas() {
-                self.performSegueWithIdentifier("SchedulesView", sender: self.event.agendaItems)
-            }
+            self.presentViewController(activityVC, animated: false, completion: { 
+                self.event.requestAgendas() {
+                    self.dismissViewControllerAnimated(true, completion: { 
+                        self.performSegueWithIdentifier("SchedulesView", sender: self.event.agendaItems)
+                    });
+                }
+            });
         }
     }
     
@@ -228,30 +244,46 @@ class EventMenuViewController: UIViewController {
         if event.didLoadSpeakers  {
             self.performSegueWithIdentifier("SpeakerList", sender: self.eventSpeakers)
         } else {
-            event.requestSpeakers() {
-                self.performSegueWithIdentifier("SpeakerList", sender: self.eventSpeakers)
-            }
+            self.presentViewController(activityVC, animated: false, completion: { 
+                self.event.requestSpeakers() {
+                    self.dismissViewControllerAnimated(true, completion: { 
+                        self.performSegueWithIdentifier("SpeakerList", sender: self.eventSpeakers)
+                    });
+                }
+            });
         }
-        
     }
     
     func didTapRecipients(sender: AnyObject) {
         if event.didLoadRecipients {
             self.performSegueWithIdentifier("RecipientsView", sender: self.event.recipients)
         } else {
-            event.requestRecipients() {
-                self.performSegueWithIdentifier("RecipientsView", sender: self.event.recipients)
-                return
-            }
+            self.presentViewController(activityVC, animated: false, completion: {
+                self.event.requestRecipients() {
+                    self.dismissViewControllerAnimated(true, completion: { 
+                        self.performSegueWithIdentifier("RecipientsView", sender: self.event.recipients)
+                    });
+                }
+            });
         }
     }
     
+    //TODO: Create screen on segue that shows more than the first potentially available venue
     func didTapDirections(sender: AnyObject) {
         if event.didLoadVenues {
-            let venues = self.event.venues
-            if !venues.isEmpty {
-                self.performSegueWithIdentifier("MapView", sender: venues[0])
+            if let venue = self.event.venues.first {
+                self.performSegueWithIdentifier("MapView", sender: venue)
             }
+        } else {
+            self.presentViewController(activityVC, animated: false, completion: { 
+                self.event.requestVenues({
+                    self.dismissViewControllerAnimated(true, completion: {
+                        if let venue = self.event.venues.first {
+                            self.performSegueWithIdentifier("MapView", sender: venue)
+                        }
+                    });
+                });
+            });
         }
     }
     
@@ -259,8 +291,12 @@ class EventMenuViewController: UIViewController {
         if event.didLoadExhibitors {
             self.performSegueWithIdentifier("ExhibitorsListView", sender: self.event.exhibitors)
         } else {
-            event.requestExhibitors({ 
-                self.performSegueWithIdentifier("ExhibitorsListView", sender: self.event.exhibitors)
+            self.presentViewController(activityVC, animated: false, completion: {
+                self.event.requestExhibitors({
+                    self.dismissViewControllerAnimated(true, completion: {
+                        self.performSegueWithIdentifier("ExhibitorsListView", sender: self.event.exhibitors)
+                    })
+                });
             });
         }
     }
@@ -270,45 +306,51 @@ class EventMenuViewController: UIViewController {
         if event.didLoadAffiliates {
             self.performSegueWithIdentifier("AffiliatesListView", sender: self.event.affiliates)
         } else {
-            event.requestAffiliates() {
-                self.performSegueWithIdentifier("AffiliatesListView", sender: self.event.affiliates)
-            }
+            self.presentViewController(activityVC, animated: false, completion: {
+                self.event.requestAffiliates() {
+                    self.dismissViewControllerAnimated(true, completion: {
+                        self.performSegueWithIdentifier("AffiliatesListView", sender: self.event.affiliates)
+                    });
+                }
+            });
         }
     }
     
     func didTapVenue(sender: AnyObject) {
         
         if event.didLoadVenues {
-            
-            if self.event.venues.count > 0 {
-                self.performSegueWithIdentifier("VenueView", sender: self.event.venues)
-            }
-    
+            self.performSegueWithIdentifier("VenueView", sender: self.event.venues)
         } else {
-            event.requestVenues() {
-                
-                if self.event.venues.count > 0 {
-                    self.performSegueWithIdentifier("VenueView", sender: self.event.venues)
+            self.presentViewController(activityVC, animated: false, completion: {
+                self.event.requestVenues() {
+                    self.dismissViewControllerAnimated(true, completion: {
+                        self.performSegueWithIdentifier("VenueView", sender: self.event.venues)
+                    });
                 }
-                
-            }
+            });
         }
-        
-        
     }
     
     func didTapSponsors(sender: AnyObject) {
+        
         if event.didLoadSponsors {
             self.performSegueWithIdentifier("SponsorsView", sender: self.event.sponsors)
         } else {
-            event.requestSponsors {
-                self.performSegueWithIdentifier("SponsorsView", sender: self.event.sponsors)
-            }
+            self.presentViewController(activityVC, animated: false, completion: {
+                self.event.requestSponsors {
+                    self.dismissViewControllerAnimated(true, completion: {
+                        self.performSegueWithIdentifier("SponsorsView", sender: self.event.sponsors)
+                    });
+                }
+            });
         }
     }
     
-    // MARK: - Navigation
+}
+
+extension EventMenuViewController {
     
+    // MARK: - Navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         if segue.identifier == "SchedulesView" {
@@ -515,9 +557,11 @@ class EventMenuViewController: UIViewController {
         }
         
     }
-    
-    // MARK: - Other Functions
-    
+}
+
+extension EventMenuViewController {
+
+    // MARK: - Custom Class Functions
     func sortAgendaDays() {
         
         for i in 0 ..< event.agendaItems.count - 1 {
@@ -533,7 +577,6 @@ class EventMenuViewController: UIViewController {
         }
     }
     
-    // Some simple bubble sorting functions
     func sortSpeakersByLastName() -> [SISpeaker]{
         var speakers = Array(event.speakers.values)
         if speakers.isEmpty { return [SISpeaker]() }
@@ -554,16 +597,16 @@ class EventMenuViewController: UIViewController {
         return speakers
     }
     
+    //TO-DO: Needs implementation
     func sortResearchRecipientsByName() {
-
     }
     
+    //TO-DO: Needs implementation
     func sortPrizeRecipientsByName() {
-        
     }
  
+    //TO-DO: Needs implementation
     func sortAffiliatesByName() {
-
     }
 }
 

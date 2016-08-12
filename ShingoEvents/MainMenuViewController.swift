@@ -15,7 +15,12 @@ import Alamofire
 class MainMenuViewController: UIViewController {
     
     // Activity view used for loading screen
-    let activityView = ActivityView()
+    var activityView : ActivityViewController = {
+        let view = ActivityViewController()
+        view.modalPresentationStyle = .OverCurrentContext
+        view.message = "Loading Upcoming Conferences..."
+        return view
+    }()
     var eventsDidLoad = false
     var timer : NSTimer!
     var time : Double = 0
@@ -158,7 +163,7 @@ class MainMenuViewController: UIViewController {
 //        Uncomment the line below to make constraints appear animated (for deployment)
 //        UIView.animateWithDuration(1.5, delay: 0.2, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: UIViewAnimationOptions(), animations: {
         
-//        Uncomment the line below to make menu options appear instantly (for production)
+//        Uncomment the line below to make menu options appear instantly (for during production)
         UIView.animateWithDuration(0.01, delay: 0,
                                    usingSpringWithDamping: 0.01,
                                    initialSpringVelocity: 0, 
@@ -172,14 +177,14 @@ class MainMenuViewController: UIViewController {
     }
     
     @IBAction func reloadEventData(sender: AnyObject) {
-//        activityView.progressIndicator.progress = 0
-//        activityView.animateProgress(0.9)
-        activityView.displayActivityView(message: "Loading Upcoming Conferences", forView: self.view)
-        SIRequest().requestEvents({ events in
-            self.activityView.removeActivityViewFromDisplay()
-            self.events = events
-            self.eventsDidLoad = true
-        })
+        presentViewController(activityView, animated: false) { 
+            SIRequest().requestEvents({ events in
+                self.dismissViewControllerAnimated(true, completion: nil)
+                self.events = events
+                self.eventsDidLoad = true
+            })
+        }
+        
     }
     @IBAction func didTapShingoModel(sender: AnyObject) {
         self.performSegueWithIdentifier("ShingoModel", sender: self)
@@ -190,21 +195,19 @@ class MainMenuViewController: UIViewController {
     }
 
     func loadUpcomingEvents() {
-        activityView.displayActivityView(message: "Loading Upcoming Conferences...", forView: self.view)
-        if !SIRequest().checkForInternetConnection() {
-            print("No internet connection detected")
+
+        if eventsDidLoad {
+            performSegueWithIdentifier("EventsView", sender: self.events)
+        } else if !SIRequest().checkForInternetConnection() {
             displayBadRequestNotification()
-        } else if eventsDidLoad {
-            self.performSegueWithIdentifier("EventsView", sender: self.events)
         } else {
-            // Make buttons non clickable while loading indicator is present
-            disableButtons(shouldDisable: true)
-            // Show loading indicator, make request to server for upcoming events
-            activityView.displayActivityView(message: "Loading Upcoming Conferences...", forView: self.view)
-//            activityView.animateProgress(0.9)
-            
-            time = 0
-            timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: #selector(MainMenuViewController.checkOnRequestStatus), userInfo: nil, repeats: true)
+            presentViewController(activityView, animated: false, completion: {
+                self.timer = NSTimer.scheduledTimerWithTimeInterval(0.1,
+                                                                    target: self,
+                                                                    selector: #selector(MainMenuViewController.checkOnRequestStatus), 
+                                                                    userInfo: nil, 
+                                                                    repeats: true)
+            });
         }
     }
     
@@ -214,9 +217,9 @@ class MainMenuViewController: UIViewController {
                                       preferredStyle: UIAlertControllerStyle.Alert)
         let action = UIAlertAction(title: "OK", style: .Default, handler: nil)
         alert.addAction(action)
-        presentViewController(alert, animated: true, completion: {
-            self.activityView.removeActivityViewFromDisplay()
-        })
+        dismissViewControllerAnimated(true, completion: {
+            self.presentViewController(alert, animated: true, completion: nil)
+        });
     }
     
     func checkOnRequestStatus() {
@@ -224,29 +227,25 @@ class MainMenuViewController: UIViewController {
         
         if eventsDidLoad {
             timer.invalidate()
-            activityView.removeActivityViewFromDisplay()
-            performSegueWithIdentifier("EventsView", sender: self.events)
+            time = 0
+            self.dismissViewControllerAnimated(true, completion: {
+                self.performSegueWithIdentifier("EventsView", sender: self.events)
+            });
         }
         
         if time > 12.0 {
             timer.invalidate()
-            activityView.removeActivityViewFromDisplay()
-            displayBadRequestNotification()
+            time = 0
+            self.dismissViewControllerAnimated(true, completion: { 
+                self.displayBadRequestNotification()
+            });
         }
-    }
-    
-    func disableButtons(shouldDisable disable:Bool){
-        eventsBtn.enabled = !disable
-        shingoModelBtn.enabled = !disable
-        settingsBtn.enabled = !disable
-        reloadEventsBtn.enabled = !disable
     }
 
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if (segue.identifier == "EventsView") {
+        if segue.identifier == "EventsView" {
             let destination = segue.destinationViewController as! EventsTableViewController
-            activityView.removeActivityViewFromDisplay()
             if let events = sender as? [SIEvent] {
                 destination.events = events
             }

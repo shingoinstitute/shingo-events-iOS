@@ -196,78 +196,63 @@ class SIRequest {
         return agendas
     }
     
-    /// Gets a single day using an agenda ID.
-    func requestAgendaDay(agendaId id: String, callback: (agenda: SIAgenda?) -> Void) {
+    /// Gets basic information for sessions associated with an SIAgenda.
+    func requestAgendaSessions(agendaId id: String, callback: (sessions: [SISession]?) -> Void) {
         
         getRequest(url: EVENTS_URL + "/days/\(id)") { json in
             
             guard let json = json else {
-                callback(agenda: nil)
+                callback(sessions: nil)
                 return
             }
             
-            let agenda = SIAgenda()
+            var sessions = [SISession]()
             
-            if json["day"].isExists() {
+            if let records = json["day"]["Shingo_Sessions__r"]["records"].array {
                 
-                let day = json["day"]
+                // NOTE: The response from this API call also provides the agenda's ID, name, and display name,
+                // however this information is not needed because it will have already been provided by previous API requests.
                 
-                if let id = day["Id"].string {
-                    agenda.id = id
-                }
-                
-                if let name = day["Name"].string {
-                    agenda.name = name
-                }
-                
-                if let displayName = day["Display_Name_c"].string {
-                    agenda.displayName = displayName
-                }
-                
-                // Sessions for the recieved day
-                if let records = day["Shingo_Sessions__r"]["records"].array {
-                    for record in records {
-                        let session = SISession()
-                        
-                        if let id = record["Id"].string {
-                            session.id = id
-                        }
-                        
-                        if let name = record["Name"].string {
-                            session.name = name
-                        }
-                        
-                        if let displayName = record["Session_Display_Name__c"].string {
-                            session.displayName = displayName
-                        }
-                        
-                        if let startDate = record["Start_Date_Time__c"].string {
-                            if let startDate = self.sessionDateFormatter.dateFromString(startDate) {
-                                session.startDate = startDate
-                            }
-                        }
-                        
-                        if let endDate = record["End_Date_Time__c"].string {
-                            if let endDate = self.sessionDateFormatter.dateFromString(endDate) {
-                                session.endDate = endDate
-                            }
-                        }
-                        
-                        if let type = record["Session_Type__c"].string {
-                            session.sessionType = type
-                        }
-                        
-                        agenda.sessions.append(session)
+                // Sessions for the agenda with the provided agenda ID
+                for record in records {
+                    let session = SISession()
+                    
+                    if let id = record["Id"].string {
+                        session.id = id
                     }
+                    
+                    if let name = record["Name"].string {
+                        session.name = name
+                    }
+                    
+                    if let displayName = record["Session_Display_Name__c"].string {
+                        session.displayName = displayName
+                    }
+                    
+                    if let startDate = record["Start_Date_Time__c"].string {
+                        if let startDate = self.sessionDateFormatter.dateFromString(startDate) {
+                            session.startDate = startDate
+                        }
+                    }
+                    
+                    if let endDate = record["End_Date_Time__c"].string {
+                        if let endDate = self.sessionDateFormatter.dateFromString(endDate) {
+                            session.endDate = endDate
+                        }
+                    }
+                    
+                    if let type = record["Session_Type__c"].string {
+                        session.sessionType = type
+                    }
+                    
+                    sessions.append(session)
                 }
             }
-            
-            
-            callback(agenda: agenda)
+            callback(sessions: sessions)
         }
     }
     
-    /// Gets all sessions for a single event using an agenda ID.
+    /// Gets all sessions for a single event using an agenda ID. Note: Provides more detail than requestAgendaSessions().
     func requestSessions(agendaId id: String, callback: (sessions: [SISession]?) -> ()) {
         getRequest(url: EVENTS_URL + "/sessions?agenda_id=\(id)") { json in
             
@@ -969,7 +954,7 @@ class SIRequest {
     
     func requestSponsors(eventId id: String, callback: (sponsors: [SISponsor]?) -> Void) {
         
-        getRequest(url: EVENTS_URL + "/sponsors?event_id=\(id)", callback: { json in
+        getRequest(url: EVENTS_URL + "/sponsors", callback: { json in
         
             guard let json = json else {
                 callback(sponsors: nil)
@@ -978,14 +963,18 @@ class SIRequest {
             
             var sponsors = [SISponsor]()
             
-            if json["sponsors"].isExists() {
+            if let records = json["sponsors"].array {
                 
-                for record in json["sponsors"].array! {
+                for record in records {
                     
                     let sponsor = SISponsor()
                     
                     if let id = record["Id"].string {
                         sponsor.id = id
+                    }
+                    
+                    if let name = record["Name"].string {
+                        sponsor.name = name
                     }
                     
                     if let organization = record["Organization__r"]["Name"].string {
@@ -994,6 +983,18 @@ class SIRequest {
                     
                     if let logoURL = record["Organization__r"]["Logo__c"].string {
                         sponsor.logoURL = logoURL
+                    }
+                    
+                    if let bannerURL = record["Banner_URL__c"].string {
+                        sponsor.bannerURL = bannerURL
+                    }
+                    
+                    if let splashScreenURL = record["Splash_Screen_URL__c"].string {
+                        sponsor.splashScreenURL = splashScreenURL
+                    }
+                    
+                    if let type = record["Sponsor_Level__c"].string {
+                        sponsor.sponsorType = self.getSponsorType(type: type)
                     }
                     
                     sponsors.append(sponsor)
@@ -1046,7 +1047,7 @@ class SIRequest {
                 }
                 
                 if let type = record["Sponsor_Level__c"].string {
-                    sponsor.sponsorType = self.parseSponsorType(type: type)
+                    sponsor.sponsorType = self.getSponsorType(type: type)
                 }
             }
             
@@ -1056,7 +1057,7 @@ class SIRequest {
         
     }
     
-    private func parseSponsorType(type type: String) -> SISponsor.SponsorType {
+    private func getSponsorType(type type: String) -> SISponsor.SponsorType {
         switch type {
             case "President": return .President
             case "Champion" : return .Champion

@@ -45,7 +45,7 @@ class SIEvent: SIObject {
     var didLoadSpeakers : Bool
     var didLoadEventData : Bool
     var didLoadSessions : Bool
-    var didLoadAgendaSessions : Bool
+    var didLoadAgendas : Bool
     var didLoadVenues : Bool
     var didLoadRecipients : Bool
     var didLoadAffiliates : Bool
@@ -68,7 +68,11 @@ class SIEvent: SIObject {
     var salesText : String
     var bannerURL : String {
         didSet {
-            requestBannerImage()
+            requestBannerImage() { image in
+                if let image = image {
+                    self.image = image
+                }
+            }
         }
     }
     
@@ -76,7 +80,7 @@ class SIEvent: SIObject {
         didLoadSpeakers = false
         didLoadEventData = false
         didLoadSessions = false
-        didLoadAgendaSessions = false
+        didLoadAgendas = false
         didLoadVenues = false
         didLoadRecipients = false
         didLoadAffiliates = false
@@ -98,6 +102,18 @@ class SIEvent: SIObject {
     }
     
     // Requests for information on event objects.
+    func requestEvent(callback: (event: SIEvent?) -> ()) {
+        SIRequest().requestEvent(eventId: id) { (event) in
+            guard let event = event else {
+                self.didLoadEventData = true
+                callback(event: nil)
+                return
+            }
+            
+            callback(event: event)
+        }
+    }
+    
     func requestSpeakers(callback:() -> ()) {
         SIRequest().requestSpeakers { (speakers) in
             if let speakers = speakers {
@@ -121,7 +137,7 @@ class SIEvent: SIObject {
             }
             
             self.agendaItems = agendas
-            self.didLoadAgendaSessions = true
+            self.didLoadAgendas = true
             
             callback()
         });
@@ -201,15 +217,24 @@ class SIEvent: SIObject {
         }
     }
     
-    private func requestBannerImage() {
+    func requestBannerImage(callback: (image: UIImage?) -> ()) {
         
-        if image != nil { return }
+        if let image = image {
+            callback(image: image)
+            return
+        }
         
-        if bannerURL.isEmpty { return }
+        if bannerURL.isEmpty {
+            callback(image: nil)
+            return
+        }
         
         requestImage(bannerURL) { image in
             if let image = image as UIImage? {
                 self.image = image
+                callback(image: image)
+            } else {
+                callback(image: nil)
             }
         }
     }
@@ -245,25 +270,21 @@ class SIAgenda: SIObject {
         super.init()
     }
     
-    /// Gets additional information about agenda object.
-    func requestAgendaInformation(callback: () -> ()) {
-        SIRequest().requestAgendaDay(agendaId: id) { agenda in
-            if let agenda = agenda {
-                self.displayName = agenda.displayName
-                self.name = agenda.name
-                self.id = agenda.id
-            }
-            self.requestSessions() { callback() }
+    /// Gets session information for SIAgenda object using an agenda ID.
+    func requestAgendaSessions(callback: () -> ()) {
+        
+        if id.isEmpty {
+            callback()
+            return
         }
         
-    }
-    
-    private func requestSessions(callback: () -> Void) {
         SIRequest().requestSessions(agendaId: id, callback: { sessions in
+            
             if let sessions = sessions {
                 self.sessions = sessions
                 self.didLoadSessions = true
             }
+            
             callback()
         });
     }
@@ -289,7 +310,7 @@ class SISession: SIObject {
         didLoadSpeakers = false
         didLoadSessionInformation = false
         speakers = [SISpeaker]()
-        self.displayName = "No Display Name"
+        displayName = "No Display Name"
         startDate = NSDate().notionallyEmptyDate()
         endDate = NSDate().notionallyEmptyDate()
         sessionType = ""
@@ -313,18 +334,23 @@ class SISession: SIObject {
                 self.name = session.name
                 self.id = session.id
                 
-                self.didLoadSessionInformation = true
+                self.requestSpeakers() {
+                    self.didLoadSessionInformation = true
+                    callback()
+                }
             }
         });
     }
     
     /// Gets all speakers associated with the session object.
-    func requestSpeakers(callback: () -> ()) {
-        SIRequest().requestSpeakers(sessionId: id) { (speakers) in
+    private func requestSpeakers(callback: () -> ()) {
+        SIRequest().requestSpeakers(sessionId: id, callback: { speakers in
             if let speakers = speakers {
                 self.speakers = speakers
+                self.didLoadSpeakers = true
             }
-        }
+            callback()
+        });
     }
     
 }
@@ -643,7 +669,7 @@ class SISponsor: SIObject {
         Champion = 4,
         President = 5
     }
-
+    
     var organizationName : String
     var summary : String
     var sponsorType : SponsorType

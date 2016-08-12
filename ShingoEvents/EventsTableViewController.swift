@@ -9,36 +9,6 @@
 import UIKit
 import Foundation
 
-class EventTableViewCell: UITableViewCell {
-    
-    // MARK: - Properties
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var dateRangeLabel: UILabel!
-    @IBOutlet weak var eventImage: UIImageView!
-    
-    var event: SIEvent!
-    
-    func updateCell(event event: SIEvent) {
-        self.event = event
-        self.nameLabel.text = event.name
-        
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        dateFormatter.dateStyle = .MediumStyle
-        let dates = "\(dateFormatter.stringFromDate(event.startDate)) - \(dateFormatter.stringFromDate(event.endDate))"
-        self.dateRangeLabel.text = dates
-        
-        if let image = event.getBannerImage() {
-            eventImage.image = image
-            eventImage.contentMode = .ScaleAspectFill
-            eventImage.clipsToBounds = true
-            eventImage.layer.cornerRadius = 3.0
-        }
-        
-    }
-    
-}
-
 
 class EventsTableViewController: UITableViewController {
     
@@ -48,26 +18,31 @@ class EventsTableViewController: UITableViewController {
     var time : Double = 0
     var timer : NSTimer!
 
-    var activityView = ActivityView()
+    var activityView : ActivityViewController = {
+        let view = ActivityViewController()
+        view.modalPresentationStyle = .OverCurrentContext
+        return view
+    }()
     
     override func loadView() {
         super.loadView()
         for i in 0 ..< events.count {
             SIRequest().requestEvent(eventId: events[i].id, callback: { event in
                 if let event = event {
-                    event.didLoadEventData = true
                     self.events[i] = event
+                    self.events[i].didLoadEventData = true
                 }
-            })
+            });
         }
-        
-        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        definesPresentationContext = true
+        providesPresentationContextTransitionStyle = true
+        
         view.backgroundColor = SIColor().prussianBlueColor
-        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     func displayBadRequestNotification() {
@@ -94,12 +69,10 @@ class EventsTableViewController: UITableViewController {
         }
     }
     
-    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
         let cell = tableView.dequeueReusableCellWithIdentifier("EventsCell", forIndexPath: indexPath) as! EventTableViewCell
+        cell.selectionStyle = .None
         cell.updateCell(event: events[indexPath.row])
-        
         return cell
     }
     
@@ -112,46 +85,37 @@ class EventsTableViewController: UITableViewController {
         return 155.0 as CGFloat
     }
     
+    override func tableView(tableView: UITableView, didHighlightRowAtIndexPath indexPath: NSIndexPath) {
+        let cell = tableView.cellForRowAtIndexPath(indexPath) as! EventTableViewCell
+        cell.backgroundColor = SIColor().lightBlueColor
+    }
+    
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
-        let activityView = ActivityView()
-        activityView.displayActivityView(message: "Loading Event Data...", forView: self.view)
+        let cell = tableView.cellForRowAtIndexPath(indexPath) as! EventTableViewCell
+        cell.backgroundColor = SIColor().lightBlueColor
+        
+        let activityView = ActivityViewController()
+        activityView.modalPresentationStyle = .OverCurrentContext
+        activityView.message = "Loading Event Data..."
 
         let event = events[indexPath.row]
         if event.didLoadEventData {
-            activityView.removeActivityViewFromDisplay()
             self.performSegueWithIdentifier("EventMenu", sender: event)
         } else {
-            self.event = event
-            time = 0
-            timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: #selector(EventsTableViewController.checkRequestStatus), userInfo: nil, repeats: true)
-        }
-    }
-    
-    @objc func checkRequestStatus() {
-        
-        guard let event = self.event else {
-            fatalError()
-        }
-        
-        time += 0.1
-        
-        if self.events.count == 0 {
-            timer.invalidate()
-            activityView.removeActivityViewFromDisplay()
-            return
-        }
-        
-        if event.didLoadEventData {
-            timer.invalidate()
-            activityView.removeActivityViewFromDisplay()
-            performSegueWithIdentifier("EventMenu", sender: event)
-        }
-        
-        if time > 12.0 {
-            timer.invalidate()
-            activityView.removeActivityViewFromDisplay()
-            displayBadRequestNotification()
+            presentViewController(activityView, animated: false, completion: { 
+                event.requestEvent() { event in
+                    self.dismissViewControllerAnimated(true, completion: {
+                        guard let event = event else {
+                            self.displayBadRequestNotification()
+                            return
+                        }
+                        
+                        self.events[indexPath.row] = event
+                        self.performSegueWithIdentifier("EventMenu", sender: event)
+                    });
+                }
+            });
         }
     }
     
@@ -170,4 +134,33 @@ class EventsTableViewController: UITableViewController {
 }
 
 
+class EventTableViewCell: UITableViewCell {
+    
+    // MARK: - Properties
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var dateRangeLabel: UILabel!
+    @IBOutlet weak var eventImage: UIImageView!
+    
+    var event: SIEvent!
+    
+    func updateCell(event event: SIEvent) {
+        self.event = event
+        nameLabel.text = event.name
+        
+        eventImage.contentMode = .ScaleAspectFill
+        eventImage.clipsToBounds = true
+        eventImage.layer.cornerRadius = 3.0
+        
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.dateStyle = .MediumStyle
+        let dates = "\(dateFormatter.stringFromDate(event.startDate)) - \(dateFormatter.stringFromDate(event.endDate))"
+        dateRangeLabel.text = dates
+        
+        if let image = event.getBannerImage() {
+            eventImage.image = image
+        }
+    }
+    
+}
 

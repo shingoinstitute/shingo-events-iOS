@@ -89,7 +89,7 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
         scrollView.backgroundColor = SIColor().shingoBlueColor
         tableView.backgroundColor = SIColor().shingoRedColor
         
-        // Load data
+        // Get correct text for labels
         titleLabel.text = session.displayName
         if !session.room.isEmpty {
             roomLabel.text = "Location: " + session.room
@@ -175,12 +175,27 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
         }
     }
     
+}
+
+extension SessionDetailViewController {
     
     // Mark: - TableView data
-    
     func tableView(tableView: UITableView, accessoryButtonTappedForRowWithIndexPath indexPath: NSIndexPath) {
         let cell = tableView.cellForRowAtIndexPath(indexPath) as! SessionSpeakerCell
-        performSegueWithIdentifier("SpeakerDetailsView", sender: cell.speaker)
+        
+        if let speaker : SISpeaker = cell.speaker {
+            performSegueWithIdentifier("SpeakerDetailsView", sender: speaker)
+        }
+        
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let cell = tableView.cellForRowAtIndexPath(indexPath) as! SessionSpeakerCell
+        
+        if let speaker : SISpeaker = cell.speaker {
+            performSegueWithIdentifier("SpeakerDetailsView", sender: speaker)
+        }
+        
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -210,8 +225,8 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         if segue.identifier == "SpeakerDetailsView" {
-//            let destination = segue.destinationViewController as! SpeakerDetailsViewController
-            // do something
+            let destination = segue.destinationViewController as! SpeakerDetailsViewController
+            destination.speaker = sender as! SISpeaker
         }
     }
     
