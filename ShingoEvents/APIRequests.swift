@@ -581,9 +581,9 @@ class SIRequest {
             
             var exhibitors = [SIExhibitor]()
             
-            if json["exhibitors"].isExists() {
+            if let records = json["exhibitors"].array {
                 
-                for record in json["exhibitors"].array! {
+                for record in records {
                     
                     let exhibitor = SIExhibitor()
                     
@@ -593,6 +593,10 @@ class SIRequest {
                     
                     if let name = record["Organization__r"]["Name"].string {
                         exhibitor.name = name
+                    }
+                    
+                    if let summary = record["Organization__r"]["App_Abstract__c"].string {
+                        exhibitor.summary = summary
                     }
                     
                     if let logoURL = record["Organization__r"]["Logo__c"].string {

@@ -615,6 +615,11 @@ class SIRecipient: SIObject {
         summary = ""
         super.init()
     }
+
+    convenience init(name: String, type: AwardType) {
+        self.init()
+        self.name = name
+    }
     
     func requestRecipientImage(url:String) {
         requestImage(url) { image in
@@ -627,21 +632,30 @@ class SIRecipient: SIObject {
         }
     }
     
-    func getRecipientImage() -> UIImage {
-        guard let image = image else {
-            return UIImage(named: "logoComingSoon500x500")!
+    func getRecipientImage() -> UIImage? {
+        
+        if awardType == AwardType.None {
+            return nil
         }
         
-        return image
-    }
-    
-    func parsePhotoList() -> [UIImage]? {
-        // Needs to be implemented
+        if let image = image {
+            return image
+        }
+        
+        if let image = UIImage(named: "logoComingSoon500x500") {
+            return image
+        }
+        
         return nil
     }
     
+    //TODO: Needs to be implemented
+    func parsePhotoList() -> [UIImage]? {
+        return nil
+    }
+    
+    //TODO: Needs to be implemented
     func parseVideoList() -> [String]? {
-        // Needs to be implemented
         return nil
     }
     

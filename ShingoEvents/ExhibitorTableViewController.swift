@@ -11,75 +11,9 @@ import AVFoundation
 import PureLayout
 
 
-class ExhibitorCell: UITableViewCell {
-    
-    var didSetupConstraints = false
-    
-    var exhibitorImage:UIImageView = UIImageView.newAutoLayoutView()
-    var label:UILabel = UILabel.newAutoLayoutView()
-    
-    var exhibitor: SIExhibitor!
-    
-    override init(style: UITableViewCellStyle, reuseIdentifier: String!) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.accessoryType = .DisclosureIndicator
-        contentView.addSubview(exhibitorImage)
-        contentView.addSubview(label)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
-    override func updateConstraints() {
-        if !didSetupConstraints {
-            NSLayoutConstraint.autoSetPriority(UILayoutPriorityRequired) {
-                self.exhibitorImage.autoSetContentCompressionResistancePriorityForAxis(.Vertical)
-            }
-            
-            exhibitorImage.contentMode = UIViewContentMode.ScaleAspectFit
-            
-            var width: CGFloat = 0.0
-            var height: CGFloat = 0.0
-            
-            if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
-                width = contentView.frame.width * (1/3)
-                height = 150
-            } else {
-                width = 300
-                height = 200
-            }
-            
-            exhibitorImage.autoSetDimensionsToSize(CGSize(width: width, height: height))
-            exhibitorImage.autoAlignAxis(.Horizontal, toSameAxisOfView: contentView)
-            exhibitorImage.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 8)
-            
-            label.text = exhibitor.name
-            label.numberOfLines = 4
-            label.lineBreakMode = .ByWordWrapping
-            label.font = UIFont.boldSystemFontOfSize(14.0)
-            
-            label.autoPinEdgeToSuperviewEdge(.Top)
-            label.autoPinEdge(.Left, toEdge: .Right, ofView: exhibitorImage, withOffset: 8)
-            label.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -10)
-            label.autoPinEdgeToSuperviewEdge(.Bottom)
-            
-            didSetupConstraints = true
-        }
-        super.updateConstraints()
-    }
-    
-    
-}
-
-///////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////
-
 class ExhibitorTableViewController: UITableViewController {
-
-    var exhibitors:[SIExhibitor]!
-    var dataToSend:SIExhibitor!
-    var sectionInformation = [(Character, [SIExhibitor])]()
+    
+    var sectionInformation = [(String, [SIExhibitor])]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -97,8 +31,20 @@ class ExhibitorTableViewController: UITableViewController {
         tableView.reloadData()
     }
     
-    // MARK: - Table view data source
+    // MARK: - Navigation
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "ExhibitorInfoView" {
+            let destination = segue.destinationViewController as! ExhibitorInfoViewController
+            if let exhibitor = sender as? SIExhibitor {
+                destination.exhibitor = exhibitor
+            }
+        }
+    }
+}
 
+extension ExhibitorTableViewController {
+    
+    // MARK: - Table view data source
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return sectionInformation.count
     }
@@ -111,7 +57,7 @@ class ExhibitorTableViewController: UITableViewController {
         let view = UIView()
         view.backgroundColor = SIColor().shingoOrangeColor
         let header = UILabel()
-        header.text = String(sectionInformation[section].0).uppercaseString
+        header.text = sectionInformation[section].0
         header.textColor = .whiteColor()
         header.font = UIFont.boldSystemFontOfSize(16.0)
         header.backgroundColor = .clearColor()
@@ -127,23 +73,21 @@ class ExhibitorTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell :ExhibitorCell = ExhibitorCell()
-        let exhibitor = sectionInformation[indexPath.section].1[indexPath.row]
-        cell.exhibitor = exhibitor
-        cell.exhibitorImage.image = exhibitor.getLogoImage()
-        cell.contentView.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 150)
+        
+        let cell: ExhibitorTableViewCell = ExhibitorTableViewCell()
+        cell.exhibitor = sectionInformation[indexPath.section].1[indexPath.row]
+        
         cell.setNeedsUpdateConstraints()
         cell.updateConstraintsIfNeeded()
         
         return cell
     }
 
-
-    
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let cell = tableView.cellForRowAtIndexPath(indexPath) as! ExhibitorCell
-        dataToSend = cell.exhibitor
-        performSegueWithIdentifier("ExhibitorInfoView", sender: self)
+        let cell = tableView.cellForRowAtIndexPath(indexPath) as! ExhibitorTableViewCell
+        if let exhibitor = cell.exhibitor {
+            performSegueWithIdentifier("ExhibitorInfoView", sender: exhibitor)
+        }
     }
 
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -151,15 +95,6 @@ class ExhibitorTableViewController: UITableViewController {
             return 200.0
         } else {
             return 150
-        }
-    }
-    
-    // MARK: - Navigation
-
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "ExhibitorInfoView" {
-            let destination = segue.destinationViewController as! ExhibitorInfoViewController
-            destination.exhibitor = self.dataToSend
         }
     }
 

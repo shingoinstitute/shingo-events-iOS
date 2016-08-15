@@ -9,6 +9,18 @@
 import Foundation
 import UIKit
 
+struct Alphabet {
+    
+    func alphabet() -> [String] {
+        var alphabet = [String]()
+        for char in Array("ABCDEFGHIJKLM‌​NOPQRSTUVWXYZ#".characters) {
+            alphabet.append(String(char))
+        }
+        return alphabet
+    }
+    
+}
+
 extension Double {
     mutating func increment() -> Double {
         return self.advancedBy(1.0)
@@ -17,7 +29,7 @@ extension Double {
 
 extension UIImage {
     func isEmpty() -> Bool {
-        return CGImage != nil || CIImage != nil
+        return CGImage == nil || CIImage == nil
     }
 }
 

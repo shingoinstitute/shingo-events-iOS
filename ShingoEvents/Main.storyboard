@@ -859,28 +859,16 @@
                                     <rect key="frame" x="0.0" y="0.0" width="567" height="131"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="18A-Xz-GPP">
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="18A-Xz-GPP">
                                             <rect key="frame" x="8" y="8" width="115" height="115"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="115" id="Vl2-JH-Abo"/>
-                                            </constraints>
                                         </imageView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Kk-kH-Qhw">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Kk-kH-Qhw">
                                             <rect key="frame" x="131" y="8" width="428" height="42"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
-                                    <constraints>
-                                        <constraint firstItem="18A-Xz-GPP" firstAttribute="bottom" secondItem="kPz-dS-j9v" secondAttribute="bottomMargin" id="1zf-Bj-8IW"/>
-                                        <constraint firstItem="18A-Xz-GPP" firstAttribute="leading" secondItem="kPz-dS-j9v" secondAttribute="leadingMargin" id="ER1-uc-UPg"/>
-                                        <constraint firstItem="7Kk-kH-Qhw" firstAttribute="top" secondItem="18A-Xz-GPP" secondAttribute="top" id="P3q-EW-HP6"/>
-                                        <constraint firstItem="7Kk-kH-Qhw" firstAttribute="trailing" secondItem="kPz-dS-j9v" secondAttribute="trailingMargin" id="QHZ-HM-IE6"/>
-                                        <constraint firstItem="7Kk-kH-Qhw" firstAttribute="leading" secondItem="18A-Xz-GPP" secondAttribute="trailing" constant="8" symbolic="YES" id="rkf-Vc-Ajv"/>
-                                        <constraint firstAttribute="bottomMargin" secondItem="7Kk-kH-Qhw" secondAttribute="bottom" constant="73" id="vez-4u-xey"/>
-                                        <constraint firstItem="18A-Xz-GPP" firstAttribute="top" secondItem="kPz-dS-j9v" secondAttribute="topMargin" id="zsq-zG-6qb"/>
-                                    </constraints>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="recipientImage" destination="18A-Xz-GPP" id="K0o-8c-70C"/>

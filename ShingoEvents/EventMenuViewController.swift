@@ -368,7 +368,33 @@ extension EventMenuViewController {
         if segue.identifier == "RecipientsView" {
             let destination = segue.destinationViewController as! RecipientsTableViewController
             if let recipients = sender as? [SIRecipient] {
-                destination.recipients = recipients
+                
+                var spRecipients = [SIRecipient]()
+                var silverRecipients = [SIRecipient]()
+                var bronzeRecipients = [SIRecipient]()
+                var researchRecipients = [SIRecipient]()
+                var publicationRecipients = [SIRecipient]()
+                
+                for r in recipients {
+                    if r.awardType == .ShingoPrize {
+                        spRecipients.append(r)
+                    } else if r.awardType == .Silver {
+                        silverRecipients.append(r)
+                    } else if r.awardType == .Bronze {
+                        bronzeRecipients.append(r)
+                    } else if r.awardType == .Research {
+                        researchRecipients.append(r)
+                    } else if r.awardType == .Publication {
+                        publicationRecipients.append(r)
+                    }
+                }
+                
+                destination.spRecipients = spRecipients
+                destination.silverRecipients = silverRecipients
+                destination.bronzeRecipients = bronzeRecipients
+                destination.researchRecipients = researchRecipients
+                destination.publicationRecipients = publicationRecipients
+                
             }
         }
         
@@ -384,7 +410,29 @@ extension EventMenuViewController {
         if segue.identifier == "ExhibitorsListView" {
             let destination = segue.destinationViewController as! ExhibitorTableViewController
             if let exhibitors = sender as? [SIExhibitor] {
-                destination.exhibitors = exhibitors
+                
+                var sections = [String : [SIExhibitor]]()
+                
+                var exhibitorSections = [(String, [SIExhibitor])]()
+                
+                for exhibitor in exhibitors {
+                    let character = getCharacterForSection(exhibitor.name)
+                    
+                    if sections[character] != nil {
+                        sections[character]?.append(exhibitor)
+                    } else {
+                        sections[character] = [exhibitor]
+                    }
+                }
+                
+                for letter in Alphabet().alphabet() {
+                    if let section = sections[letter] {
+                        exhibitorSections.append((letter, section))
+                    }
+                }
+                
+                destination.sectionInformation = exhibitorSections
+                
             }
         }
         
@@ -395,120 +443,26 @@ extension EventMenuViewController {
                 // Populate section headers so affiliates can be presented alphabetically in seperate tableView sections
                 var sections = [String : [SIAffiliate]]()
                 
+                var affiliateSections = [(String, [SIAffiliate])]()
+                
                 for affiliate in affiliates {
                     
                     // Get first letter of affiliate name
-                    
-                    let fullName : [String?] = affiliate.name.split(" ")
-                    var name = ""
-                    if let first = fullName[0] {
-                        if first.lowercaseString == "the" {
-                            if let second = fullName[1] {
-                                name = second
-                            }
-                        } else {
-                            name = first
-                        }
-                    }
-                    
-                    let char : Character = name.characters.first!
-                    var value : String = String(char).uppercaseString
-                    // If affiliate name begins with a number, change to the # character
-                    if Int(value) != nil {
-                        value = "#"
-                    }
+                    let character = getCharacterForSection(affiliate.name)
                     
                     // Add to dictionary
-                    if var section = sections[value] {
+                    if var section = sections[character] {
                         section.append(affiliate)
-                        sections[value] = section
+                        sections[character] = section
                     } else {
-                        sections[value] = [affiliate]
+                        sections[character] = [affiliate]
                     }
                 }
                 
-                var affiliateSections = [(String, [SIAffiliate])]()
-                
-                if let section = sections["A"] {
-                    affiliateSections.append(("A", section))
-                }
-                if let section = sections["B"] {
-                    affiliateSections.append(("B", section))
-                }
-                if let section = sections["C"] {
-                    affiliateSections.append(("C", section))
-                }
-                if let section = sections["D"] {
-                    affiliateSections.append(("D", section))
-                }
-                if let section = sections["E"] {
-                    affiliateSections.append(("E", section))
-                }
-                if let section = sections["F"] {
-                    affiliateSections.append(("F", section))
-                }
-                if let section = sections["G"] {
-                    affiliateSections.append(("G", section))
-                }
-                if let section = sections["H"] {
-                    affiliateSections.append(("H", section))
-                }
-                if let section = sections["I"] {
-                    affiliateSections.append(("I", section))
-                }
-                if let section = sections["J"] {
-                    affiliateSections.append(("J", section))
-                }
-                if let section = sections["K"] {
-                    affiliateSections.append(("K", section))
-                }
-                if let section = sections["L"] {
-                    affiliateSections.append(("L", section))
-                }
-                if let section = sections["M"] {
-                    affiliateSections.append(("M", section))
-                }
-                if let section = sections["N"] {
-                    affiliateSections.append(("N", section))
-                }
-                if let section = sections["O"] {
-                    affiliateSections.append(("O", section))
-                }
-                if let section = sections["P"] {
-                    affiliateSections.append(("P", section))
-                }
-                if let section = sections["Q"] {
-                    affiliateSections.append(("Q", section))
-                }
-                if let section = sections["R"] {
-                    affiliateSections.append(("R", section))
-                }
-                if let section = sections["S"] {
-                    affiliateSections.append(("S", section))
-                }
-                if let section = sections["T"] {
-                    affiliateSections.append(("T", section))
-                }
-                if let section = sections["U"] {
-                    affiliateSections.append(("U", section))
-                }
-                if let section = sections["V"] {
-                    affiliateSections.append(("V", section))
-                }
-                if let section = sections["W"] {
-                    affiliateSections.append(("W", section))
-                }
-                if let section = sections["X"] {
-                    affiliateSections.append(("X", section))
-                }
-                if let section = sections["Y"] {
-                    affiliateSections.append(("Y", section))
-                }
-                if let section = sections["Z"] {
-                    affiliateSections.append(("Z", section))
-                }
-                if let section = sections["#"] {
-                    affiliateSections.append(("#", section))
+                for letter in Alphabet().alphabet() {
+                    if let section = sections[letter] {
+                        affiliateSections.append((letter, section))
+                    }
                 }
                 
                 destination.affiliateSections = affiliateSections
@@ -562,6 +516,32 @@ extension EventMenuViewController {
 extension EventMenuViewController {
 
     // MARK: - Custom Class Functions
+    func getCharacterForSection(name: String) -> String {
+        
+        // Get first letter of name
+        let fullName : [String?] = name.split(" ")
+        var temp = ""
+        if let first = fullName[0] {
+            if first.lowercaseString == "the" {
+                if let second = fullName[1] {
+                    temp = second
+                }
+            } else {
+                temp = first
+            }
+        }
+        
+        let char : Character = temp.characters.first!
+        var value : String = String(char).uppercaseString
+        
+        // If name begins with a number, change to the # character
+        if Int(value) != nil {
+            value = "#"
+        }
+        
+        return value
+    }
+    
     func sortAgendaDays() {
         
         for i in 0 ..< event.agendaItems.count - 1 {

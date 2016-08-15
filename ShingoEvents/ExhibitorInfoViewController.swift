@@ -75,7 +75,7 @@ class ExhibitorInfoViewController: UIViewController {
     
     
     func getDescriptionForRichText() {
-        let richText = NSMutableAttributedString();
+        let richText = NSMutableAttributedString()
         let attrs = [NSFontAttributeName : UIFont.systemFontOfSize(16.0),
                      NSForegroundColorAttributeName : UIColor.whiteColor()]
         descriptionTextField.linkTextAttributes = [NSForegroundColorAttributeName : UIColor.cyanColor(),
@@ -83,13 +83,13 @@ class ExhibitorInfoViewController: UIViewController {
                                                    
         
         if !exhibitor.summary.isEmpty {
-            let htmlString: String! = "<style>body{color:white;}</style><font size=\"5\">" + exhibitor.summary + "</font></style>";
+            let htmlString: String! = "<style>body{color: white;}</style><font size=\"5\">" + exhibitor.summary + "</font></style>";
             do {
             let description = try NSAttributedString(data: htmlString.dataUsingEncoding(NSUTF8StringEncoding)!,
                                                         options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
                                                             NSCharacterEncodingDocumentAttribute : NSUTF8StringEncoding],
                                                         documentAttributes: nil)
-            richText.appendAttributedString(description);
+            richText.appendAttributedString(description)
             } catch {
                 print("Error with richText in ExhibitorInfoViewController")
             }

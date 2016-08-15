@@ -12,11 +12,6 @@ class AffiliateListTableViewController: UITableViewController {
 
     var affiliateSections:[(String, [SIAffiliate])]!
     
-    var dataToSend: SIAffiliate!
-    
-    let cellHeight:CGFloat = 117.0
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -36,8 +31,9 @@ class AffiliateListTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let cell = tableView.cellForRowAtIndexPath(indexPath) as! AffiliateTableViewCell
-        dataToSend = cell.affiliate
-        performSegueWithIdentifier("AffiliateView", sender: self)
+        if let affiliate = cell.affiliate {
+            performSegueWithIdentifier("AffiliateView", sender: affiliate)
+        }
     }
     
     // MARK: - Table view data source
@@ -61,7 +57,6 @@ class AffiliateListTableViewController: UITableViewController {
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
         view.backgroundColor = SIColor().shingoOrangeColor
-//        view.backgroundColor = .orangeColor()
         let header = UILabel()
         header.text = String(affiliateSections[section].0).uppercaseString
         header.textColor = .whiteColor()
@@ -105,7 +100,9 @@ class AffiliateListTableViewController: UITableViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "AffiliateView" {
             let destination = segue.destinationViewController as! AfilliateViewController
-            destination.affiliate = self.dataToSend
+            if let affiliate = sender as? SIAffiliate {
+                destination.affiliate = affiliate
+            }
         }
     }
 
