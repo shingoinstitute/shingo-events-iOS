@@ -18,59 +18,32 @@ class SponsorsTableViewController: UITableViewController {
     var benefactors:[SISponsor]!
     var champions:[SISponsor]!
     var presidents:[SISponsor]!
+    var other: [SISponsor]!
     
     var sectionTitles = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-      
-        var sponsorListsIsEmpty = true
-        let sponsors = [friends, supporters, benefactors, champions, presidents]
-        for sponsorList in sponsors {
-            if !sponsorList.isEmpty {
-                sponsorListsIsEmpty = false
-                break
-            }
-        }
         
-        if sponsorListsIsEmpty {
-            let label = UILabel.newAutoLayoutView()
-            label.text = "No Content Available"
-            label.textColor = UIColor.whiteColor()
-            
-            view.addSubview(label)
-            view.bringSubviewToFront(label)
-            
-            label.sizeToFit()
-            label.autoAlignAxis(.Horizontal, toSameAxisOfView: view)
-            label.autoAlignAxis(.Vertical, toSameAxisOfView: view)
+        if friends.isEmpty && supporters.isEmpty && benefactors.isEmpty && champions.isEmpty && presidents.isEmpty && other.isEmpty {
+            displayNoContentNotification()
         }
-        
-//        addGradientLayer()
     }
     
-    private func addGradientLayer() {
+    private func displayNoContentNotification() {
+        let label: UILabel = {
+            let view = UILabel.newAutoLayoutView()
+            view.text = "No Content Available"
+            view.textColor = .whiteColor()
+            view.sizeToFit()
+            return view
+        }()
         
-        let gradient = CAGradientLayer()
-        tableView.backgroundColor = SIColor().shingoRedColor
+        view.addSubview(label)
         
-        gradient.frame = view.bounds
-        
-        let color1 = SIColor().shingoRedColor.CGColor as CGColorRef
-        let color2 = SIColor().shingoRedColor.colorWithAlphaComponent(0.75).CGColor as CGColorRef
-        let color3 = SIColor().shingoRedColor.colorWithAlphaComponent(0.5).CGColor as CGColorRef
-        let color4 = SIColor().shingoRedColor.colorWithAlphaComponent(0.25).CGColor as CGColorRef
-        let color5 = SIColor().shingoBlueColor.CGColor as CGColorRef
-        let colors = [color1, color2, color3, color4, color5]
-
-        gradient.colors = colors
-        
-        let locations = [0.0, 0.25, 0.5 , 0.75, 1.0]
-        gradient.locations = locations
-        
-        self.tableView.layer.addSublayer(gradient)
+        label.autoAlignAxis(.Horizontal, toSameAxisOfView: view)
+        label.autoAlignAxis(.Vertical, toSameAxisOfView: view)
     }
-    
 }
 
 extension SponsorsTableViewController {
@@ -78,35 +51,33 @@ extension SponsorsTableViewController {
     // MARK: - Table view data source
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         
-        var numSections = 0
+        sectionTitles = []
+        
         if presidents.count > 0 {
-            numSections += 1
             sectionTitles.append("Presidents")
         }
         if champions.count > 0 {
-            numSections += 1
             sectionTitles.append("Champions")
         }
         if benefactors.count > 0 {
-            numSections += 1
             sectionTitles.append("Benefactors")
         }
         if supporters.count > 0 {
-            numSections += 1
             sectionTitles.append("Supporters")
         }
         if friends.count > 0 {
-            numSections += 1
             sectionTitles.append("Friends")
         }
+        if other.count > 0 {
+            sectionTitles.append("Other")
+        }
 
-        return numSections
-        
+        return sectionTitles.count
     }
 
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = UILabel()
-        header.backgroundColor = UIColor(netHex: 0xcd8931)
+        header.backgroundColor = SIColor().shingoOrangeColor
         header.text = sectionTitles[section]
         header.textColor = .whiteColor()
         header.font = UIFont.boldSystemFontOfSize(16.0)
@@ -120,21 +91,16 @@ extension SponsorsTableViewController {
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
-        let title = sectionTitles[section]
         
-        if title == "Presidents" {
-            return presidents.count
-        } else if title == "Champions" {
-            return champions.count
-        } else if title == "Benefactors" {
-            return benefactors.count
-        } else if title == "Supporters" {
-            return supporters.count
-        } else if title == "Friends" {
-            return friends.count
-        } else {
-            print("ERROR: Was not able to get number of rows in section when given a section title.")
+        switch sectionTitles[section] {
+        case "Presidents": return presidents.count
+        case "Champions": return champions.count
+        case "Benefactors": return benefactors.count
+        case "Supporters": return supporters.count
+        case "Friends": return friends.count
+        case "Other": return other.count
+        default:
+            print("Error: Invalid section title detected in SponsorsTableViewController.")
             return 0
         }
     }
@@ -147,28 +113,27 @@ extension SponsorsTableViewController {
         switch sectionTitles[indexPath.section] {
             case "Friends":
                 if (friends.count > 0) {
-                    cell.bannerImage.image = friends[indexPath.row].getBannerImage()
                     cell.sponsor = friends[indexPath.row]
                 }
             case "Supporters":
                 if (supporters.count > 0) {
-                    cell.bannerImage.image = supporters[indexPath.row].getBannerImage()
                     cell.sponsor = supporters[indexPath.row]
                 }
             case "Benefactors":
                 if (benefactors.count > 0) {
-                    cell.bannerImage.image = benefactors[indexPath.row].getBannerImage()
                     cell.sponsor = benefactors[indexPath.row]
                 }
             case "Champions":
                 if (champions.count > 0) {
-                    cell.bannerImage.image = champions[indexPath.row].getBannerImage()
                     cell.sponsor = champions[indexPath.row]
                 }
             case "Presidents":
                 if (presidents.count > 0) {
-                    cell.bannerImage.image = presidents[indexPath.row].getBannerImage()
                     cell.sponsor = presidents[indexPath.row]
+                }
+            case "Other":
+                if other.count > 0 {
+                    cell.sponsor = other[indexPath.row]
                 }
             default: break
         }
@@ -193,16 +158,25 @@ extension SponsorsTableViewController {
 }
 
 
-class SponsorTableViewCell:UITableViewCell {
+class SponsorTableViewCell: UITableViewCell {
     
-    var sponsor:SISponsor!
-    
-    let horizontalInsets:CGFloat = 15.0
-    let verticalInsets:CGFloat = 10.0
+    var sponsor: SISponsor! {
+        didSet {
+            updateCell()
+        }
+    }
     
     var didSetupConstraints = false
 
-    var bannerImage:UIImageView = {
+    var nameLabel: UILabel = {
+        let view = UILabel.newAutoLayoutView()
+        view.numberOfLines = 0
+        view.lineBreakMode = .ByWordWrapping
+        view.textAlignment = .Center
+        return view
+    }()
+    
+    var bannerImage: UIImageView = {
         let image = UIImageView.newAutoLayoutView()
         image.contentMode = .ScaleAspectFit
         return image
@@ -219,17 +193,34 @@ class SponsorTableViewCell:UITableViewCell {
     override func updateConstraints() {
         if !didSetupConstraints {
             
+            contentView.addSubview(nameLabel)
             contentView.addSubview(bannerImage)
             
             NSLayoutConstraint.autoSetPriority(UILayoutPriorityRequired) {
                 self.bannerImage.autoSetContentCompressionResistancePriorityForAxis(.Vertical)
             }
             
-            bannerImage.autoPinEdgesToSuperviewEdgesWithInsets(UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8))
+            nameLabel.sizeToFit()
+            nameLabel.autoPinEdge(.Top, toEdge: .Top, ofView: contentView, withOffset: 8)
+            nameLabel.autoAlignAxis(.Vertical, toSameAxisOfView: contentView)
+            
+            bannerImage.autoPinEdge(.Top, toEdge: .Bottom, ofView: nameLabel, withOffset: 8)
+            bannerImage.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 8)
+            bannerImage.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -8)
+            bannerImage.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: contentView, withOffset: -8)
             
             didSetupConstraints = true
         }
         super.updateConstraints()
+    }
+    
+    private func updateCell() {
+        
+        if let sponsor = sponsor {
+            nameLabel.text = sponsor.name
+            bannerImage.image = sponsor.getBannerImage()
+        }
+        
     }
 }
 

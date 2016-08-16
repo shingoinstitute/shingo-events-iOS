@@ -977,12 +977,8 @@ class SIRequest {
                         sponsor.id = id
                     }
                     
-                    if let name = record["Name"].string {
-                        sponsor.name = name
-                    }
-                    
                     if let organization = record["Organization__r"]["Name"].string {
-                        sponsor.organizationName = organization
+                        sponsor.name = organization
                     }
                     
                     if let logoURL = record["Organization__r"]["Logo__c"].string {

@@ -138,12 +138,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ShingoEvents/APIRequests.swift"
-            timestampString = "492989098.430417"
+            timestampString = "493059360.9394"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1064"
-            endingLineNumber = "1064"
+            startingLineNumber = "1060"
+            endingLineNumber = "1060"
             landmarkName = "getSponsorType(type:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "ShingoEvents/APIRequests.swift"
+            timestampString = "493059360.9394"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1014"
+            endingLineNumber = "1014"
+            landmarkName = "requestSponsor(sponsorId:callback:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

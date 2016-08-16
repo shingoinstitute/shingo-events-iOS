@@ -7,9 +7,6 @@
 //
 
 import UIKit
-import AVFoundation
-import PureLayout
-
 
 class ExhibitorTableViewController: UITableViewController {
     
@@ -20,15 +17,29 @@ class ExhibitorTableViewController: UITableViewController {
         
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 150.0
+        
+        if sectionInformation.isEmpty {
+            displayNoContentNotification()
+        }
     }
-
+    
     override func viewDidDisappear(animated: Bool) {
         super.viewDidDisappear(animated)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIContentSizeCategoryDidChangeNotification, object: nil)
     }
-
-    func contentSizeCategoryChanged(notification: NSNotification) {
-        tableView.reloadData()
+    
+    private func displayNoContentNotification() {
+        let label: UILabel = {
+            let view = UILabel.newAutoLayoutView()
+            view.text = "No Content Available"
+            view.textColor = .whiteColor()
+            view.sizeToFit()
+            return view
+        }()
+        
+        view.addSubview(label)
+        label.autoAlignAxisToSuperviewAxis(.Horizontal)
+        label.autoAlignAxisToSuperviewAxis(.Vertical)
     }
     
     // MARK: - Navigation

@@ -177,7 +177,7 @@ class MainMenuViewController: UIViewController {
     }
     
     @IBAction func reloadEventData(sender: AnyObject) {
-        presentViewController(activityView, animated: false) { 
+        presentViewController(activityView, animated: true) {
             SIRequest().requestEvents({ events in
                 self.dismissViewControllerAnimated(true, completion: nil)
                 self.events = events

@@ -29,7 +29,31 @@ extension Double {
 
 extension UIImage {
     func isEmpty() -> Bool {
-        return CGImage == nil || CIImage == nil
+        return CGImage == nil && CIImage == nil
+    }
+    
+    /// Returns the filezise in KB of a UIImage in a PNG format.
+    func fileSizeOfPNG() -> Int {
+        if let representation = UIImagePNGRepresentation(self) {
+            return NSData(data: representation).length / 1024
+        }
+        return -9999
+    }
+    
+    /// Returns the filesize in KB of a UIImage in a JPEG format with a compression quality of 1.
+    func fileSizeOfJPEG() -> Int {
+        if let representation = UIImageJPEGRepresentation(self, 1) {
+            return NSData(data: representation).length / 1024
+        }
+        return -9999
+    }
+    
+    /// Returns the filesize in KB of a UIImage in a JPEG format with a given compression quality.
+    func fileSizeOfJPEG(compressionQuality quality: CGFloat) -> Int {
+        if let representation = UIImageJPEGRepresentation(self, quality) {
+            return NSData(data: representation).length / 1024
+        }
+        return -9999
     }
 }
 

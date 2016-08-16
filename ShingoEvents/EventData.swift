@@ -33,7 +33,7 @@ class SIObject : AnyObject {
                 return
             }
         
-            print("Success! Image downloaded, size: \(image.size.width)x\(image.size.height)")
+            print("Image Downloaded, \(image.fileSizeOfPNG())kb, \(Int(image.size.width))x\(Int(image.size.height)), \(Mirror(reflecting: self).subjectType)")
             callback(image: image)
         }
     }
@@ -684,7 +684,6 @@ class SISponsor: SIObject {
         President = 5
     }
     
-    var organizationName : String
     var summary : String
     var sponsorType : SponsorType
     var logoURL : String {
@@ -707,7 +706,6 @@ class SISponsor: SIObject {
     
     override init() {
         sponsorType = .None
-        organizationName = ""
         summary = ""
         logoURL = ""
         bannerURL = ""

@@ -109,9 +109,7 @@ class EventMenuViewController: UIViewController {
         event.requestExhibitors() {self.event.didLoadExhibitors = true}
         
         // Load Sponsor information
-        event.requestSponsors() {
-            self.event.didLoadSponsors = true
-        }
+        event.requestSponsors() {self.event.didLoadSponsors = true}
         
     }
     
@@ -485,6 +483,7 @@ extension EventMenuViewController {
                     [SISponsor](),
                     [SISponsor](),
                     [SISponsor](),
+                    [SISponsor](),
                     [SISponsor]()
                 ]
                 
@@ -499,6 +498,8 @@ extension EventMenuViewController {
                         sponsorTypes[3].append(s)
                     } else if s.sponsorType == .President {
                         sponsorTypes[4].append(s)
+                    } else {
+                        sponsorTypes[5].append(s)
                     }
                 }
                 
@@ -507,6 +508,7 @@ extension EventMenuViewController {
                 destination.benefactors = sponsorTypes[2]
                 destination.champions = sponsorTypes[3]
                 destination.presidents = sponsorTypes[4]
+                destination.other = sponsorTypes[5]
             }
         }
         
