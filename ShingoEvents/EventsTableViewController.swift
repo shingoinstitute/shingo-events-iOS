@@ -39,6 +39,11 @@ class EventsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if let nav = navigationController?.navigationBar {
+            nav.barStyle = UIBarStyle.Black
+            nav.tintColor = UIColor.yellowColor()
+        }
+        
         definesPresentationContext = true
         providesPresentationContextTransitionStyle = true
         

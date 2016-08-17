@@ -9,6 +9,14 @@
 import Foundation
 import UIKit
 
+extension UIView {
+    func addSubviews(views: [UIView]) {
+        for view in views {
+            self.addSubview(view)
+        }
+    }
+}
+
 struct Alphabet {
     
     func alphabet() -> [String] {

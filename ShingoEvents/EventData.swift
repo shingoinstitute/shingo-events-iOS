@@ -115,16 +115,14 @@ class SIEvent: SIObject {
     }
     
     func requestSpeakers(callback:() -> ()) {
-        SIRequest().requestSpeakers { (speakers) in
+        SIRequest().requestSpeakers(eventId: id) { (speakers) in
             if let speakers = speakers {
                 for speaker in speakers {
-                    guard let _ = self.speakers[speaker.name] else {
-                        self.speakers[speaker.name] = speaker
-                        continue
-                    }
+                    self.speakers[speaker.name] = speaker //Adds speakers to dictionary object
                 }
+                self.didLoadSpeakers = true
             }
-            self.didLoadSpeakers = true
+            callback()
         }
     }
     

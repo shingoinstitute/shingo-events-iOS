@@ -23,7 +23,6 @@ class ActivityViewController: UIViewController {
         view.layer.cornerRadius = 12.0
         return view
     }()
-    var activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
     var messageLabel : UILabel = {
         let view = UILabel.newAutoLayoutView()
         view.font = UIFont.boldSystemFontOfSize(UIFont.labelFontSize())
@@ -34,22 +33,22 @@ class ActivityViewController: UIViewController {
         view.numberOfLines = 3
         return view
     }()
-    
+    var activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
     var didAddActivityIndicatorConstraints = false
+    
+    convenience init() {
+        self.init(nibName: nil, bundle: nil)
+        modalTransitionStyle = .CrossDissolve
+        modalPresentationStyle = .OverCurrentContext
+        view.backgroundColor = UIColor.clearColor()
+        view.addSubview(activityView)
+        activityView.addSubviews([activityIndicatorView, messageLabel])
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = UIColor.clearColor()
-        view.addSubview(activityView)
-        
-        activityView.addSubview(activityIndicatorView)
-        activityView.addSubview(messageLabel)
-        
         messageLabel.text = message
-        
         view.setNeedsUpdateConstraints()
-        
     }
     
     override func updateViewConstraints() {
@@ -71,7 +70,8 @@ class ActivityViewController: UIViewController {
             messageLabel.autoPinEdge(.Top, toEdge: .Top, ofView: activityView, withOffset: 24)
             
             activityIndicatorView.autoAlignAxis(.Vertical, toSameAxisOfView: activityView)
-            activityIndicatorView.autoPinEdge(.Top, toEdge: .Bottom, ofView: messageLabel, withOffset: 8.0)
+            activityIndicatorView.autoAlignAxis(.Horizontal, toSameAxisOfView: activityView, withOffset: 8)
+//            activityIndicatorView.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: activityView, withOffset: -16.0)
             
             didAddActivityIndicatorConstraints = true
         }
@@ -79,3 +79,6 @@ class ActivityViewController: UIViewController {
     }
     
 }
+
+
+

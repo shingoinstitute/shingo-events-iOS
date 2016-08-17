@@ -14,10 +14,9 @@ import Alamofire
 
 class MainMenuViewController: UIViewController {
     
-    // Activity view used for loading screen
+    // Activity view used for the loading screen
     var activityView : ActivityViewController = {
         let view = ActivityViewController()
-        view.modalPresentationStyle = .OverCurrentContext
         view.message = "Loading Upcoming Conferences..."
         return view
     }()
@@ -161,10 +160,17 @@ class MainMenuViewController: UIViewController {
         contentViewHeightConstraint?.constant = -80
         
 //        Uncomment the line below to make constraints appear animated (for deployment)
-//        UIView.animateWithDuration(1.5, delay: 0.2, usingSpringWithDamping: 0.5, initialSpringVelocity: 0, options: UIViewAnimationOptions(), animations: {
+//        UIView.animateWithDuration(1.5,
+//                                   delay: 0.2, 
+//                                   usingSpringWithDamping: 0.5, 
+//                                   initialSpringVelocity: 0, 
+//                                   options: UIViewAnimationOptions(), 
+//                                   animations: { self.view.layoutIfNeeded() }, 
+//                                   completion: nil)
         
 //        Uncomment the line below to make menu options appear instantly (for during production)
-        UIView.animateWithDuration(0.01, delay: 0,
+        UIView.animateWithDuration(0.01,
+                                   delay: 0,
                                    usingSpringWithDamping: 0.01,
                                    initialSpringVelocity: 0, 
                                    options: UIViewAnimationOptions(), 

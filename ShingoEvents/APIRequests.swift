@@ -711,11 +711,6 @@ class SIRequest {
                         hotel.website = website
                     }
                     
-//                     Need to ask Dustin about the API response for this  field.
-//                    if let eventId = record["Event_Hotel_Associations__r"] {
-//                        
-//                    }
-                    
                     hotels.append(hotel)
                 }
             }
