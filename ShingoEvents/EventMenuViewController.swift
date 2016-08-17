@@ -79,19 +79,33 @@ class EventMenuViewController: UIViewController {
     
     var backgroundImage: UIImageView = {
         let view = UIImageView.newAutoLayoutView()
-        view.image = ShingoIconImages().shingoIconForDevice()
+//        view.image = ShingoIconImages().shingoIconForDevice()
+        view.image = UIImage(named: "shingo_icon")
+        view.contentMode = .ScaleAspectFill
         return view
     }()
+    var eventHeaderImage: UIImageView = {
+        let view = UIImageView.newAutoLayoutView()
+        view.contentMode = .ScaleAspectFill
+        view.clipsToBounds = true
+        view.image = nil
+        return view
+    }()
+    
+    var buttonViews = [UIView]()
     
     let BUTTON_WIDTH: CGFloat = 110.0
     let BUTTON_HEIGHT: CGFloat = 110.0
     
+    var didSetupConstraints = false
+    
     override func loadView() {
         super.loadView()
         
+        navigationItem.title = event.name
+        
         // Load Agenda
-        // Note: requestAgendas will request session data underneath
-        event.requestAgendas() {self.event.didLoadAgendas = true}
+        event.requestAgendas() {self.event.didLoadAgendas = true} //Note: requestAgendas will request session data underneath
         
         // Load Speakers for entire event
         event.requestSpeakers() {self.event.didLoadSpeakers = true}
@@ -111,29 +125,14 @@ class EventMenuViewController: UIViewController {
         // Load Sponsor information
         event.requestSponsors() {self.event.didLoadSponsors = true}
         
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        definesPresentationContext = true
-        providesPresentationContextTransitionStyle = true
-        
-        // Sorting
-        sortResearchRecipientsByName()
-        sortPrizeRecipientsByName()
-        sortSpeakersByLastName()
-        sortAffiliatesByName()
-        
+        // Setup views
         contentView.backgroundColor = .clearColor()
+        
+        eventNameLabel.text = event.name
         eventNameLabel.backgroundColor = SIColor().prussianBlueColor.colorWithAlphaComponent(0.5)
         eventNameLabel.textColor = UIColor.whiteColor()
         
-        eventNameLabel.text = event.name
-        contentView.addSubview(eventNameLabel)
-        contentView.addSubview(backgroundImage)
-        
-        let buttonViews = [
+        buttonViews = [
             scheduleButton,
             venuePhotosButton,
             recipientsButton,
@@ -144,23 +143,20 @@ class EventMenuViewController: UIViewController {
             sponsorsButton
         ]
         
-        // add label and custom built UIButtons to contentView
-        contentView.bringSubviewToFront(eventNameLabel)
-        for button in buttonViews {
-            contentView.addSubview(button)
-            contentView.bringSubviewToFront(button)
-            
-            // set dimensions of buttons
-            button.autoSetDimension(.Height, toSize: BUTTON_WIDTH)
-            button.autoSetDimension(.Width, toSize: BUTTON_HEIGHT)
-        }
+        contentView.addSubviews([backgroundImage, eventNameLabel])
+        contentView.addSubviews(buttonViews)
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
-        // constraints for view
-        backgroundImage.autoPinToTopLayoutGuideOfViewController(self, withInset: 0)
-        backgroundImage.autoPinEdge(.Left, toEdge: .Left, ofView: view)
-        backgroundImage.autoPinEdge(.Right, toEdge: .Right, ofView: view)
-        backgroundImage.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: view)
+        if let image = event.getBannerImage() {
+            eventHeaderImage.image = image
+        }
         
+        definesPresentationContext = true
+        providesPresentationContextTransitionStyle = true
+
         // Add targets to all buttons
         scheduleButton.addTarget(self, action: #selector(EventMenuViewController.didTapSchedule(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         venuePhotosButton.addTarget(self, action: #selector(EventMenuViewController.didTapVenue(_:)), forControlEvents: UIControlEvents.TouchUpInside)
@@ -172,8 +168,65 @@ class EventMenuViewController: UIViewController {
         sponsorsButton.addTarget(self, action: #selector(EventMenuViewController.didTapSponsors(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
         setButtonConstraintsToBottomOfView()
-        eventNameLabel.autoPinEdge(.Bottom, toEdge: .Top, ofView: scheduleButton, withOffset: -12)
         
+    }
+    
+    override func updateViewConstraints() {
+        if !didSetupConstraints {
+            
+            // set dimensions of buttons
+            for button in buttonViews {
+                button.autoSetDimension(.Height, toSize: BUTTON_WIDTH)
+                button.autoSetDimension(.Width, toSize: BUTTON_HEIGHT)
+            }
+            
+            // calculate button spacing from edge
+            let edgeSpacing = (view.frame.width * (1/4)) - (BUTTON_WIDTH / 2) + 10
+            let verticalButtonSpacing: CGFloat = -10
+            
+            // Set up constraints from bottom left to top right
+            exhibitorsButton.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: contentView, withOffset: verticalButtonSpacing)
+            exhibitorsButton.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: edgeSpacing)
+            
+            sponsorsButton.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: contentView, withOffset: verticalButtonSpacing)
+            sponsorsButton.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -edgeSpacing)
+            
+            recipientsButton.autoPinEdge(.Bottom, toEdge: .Top, ofView: exhibitorsButton, withOffset: verticalButtonSpacing)
+            recipientsButton.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: edgeSpacing)
+            
+            affiliatesButton.autoPinEdge(.Bottom, toEdge: .Top, ofView: sponsorsButton, withOffset: verticalButtonSpacing)
+            affiliatesButton.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -edgeSpacing)
+            
+            venuePhotosButton.autoPinEdge(.Bottom, toEdge: .Top, ofView: recipientsButton, withOffset: verticalButtonSpacing)
+            venuePhotosButton.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: edgeSpacing)
+            
+            directionsButton.autoPinEdge(.Bottom, toEdge: .Top, ofView: affiliatesButton, withOffset: verticalButtonSpacing)
+            directionsButton.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -edgeSpacing)
+            
+            scheduleButton.autoPinEdge(.Bottom, toEdge: .Top, ofView: venuePhotosButton, withOffset: verticalButtonSpacing)
+            scheduleButton.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: edgeSpacing)
+            
+            speakerButton.autoPinEdge(.Bottom, toEdge: .Top, ofView: directionsButton, withOffset: verticalButtonSpacing)
+            speakerButton.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -edgeSpacing)
+            
+            //Note: eventNameLabel's top, left, and right constraints are defined in Main.storyboard
+            eventNameLabel.autoPinEdge(.Bottom, toEdge: .Top, ofView: scheduleButton, withOffset: -12)
+            
+            if eventHeaderImage.image != nil {
+                eventNameLabel.addSubview(eventHeaderImage)
+                eventHeaderImage.autoPinEdgesToSuperviewEdges()
+            }
+            
+            // constraints for backgroundImage
+//            backgroundImage.autoPinToTopLayoutGuideOfViewController(self, withInset: 0)
+            backgroundImage.autoPinEdge(.Top, toEdge: .Bottom, ofView: eventNameLabel)
+            backgroundImage.autoPinEdge(.Left, toEdge: .Left, ofView: view)
+            backgroundImage.autoPinEdge(.Right, toEdge: .Right, ofView: view)
+            backgroundImage.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: view)
+            
+            didSetupConstraints = true
+        }
+        super.updateViewConstraints()
     }
     
     func displayBadRequestNotification() {
@@ -188,34 +241,7 @@ class EventMenuViewController: UIViewController {
     // constraints for UIButtons
     func setButtonConstraintsToBottomOfView() {
         
-        // calculate button spacing from edge
-        let edgeSpacing = (view.frame.width * (1/4)) - (BUTTON_WIDTH / 2) + 10
-        let verticalButtonSpacing: CGFloat = -10
         
-        // Set up constraints from bottom left to top right
-        exhibitorsButton.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: contentView, withOffset: verticalButtonSpacing)
-        exhibitorsButton.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: edgeSpacing)
-        
-        sponsorsButton.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: contentView, withOffset: verticalButtonSpacing)
-        sponsorsButton.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -edgeSpacing)
-        
-        recipientsButton.autoPinEdge(.Bottom, toEdge: .Top, ofView: exhibitorsButton, withOffset: verticalButtonSpacing)
-        recipientsButton.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: edgeSpacing)
-        
-        affiliatesButton.autoPinEdge(.Bottom, toEdge: .Top, ofView: sponsorsButton, withOffset: verticalButtonSpacing)
-        affiliatesButton.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -edgeSpacing)
-        
-        venuePhotosButton.autoPinEdge(.Bottom, toEdge: .Top, ofView: recipientsButton, withOffset: verticalButtonSpacing)
-        venuePhotosButton.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: edgeSpacing)
-        
-        directionsButton.autoPinEdge(.Bottom, toEdge: .Top, ofView: affiliatesButton, withOffset: verticalButtonSpacing)
-        directionsButton.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -edgeSpacing)
-        
-        scheduleButton.autoPinEdge(.Bottom, toEdge: .Top, ofView: venuePhotosButton, withOffset: verticalButtonSpacing)
-        scheduleButton.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: edgeSpacing)
-        
-        speakerButton.autoPinEdge(.Bottom, toEdge: .Top, ofView: directionsButton, withOffset: verticalButtonSpacing)
-        speakerButton.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -edgeSpacing)
     }
     
     
@@ -578,18 +604,7 @@ extension EventMenuViewController {
         
         return speakers
     }
-    
-    //TO-DO: Needs implementation
-    func sortResearchRecipientsByName() {
-    }
-    
-    //TO-DO: Needs implementation
-    func sortPrizeRecipientsByName() {
-    }
- 
-    //TO-DO: Needs implementation
-    func sortAffiliatesByName() {
-    }
+
 }
 
 

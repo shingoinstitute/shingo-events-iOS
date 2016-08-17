@@ -26,7 +26,7 @@ class VenueMapsCollectionView: UIViewController {
         super.viewDidLoad()
         
         let backgroundImage = UIImageView()
-        backgroundImage.image = ShingoIconImages().shingoIconForDevice()
+        backgroundImage.image = SIImages().shingoIconForDevice()
         backgroundImage.contentMode = UIViewContentMode.ScaleAspectFill
         collectionView.backgroundView = backgroundImage
         

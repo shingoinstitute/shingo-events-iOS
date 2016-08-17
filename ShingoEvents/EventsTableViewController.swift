@@ -36,6 +36,11 @@ class EventsTableViewController: UITableViewController {
         }
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationItem.title = "Upcoming Events"
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -76,6 +81,7 @@ class EventsTableViewController: UITableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("EventsCell", forIndexPath: indexPath) as! EventTableViewCell
+        cell.backgroundColor = .clearColor()
         cell.selectionStyle = .None
         cell.updateCell(event: events[indexPath.row])
         return cell
@@ -85,6 +91,10 @@ class EventsTableViewController: UITableViewController {
         
         if events[indexPath.row].getBannerImage() == nil {
             return 75.0
+        }
+        
+        if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+            return 240
         }
         
         return 155.0 as CGFloat
@@ -131,7 +141,7 @@ class EventsTableViewController: UITableViewController {
         if segue.identifier == "EventMenu" {
             let destination = segue.destinationViewController as! EventMenuViewController
             destination.event = sender as! SIEvent
-            print((sender as! SIEvent).name)
+            navigationItem.title = ""
         }
     }
     

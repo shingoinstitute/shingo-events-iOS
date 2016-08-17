@@ -26,7 +26,7 @@ class MainMenuViewController: UIViewController {
     var events : [SIEvent]?
     
     // used to set inital placement of menu items off screen so they can later be animated
-    var contentViewHeightConstraint: NSLayoutConstraint?
+    var contentViewHeightConstraint: NSLayoutConstraint!
     
     // buttons
     @IBOutlet weak var eventsBtn: UIButton!
@@ -36,17 +36,26 @@ class MainMenuViewController: UIViewController {
     
     // Other views
     var menuBackgroundImage: UIImageView = {
-        let view = UIImageView()
+        let view = UIImageView.newAutoLayoutView()
         view.backgroundColor = .whiteColor()
+        view.image = SIImages().shingoIconForDevice()
         return view
     }()
-    var shingoLogoImageView : UIImageView = UIImageView.newAutoLayoutView()
+    var shingoLogoImageView : UIImageView = {
+        let view = UIImageView.newAutoLayoutView()
+        if let image = UIImage(named: "Shingo logo with Home BIG") {
+            view.image = image
+        }
+        view.contentMode = .ScaleAspectFit
+        return view
+    }()
     var contentView: UIView = {
         let view = UIView.newAutoLayoutView()
         view.backgroundColor = SIColor().prussianBlueColor.colorWithAlphaComponent(0.5)
         return view
     }()
-
+    var didSetupConstraints = false
+    var didAnimateLayout = false
     
     // MARK: - class methods
     
@@ -62,7 +71,7 @@ class MainMenuViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
+        updateViewConstraints()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -71,77 +80,84 @@ class MainMenuViewController: UIViewController {
     }
     
     override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(true)
+        super.viewWillDisappear(animated)
         navigationController?.navigationBarHidden = false
     }
     
     override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
         self.animateLayout()
     }
 
-    func setupView() {
-        eventsBtn.removeFromSuperview()
-        shingoModelBtn.removeFromSuperview()
-        settingsBtn.removeFromSuperview()
-        reloadEventsBtn.removeFromSuperview()
-        
-        contentView.addSubview(eventsBtn)
-        contentView.addSubview(shingoModelBtn)
-        contentView.addSubview(settingsBtn)
-        contentView.addSubview(reloadEventsBtn)
-        
-        menuBackgroundImage.image = ShingoIconImages().shingoIconForDevice()
-        
-        view.addSubview(menuBackgroundImage)
-        view.addSubview(contentView)
-        view.bringSubviewToFront(contentView)
-        view.addSubview(self.shingoLogoImageView)
-        view.bringSubviewToFront(self.shingoLogoImageView)
-        
-        shingoLogoImageView.image = UIImage(named: "Shingo logo with Home BIG")
-        shingoLogoImageView.contentMode = .ScaleAspectFit
-        
-        menuBackgroundImage.autoPinToTopLayoutGuideOfViewController(self, withInset: 0)
-        menuBackgroundImage.autoPinEdge(.Left, toEdge: .Left, ofView: view)
-        menuBackgroundImage.autoPinEdge(.Right, toEdge: .Right, ofView: view)
-        menuBackgroundImage.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: view)
-        
-        contentView.autoSetDimension(.Height, toSize: 265)
-        contentViewHeightConstraint = contentView.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: view, withOffset: -view.frame.height)
-        contentView.autoPinEdge(.Left, toEdge: .Left, ofView: view, withOffset: 5.0)
-        contentView.autoPinEdge(.Right, toEdge: .Right, ofView: view, withOffset: -5.0)
-        
-        eventsBtn.autoSetDimension(.Height, toSize: 60)
-        eventsBtn.autoPinEdge(.Top, toEdge: .Top, ofView: contentView, withOffset: 5)
-        eventsBtn.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 5)
-        eventsBtn.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -5)
-        
-        shingoModelBtn.autoSetDimension(.Height, toSize: 60)
-        shingoModelBtn.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 5)
-        shingoModelBtn.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -5)
-        shingoModelBtn.autoPinEdge(.Top, toEdge: .Bottom, ofView: eventsBtn, withOffset: 5)
-        
-        settingsBtn.autoSetDimension(.Height, toSize: 60)
-        settingsBtn.autoPinEdge(.Top, toEdge: .Bottom, ofView: shingoModelBtn, withOffset: 5)
-        settingsBtn.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 5)
-        settingsBtn.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -5)
-        
-        reloadEventsBtn.autoSetDimension(.Height, toSize: 60)
-        reloadEventsBtn.autoPinEdge(.Top, toEdge: .Bottom, ofView: settingsBtn, withOffset: 5)
-        reloadEventsBtn.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 5)
-        reloadEventsBtn.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -5)
-        
-        shingoLogoImageView.autoSetDimension(.Height, toSize: 125)
-        shingoLogoImageView.autoPinToTopLayoutGuideOfViewController(self, withInset: 8)
-        shingoLogoImageView.autoPinEdgeToSuperviewEdge(.Left, withInset: 8)
-        shingoLogoImageView.autoPinEdgeToSuperviewEdge(.Right, withInset: 8)
-        
-        let buttons:NSArray = [eventsBtn, shingoModelBtn, settingsBtn, reloadEventsBtn]
-        for button in buttons as! [UIButton] {
-            contentView.bringSubviewToFront(button)
-            button.backgroundColor = UIColor(white: 0.9, alpha: 0.9)
-            button.setTitleColor(SIColor().darkShingoBlueColor, forState: .Normal)
+    override func updateViewConstraints() {
+        if !didSetupConstraints {
+            
+            eventsBtn.removeFromSuperview()
+            shingoModelBtn.removeFromSuperview()
+            settingsBtn.removeFromSuperview()
+            reloadEventsBtn.removeFromSuperview()
+            
+            contentView.addSubview(eventsBtn)
+            contentView.addSubview(shingoModelBtn)
+            contentView.addSubview(settingsBtn)
+            contentView.addSubview(reloadEventsBtn)
+
+            view.addSubview(menuBackgroundImage)
+            view.addSubview(contentView)
+            view.bringSubviewToFront(contentView)
+            view.addSubview(shingoLogoImageView)
+            view.bringSubviewToFront(shingoLogoImageView)
+            
+            menuBackgroundImage.autoPinToTopLayoutGuideOfViewController(self, withInset: 0)
+            menuBackgroundImage.autoPinEdge(.Left, toEdge: .Left, ofView: view)
+            menuBackgroundImage.autoPinEdge(.Right, toEdge: .Right, ofView: view)
+            menuBackgroundImage.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: view)
+            
+            contentView.autoSetDimension(.Height, toSize: 265)
+            contentViewHeightConstraint = contentView.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: view, withOffset: -view.frame.height)
+            if UIDevice.currentDevice().deviceType.rawValue >= 6.0 {
+                contentView.autoPinEdge(.Left, toEdge: .Left, ofView: view, withOffset: 200.0)
+                contentView.autoPinEdge(.Right, toEdge: .Right, ofView: view, withOffset: -200.0)
+            } else {
+                contentView.autoPinEdge(.Left, toEdge: .Left, ofView: view, withOffset: 5.0)
+                contentView.autoPinEdge(.Right, toEdge: .Right, ofView: view, withOffset: -5.0)
+            }
+            
+            eventsBtn.autoSetDimension(.Height, toSize: 60)
+            eventsBtn.autoPinEdge(.Top, toEdge: .Top, ofView: contentView, withOffset: 5)
+            eventsBtn.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 5)
+            eventsBtn.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -5)
+            
+            shingoModelBtn.autoSetDimension(.Height, toSize: 60)
+            shingoModelBtn.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 5)
+            shingoModelBtn.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -5)
+            shingoModelBtn.autoPinEdge(.Top, toEdge: .Bottom, ofView: eventsBtn, withOffset: 5)
+            
+            settingsBtn.autoSetDimension(.Height, toSize: 60)
+            settingsBtn.autoPinEdge(.Top, toEdge: .Bottom, ofView: shingoModelBtn, withOffset: 5)
+            settingsBtn.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 5)
+            settingsBtn.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -5)
+            
+            reloadEventsBtn.autoSetDimension(.Height, toSize: 60)
+            reloadEventsBtn.autoPinEdge(.Top, toEdge: .Bottom, ofView: settingsBtn, withOffset: 5)
+            reloadEventsBtn.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 5)
+            reloadEventsBtn.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -5)
+            
+            shingoLogoImageView.autoSetDimension(.Height, toSize: 125)
+            shingoLogoImageView.autoPinToTopLayoutGuideOfViewController(self, withInset: 8)
+            shingoLogoImageView.autoPinEdgeToSuperviewEdge(.Left, withInset: 8)
+            shingoLogoImageView.autoPinEdgeToSuperviewEdge(.Right, withInset: 8)
+            
+            let buttons:NSArray = [eventsBtn, shingoModelBtn, settingsBtn, reloadEventsBtn]
+            for button in buttons as! [UIButton] {
+                contentView.bringSubviewToFront(button)
+                button.backgroundColor = UIColor(white: 0.9, alpha: 0.9)
+                button.setTitleColor(SIColor().darkShingoBlueColor, forState: .Normal)
+            }
+            
+            didSetupConstraints = true
         }
+        super.updateViewConstraints()
     }
     
     func displayInternetAlert() {
@@ -157,25 +173,41 @@ class MainMenuViewController: UIViewController {
     }
     
     func animateLayout() {
-        contentViewHeightConstraint?.constant = -80
-        
-//        Uncomment the line below to make constraints appear animated (for deployment)
-//        UIView.animateWithDuration(1.5,
-//                                   delay: 0.2, 
-//                                   usingSpringWithDamping: 0.5, 
-//                                   initialSpringVelocity: 0, 
-//                                   options: UIViewAnimationOptions(), 
-//                                   animations: { self.view.layoutIfNeeded() }, 
-//                                   completion: nil)
-        
-//        Uncomment the line below to make menu options appear instantly (for during production)
-        UIView.animateWithDuration(0.01,
-                                   delay: 0,
-                                   usingSpringWithDamping: 0.01,
-                                   initialSpringVelocity: 0, 
-                                   options: UIViewAnimationOptions(), 
-                                   animations: { self.view.layoutIfNeeded() },
-                                   completion: nil)
+        if !didAnimateLayout {
+            
+            switch Int(UIDevice.currentDevice().deviceType.rawValue) {
+            case 1, 2:
+                contentViewHeightConstraint.constant = -50
+            case 3:
+                contentViewHeightConstraint.constant = -60
+            case 4, 5:
+                contentViewHeightConstraint.constant = -80
+            case 6, 7:
+                contentViewHeightConstraint.constant = -view.frame.height / 3
+            default:
+                contentViewHeightConstraint.constant = -80
+            }
+            
+            //        Uncomment the line below to make constraints appear animated (for deployment)
+            //        UIView.animateWithDuration(1.5,
+            //                                   delay: 0.2,
+            //                                   usingSpringWithDamping: 0.5,
+            //                                   initialSpringVelocity: 0,
+            //                                   options: UIViewAnimationOptions(),
+            //                                   animations: { self.view.layoutIfNeeded() },
+            //                                   completion: nil)
+            
+            //        Uncomment the line below to make menu options appear instantly (for during production)
+            UIView.animateWithDuration(0.01,
+                                       delay: 0,
+                                       usingSpringWithDamping: 0.01,
+                                       initialSpringVelocity: 0,
+                                       options: UIViewAnimationOptions(),
+                                       animations: { self.view.layoutIfNeeded() },
+                                       completion: nil)
+            
+            didAnimateLayout = true
+        }
     }
     
     @IBAction func didTapEvents(sender: AnyObject) {

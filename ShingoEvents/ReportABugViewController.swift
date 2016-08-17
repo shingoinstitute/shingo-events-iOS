@@ -32,7 +32,7 @@ class ReportABugViewController: UIViewController, UITextViewDelegate {
         
         let backgroundImage = UIImageView.newAutoLayoutView()
         view.addSubview(backgroundImage)
-        backgroundImage.image = ShingoIconImages().shingoIconForDevice()
+        backgroundImage.image = SIImages().shingoIconForDevice()
         backgroundImage.autoPinToTopLayoutGuideOfViewController(self, withInset: 0)
         backgroundImage.autoPinEdgeToSuperviewEdge(.Left)
         backgroundImage.autoPinEdgeToSuperviewEdge(.Right)
@@ -48,8 +48,7 @@ class ReportABugViewController: UIViewController, UITextViewDelegate {
         view.bringSubviewToFront(messageTextField)
         view.bringSubviewToFront(reportButton)
         
-        if titleLabelString != "Report a bug"
-        {
+        if titleLabelString != "Report a bug" {
             reportButton.setTitle("Send Feedback", forState: UIControlState.Normal)
         }
     }
@@ -57,28 +56,21 @@ class ReportABugViewController: UIViewController, UITextViewDelegate {
 
     @IBAction func didTapReportBug(sender: AnyObject) {
         
-        if !messageSent
-        {
-            if messageTextField.text == "" || messageTextField.text == "Enter message here."
-            {
+        if !messageSent {
+            if messageTextField.text == "" || messageTextField.text == "Enter message here." {
                 let alert = UIAlertController(title: "Oops!", message: "The message field is still empty!", preferredStyle: .Alert)
                 let action = UIAlertAction(title: "Okay", style: .Default, handler: nil)
                 alert.addAction(action)
                 
                 presentViewController(alert, animated: true, completion: nil)
-            }
-            else
-            {
+            } else {
                 let system_information:String = " " + UIDevice.currentDevice().modelName + " version "  + UIDevice.currentDevice().systemVersion
                 let report:String = messageTextField.text + "\n\n"
                 var type:String = ""
                 
-                if titleLabelString == "Report a bug"
-                {
+                if titleLabelString == "Report a bug" {
                     type = " Bug report"
-                }
-                else
-                {
+                } else {
                     type = " Feedback"
                 }
                 
@@ -101,8 +93,7 @@ class ReportABugViewController: UIViewController, UITextViewDelegate {
     }
     
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
-        if text == "\n"
-        {
+        if text == "\n" {
             textView.resignFirstResponder()
             return false
         }
@@ -110,8 +101,7 @@ class ReportABugViewController: UIViewController, UITextViewDelegate {
     }
     
     func textViewDidBeginEditing(textView: UITextView) {
-        if !beganEditing
-        {
+        if !beganEditing {
             textView.text = ""
             textView.textColor = .blackColor()
             beganEditing = true

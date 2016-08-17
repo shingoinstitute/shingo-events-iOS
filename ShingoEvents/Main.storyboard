@@ -265,6 +265,7 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="uDy-er-5Jq" secondAttribute="trailing" constant="33" id="1Ud-Yn-J9d"/>
                                 </constraints>
@@ -1080,7 +1081,7 @@
             </objects>
             <point key="canvasLocation" x="2866" y="-1347"/>
         </scene>
-        <!--Schedules Table View Controller-->
+        <!--Schedule-->
         <scene sceneID="AYG-7x-KYt">
             <objects>
                 <tableViewController id="PqC-BM-dR8" customClass="SchedulesTableViewController" customModule="Shingo_Events" customModuleProvider="target" sceneMemberID="viewController">
@@ -1100,7 +1101,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="567" height="49"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="day_of_week" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5Oz-lF-59s">
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="day of week" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5Oz-lF-59s">
                                             <rect key="frame" x="15" y="0.0" width="550" height="49"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
@@ -1119,6 +1120,7 @@
                             <outlet property="delegate" destination="PqC-BM-dR8" id="Gml-dC-rl0"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" title="Schedule" id="8ax-Rv-lw8"/>
                     <connections>
                         <segue destination="skg-Ca-vnm" kind="show" identifier="SessionListView" id="KuT-Bg-DHs"/>
                     </connections>
@@ -1164,7 +1166,7 @@
             </objects>
             <point key="canvasLocation" x="3555" y="-1347"/>
         </scene>
-        <!--Event Sessions-->
+        <!--Sessions-->
         <scene sceneID="TFp-g3-j6F">
             <objects>
                 <tableViewController id="skg-Ca-vnm" customClass="SessionListTableViewController" customModule="Shingo_Events" customModuleProvider="target" sceneMemberID="viewController">
@@ -1230,7 +1232,7 @@
                             <outlet property="delegate" destination="skg-Ca-vnm" id="kLy-Et-mtO"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Event Sessions" id="SCh-pj-DSK"/>
+                    <navigationItem key="navigationItem" title="Sessions" id="SCh-pj-DSK"/>
                     <connections>
                         <segue destination="w4L-8j-sRQ" kind="show" identifier="SessionDetailView" id="RGI-vn-4an"/>
                     </connections>

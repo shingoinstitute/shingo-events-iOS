@@ -20,7 +20,7 @@ class ContactUsViewController: UIViewController, UITextFieldDelegate, UITextView
 
     var backgroundImage:UIImageView = {
         let view = UIImageView.newAutoLayoutView()
-        view.image = ShingoIconImages().shingoIconForDevice()
+        view.image = SIImages().shingoIconForDevice()
         return view
     }()
 
@@ -28,17 +28,7 @@ class ContactUsViewController: UIViewController, UITextFieldDelegate, UITextView
     override func viewDidLoad() {
         super.viewDidLoad()
 
-//        sendMessageButton.layer.cornerRadius = 5
-//        sendMessageButton.backgroundColor = ShingoColors().shingoBlue
-//        sendMessageButton.layer.borderColor = ShingoColors().darkShingoBlue.CGColor
-//        sendMessageButton.layer.borderWidth = 1
         sendMessageButton.imageView?.image = UIImage(named: "send button")
-        
-//        sendMessageButton.layer.shadowColor = UIColor.darkGrayColor().CGColor
-//        sendMessageButton.layer.shadowOffset = CGSizeMake(2.0, 2.0)
-//        sendMessageButton.layer.shadowOpacity = 1.0
-//        sendMessageButton.layer.shadowRadius = 1
-        
         
         view.addSubview(backgroundImage)
         backgroundImage.autoPinToTopLayoutGuideOfViewController(self, withInset: 0)
@@ -77,7 +67,6 @@ class ContactUsViewController: UIViewController, UITextFieldDelegate, UITextView
     
     func textViewDidBeginEditing(textView: UITextView) {
         if !didTouchInsideTextField {
-            
             textView.text = ""
             textView.textColor = .blackColor()
             textView.text.sizeWithAttributes([NSFontAttributeName: UIFont.systemFontOfSize(12.0)])

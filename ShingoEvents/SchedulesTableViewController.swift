@@ -18,7 +18,6 @@ class SchedulesTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Needed to make loading screen animation display correctly
         providesPresentationContextTransitionStyle = true
         definesPresentationContext = true
     }
@@ -71,29 +70,32 @@ extension SchedulesTableViewController {
         return cell
     }
 
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = UIView();
-        view.backgroundColor = .clearColor()
-        let header = UILabel();
-        header.text = eventName;
-        header.lineBreakMode = .ByWordWrapping;
-        header.textAlignment = .Center;
-        header.numberOfLines = 2;
-        header.textColor = .whiteColor();
-        header.font = UIFont.boldSystemFontOfSize(16.0);
-        header.clipsToBounds = true;
-        header.backgroundColor = SIColor().shingoOrangeColor
-        header.layer.borderWidth = 1.0;
-        header.layer.cornerRadius = 5;
-        view.addSubview(header);
-        header.autoPinEdgesToSuperviewEdgesWithInsets(UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4));
-        
-        return view;
-    }
-    
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 50
-    }
+//    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        let view = UIView()
+//        view.backgroundColor = .clearColor()
+//        let header = UILabel()
+//        header.text = eventName
+//        header.lineBreakMode = .ByWordWrapping
+//        header.textAlignment = .Center
+//        header.numberOfLines = 0
+//        header.textColor = .whiteColor()
+//        header.font = UIFont.boldSystemFontOfSize(16.0)
+//        header.clipsToBounds = true
+//        header.backgroundColor = SIColor().shingoOrangeColor
+//        header.layer.cornerRadius = 3
+//        view.addSubview(header)
+//        
+//        header.sizeToFit()
+//        header.autoAlignAxisToSuperviewAxis(.Vertical)
+//        header.autoAlignAxisToSuperviewAxis(.Horizontal)
+//        header.autoPinEdgesToSuperviewEdgesWithInsets(UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4))
+//        
+//        return view
+//    }
+//    
+//    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+//        return 50
+//    }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
@@ -134,8 +136,6 @@ class SchedulesTableViewCell: UITableViewCell {
     }
     
 }
-
-
 
 
 

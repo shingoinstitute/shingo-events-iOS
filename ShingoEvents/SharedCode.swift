@@ -65,15 +65,21 @@ extension UIImage {
     }
 }
 
+extension UIBarButtonItem {
+    convenience init(title: String) {
+        self.init()
+        self.title = title
+    }
+}
+
 // Shingo IP Colors
 struct SIColor {
-    
     let lightBlueColor = UIColor(netHex: 0x155c97)
     let shingoBlueColor = UIColor(netHex: 0x002f56)
+    let prussianBlueColor = UIColor(netHex: 0x002F56)
     let shingoRedColor = UIColor(netHex: 0x650820)
     let darkShingoBlueColor = UIColor(netHex: 0x0e2145)
     let shingoOrangeColor = UIColor(netHex: 0xcd8931)
-    let prussianBlueColor = UIColor(netHex: 0x002F56)
 }
 
 extension UIColor {
