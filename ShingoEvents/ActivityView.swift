@@ -71,7 +71,6 @@ class ActivityViewController: UIViewController {
             
             activityIndicatorView.autoAlignAxis(.Vertical, toSameAxisOfView: activityView)
             activityIndicatorView.autoAlignAxis(.Horizontal, toSameAxisOfView: activityView, withOffset: 8)
-//            activityIndicatorView.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: activityView, withOffset: -16.0)
             
             didAddActivityIndicatorConstraints = true
         }

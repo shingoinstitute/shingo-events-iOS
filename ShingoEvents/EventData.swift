@@ -33,7 +33,7 @@ class SIObject : AnyObject {
                 return
             }
         
-            print("Image Downloaded, \(image.fileSizeOfPNG())kb, \(Int(image.size.width))x\(Int(image.size.height)), \(Mirror(reflecting: self).subjectType)")
+            print("Image Downloaded; \(image.fileSizeOfPNG())kb recieved; width: \(Int(image.size.width)), height: \(Int(image.size.height)); Type: \(Mirror(reflecting: self).subjectType).")
             callback(image: image)
         }
     }
