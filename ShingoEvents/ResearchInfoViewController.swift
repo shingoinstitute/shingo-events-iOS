@@ -15,7 +15,7 @@ class ResearchInfoViewController: UIViewController {
     var scrollView: UIScrollView = UIScrollView.newAutoLayoutView()
     var backdrop = UIView.newAutoLayoutView()
     
-    var recipient:Recipient!
+    var recipient: SIRecipient!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,18 +58,18 @@ class ResearchInfoViewController: UIViewController {
         
         self.automaticallyAdjustsScrollViewInsets = false
 
-        if recipient.logo_book_cover_image != nil {
-             bookImage.image = recipient.logo_book_cover_image
-        } else {
-            bookImage.image = UIImage(named: "shingo_icon")
-        }
+//        if recipient.logoBookCoverImage != nil {
+             bookImage.image = recipient.getRecipientImage()
+//        } else {
+//            bookImage.image = UIImage(named: "shingo_icon")
+//        }
         
         abstractTextField.text = ""
         
-        if recipient.richAbstract != nil {
+        if !recipient.summary.isEmpty {
             
             do {
-                let htmlString: String! = "<style>body{color:white;}</style><font size=\"5\">" + recipient.richAbstract! + "</font></style>";
+                let htmlString: String! = "<style>body{color:white;}</style><font size=\"5\">" + recipient.summary + "</font></style>";
                 abstractTextField.attributedText = try NSAttributedString(data: htmlString.dataUsingEncoding(NSUTF8StringEncoding)!,
                                                                       options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
                                                                                 NSCharacterEncodingDocumentAttribute : NSUTF8StringEncoding],
@@ -78,10 +78,6 @@ class ResearchInfoViewController: UIViewController {
                 print("Error with richText in ResearchInfoViewController")
             }
             
-        } else if recipient.abstract != nil {
-            abstractTextField.text! += recipient.abstract
-        } else {
-            abstractTextField.text! += "Book description coming soon."
         }
         
     }

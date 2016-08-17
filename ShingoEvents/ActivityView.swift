@@ -10,81 +10,75 @@ import Foundation
 import UIKit
 import Alamofire
 
-public class ActivityView: UIView {
+class ActivityViewController: UIViewController {
     
-    let activityView:UIView = UIView.newAutoLayoutView()
-    let cancelButton:UIButton = UIButton.newAutoLayoutView()
-    let activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
-    let messageLabel = UILabel.newAutoLayoutView()
-    let progressIndicator:UIProgressView = UIProgressView.newAutoLayoutView()
-    
-    var request:Alamofire.Request!
-    
-    public func displayActivityView(message message:String, forView view: UIView, withRequest request: Alamofire.Request?) {
-        if let request = request {
-            self.request = request
+    var message = "Loading..." {
+        didSet {
+            messageLabel.text = message
         }
+    }
+    var activityView:UIView = {
+        let view = UIView.newAutoLayoutView()
+        view.backgroundColor = UIColor(white: 0.0, alpha: 0.5)
+        view.layer.cornerRadius = 12.0
+        return view
+    }()
+    var messageLabel : UILabel = {
+        let view = UILabel.newAutoLayoutView()
+        view.font = UIFont.boldSystemFontOfSize(UIFont.labelFontSize())
+        view.textColor = UIColor.whiteColor()
+        view.textAlignment = .Center
+        view.shadowColor = UIColor.blackColor()
+        view.shadowOffset = CGSizeMake(0.0, 1.0)
+        view.numberOfLines = 3
+        return view
+    }()
+    var activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+    var didAddActivityIndicatorConstraints = false
+    
+    convenience init() {
+        self.init(nibName: nil, bundle: nil)
+        modalTransitionStyle = .CrossDissolve
+        modalPresentationStyle = .OverCurrentContext
+        view.backgroundColor = UIColor.clearColor()
         view.addSubview(activityView)
-//        view.addSubview(cancelButton)
-        activityView.addSubview(activityIndicatorView)
-        activityView.addSubview(messageLabel)
-        activityView.addSubview(progressIndicator)
-        
+        activityView.addSubviews([activityIndicatorView, messageLabel])
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
         messageLabel.text = message
-        messageLabel.font = UIFont.boldSystemFontOfSize(UIFont.labelFontSize())
-        messageLabel.textColor = UIColor.whiteColor()
-        messageLabel.textAlignment = .Center
-        messageLabel.shadowColor = UIColor.blackColor()
-        messageLabel.shadowOffset = CGSizeMake(0.0, 1.0)
-        messageLabel.numberOfLines = 3
-        
-        activityIndicatorView.startAnimating()
-        
-        activityView.backgroundColor = UIColor(white: 0.0, alpha: 0.5)
-        activityView.layer.cornerRadius = 12.0
-        
-        activityView.autoSetDimensionsToSize(CGSize(width: 160.0, height: 160.0))
-        activityView.autoAlignAxis(.Horizontal, toSameAxisOfView: view)
-        activityView.autoAlignAxis(.Vertical, toSameAxisOfView: view)
-        
-        activityIndicatorView.autoAlignAxis(.Vertical, toSameAxisOfView: activityView)
-        activityIndicatorView.autoPinEdge(.Top, toEdge: .Top, ofView: activityView, withOffset: 8.0)
-        
-        messageLabel.autoPinEdge(.Left, toEdge: .Left, ofView: activityView, withOffset: 5)
-        messageLabel.autoPinEdge(.Right, toEdge: .Right, ofView: activityView, withOffset: -5)
-        messageLabel.autoAlignAxis(.Vertical, toSameAxisOfView: activityView)
-        messageLabel.autoAlignAxis(.Horizontal, toSameAxisOfView: activityView)
-        
-        progressIndicator.autoSetDimensionsToSize(CGSizeMake(140.0, 3.0))
-        progressIndicator.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: activityView, withOffset: -10.0)
-        progressIndicator.autoAlignAxis(.Vertical, toSameAxisOfView: activityView)
-        
-//        cancelButton.setTitle("Cancel", forState: UIControlState.Normal)
-//        cancelButton.addTarget(self, action: #selector(ActivityView.cancelRequest), forControlEvents: UIControlEvents.TouchUpInside)
-//        cancelButton.setTitleColor(view.tintColor, forState: UIControlState.Normal)
-//        cancelButton.titleLabel?.font = UIFont.systemFontOfSize(16.0)
-//        cancelButton.titleLabel?.textAlignment = .Center
-//        cancelButton.layer.cornerRadius = 5.0
-//        cancelButton.backgroundColor = UIColor.whiteColor()
-//        
-//        cancelButton.autoSetDimensionsToSize(CGSize(width: 160, height: 42))
-//        cancelButton.autoPinEdge(.Left, toEdge: .Left, ofView: activityView, withOffset: 0)
-//        cancelButton.autoPinEdge(.Top, toEdge: .Bottom, ofView: activityView, withOffset: 8.0)
-        
+        view.setNeedsUpdateConstraints()
     }
     
-    public func cancelRequest() {
-        print("Canceling http request.")
-        if self.request != nil {
-            self.request.cancel()
-        }
-        removeActivityViewFromDisplay()
-    }
+    override func updateViewConstraints() {
+        
+        if !didAddActivityIndicatorConstraints {
+            activityView.autoAlignAxis(.Horizontal, toSameAxisOfView: view)
+            activityView.autoAlignAxis(.Vertical, toSameAxisOfView: view)
+            
+            messageLabel.sizeToFit()
+            
+            activityIndicatorView.startAnimating()
 
-    
-    public func removeActivityViewFromDisplay() {
-        activityView.removeFromSuperview()
-        cancelButton.removeFromSuperview()
+            activityView.autoSetDimensionsToSize(CGSize(width: 160.0, height: 160.0))
+            activityView.autoAlignAxis(.Horizontal, toSameAxisOfView: view)
+            activityView.autoAlignAxis(.Vertical, toSameAxisOfView: view)
+            
+            messageLabel.autoPinEdge(.Left, toEdge: .Left, ofView: activityView, withOffset: 5)
+            messageLabel.autoPinEdge(.Right, toEdge: .Right, ofView: activityView, withOffset: -5)
+            messageLabel.autoPinEdge(.Top, toEdge: .Top, ofView: activityView, withOffset: 24)
+            
+            activityIndicatorView.autoAlignAxis(.Vertical, toSameAxisOfView: activityView)
+            activityIndicatorView.autoAlignAxis(.Horizontal, toSameAxisOfView: activityView, withOffset: 8)
+//            activityIndicatorView.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: activityView, withOffset: -16.0)
+            
+            didAddActivityIndicatorConstraints = true
+        }
+        super.updateViewConstraints()
     }
     
 }
+
+
+

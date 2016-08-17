@@ -15,7 +15,7 @@ class ChallengerInfoViewController: UIViewController {
     var scrollView: UIScrollView = UIScrollView.newAutoLayoutView()
     var backgroundView = UIView.newAutoLayoutView()
     
-    var recipient:Recipient!
+    var recipient: SIRecipient!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,21 +59,12 @@ class ChallengerInfoViewController: UIViewController {
         abstractTextField.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         self.automaticallyAdjustsScrollViewInsets = false
         logoImage.contentMode = UIViewContentMode.ScaleAspectFit
-        if recipient.logo_book_cover_image != nil
-        {
-            logoImage.image = recipient.logo_book_cover_image
-        }
-        else
-        {
-            logoImage.image = UIImage(named: "logoComingSoon500x500")
-            logoImage.layer.borderColor = UIColor.lightGrayColor().CGColor
-            logoImage.layer.borderWidth = 1.0
-            logoImage.layer.cornerRadius = 4.0
-        }
+        logoImage.image = recipient.getRecipientImage()
         
-        if recipient.richAbstract != nil {
+        
+        if !recipient.summary.isEmpty {
             do {
-                let htmlString: String! = "<style>body{color:white;}</style><font size=\"5\">" + recipient.richAbstract! + "</font></style>";
+                let htmlString: String! = "<style>body{color:white;}</style><font size=\"5\">" + recipient.summary + "</font></style>";
                 abstractTextField.attributedText = try NSAttributedString(data: htmlString.dataUsingEncoding(NSUTF8StringEncoding)!,
                                                                       options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
                                                                                 NSCharacterEncodingDocumentAttribute : NSUTF8StringEncoding],
@@ -81,10 +72,6 @@ class ChallengerInfoViewController: UIViewController {
             } catch {
                 print("Error with richText in ChallengerInfoViewController")
             }
-        } else {
-            abstractTextField.text! = recipient.abstract
-            abstractTextField.textColor = .whiteColor()
-            abstractTextField.font = UIFont.systemFontOfSize(16)
         }
         
         

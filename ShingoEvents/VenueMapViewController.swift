@@ -10,22 +10,31 @@ import UIKit
 
 class VenueMapViewController: UIViewController, UIScrollViewDelegate {
 
-    var venueMap: VenueMap! = nil
+    var venueMap: SIVenueMap!
     
     var scrollView = UIScrollView()
     var image = UIImageView()
     
     var didUpdateConstraints = false
     
+    let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        delegate.shouldSupportAllOrientation = true
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        delegate.shouldSupportAllOrientation = false
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        self.navigationItem.title = venueMap.name
         
-        if venueMap != nil {
-            image.image = venueMap.image
-        }
+        navigationItem.title = venueMap.name
         
+        image.image = venueMap.getVenueMapImage()
         image.contentMode = UIViewContentMode.ScaleAspectFit
         
         scrollView.delegate = self
@@ -39,8 +48,8 @@ class VenueMapViewController: UIViewController, UIScrollViewDelegate {
 
     override func updateViewConstraints() {
         
-        if !didUpdateConstraints
-        {
+        if !didUpdateConstraints {
+            
             scrollView.autoPinEdgesToSuperviewEdges()
             scrollView.addSubview(image)
             image.autoPinEdgesToSuperviewEdges()

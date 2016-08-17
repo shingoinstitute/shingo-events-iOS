@@ -13,51 +13,71 @@ class SponsorsTableViewController: UITableViewController {
 
     let cellIdentifier = "SponsorCell"
     
-    var friends:[Sponsor]!
-    var supporters:[Sponsor]!
-    var benefactors:[Sponsor]!
-    var champions:[Sponsor]!
-    var presidents:[Sponsor]!
+    var friends:[SISponsor]!
+    var supporters:[SISponsor]!
+    var benefactors:[SISponsor]!
+    var champions:[SISponsor]!
+    var presidents:[SISponsor]!
+    var other: [SISponsor]!
     
     var sectionTitles = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        if friends.isEmpty && supporters.isEmpty && benefactors.isEmpty && champions.isEmpty && presidents.isEmpty && other.isEmpty {
+            displayNoContentNotification()
+        }
     }
     
-    // MARK: - Table view data source
+    private func displayNoContentNotification() {
+        let label: UILabel = {
+            let view = UILabel.newAutoLayoutView()
+            view.text = "No Content Available"
+            view.textColor = .whiteColor()
+            view.sizeToFit()
+            return view
+        }()
+        
+        view.addSubview(label)
+        
+        label.autoAlignAxis(.Horizontal, toSameAxisOfView: view)
+        label.autoAlignAxis(.Vertical, toSameAxisOfView: view)
+    }
+}
 
+extension SponsorsTableViewController {
+    
+    // MARK: - Table view data source
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         
-        var numSections = 0
+        sectionTitles = []
+        
         if presidents.count > 0 {
-            numSections += 1
             sectionTitles.append("Presidents")
         }
         if champions.count > 0 {
-            numSections += 1
             sectionTitles.append("Champions")
         }
         if benefactors.count > 0 {
-            numSections += 1
             sectionTitles.append("Benefactors")
         }
         if supporters.count > 0 {
-            numSections += 1
             sectionTitles.append("Supporters")
         }
         if friends.count > 0 {
-            numSections += 1
             sectionTitles.append("Friends")
         }
+        if other.count > 0 {
+            sectionTitles.append("Other")
+        }
 
-        return numSections
+        return sectionTitles.count
     }
 
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = UILabel()
-        header.backgroundColor = UIColor(netHex: 0xcd8931)
+        header.backgroundColor = SIColor().shingoOrangeColor
         header.text = sectionTitles[section]
         header.textColor = .whiteColor()
         header.font = UIFont.boldSystemFontOfSize(16.0)
@@ -71,57 +91,53 @@ class SponsorsTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
-        let title = sectionTitles[section]
         
-        if title == "Presidents" {
-            return presidents.count
-        } else if title == "Champions" {
-            return champions.count
-        } else if title == "Benefactors" {
-            return benefactors.count
-        } else if title == "Supporters" {
-            return supporters.count
-        } else if title == "Friends" {
-            return friends.count
-        } else {
-            print("ERROR: Was not able to get number of rows in section when given a section title.")
+        switch sectionTitles[section] {
+        case "Presidents": return presidents.count
+        case "Champions": return champions.count
+        case "Benefactors": return benefactors.count
+        case "Supporters": return supporters.count
+        case "Friends": return friends.count
+        case "Other": return other.count
+        default:
+            print("Error: Invalid section title detected in SponsorsTableViewController.")
             return 0
         }
     }
 
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCellWithIdentifier("SponsorCell", forIndexPath: indexPath) as! SponsorTableViewCell
-        let cell = SponsorTableViewCell()
+        
+        let cell = tableView.dequeueReusableCellWithIdentifier("SponsorCell", forIndexPath: indexPath) as! SponsorTableViewCell
+        
         switch sectionTitles[indexPath.section] {
-        case "Friends":
-            if (friends?.count > 0) {
-                cell.bannerImage.image = friends[indexPath.row].banner_image
-                cell.sponsor = friends[indexPath.row]
-            }
-        case "Supporters":
-            if (supporters?.count > 0) {
-                cell.bannerImage.image = supporters[indexPath.row].banner_image
-                cell.sponsor = supporters[indexPath.row]
-            }
-        case "Benefactors":
-            if (benefactors?.count > 0) {
-                cell.bannerImage.image = benefactors[indexPath.row].banner_image
-                cell.sponsor = benefactors[indexPath.row]
-            }
-        case "Champions":
-            if (champions?.count > 0) {
-                cell.bannerImage.image = champions[indexPath.row].banner_image
-                cell.sponsor = champions[indexPath.row]
-            }
-        case "Presidents":
-            if (presidents?.count > 0) {
-                cell.bannerImage.image = presidents[indexPath.row].banner_image
-                cell.sponsor = presidents[indexPath.row]
-            }
-        default: break
+            case "Friends":
+                if (friends.count > 0) {
+                    cell.sponsor = friends[indexPath.row]
+                }
+            case "Supporters":
+                if (supporters.count > 0) {
+                    cell.sponsor = supporters[indexPath.row]
+                }
+            case "Benefactors":
+                if (benefactors.count > 0) {
+                    cell.sponsor = benefactors[indexPath.row]
+                }
+            case "Champions":
+                if (champions.count > 0) {
+                    cell.sponsor = champions[indexPath.row]
+                }
+            case "Presidents":
+                if (presidents.count > 0) {
+                    cell.sponsor = presidents[indexPath.row]
+                }
+            case "Other":
+                if other.count > 0 {
+                    cell.sponsor = other[indexPath.row]
+                }
+            default: break
         }
+        
         cell.selectionStyle = .None
         cell.contentView.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 150.0)
         cell.setNeedsUpdateConstraints()
@@ -141,64 +157,70 @@ class SponsorsTableViewController: UITableViewController {
 
 }
 
-class SponsorTableViewCell:UITableViewCell {
+
+class SponsorTableViewCell: UITableViewCell {
     
-    var sponsor:Sponsor!
-    
-    let horizontalInsets:CGFloat = 15.0
-    let verticalInsets:CGFloat = 10.0
+    var sponsor: SISponsor! {
+        didSet {
+            updateCell()
+        }
+    }
     
     var didSetupConstraints = false
 
-    var bannerImage:UIImageView = UIImageView.newAutoLayoutView()
-    var testView:UIView = UIView.newAutoLayoutView()
+    var nameLabel: UILabel = {
+        let view = UILabel.newAutoLayoutView()
+        view.numberOfLines = 0
+        view.lineBreakMode = .ByWordWrapping
+        view.textAlignment = .Center
+        return view
+    }()
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String!)
-    {
+    var bannerImage: UIImageView = {
+        let image = UIImageView.newAutoLayoutView()
+        image.contentMode = .ScaleAspectFit
+        return image
+    }()
+    
+    override init(style: UITableViewCellStyle, reuseIdentifier: String!) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        setupViews()
     }
     
-    required init?(coder aDecoder: NSCoder)
-    {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        
-        setupViews()
-    }
-    
-    func setupViews()
-    {
-        contentView.addSubview(bannerImage)
     }
     
     override func updateConstraints() {
-        if !didSetupConstraints
-        {
+        if !didSetupConstraints {
+            
+            contentView.addSubview(nameLabel)
+            contentView.addSubview(bannerImage)
+            
             NSLayoutConstraint.autoSetPriority(UILayoutPriorityRequired) {
                 self.bannerImage.autoSetContentCompressionResistancePriorityForAxis(.Vertical)
             }
-
-            if let image = self.sponsor.banner_image
-            {
-                bannerImage.image = image
-            }
-            else if let image = self.sponsor.logo_image
-            {
-                bannerImage.image = image
-            }
-            else
-            {
-                bannerImage.image = UIImage(named: "sponsor_banner_pl")
-            }
             
-            bannerImage.contentMode = UIViewContentMode.ScaleAspectFit
+            nameLabel.sizeToFit()
+            nameLabel.autoPinEdge(.Top, toEdge: .Top, ofView: contentView, withOffset: 8)
+            nameLabel.autoAlignAxis(.Vertical, toSameAxisOfView: contentView)
             
-            bannerImage.autoPinEdgesToSuperviewEdgesWithInsets(UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8))
+            bannerImage.autoPinEdge(.Top, toEdge: .Bottom, ofView: nameLabel, withOffset: 8)
+            bannerImage.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 8)
+            bannerImage.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -8)
+            bannerImage.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: contentView, withOffset: -8)
             
             didSetupConstraints = true
         }
         super.updateConstraints()
+    }
+    
+    private func updateCell() {
+        
+        if let sponsor = sponsor {
+            nameLabel.text = sponsor.name
+            bannerImage.image = sponsor.getBannerImage()
+        }
+        
     }
 }
 

@@ -7,118 +7,55 @@
 //
 
 import UIKit
-import AVFoundation
-import PureLayout
-
-
-class ExhibitorCell: UITableViewCell {
-    
-    var didSetupConstraints = false
-    
-    var exhibitorImage:UIImageView = UIImageView.newAutoLayoutView()
-    var label:UILabel = UILabel.newAutoLayoutView()
-    
-    var exhibitor:Exhibitor!
-    
-    override init(style: UITableViewCellStyle, reuseIdentifier: String!)
-    {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.accessoryType = .DisclosureIndicator
-        setupViews()
-    }
-    
-    required init?(coder aDecoder: NSCoder)
-    {
-        super.init(coder: aDecoder)
-        self.accessoryType = .DisclosureIndicator        
-        setupViews()
-    }
-    
-    
-    func setupViews()
-    {
-        contentView.addSubview(exhibitorImage)
-        contentView.addSubview(label)
-    }
-    
-    override func updateConstraints() {
-        if !didSetupConstraints
-        {
-            NSLayoutConstraint.autoSetPriority(UILayoutPriorityRequired) {
-                self.exhibitorImage.autoSetContentCompressionResistancePriorityForAxis(.Vertical)
-            }
-            
-            exhibitorImage.contentMode = UIViewContentMode.ScaleAspectFit
-            
-            var width:CGFloat = CGFloat()
-            var height:CGFloat = CGFloat()
-            
-            if UIDevice.currentDevice().userInterfaceIdiom == .Phone
-            {
-                width = contentView.frame.width * 0.33
-                height = 150
-            }
-            else
-            {
-                width = 300
-                height = 200
-            }
-
-            
-            exhibitorImage.autoSetDimensionsToSize(CGSize(width: width, height: height))
-            exhibitorImage.autoAlignAxis(.Horizontal, toSameAxisOfView: contentView)
-            exhibitorImage.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 8.0)
-            
-            label.text = exhibitor.name
-            label.numberOfLines = 4
-            label.lineBreakMode = .ByWordWrapping
-            label.font = UIFont.boldSystemFontOfSize(14.0)
-            
-            label.autoPinEdgeToSuperviewEdge(.Top)
-            label.autoPinEdge(.Left, toEdge: .Right, ofView: exhibitorImage, withOffset: 8.0)
-            label.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -10.0)
-            label.autoPinEdgeToSuperviewEdge(.Bottom)
-            
-            didSetupConstraints = true
-        }
-        super.updateConstraints()
-    }
-    
-    
-}
-
-///////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////
 
 class ExhibitorTableViewController: UITableViewController {
-
-    var exhibitors:[Exhibitor]!
-    var dataToSend:Exhibitor!
-    var sectionInformation = [(Character, [Exhibitor])]()
+    
+    var sectionInformation = [(String, [SIExhibitor])]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 150.0
+        
+        if sectionInformation.isEmpty {
+            displayNoContentNotification()
+        }
     }
     
-//    override func viewDidAppear(animated: Bool) {
-//        super.viewDidAppear(animated)
-//        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("contentSizeCategoryChanged"), name: UIContentSizeCategoryDidChangeNotification, object: nil)
-//    }
-
     override func viewDidDisappear(animated: Bool) {
         super.viewDidDisappear(animated)
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIContentSizeCategoryDidChangeNotification, object: nil)
     }
-
-    func contentSizeCategoryChanged(notification: NSNotification) {
-        tableView.reloadData()
+    
+    private func displayNoContentNotification() {
+        let label: UILabel = {
+            let view = UILabel.newAutoLayoutView()
+            view.text = "No Content Available"
+            view.textColor = .whiteColor()
+            view.sizeToFit()
+            return view
+        }()
+        
+        view.addSubview(label)
+        label.autoAlignAxisToSuperviewAxis(.Horizontal)
+        label.autoAlignAxisToSuperviewAxis(.Vertical)
     }
     
-    // MARK: - Table view data source
+    // MARK: - Navigation
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "ExhibitorInfoView" {
+            let destination = segue.destinationViewController as! ExhibitorInfoViewController
+            if let exhibitor = sender as? SIExhibitor {
+                destination.exhibitor = exhibitor
+            }
+        }
+    }
+}
 
+extension ExhibitorTableViewController {
+    
+    // MARK: - Table view data source
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return sectionInformation.count
     }
@@ -129,10 +66,9 @@ class ExhibitorTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
-        view.backgroundColor = UIColor(netHex: 0xcd8931)
-//        view.backgroundColor = .orangeColor()
+        view.backgroundColor = SIColor().shingoOrangeColor
         let header = UILabel()
-        header.text = String(sectionInformation[section].0).uppercaseString
+        header.text = sectionInformation[section].0
         header.textColor = .whiteColor()
         header.font = UIFont.boldSystemFontOfSize(16.0)
         header.backgroundColor = .clearColor()
@@ -148,23 +84,21 @@ class ExhibitorTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell :ExhibitorCell = ExhibitorCell()
-        let exhibitor = sectionInformation[indexPath.section].1[indexPath.row]
-        cell.exhibitor = exhibitor
-        cell.exhibitorImage.image = exhibitor.logo_image
-        cell.contentView.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 150)
+        
+        let cell: ExhibitorTableViewCell = ExhibitorTableViewCell()
+        cell.exhibitor = sectionInformation[indexPath.section].1[indexPath.row]
+        
         cell.setNeedsUpdateConstraints()
         cell.updateConstraintsIfNeeded()
         
         return cell
     }
 
-
-    
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let cell = tableView.cellForRowAtIndexPath(indexPath) as! ExhibitorCell
-        dataToSend = cell.exhibitor
-        performSegueWithIdentifier("ExhibitorInfoView", sender: self)
+        let cell = tableView.cellForRowAtIndexPath(indexPath) as! ExhibitorTableViewCell
+        if let exhibitor = cell.exhibitor {
+            performSegueWithIdentifier("ExhibitorInfoView", sender: exhibitor)
+        }
     }
 
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -174,29 +108,8 @@ class ExhibitorTableViewController: UITableViewController {
             return 150
         }
     }
-    
-    // MARK: - Navigation
-
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "ExhibitorInfoView" {
-            let destination = segue.destinationViewController as! ExhibitorInfoViewController
-            destination.exhibitor = self.dataToSend
-        }
-    }
 
 
 }
 
-extension UIColor {
-    convenience init(red: Int, green: Int, blue: Int) {
-        assert(red >= 0 && red <= 255, "Invalid red component")
-        assert(green >= 0 && green <= 255, "Invalid green component")
-        assert(blue >= 0 && blue <= 255, "Invalid blue component")
-        
-        self.init(red: CGFloat(red) / 255.0, green: CGFloat(green) / 255.0, blue: CGFloat(blue) / 255.0, alpha: 1.0)
-    }
-    
-    convenience init(netHex:Int) {
-        self.init(red:(netHex >> 16) & 0xff, green:(netHex >> 8) & 0xff, blue:netHex & 0xff)
-    }
-}
+

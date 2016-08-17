@@ -9,62 +9,55 @@
 import UIKit
 import Foundation
 
-class EventTableViewCell: UITableViewCell {
-    
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var dateRangeLabel: UILabel!
-    var event:Event!
-}
-
 
 class EventsTableViewController: UITableViewController {
     
-    var appData:AppData!
-    var cell_index_path:NSIndexPath!
-    var number_of_async_tasks = 7
-    var async_tasks_completed = 0
-    var progress:Float = 0
+    // MARK: - Properties
+    var events = [SIEvent]()
+    var event : SIEvent?
+    var time : Double = 0
+    var timer : NSTimer!
+
+    var activityView : ActivityViewController = {
+        let view = ActivityViewController()
+        view.modalPresentationStyle = .OverCurrentContext
+        return view
+    }()
     
-//    var activityViewController:ActivityViewController!
-    var activityView = ActivityView()
+    override func loadView() {
+        super.loadView()
+        for i in 0 ..< events.count {
+            SIRequest().requestEvent(eventId: events[i].id, callback: { event in
+                if let event = event {
+                    self.events[i] = event
+                    self.events[i].didLoadEventData = true
+                }
+            });
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.dismissViewControllerAnimated(true, completion: nil)
-        if appData == nil {
-            let alert = UIAlertController(title: "Oops!",
-                message: "We were unable to fetch any data for you. Please check your internet connection and try reloading our upcoming events in the previous menu.",
-                preferredStyle: UIAlertControllerStyle.Alert)
-            let action = UIAlertAction(title: "OK", style: .Default, handler: nil)
-            alert.addAction(action)
-            presentViewController(alert, animated: true, completion: nil)
-            appData = AppData()
+        
+        if let nav = navigationController?.navigationBar {
+            nav.barStyle = UIBarStyle.Black
+            nav.tintColor = UIColor.yellowColor()
         }
         
+        definesPresentationContext = true
+        providesPresentationContextTransitionStyle = true
+        
+        view.backgroundColor = SIColor().prussianBlueColor
     }
     
-    
-    func asyncTaskDidComplete() -> Void {
-        async_tasks_completed += 1
-        if async_tasks_completed == number_of_async_tasks {
-            let cell = tableView.cellForRowAtIndexPath(cell_index_path) as! EventTableViewCell
-            cell.event = self.appData.event
-            self.performSegueWithIdentifier("EventMenu", sender: self)
-//            self.dismissViewControllerAnimated(true, completion: nil)
-            activityView.removeActivityViewFromDisplay()
-        }
-        else
-        {
-            progress += Float(1.0) / Float(number_of_async_tasks + 1)
-            activityView.progressIndicator.progress += progress
-//            if activityViewController != nil
-//            {
-//                progress += Float(1.0) / Float(number_of_async_tasks + 1)
-//                activityViewController.updateProgress(progress)
-//            }
-        }
+    func displayBadRequestNotification() {
+        let alert = UIAlertController(title: "Oops!",
+                                      message: "We were unable to fetch any data for you. Please make sure you have an internet connection.",
+                                      preferredStyle: UIAlertControllerStyle.Alert)
+        let action = UIAlertAction(title: "OK", style: .Default, handler: nil)
+        alert.addAction(action)
+        presentViewController(alert, animated: true, completion: nil)
     }
-    
     
     // MARK: - Table view data source
     
@@ -73,91 +66,72 @@ class EventsTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let events = appData.upcomingEvents
-        if events != nil
-        {
-            return events.count
-        }
-        else
-        {
-            return 0
+        switch section {
+            case 0:
+                return events.count
+            default:
+                return 0
         }
     }
     
-    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
         let cell = tableView.dequeueReusableCellWithIdentifier("EventsCell", forIndexPath: indexPath) as! EventTableViewCell
-        // Configure the cell...
-        let event = appData.upcomingEvents[indexPath.row]
-        cell.event = event
-        cell.nameLabel.text = event.name
-        
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        dateFormatter.dateStyle = .MediumStyle
-        
-        cell.dateRangeLabel.text = dateFormatter.stringFromDate(cell.event.event_start_date) + " - " + dateFormatter.stringFromDate(cell.event.event_end_date)
-        
+        cell.selectionStyle = .None
+        cell.updateCell(event: events[indexPath.row])
         return cell
-        
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 93.0 as CGFloat
+        
+        if events[indexPath.row].getBannerImage() == nil {
+            return 75.0
+        }
+        
+        return 155.0 as CGFloat
+    }
+    
+    override func tableView(tableView: UITableView, didHighlightRowAtIndexPath indexPath: NSIndexPath) {
+        let cell = tableView.cellForRowAtIndexPath(indexPath) as! EventTableViewCell
+        cell.backgroundColor = SIColor().lightBlueColor
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
         let cell = tableView.cellForRowAtIndexPath(indexPath) as! EventTableViewCell
-        appData.event = cell.event
-        cell_index_path = indexPath
-        self.async_tasks_completed = 0
+        cell.backgroundColor = SIColor().lightBlueColor
         
-        if cell.event.eventSessions == nil
-        {
-            activityView.displayActivityView(message: "Loading Conference Data...", forView: self.view, withRequest: nil)
-            appData.getEventSessions() { // appData.eventSessions should be populated before calling other tasks
-                self.asyncTaskDidComplete()
-                self.appData.getAgenda() {
-                    self.asyncTaskDidComplete()
-                }
-                self.appData.getSpeakers() {
-                    self.asyncTaskDidComplete()
-                }
-                self.appData.getRecipients() {
-                    self.asyncTaskDidComplete()
-                }
-                self.appData.getExhibitors() {
-                    self.asyncTaskDidComplete()
-                }
-                self.appData.getAffiliates() {
-                    self.asyncTaskDidComplete()
-                }
-                self.appData.getSponsors() {
-                    self.asyncTaskDidComplete()
-                }
-                
-            }
-        }
-        else
-        {
-            self.performSegueWithIdentifier("EventMenu", sender: self)
-        }
+        let activityView = ActivityViewController()
+        activityView.modalPresentationStyle = .OverCurrentContext
+        activityView.message = "Loading Event Data..."
 
-        
+        let event = events[indexPath.row]
+        if event.didLoadEventData {
+            self.performSegueWithIdentifier("EventMenu", sender: event)
+        } else {
+            presentViewController(activityView, animated: false, completion: { 
+                event.requestEvent() { event in
+                    self.dismissViewControllerAnimated(true, completion: {
+                        guard let event = event else {
+                            self.displayBadRequestNotification()
+                            return
+                        }
+                        
+                        self.events[indexPath.row] = event
+                        self.performSegueWithIdentifier("EventMenu", sender: event)
+                    });
+                }
+            });
+        }
     }
     
-    
-    //     MARK: - Navigation
+    // MARK: - Navigation
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         if segue.identifier == "EventMenu" {
-            let dest_vc = segue.destinationViewController as! EventMenuViewController
-            dest_vc.appData = self.appData
-            let backButton = UIBarButtonItem()
-            backButton.title = "Back"
-            navigationItem.backBarButtonItem = backButton
+            let destination = segue.destinationViewController as! EventMenuViewController
+            destination.event = sender as! SIEvent
+            print((sender as! SIEvent).name)
         }
     }
     
@@ -165,10 +139,33 @@ class EventsTableViewController: UITableViewController {
 }
 
 
-
-
-
-
-
-
+class EventTableViewCell: UITableViewCell {
+    
+    // MARK: - Properties
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var dateRangeLabel: UILabel!
+    @IBOutlet weak var eventImage: UIImageView!
+    
+    var event: SIEvent!
+    
+    func updateCell(event event: SIEvent) {
+        self.event = event
+        nameLabel.text = event.name
+        
+        eventImage.contentMode = .ScaleAspectFill
+        eventImage.clipsToBounds = true
+        eventImage.layer.cornerRadius = 3.0
+        
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.dateStyle = .MediumStyle
+        let dates = "\(dateFormatter.stringFromDate(event.startDate)) - \(dateFormatter.stringFromDate(event.endDate))"
+        dateRangeLabel.text = dates
+        
+        if let image = event.getBannerImage() {
+            eventImage.image = image
+        }
+    }
+    
+}
 

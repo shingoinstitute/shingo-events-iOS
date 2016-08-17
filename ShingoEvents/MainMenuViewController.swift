@@ -14,33 +14,72 @@ import Alamofire
 
 class MainMenuViewController: UIViewController {
     
+    // Activity view used for the loading screen
+    var activityView : ActivityViewController = {
+        let view = ActivityViewController()
+        view.message = "Loading Upcoming Conferences..."
+        return view
+    }()
+    var eventsDidLoad = false
+    var timer : NSTimer!
+    var time : Double = 0
+    var events : [SIEvent]?
+    
+    // used to set inital placement of menu items off screen so they can later be animated
+    var contentViewHeightConstraint: NSLayoutConstraint?
+    
+    // buttons
     @IBOutlet weak var eventsBtn: UIButton!
     @IBOutlet weak var shingoModelBtn: UIButton!
     @IBOutlet weak var settingsBtn: UIButton!
     @IBOutlet weak var reloadEventsBtn: UIButton!
     
+    // Other views
     var menuBackgroundImage: UIImageView = {
         let view = UIImageView()
         view.backgroundColor = .whiteColor()
         return view
     }()
-    
-    let contentView: UIView = {
+    var shingoLogoImageView : UIImageView = UIImageView.newAutoLayoutView()
+    var contentView: UIView = {
         let view = UIView.newAutoLayoutView()
-        view.backgroundColor = UIColor(red: 0, green: 47.0/255.0, blue: 86.0/255.0, alpha: 0.5)
+        view.backgroundColor = SIColor().prussianBlueColor.colorWithAlphaComponent(0.5)
         return view
     }()
+
     
-    var appData:AppData!
-    var request:Alamofire.Request!
+    // MARK: - class methods
     
-    var contentViewHeightConstraint: NSLayoutConstraint?
+    override func loadView() {
+        super.loadView()
+        
+        SIRequest().requestEvents({ events in
+            self.events = events
+            self.eventsDidLoad = true
+        })
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupView()
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBarHidden = true
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(true)
+        navigationController?.navigationBarHidden = false
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        self.animateLayout()
+    }
 
-        self.navigationItem.title = "Shingo Events"
-        
+    func setupView() {
         eventsBtn.removeFromSuperview()
         shingoModelBtn.removeFromSuperview()
         settingsBtn.removeFromSuperview()
@@ -56,6 +95,11 @@ class MainMenuViewController: UIViewController {
         view.addSubview(menuBackgroundImage)
         view.addSubview(contentView)
         view.bringSubviewToFront(contentView)
+        view.addSubview(self.shingoLogoImageView)
+        view.bringSubviewToFront(self.shingoLogoImageView)
+        
+        shingoLogoImageView.image = UIImage(named: "Shingo logo with Home BIG")
+        shingoLogoImageView.contentMode = .ScaleAspectFit
         
         menuBackgroundImage.autoPinToTopLayoutGuideOfViewController(self, withInset: 0)
         menuBackgroundImage.autoPinEdge(.Left, toEdge: .Left, ofView: view)
@@ -63,10 +107,10 @@ class MainMenuViewController: UIViewController {
         menuBackgroundImage.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: view)
         
         contentView.autoSetDimension(.Height, toSize: 265)
-        contentViewHeightConstraint = contentView.autoAlignAxis(.Horizontal, toSameAxisOfView: view, withOffset: view.frame.height)
+        contentViewHeightConstraint = contentView.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: view, withOffset: -view.frame.height)
         contentView.autoPinEdge(.Left, toEdge: .Left, ofView: view, withOffset: 5.0)
         contentView.autoPinEdge(.Right, toEdge: .Right, ofView: view, withOffset: -5.0)
-
+        
         eventsBtn.autoSetDimension(.Height, toSize: 60)
         eventsBtn.autoPinEdge(.Top, toEdge: .Top, ofView: contentView, withOffset: 5)
         eventsBtn.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 5)
@@ -87,35 +131,22 @@ class MainMenuViewController: UIViewController {
         reloadEventsBtn.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 5)
         reloadEventsBtn.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -5)
         
+        shingoLogoImageView.autoSetDimension(.Height, toSize: 125)
+        shingoLogoImageView.autoPinToTopLayoutGuideOfViewController(self, withInset: 8)
+        shingoLogoImageView.autoPinEdgeToSuperviewEdge(.Left, withInset: 8)
+        shingoLogoImageView.autoPinEdgeToSuperviewEdge(.Right, withInset: 8)
         
         let buttons:NSArray = [eventsBtn, shingoModelBtn, settingsBtn, reloadEventsBtn]
-        for button in buttons
-        {
-            contentView.bringSubviewToFront(button as! UIView)
-            (button as! UIButton).backgroundColor = UIColor(white: 0.9, alpha: 0.9)
-        }
-
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        self.animateLayout()
-    }
-
-    // Check for internet connectivity
-    func isConnected() -> Bool {
-        let status = Reach().connectionStatus()
-        switch status {
-        case .Unknown, .Offline:
-            displayInternetAlert()
-            return false
-        case .Online(.WWAN), .Online(.WiFi):
-            return true
+        for button in buttons as! [UIButton] {
+            contentView.bringSubviewToFront(button)
+            button.backgroundColor = UIColor(white: 0.9, alpha: 0.9)
+            button.setTitleColor(SIColor().darkShingoBlueColor, forState: .Normal)
         }
     }
     
     func displayInternetAlert() {
         let alert = UIAlertController(
-            title: "No Internet Connection",
+            title: "No Internet Connection Detected",
             message: "Your device must be connected to the internet to use this app.",
             preferredStyle: UIAlertControllerStyle.Alert)
         let action = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel) { _ in
@@ -126,77 +157,104 @@ class MainMenuViewController: UIViewController {
     }
     
     func animateLayout() {
-        contentViewHeightConstraint?.constant = 0
-        UIView.animateWithDuration(1.5, delay: 0.2, usingSpringWithDamping: 0.7, initialSpringVelocity: 0, options: UIViewAnimationOptions(), animations: {
-            self.view.layoutIfNeeded()
-            }, completion: nil)
-    }
-    
-    
-    override func didReceiveMemoryWarning() {
-        print("Hey, yeah you, the one with the face. You got a memory warning.")
+        contentViewHeightConstraint?.constant = -80
+        
+//        Uncomment the line below to make constraints appear animated (for deployment)
+//        UIView.animateWithDuration(1.5,
+//                                   delay: 0.2, 
+//                                   usingSpringWithDamping: 0.5, 
+//                                   initialSpringVelocity: 0, 
+//                                   options: UIViewAnimationOptions(), 
+//                                   animations: { self.view.layoutIfNeeded() }, 
+//                                   completion: nil)
+        
+//        Uncomment the line below to make menu options appear instantly (for during production)
+        UIView.animateWithDuration(0.01,
+                                   delay: 0,
+                                   usingSpringWithDamping: 0.01,
+                                   initialSpringVelocity: 0, 
+                                   options: UIViewAnimationOptions(), 
+                                   animations: { self.view.layoutIfNeeded() },
+                                   completion: nil)
     }
     
     @IBAction func didTapEvents(sender: AnyObject) {
-        if appData == nil {
-            loadUpcomingEvents() {
-                self.performSegueWithIdentifier("EventsView", sender: self)
-            }
-        } else {
-            self.performSegueWithIdentifier("EventsView", sender: self)
-        }
+        loadUpcomingEvents()
     }
     
     @IBAction func reloadEventData(sender: AnyObject) {
-        appData = nil
-        activityView.progressIndicator.progress = 0;
-        loadUpcomingEvents()
+        presentViewController(activityView, animated: true) {
+            SIRequest().requestEvents({ events in
+                self.dismissViewControllerAnimated(true, completion: nil)
+                self.events = events
+                self.eventsDidLoad = true
+            })
+        }
+        
     }
     @IBAction func didTapShingoModel(sender: AnyObject) {
         self.performSegueWithIdentifier("ShingoModel", sender: self)
     }
     
     @IBAction func didTapSupport(sender: AnyObject) {
-        if !isConnected() { displayInternetAlert() }
         self.performSegueWithIdentifier("Support", sender: self)
     }
-    
-    let activityView = ActivityView()
-    func loadUpcomingEvents(callback: (() -> Void)? = {} ) {
-    
-        if isConnected()
-        {
-            disableButtons(shouldDisable: true)
-            activityView.displayActivityView(message: "Loading Upcoming Conferences...", forView: self.view, withRequest: self.request)
-            request = Alamofire.request(.GET, "http://api.shingo.org:5000/api").response { // Poke the server
-                _ in
-                self.activityView.progressIndicator.progress = 0.5
-                self.appData = AppData()
-                self.appData.getUpcomingEvents() {
-                    self.activityView.progressIndicator.progress = 1
-                    self.disableButtons(shouldDisable: false)
-                    self.activityView.removeActivityViewFromDisplay()
-                    callback!()
-                }
-            }
+
+    func loadUpcomingEvents() {
+
+        if eventsDidLoad {
+            performSegueWithIdentifier("EventsView", sender: self.events)
+        } else if !SIRequest().checkForInternetConnection() {
+            displayBadRequestNotification()
+        } else {
+            presentViewController(activityView, animated: false, completion: {
+                self.timer = NSTimer.scheduledTimerWithTimeInterval(0.1,
+                                                                    target: self,
+                                                                    selector: #selector(MainMenuViewController.checkOnRequestStatus), 
+                                                                    userInfo: nil, 
+                                                                    repeats: true)
+            });
         }
-        
     }
     
+    func displayBadRequestNotification() {
+        let alert = UIAlertController(title: "There seems to be a problem.",
+                                      message: "We were unable to fetch any data for you. Please make sure you are connected to the internet.",
+                                      preferredStyle: UIAlertControllerStyle.Alert)
+        let action = UIAlertAction(title: "OK", style: .Default, handler: nil)
+        alert.addAction(action)
+        dismissViewControllerAnimated(true, completion: {
+            self.presentViewController(alert, animated: true, completion: nil)
+        });
+    }
     
-    func disableButtons(shouldDisable disable:Bool){
-        eventsBtn.enabled = !disable
-        shingoModelBtn.enabled = !disable
-        settingsBtn.enabled = !disable
-        reloadEventsBtn.enabled = !disable
+    func checkOnRequestStatus() {
+        time += 0.1
+        
+        if eventsDidLoad {
+            timer.invalidate()
+            time = 0
+            self.dismissViewControllerAnimated(true, completion: {
+                self.performSegueWithIdentifier("EventsView", sender: self.events)
+            });
+        }
+        
+        if time > 12.0 {
+            timer.invalidate()
+            time = 0
+            self.dismissViewControllerAnimated(true, completion: { 
+                self.displayBadRequestNotification()
+            });
+        }
     }
 
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if (segue.identifier == "EventsView")
-        {
-            let dest_vc = segue.destinationViewController as! EventsTableViewController
-            dest_vc.appData = self.appData
+        if segue.identifier == "EventsView" {
+            let destination = segue.destinationViewController as! EventsTableViewController
+            if let events = sender as? [SIEvent] {
+                destination.events = events
+            }
         }
         
     }

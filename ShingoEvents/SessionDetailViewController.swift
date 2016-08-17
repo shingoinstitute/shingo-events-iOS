@@ -9,23 +9,13 @@
 import UIKit
 import PureLayout
 
-class SessionSpeakerCell: UITableViewCell {
-    
-    @IBOutlet weak var speakerNameLabel: UILabel!
-    @IBOutlet weak var speakerImage: UIImageView!
-    var speaker:Speaker!
-    
-}
-
 class SessionDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
-    var session:EventSession!
-    var speakers:[Speaker]!
-    var dataToSend:Speaker!
+    var session: SISession!
     
     @IBOutlet weak var tableView: UITableView!
     
-    //MARK: - Custom UIViews
+    //MARK: - Custom Views
     var titleLabel:UILabel = {
         let label = UILabel.newAutoLayoutView()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -53,13 +43,12 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
         let label = UILabel.newAutoLayoutView()
         let style = NSMutableParagraphStyle()
         style.alignment = NSTextAlignment.Center
-        let attributes = [NSUnderlineStyleAttributeName : NSUnderlineStyle.StyleSingle.rawValue,
-                          NSParagraphStyleAttributeName : style]
-        let attrText = NSAttributedString(string: "Summary", attributes: attributes)
+//        let attributes = [NSUnderlineStyleAttributeName : NSUnderlineStyle.StyleSingle.rawValue,
+//                          NSParagraphStyleAttributeName : style]
+        let attrText = NSAttributedString(string: "Summary", attributes: nil)
         label.attributedText = attrText
         label.textAlignment = .Center
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textAlignment = .Center
         label.textColor = .whiteColor()
         label.backgroundColor = .clearColor()
         return label
@@ -94,24 +83,24 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.removeFromSuperview() // remove tableView before re-adding it
         
-        scrollView.backgroundColor = ShingoColors().shingoRed
-        tableView.backgroundColor = ShingoColors().shingoRed
+        tableView.removeFromSuperview() // remove tableView before re-adding it... because...
         
-        // Load data
-        titleLabel.text = session.name
-        roomLabel.text = "Location: " + session.room
+        scrollView.backgroundColor = SIColor().shingoBlueColor
+        tableView.backgroundColor = SIColor().shingoRedColor
         
-        if session.abstract == "" || session.abstract == "null" || session.richAbstract == "" || session.richAbstract == "null"
-        {
-            textField.text = "Session details coming soon."
+        // Get correct text for labels
+        titleLabel.text = session.displayName
+        if !session.room.isEmpty {
+            roomLabel.text = "Location: " + session.room
         }
-        else if session.richAbstract != nil
-        {
+        
+        if session.summary.isEmpty {
+            textField.text = "Session details coming soon."
+        } else {
 
             do {
-                let htmlString = "<!DOCTYPE html><html><body><font size=\"5\">" + session.richAbstract! + "</font></body></html>"
+                let htmlString = "<!DOCTYPE html><html><body><font size=\"5\">" + session.summary + "</font></body></html>"
                 let attrString = try NSAttributedString(data: htmlString.dataUsingEncoding(NSUTF8StringEncoding)!,
                                                         options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
                                                                     NSCharacterEncodingDocumentAttribute : NSUTF8StringEncoding],
@@ -122,27 +111,20 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
             }
             
         }
-        else
-        {
-            textField.text = session.abstract
-        }
         
-//        }
         textField.scrollEnabled = false
-        
         
         contentView.addSubview(titleLabel)
         contentView.addSubview(roomLabel)
         contentView.addSubview(summaryLabel)
         contentView.addSubview(textField)
         scrollView.addSubview(contentView)
-        if session.speaker_ids.count > 0 {
+        if session.speakers.count > 0 {
             scrollView.addSubview(tableView)
         }
         view.addSubview(scrollView)
 
         scrollView.autoSetDimensionsToSize(CGSize(width: self.view.frame.width, height: self.view.frame.height))
-//        scrollView.sizeToFit()
         scrollView.autoPinEdgesToSuperviewEdges()
         
         contentView.autoPinEdgeToSuperviewEdge(.Top)
@@ -150,15 +132,12 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
         contentView.autoSetDimension(.Width, toSize: view.frame.width)
         contentView.autoPinEdgeToSuperviewEdge(.Right)
         
-        if session.speaker_ids.count != 0
-        {
+        if session.speakers.count != 0 {
             tableView.autoPinEdge(.Top, toEdge: .Bottom, ofView: contentView)
             tableView.autoPinEdgeToSuperviewEdge(.Left)
             tableView.autoPinEdgeToSuperviewEdge(.Right)
             tableView.autoPinEdgeToSuperviewEdge(.Bottom)
-        }
-        else
-        {
+        } else {
             contentView.autoPinEdgeToSuperviewEdge(.Bottom)
         }
         
@@ -186,10 +165,9 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
         textField.autoPinEdge(.Top, toEdge: .Bottom, ofView: summaryLabel, withOffset: 0)
         textField.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: contentView, withOffset: 0.0)
         
-        if session.speaker_ids.count > 0
-        {
+        if session.speakers.count > 0 {
             let tableViewCellHeight:CGFloat = 117.0
-            let tableViewHeight:CGFloat = CGFloat(tableView.contentSize.height) + (CGFloat(tableViewCellHeight) * CGFloat(session.speaker_ids.count))
+            let tableViewHeight:CGFloat = CGFloat(tableView.contentSize.height) + (CGFloat(tableViewCellHeight) * CGFloat(session.speakers.count))
             tableView.autoSetDimension(.Height, toSize: tableViewHeight)
             tableView.autoPinEdge(.Top, toEdge: .Bottom, ofView: contentView, withOffset: 0.0)
             tableView.autoPinEdgeToSuperviewEdge(.Left)
@@ -197,17 +175,31 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
         }
     }
     
+}
+
+extension SessionDetailViewController {
     
     // Mark: - TableView data
-    
     func tableView(tableView: UITableView, accessoryButtonTappedForRowWithIndexPath indexPath: NSIndexPath) {
         let cell = tableView.cellForRowAtIndexPath(indexPath) as! SessionSpeakerCell
-        dataToSend = cell.speaker
-        performSegueWithIdentifier("SpeakerDetailsView", sender: self)
+        
+        if let speaker : SISpeaker = cell.speaker {
+            performSegueWithIdentifier("SpeakerDetailsView", sender: speaker)
+        }
+        
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let cell = tableView.cellForRowAtIndexPath(indexPath) as! SessionSpeakerCell
+        
+        if let speaker : SISpeaker = cell.speaker {
+            performSegueWithIdentifier("SpeakerDetailsView", sender: speaker)
+        }
+        
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return (session?.speaker_ids.count)!
+        return session.speakers.count
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -222,15 +214,8 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
         
         let cell = tableView.dequeueReusableCellWithIdentifier("SpeakerCell", forIndexPath: indexPath) as! SessionSpeakerCell
         
-        let speaker_id = session?.speaker_ids[indexPath.row]
-        for speaker in speakers! {
-            if speaker.speaker_id == speaker_id! {
-                cell.speakerNameLabel.text = speaker.display_name
-                cell.speakerImage.image = speaker.image
-                cell.speaker = speaker
-            }
-        }
-        cell.speakerImage.layer.cornerRadius = 3.0
+        cell.updateCell(session.speakers[indexPath.row])
+        
         return cell
         
     }
@@ -240,10 +225,34 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         if segue.identifier == "SpeakerDetailsView" {
-            let dest_vc = segue.destinationViewController as! SpeakerDetailsViewController
-            dest_vc.speaker = self.dataToSend
+            let destination = segue.destinationViewController as! SpeakerDetailsViewController
+            destination.speaker = sender as! SISpeaker
         }
     }
     
 
 }
+
+class SessionSpeakerCell: UITableViewCell {
+    
+    @IBOutlet weak var speakerNameLabel: UILabel!
+    @IBOutlet weak var speakerImage: UIImageView!
+    var speaker: SISpeaker!
+    
+    func updateCell(speaker: SISpeaker) {
+        
+        self.speaker = speaker
+        
+        speakerNameLabel.text = speaker.name
+        speakerImage.image = speaker.getSpeakerImage()
+        speakerImage.layer.cornerRadius = 3.0
+    }
+    
+}
+
+
+
+
+
+
+

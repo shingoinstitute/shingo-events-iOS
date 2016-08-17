@@ -12,6 +12,16 @@ import PureLayout
 
 class EventMenuViewController: UIViewController {
     
+    var event : SIEvent!
+
+    var eventSpeakers = [String : SISpeaker]()
+    
+    var activityVC : ActivityViewController = {
+        let view = ActivityViewController()
+        view.modalPresentationStyle = .OverCurrentContext
+        return view
+    }()
+    
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var eventNameLabel: UILabel!
     @IBOutlet weak var scrollView: UIScrollView!
@@ -73,24 +83,57 @@ class EventMenuViewController: UIViewController {
         return view
     }()
     
-    var appData:AppData!
-    var sectionHeaders:[(Character, [Exhibitor])]!
+    let BUTTON_WIDTH: CGFloat = 110.0
+    let BUTTON_HEIGHT: CGFloat = 110.0
+    
+    override func loadView() {
+        super.loadView()
+        
+        // Load Agenda
+        // Note: requestAgendas will request session data underneath
+        event.requestAgendas() {self.event.didLoadAgendas = true}
+        
+        // Load Speakers for entire event
+        event.requestSpeakers() {self.event.didLoadSpeakers = true}
+        
+        // Load venue photos
+        event.requestVenues() {self.event.didLoadVenues = true}
+        
+        // Load Recipient information
+        event.requestRecipients() {self.event.didLoadRecipients  = true}
+        
+        // Load Affiliate information
+        event.requestAffiliates() {self.event.didLoadAffiliates = true}
+        
+        // Load Exhibitor information
+        event.requestExhibitors() {self.event.didLoadExhibitors = true}
+        
+        // Load Sponsor information
+        event.requestSponsors() {self.event.didLoadSponsors = true}
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        definesPresentationContext = true
+        providesPresentationContextTransitionStyle = true
         
-        // do some sorting! Yay!
+        // Sorting
         sortResearchRecipientsByName()
         sortPrizeRecipientsByName()
         sortSpeakersByLastName()
         sortAffiliatesByName()
         
         contentView.backgroundColor = .clearColor()
+        eventNameLabel.backgroundColor = SIColor().prussianBlueColor.colorWithAlphaComponent(0.5)
+        eventNameLabel.textColor = UIColor.whiteColor()
         
-        eventNameLabel.text = appData.event.name
+        eventNameLabel.text = event.name
         contentView.addSubview(eventNameLabel)
+        contentView.addSubview(backgroundImage)
         
-        let buttonViews:NSArray = [
+        let buttonViews = [
             scheduleButton,
             venuePhotosButton,
             recipientsButton,
@@ -101,36 +144,22 @@ class EventMenuViewController: UIViewController {
             sponsorsButton
         ]
         
-        // add custom built UIButtons to contentView
-        for button in buttonViews
-        {
-            contentView.addSubview(button as! UIButton)
+        // add label and custom built UIButtons to contentView
+        contentView.bringSubviewToFront(eventNameLabel)
+        for button in buttonViews {
+            contentView.addSubview(button)
+            contentView.bringSubviewToFront(button)
+            
+            // set dimensions of buttons
+            button.autoSetDimension(.Height, toSize: BUTTON_WIDTH)
+            button.autoSetDimension(.Width, toSize: BUTTON_HEIGHT)
         }
-        
-        // height and width constraints for buttons
-        for button in buttonViews
-        {
-            button.autoSetDimension(.Height, toSize: 110)
-            button.autoSetDimension(.Width, toSize: 110)
-        }
-        
+
         // constraints for view
-        contentView.addSubview(backgroundImage)
-        
         backgroundImage.autoPinToTopLayoutGuideOfViewController(self, withInset: 0)
         backgroundImage.autoPinEdge(.Left, toEdge: .Left, ofView: view)
         backgroundImage.autoPinEdge(.Right, toEdge: .Right, ofView: view)
         backgroundImage.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: view)
-        
-        contentView.bringSubviewToFront(eventNameLabel)
-        contentView.bringSubviewToFront(scheduleButton)
-        contentView.bringSubviewToFront(venuePhotosButton)
-        contentView.bringSubviewToFront(recipientsButton)
-        contentView.bringSubviewToFront(exhibitorsButton)
-        contentView.bringSubviewToFront(speakerButton)
-        contentView.bringSubviewToFront(directionsButton)
-        contentView.bringSubviewToFront(affiliatesButton)
-        contentView.bringSubviewToFront(sponsorsButton)
         
         // Add targets to all buttons
         scheduleButton.addTarget(self, action: #selector(EventMenuViewController.didTapSchedule(_:)), forControlEvents: UIControlEvents.TouchUpInside)
@@ -142,446 +171,425 @@ class EventMenuViewController: UIViewController {
         affiliatesButton.addTarget(self, action: #selector(EventMenuViewController.didTapAffiliates(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         sponsorsButton.addTarget(self, action: #selector(EventMenuViewController.didTapSponsors(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
-        setButtonConstraints()
+        setButtonConstraintsToBottomOfView()
+        eventNameLabel.autoPinEdge(.Bottom, toEdge: .Top, ofView: scheduleButton, withOffset: -12)
         
+    }
+    
+    func displayBadRequestNotification() {
+        let alert = UIAlertController(title: "Oops!",
+                                      message: "We were unable to fetch any data for you. Please make sure you have an internet connection.",
+                                      preferredStyle: UIAlertControllerStyle.Alert)
+        let action = UIAlertAction(title: "OK", style: .Default, handler: nil)
+        alert.addAction(action)
+        presentViewController(alert, animated: true, completion: nil)
     }
     
     // constraints for UIButtons
-    func setButtonConstraints() {
+    func setButtonConstraintsToBottomOfView() {
         
-        let leftButtons:NSArray = [
-            scheduleButton,
-            venuePhotosButton,
-            recipientsButton,
-            exhibitorsButton,
-        ]
+        // calculate button spacing from edge
+        let edgeSpacing = (view.frame.width * (1/4)) - (BUTTON_WIDTH / 2) + 10
+        let verticalButtonSpacing: CGFloat = -10
         
-        let rightButtons:NSArray = [
-            speakerButton,
-            directionsButton,
-            affiliatesButton,
-            sponsorsButton
-        ]
+        // Set up constraints from bottom left to top right
+        exhibitorsButton.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: contentView, withOffset: verticalButtonSpacing)
+        exhibitorsButton.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: edgeSpacing)
         
-        let quarter = self.view.frame.width * 0.25 // calculate 1/4 width of parent view
-
-        var horizontalConstraint = NSLayoutConstraint(
-            item: leftButtons.firstObject as! UIButton,
-            attribute: NSLayoutAttribute.CenterX,
-            relatedBy: NSLayoutRelation.Equal,
-            toItem: contentView,
-            attribute: NSLayoutAttribute.CenterX,
-            multiplier: 1,
-            constant: quarter * -1 + 10.0)
-        contentView.addConstraint(horizontalConstraint)
+        sponsorsButton.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: contentView, withOffset: verticalButtonSpacing)
+        sponsorsButton.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -edgeSpacing)
         
-        var verticalConstraint = NSLayoutConstraint(
-            item: leftButtons.firstObject as! UIButton,
-            attribute: NSLayoutAttribute.Top,
-            relatedBy: .Equal,
-            toItem: eventNameLabel,
-            attribute: NSLayoutAttribute.Bottom,
-            multiplier: 1,
-            constant: 10.0)
-        scrollView.addConstraint(verticalConstraint)
+        recipientsButton.autoPinEdge(.Bottom, toEdge: .Top, ofView: exhibitorsButton, withOffset: verticalButtonSpacing)
+        recipientsButton.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: edgeSpacing)
         
-        var previousButton:UIButton!
-        for item in leftButtons
-        {
-            if let previousButton = previousButton
-            {
-                let verticalConstraint = NSLayoutConstraint(
-                    item: item,
-                    attribute: NSLayoutAttribute.Top,
-                    relatedBy: .Equal,
-                    toItem: previousButton,
-                    attribute: NSLayoutAttribute.Bottom,
-                    multiplier: 1,
-                    constant: 0)
-                contentView.addConstraint(verticalConstraint)
-                
-                // Even numbered indecies get offset from center of contentView by (quarter * -1 + 10)
-                let horizontalConstraint = NSLayoutConstraint(
-                    item: item,
-                    attribute: NSLayoutAttribute.CenterX,
-                    relatedBy: NSLayoutRelation.Equal,
-                    toItem: contentView,
-                    attribute: NSLayoutAttribute.CenterX,
-                    multiplier: 1,
-                    constant: quarter * -1 + 10)
-                contentView.addConstraint(horizontalConstraint)
-            }
-            previousButton = item as! UIButton
-        }
+        affiliatesButton.autoPinEdge(.Bottom, toEdge: .Top, ofView: sponsorsButton, withOffset: verticalButtonSpacing)
+        affiliatesButton.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -edgeSpacing)
         
-        horizontalConstraint = NSLayoutConstraint(
-            item: rightButtons.firstObject as! UIButton,
-            attribute: NSLayoutAttribute.CenterX,
-            relatedBy: NSLayoutRelation.Equal,
-            toItem: contentView,
-            attribute: NSLayoutAttribute.CenterX,
-            multiplier: 1,
-            constant: quarter - 10)
-        contentView.addConstraint(horizontalConstraint)
+        venuePhotosButton.autoPinEdge(.Bottom, toEdge: .Top, ofView: recipientsButton, withOffset: verticalButtonSpacing)
+        venuePhotosButton.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: edgeSpacing)
         
-        verticalConstraint = NSLayoutConstraint(
-            item: rightButtons.firstObject as! UIButton,
-            attribute: NSLayoutAttribute.Top,
-            relatedBy: .Equal,
-            toItem: eventNameLabel,
-            attribute: NSLayoutAttribute.Bottom,
-            multiplier: 1,
-            constant: 10.0)
-        contentView.addConstraint(verticalConstraint)
+        directionsButton.autoPinEdge(.Bottom, toEdge: .Top, ofView: affiliatesButton, withOffset: verticalButtonSpacing)
+        directionsButton.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -edgeSpacing)
         
-        previousButton = nil
-        for item in rightButtons
-        {
-            if let previousButton = previousButton
-            {
-                let verticalConstraint = NSLayoutConstraint(
-                    item: item,
-                    attribute: NSLayoutAttribute.Top,
-                    relatedBy: .Equal,
-                    toItem: previousButton,
-                    attribute: NSLayoutAttribute.Bottom,
-                    multiplier: 1,
-                    constant: 0)
-                contentView.addConstraint(verticalConstraint)
-                
-                let horizontalConstraint = NSLayoutConstraint(
-                    item: item,
-                    attribute: NSLayoutAttribute.CenterX,
-                    relatedBy: NSLayoutRelation.Equal,
-                    toItem: contentView,
-                    attribute: NSLayoutAttribute.CenterX,
-                    multiplier: 1,
-                    constant: quarter - 10)
-                contentView.addConstraint(horizontalConstraint)
-            }
-            previousButton = item as! UIButton
-        }
+        scheduleButton.autoPinEdge(.Bottom, toEdge: .Top, ofView: venuePhotosButton, withOffset: verticalButtonSpacing)
+        scheduleButton.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: edgeSpacing)
         
+        speakerButton.autoPinEdge(.Bottom, toEdge: .Top, ofView: directionsButton, withOffset: verticalButtonSpacing)
+        speakerButton.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -edgeSpacing)
     }
     
+    
+}
+
+extension EventMenuViewController {
+    
+    // MARK: - Button Outlet functions
     func didTapSchedule(sender: AnyObject) {
-        self.performSegueWithIdentifier("SchedulesView", sender: self)
+        if event.didLoadAgendas {
+            self.performSegueWithIdentifier("SchedulesView", sender: self.event.agendaItems)
+        } else {
+            self.presentViewController(activityVC, animated: false, completion: { 
+                self.event.requestAgendas() {
+                    self.dismissViewControllerAnimated(true, completion: { 
+                        self.performSegueWithIdentifier("SchedulesView", sender: self.event.agendaItems)
+                    });
+                }
+            });
+        }
     }
     
     func didTapSpeakers(sender: AnyObject) {
-        self.performSegueWithIdentifier("SpeakerList", sender: self)
+        if event.didLoadSpeakers  {
+            self.performSegueWithIdentifier("SpeakerList", sender: self.eventSpeakers)
+        } else {
+            self.presentViewController(activityVC, animated: false, completion: { 
+                self.event.requestSpeakers() {
+                    self.dismissViewControllerAnimated(true, completion: { 
+                        self.performSegueWithIdentifier("SpeakerList", sender: self.eventSpeakers)
+                    });
+                }
+            });
+        }
     }
     
     func didTapRecipients(sender: AnyObject) {
-        self.performSegueWithIdentifier("RecipientsView", sender: self)
+        if event.didLoadRecipients {
+            self.performSegueWithIdentifier("RecipientsView", sender: self.event.recipients)
+        } else {
+            self.presentViewController(activityVC, animated: false, completion: {
+                self.event.requestRecipients() {
+                    self.dismissViewControllerAnimated(true, completion: { 
+                        self.performSegueWithIdentifier("RecipientsView", sender: self.event.recipients)
+                    });
+                }
+            });
+        }
     }
     
+    //TODO: Create screen on segue that shows more than the first potentially available venue
     func didTapDirections(sender: AnyObject) {
-        self.performSegueWithIdentifier("MapView", sender: self)
+        if event.didLoadVenues {
+            if let venue = self.event.venues.first {
+                self.performSegueWithIdentifier("MapView", sender: venue)
+            }
+        } else {
+            self.presentViewController(activityVC, animated: false, completion: { 
+                self.event.requestVenues({
+                    self.dismissViewControllerAnimated(true, completion: {
+                        if let venue = self.event.venues.first {
+                            self.performSegueWithIdentifier("MapView", sender: venue)
+                        }
+                    });
+                });
+            });
+        }
     }
     
     func didTapExhibitors(sender: AnyObject) {
-        // Ensure each exhibitor has an image assigned to it
-        if sectionHeaders == nil
-        {
-            sectionHeaders = [(Character, [Exhibitor])]()
-            
-            for exhibitor in self.appData.exhibitors
-            {
-                if exhibitor.logo_image == nil
-                {
-                    exhibitor.logo_image = UIImage(named: "sponsor_banner_pl")
-                }
-            }
-            
-            // Alphabetically sort exhibitors by company name
-            for i in 0 ..< appData.exhibitors.count - 1
-            {
-                for j in 0 ..< appData.exhibitors.count - i - 1
-                {
-                    if appData.exhibitors[j].name > appData.exhibitors[j+1].name
-                    {
-                        let temp = appData.exhibitors[j]
-                        appData.exhibitors[j] = appData.exhibitors[j+1]
-                        appData.exhibitors[j+1] = temp
-                    }
-                }
-            }
-            
-
-            // Create dictionary to set section headers in ExhibitorTableViewController
-            if var char = appData.exhibitors[0].name.characters.first {
-                var exhibitorList = [Exhibitor]()
-                exhibitorList.append(appData.exhibitors[0])
-                sectionHeaders.append((char, exhibitorList))
-                var count = 0
-                for i in 1 ..< appData.exhibitors.count
-                {
-                    char = appData.exhibitors[i].name.characters.first!
-                    if char == sectionHeaders[count].0
-                    {
-                        sectionHeaders[count].1.append(appData.exhibitors[i])
-                    }
-                    else
-                    {
-                        var nextList = [Exhibitor]()
-                        nextList.append(appData.exhibitors[i])
-                        sectionHeaders.append((char, nextList))
-                        count += 1
-                    }
-                }
-            }
-            
+        if event.didLoadExhibitors {
+            self.performSegueWithIdentifier("ExhibitorsListView", sender: self.event.exhibitors)
+        } else {
+            self.presentViewController(activityVC, animated: false, completion: {
+                self.event.requestExhibitors({
+                    self.dismissViewControllerAnimated(true, completion: {
+                        self.performSegueWithIdentifier("ExhibitorsListView", sender: self.event.exhibitors)
+                    })
+                });
+            });
         }
-        self.performSegueWithIdentifier("ExhibitorsListView", sender: self)
     }
     
     func didTapAffiliates(sender: AnyObject) {
-        self.performSegueWithIdentifier("AffiliatesListView", sender: self)
+        
+        if event.didLoadAffiliates {
+            self.performSegueWithIdentifier("AffiliatesListView", sender: self.event.affiliates)
+        } else {
+            self.presentViewController(activityVC, animated: false, completion: {
+                self.event.requestAffiliates() {
+                    self.dismissViewControllerAnimated(true, completion: {
+                        self.performSegueWithIdentifier("AffiliatesListView", sender: self.event.affiliates)
+                    });
+                }
+            });
+        }
     }
     
     func didTapVenue(sender: AnyObject) {
-        self.performSegueWithIdentifier("VenueView", sender: self)
+        
+        if event.didLoadVenues {
+            self.performSegueWithIdentifier("VenueView", sender: self.event.venues)
+        } else {
+            self.presentViewController(activityVC, animated: false, completion: {
+                self.event.requestVenues() {
+                    self.dismissViewControllerAnimated(true, completion: {
+                        self.performSegueWithIdentifier("VenueView", sender: self.event.venues)
+                    });
+                }
+            });
+        }
     }
     
     func didTapSponsors(sender: AnyObject) {
-        self.performSegueWithIdentifier("SponsorsView", sender: self)
+        
+        if event.didLoadSponsors {
+            self.performSegueWithIdentifier("SponsorsView", sender: self.event.sponsors)
+        } else {
+            self.presentViewController(activityVC, animated: false, completion: {
+                self.event.requestSponsors {
+                    self.dismissViewControllerAnimated(true, completion: {
+                        self.performSegueWithIdentifier("SponsorsView", sender: self.event.sponsors)
+                    });
+                }
+            });
+        }
     }
     
-    // MARK: - Navigation
+}
+
+extension EventMenuViewController {
     
+    // MARK: - Navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         if segue.identifier == "SchedulesView" {
-            let dest_vc = segue.destinationViewController as! SchedulesTableViewController
-            self.appData.event?.eventAgenda.days_array = sortWeekByDay(self.appData!.event!.eventAgenda.days_array)
-            dest_vc.event = self.appData!.event!
+            let destination = segue.destinationViewController as! SchedulesTableViewController
+            sortAgendaDays()
+            destination.agendas = event.agendaItems
+            destination.eventName = event.name
         }
         
         if segue.identifier == "SpeakerList" {
-            let dest_vc = segue.destinationViewController as! SpeakerListTableViewController
-            dest_vc.speakers = appData.event.eventSpeakers
+            let destination = segue.destinationViewController as! SpeakerListTableViewController
+            destination.speakers = self.sortSpeakersByLastName()
         }
         
         if segue.identifier == "RecipientsView" {
-            let dest_vc = segue.destinationViewController as! RecipientsTableViewController
-            dest_vc.appData = self.appData
+            let destination = segue.destinationViewController as! RecipientsTableViewController
+            if let recipients = sender as? [SIRecipient] {
+                
+                var spRecipients = [SIRecipient]()
+                var silverRecipients = [SIRecipient]()
+                var bronzeRecipients = [SIRecipient]()
+                var researchRecipients = [SIRecipient]()
+                var publicationRecipients = [SIRecipient]()
+                
+                for r in recipients {
+                    if r.awardType == .ShingoPrize {
+                        spRecipients.append(r)
+                    } else if r.awardType == .Silver {
+                        silverRecipients.append(r)
+                    } else if r.awardType == .Bronze {
+                        bronzeRecipients.append(r)
+                    } else if r.awardType == .Research {
+                        researchRecipients.append(r)
+                    } else if r.awardType == .Publication {
+                        publicationRecipients.append(r)
+                    }
+                }
+                
+                destination.spRecipients = spRecipients
+                destination.silverRecipients = silverRecipients
+                destination.bronzeRecipients = bronzeRecipients
+                destination.researchRecipients = researchRecipients
+                destination.publicationRecipients = publicationRecipients
+                
+            }
         }
         
         if segue.identifier == "MapView" {
             let destination = segue.destinationViewController as! MapViewController
-            destination.location = appData.event?.location
+            if let venue = sender as? SIVenue {
+                if let location = venue.location {
+                    destination.location = location
+                }
+            }
         }
         
         if segue.identifier == "ExhibitorsListView" {
             let destination = segue.destinationViewController as! ExhibitorTableViewController
-            destination.sectionInformation = self.sectionHeaders
-            destination.exhibitors = self.appData.exhibitors
+            if let exhibitors = sender as? [SIExhibitor] {
+                
+                var sections = [String : [SIExhibitor]]()
+                
+                var exhibitorSections = [(String, [SIExhibitor])]()
+                
+                for exhibitor in exhibitors {
+                    let character = getCharacterForSection(exhibitor.name)
+                    
+                    if sections[character] != nil {
+                        sections[character]?.append(exhibitor)
+                    } else {
+                        sections[character] = [exhibitor]
+                    }
+                }
+                
+                for letter in Alphabet().alphabet() {
+                    if let section = sections[letter] {
+                        exhibitorSections.append((letter, section))
+                    }
+                }
+                
+                destination.sectionInformation = exhibitorSections
+                
+            }
         }
         
         if segue.identifier == "AffiliatesListView" {
-            var sectionInfo = [(String, [Affiliate])]()
-            
-            if var char:String = String(appData.affiliates[0].name.characters.first!) {
-                var affiliateList = [Affiliate]()
-                affiliateList.append(appData.affiliates[0])
-                sectionInfo.append((char, affiliateList))
-                var count = 0
-                for i in 1 ..< appData.affiliates.count
-                {
-                    let affiliate = appData.affiliates[i]
-                    char = String(affiliate.name.characters.first!)
-                    if char == sectionInfo[count].0
-                    {
-                        sectionInfo[count].1.append(appData.affiliates[i])
-                    }
-                    else
-                    {
-                        var nextList = [Affiliate]()
-                        nextList.append(appData.affiliates[i])
-                        sectionInfo.append((char, nextList))
-                        count += 1
+            let destination = segue.destinationViewController as! AffiliateListTableViewController
+            if let affiliates = sender as? [SIAffiliate] {
+                
+                // Populate section headers so affiliates can be presented alphabetically in seperate tableView sections
+                var sections = [String : [SIAffiliate]]()
+                
+                var affiliateSections = [(String, [SIAffiliate])]()
+                
+                for affiliate in affiliates {
+                    
+                    // Get first letter of affiliate name
+                    let character = getCharacterForSection(affiliate.name)
+                    
+                    // Add to dictionary
+                    if var section = sections[character] {
+                        section.append(affiliate)
+                        sections[character] = section
+                    } else {
+                        sections[character] = [affiliate]
                     }
                 }
+                
+                for letter in Alphabet().alphabet() {
+                    if let section = sections[letter] {
+                        affiliateSections.append((letter, section))
+                    }
+                }
+                
+                destination.affiliateSections = affiliateSections
             }
-            
-            let destination = segue.destinationViewController as! AffiliateListTableViewController
-            destination.affiliates = self.appData.affiliates
-            destination.sectionInfo = sectionInfo
-            
         }
+        
+        
         
         if segue.identifier == "VenueView" {
             let destination = segue.destinationViewController as! VenueMapsCollectionView
-            destination.venueMaps = appData.event.venueMaps
+            destination.venue = self.event.venues[0]
         }
         
         if segue.identifier == "SponsorsView" {
-            // This is a pointless comment!
             let destination = segue.destinationViewController as! SponsorsTableViewController
-            destination.friends = appData.friendSponsors            //sponsors_array[0]
-            destination.supporters = appData.supportersSponsors     //sponsors_array[1]
-            destination.benefactors = appData.benefactorsSponsors   //sponsors_array[2]
-            destination.champions = appData.championsSponsors       //sponsors_array[3]
-            destination.presidents = appData.presidentsSponsors     //sponsors_array[4]
-        }
-        
-    }
-    
-    // MARK: - Custom Functions
-    
-    func sortWeekByDay(eventDayList:[EventDay]) -> [EventDay] {
-        var days = eventDayList
-        for i in 0 ..< days.count - 1
-        {
-            for j in 0 ..< (days.count - i - 1)
-            {
+            if let sponsors = sender as? [SISponsor] {
                 
-                if days[j].sessions[0].start_end_date.0 != days[j].sessions[0].start_end_date.0.earlierDate(days[j+1].sessions[0].start_end_date.0)
-                {
-                    let temp = days[j]
-                    days[j] = days[j+1]
-                    days[j+1] = temp
-                }
-
-            }
-        }
-        return days
-    }
-    
-//    func valueOfDay(day:String) -> Int {
-//        let day = day.lowercaseString
-//        switch day {
-//        case "monday":
-//            return 1
-//        case "tuesday":
-//            return 2
-//        case "wednesday":
-//            return 3
-//        case "thursday":
-//            return 4
-//        case "friday":
-//            return 5
-//        case "saturday":
-//            return 6
-//        case "sunday":
-//            return 7
-//        default:
-//            print("ERROR: EventMenuViewController::valueOfDay, invalid string passed into parameter!")
-//            return 0
-//        }
-//    }
-    
-    
-    // Some simple bubble sorting functions
-    func sortSpeakersByLastName() {
-        var speakers = appData.event.eventSpeakers
-        if speakers.count > 1
-        {
-            for i in 0 ..< speakers.count - 1
-            {
-                for j in 0 ..< speakers.count - i - 1
-                {
-                    let name1 = speakers[j].name.characters.split{$0 == " "}.map(String.init);
-                    let name2 = speakers[j+1].name.characters.split{$0 == " "}.map(String.init);
-                    if name1.last > name2.last
-                    {
-                        let temp = speakers[j]
-                        speakers[j] = speakers[j+1]
-                        speakers[j+1] = temp
+                var sponsorTypes = [
+                    [SISponsor](),
+                    [SISponsor](),
+                    [SISponsor](),
+                    [SISponsor](),
+                    [SISponsor](),
+                    [SISponsor]()
+                ]
+                
+                for s in sponsors {
+                    if s.sponsorType == .Friend {
+                        sponsorTypes[0].append(s)
+                    } else if s.sponsorType == .Supporter {
+                        sponsorTypes[1].append(s)
+                    } else if s.sponsorType == .Benefactor {
+                        sponsorTypes[2].append(s)
+                    } else if s.sponsorType == .Champion {
+                        sponsorTypes[3].append(s)
+                    } else if s.sponsorType == .President {
+                        sponsorTypes[4].append(s)
+                    } else {
+                        sponsorTypes[5].append(s)
                     }
                 }
+                
+                destination.friends = sponsorTypes[0]
+                destination.supporters = sponsorTypes[1]
+                destination.benefactors = sponsorTypes[2]
+                destination.champions = sponsorTypes[3]
+                destination.presidents = sponsorTypes[4]
+                destination.other = sponsorTypes[5]
             }
-            appData.event.eventSpeakers = speakers
         }
         
-    }
-    
-    func sortResearchRecipientsByName() {
-        var researchRecipients = appData.researchRecipients
-        if researchRecipients.count > 1
-        {
-            for i in 0 ..< researchRecipients.count - 1
-            {
-                for j in 0 ..< researchRecipients.count - i - 1
-                {
-                    if researchRecipients[j].name > researchRecipients[j+1].name
-                    {
-                        let temp = researchRecipients[j]
-                        researchRecipients[j] = researchRecipients[j+1]
-                        researchRecipients[j+1] = temp
-                    }
-                }
-            }
-            appData.researchRecipients = researchRecipients
-        }
-        
-    }
-    
-    func sortPrizeRecipientsByName() {
-        var prizeRecipients = appData.shingoPrizeRecipients
-        if prizeRecipients.count > 1
-        {
-            for i in 0 ..< prizeRecipients.count - 1
-            {
-                for j in 0 ..< prizeRecipients.count - i - 1
-                {
-                    if prizeRecipients[j].name > prizeRecipients[j+1].name
-                    {
-                        let temp = prizeRecipients[j]
-                        prizeRecipients[j] = prizeRecipients[j+1]
-                        prizeRecipients[j+1] = temp
-                    }
-                }
-            }
-            appData.shingoPrizeRecipients = prizeRecipients
-        }
-        
-    }
- 
-    func sortAffiliatesByName() {
-        var affiliates = appData.affiliates
-        if affiliates.count > 1
-        {
-            for i in 0 ..< affiliates.count - 1
-            {
-                for j in 0 ..< affiliates.count - i - 1
-                {
-                    
-                    if affiliates[j].name > affiliates[j+1].name
-                    {
-                        let temp = affiliates[j]
-                        affiliates[j] = affiliates[j+1]
-                        affiliates[j+1] = temp
-                    }
-                }
-            }
-            appData.affiliates = affiliates
-        }
     }
 }
 
+extension EventMenuViewController {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    // MARK: - Custom Class Functions
+    func getCharacterForSection(name: String) -> String {
+        
+        // Get first letter of name
+        let fullName : [String?] = name.split(" ")
+        var temp = ""
+        if let first = fullName[0] {
+            if first.lowercaseString == "the" {
+                if let second = fullName[1] {
+                    temp = second
+                }
+            } else {
+                temp = first
+            }
+        }
+        
+        let char : Character = temp.characters.first!
+        var value : String = String(char).uppercaseString
+        
+        // If name begins with a number, change to the # character
+        if Int(value) != nil {
+            value = "#"
+        }
+        
+        return value
+    }
+    
+    func sortAgendaDays() {
+        
+        for i in 0 ..< event.agendaItems.count - 1 {
+            
+            for n in 0 ..< event.agendaItems.count - i - 1 {
+                
+                if event.agendaItems[n].date.isGreaterThanDate(event.agendaItems[n+1].date) {
+                    let day = event.agendaItems[n]
+                    event.agendaItems[n] = event.agendaItems[n+1]
+                    event.agendaItems[n+1] = day
+                }
+            }
+        }
+    }
+    
+    func sortSpeakersByLastName() -> [SISpeaker]{
+        var speakers = Array(event.speakers.values)
+        if speakers.isEmpty { return [SISpeaker]() }
+        for i in 0 ..< speakers.count - 1 {
+            
+            for n in 0 ..< speakers.count - i - 1 {
+                
+                if speakers[n].getLastName() > speakers[n+1].getLastName() {
+                    let speaker = speakers[n]
+                    speakers[n] = speakers[n+1]
+                    speakers[n+1] = speaker
+                }
+                
+            }
+            
+        }
+        
+        return speakers
+    }
+    
+    //TO-DO: Needs implementation
+    func sortResearchRecipientsByName() {
+    }
+    
+    //TO-DO: Needs implementation
+    func sortPrizeRecipientsByName() {
+    }
+ 
+    //TO-DO: Needs implementation
+    func sortAffiliatesByName() {
+    }
+}
 
 

@@ -15,7 +15,7 @@ class AfilliateViewController: UIViewController {
     var scrollView = UIScrollView.newAutoLayoutView()
     var backdrop = UIView.newAutoLayoutView()
     
-    var affiliate:Affiliate!
+    var affiliate: SIAffiliate!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,83 +60,33 @@ class AfilliateViewController: UIViewController {
         backdrop.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: view, withOffset: 0)
         backdrop.backgroundColor = shingoBlue
         
-        if affiliate.logo_image != nil {
-            logoImage.image = affiliate.logo_image
-            logoImage.contentMode = .ScaleAspectFit
+        logoImage.image = affiliate.getLogoImage()
+        logoImage.contentMode = .ScaleAspectFit
+        
+        let attrs = [NSFontAttributeName : UIFont.systemFontOfSize(16.0),
+                     NSForegroundColorAttributeName : UIColor.whiteColor()]
+        var richText = NSMutableAttributedString()
+        abstractTextField.linkTextAttributes = [NSForegroundColorAttributeName : UIColor.cyanColor(),
+                                                   NSUnderlineStyleAttributeName : NSUnderlineStyle.StyleSingle.rawValue]
+        do {
+            let htmlString: String! = "<style>body{color:white;}</style><font size=\"5\">" + affiliate.summary + "</font></style>"
+            richText = try NSMutableAttributedString(data: htmlString.dataUsingEncoding(NSUTF8StringEncoding)!,
+                                                                         options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
+                                                                            NSCharacterEncodingDocumentAttribute: NSUTF8StringEncoding],
+                                                                         documentAttributes: nil)
+        } catch {
+            print("Error with richText in affiliateViewController")
         }
         
-            
-        if affiliate.richAbstract != nil {
-            
-            if affiliate.richAbstract == "" || affiliate.richAbstract == "null" {
-                affiliate.richAbstract = "Description not available.\n"
-            }
-            
-            var plainText = String()
-            let attrs = [NSFontAttributeName : UIFont.systemFontOfSize(16.0),
-                         NSForegroundColorAttributeName : UIColor.whiteColor()]
-            var richText = NSMutableAttributedString()
-            abstractTextField.linkTextAttributes = [NSForegroundColorAttributeName : UIColor.cyanColor(),
-                                                       NSUnderlineStyleAttributeName : NSUnderlineStyle.StyleSingle.rawValue]
-            do {
-                let htmlString: String! = "<style>body{color:white;}</style><font size=\"5\">" + affiliate.richAbstract! + "</font></style>"
-                richText = try NSMutableAttributedString(data: htmlString.dataUsingEncoding(NSUTF8StringEncoding)!,
-                                                                             options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
-                                                                                NSCharacterEncodingDocumentAttribute: NSUTF8StringEncoding],
-                                                                             documentAttributes: nil)
-            } catch {
-                print("Error with richText in affiliateViewController")
-            }
-            
-            if affiliate.name != nil {
-                plainText = newline + newline + affiliate.name + newline
-            } else {
-                plainText = newline + newline + "Company name not available" + newline
-            }
-            
-            if affiliate.phone != nil {
-                plainText += "Phone: " + affiliate.phone + newline
-            }
-            
-            if affiliate.email != nil {
-                plainText += "Email: " + affiliate.email + newline
-            }
-            
-            richText.appendAttributedString(NSAttributedString(string: plainText, attributes: attrs))
-            abstractTextField.attributedText = richText
-            
+        var plainText = String()
+        if !affiliate.name.isEmpty {
+            plainText = newline + newline + affiliate.name + newline
         } else {
-            
-            if affiliate.abstract! == "" || affiliate.abstract! == "null"
-            {
-                affiliate.abstract = "Description not available.\n"
-            }
-            
-            if affiliate.name != nil {
-                abstractTextField.text = affiliate.name
-            } else {
-                abstractTextField.text = "Company name not available"
-            }
-            abstractTextField.text! += newline
-            
-            if affiliate.phone != nil {
-                abstractTextField.text! += "Phone: " + affiliate.phone + newline
-            }
-            
-            if affiliate.email != nil {
-                abstractTextField.text! += "Email: " + affiliate.email + newline
-            }
-            abstractTextField.text! += newline
-            
-            if affiliate.abstract != nil {
-                abstractTextField.text! += affiliate.abstract + newline
-            }
-            
-            if affiliate.website_url != nil {
-                abstractTextField.text! += "Visit \(affiliate.name)'s website at "  + affiliate.website_url
-            }
+            plainText = newline + newline + "Company name not available" + newline
         }
-
+        
+        richText.appendAttributedString(NSAttributedString(string: plainText, attributes: attrs))
+        abstractTextField.attributedText = richText
 
         var frame:CGRect = abstractTextField.frame
         frame.size.height = abstractTextField.contentSize.height

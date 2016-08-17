@@ -9,46 +9,50 @@
 import UIKit
 
 class SpeakerListCell: UITableViewCell {
-    var speaker:Speaker!
+    
+    var speaker: SISpeaker!
     @IBOutlet weak var speakerNameLabel: UILabel!
     @IBOutlet weak var speakerImage: UIImageView!
+    
+    func updateCellProperties(speaker: SISpeaker) {
+        self.speaker = speaker
+        speakerNameLabel.text = speaker.name
+        speakerImage.image = speaker.getSpeakerImage()
+    }
+    
 }
-
 
 class SpeakerListTableViewController: UITableViewController {
 
-    var speakers:[Speaker]!
-    var dataToSend:Speaker!
+    var speakers: [SISpeaker]!
     
-    override func viewDidLoad()
-    {
+    override func viewDidLoad() {
         super.viewDidLoad()
 
     }
     
-    override func tableView(tableView: UITableView, accessoryButtonTappedForRowWithIndexPath indexPath: NSIndexPath)
-    {
+    override func tableView(tableView: UITableView, accessoryButtonTappedForRowWithIndexPath indexPath: NSIndexPath) {
         let cell = tableView.cellForRowAtIndexPath(indexPath) as! SpeakerListCell
-        if cell.speaker != nil
-        {
-            dataToSend = cell.speaker
-            performSegueWithIdentifier("SpeakerDetails", sender: self)
+        if let speaker = cell.speaker {
+            performSegueWithIdentifier("SpeakerDetails", sender: speaker)
         }
- 
     }
     
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let cell = tableView.cellForRowAtIndexPath(indexPath) as! SpeakerListCell
+        if let speaker = cell.speaker {
+            performSegueWithIdentifier("SpeakerDetails", sender: speaker)
+        }
+    }
     
     // MARK: - Table view data source
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int
-    {
+    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
-    {
-        switch section
-        {
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        switch section {
         case 0:
             return speakers.count
         case 1:
@@ -58,41 +62,30 @@ class SpeakerListTableViewController: UITableViewController {
         }
     }
     
-
-    
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
-    {
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("SpeakerListCell", forIndexPath: indexPath) as! SpeakerListCell
-        cell.speakerNameLabel.text = speakers![indexPath.row].display_name
-        cell.speaker = speakers![indexPath.row]
-        if cell.speaker.image != nil
-        {
-            cell.speakerImage.image = cell.speaker.image
-            cell.speakerImage.layer.cornerRadius = 5.0
-            cell.speakerImage.layer.borderColor = UIColor.blackColor().CGColor
-        }
-        else
-        {
-            cell.speakerImage.image = UIImage(named: "silhouette")
-        }
+        let speaker = speakers[indexPath.row]
+        cell.updateCellProperties(speaker)
 
         return cell
     }
-
-
-
-
     
     // MARK: - Navigation
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?)
-    {
-        if segue.identifier == "SpeakerDetails"
-        {
-            let dest_vc = segue.destinationViewController as! SpeakerDetailsViewController
-            dest_vc.speaker = self.dataToSend
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "SpeakerDetails" {
+            let destination = segue.destinationViewController as! SpeakerDetailsViewController
+            if let speaker = sender as? SISpeaker {
+                destination.speaker = speaker
+            }
         }
     }
 
-
 }
+
+
+
+
+
+
+

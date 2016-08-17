@@ -53,7 +53,6 @@ public extension UIDevice {
 
 class SettingsTableViewController: UITableViewController {
 
-    var dataToSend:AppData!
     var buttonPushedString:String!
     
     override func viewDidLoad() {

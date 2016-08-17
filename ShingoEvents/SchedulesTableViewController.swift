@@ -8,82 +8,81 @@
 
 import UIKit
 
-class  SchedulesTableViewCell: UITableViewCell {
-    
-    var sessions:[EventSession]!
+class SchedulesTableViewController: UITableViewController {
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    var agendas : [SIAgenda]!
+    var eventName : String!
+
+    var dataToSend = [SISession]()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Needed to make loading screen animation display correctly
+        providesPresentationContextTransitionStyle = true
+        definesPresentationContext = true
+    }
+ 
+    // MARK: - Navigation
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if segue.identifier == "SessionListView" {
+            let destination = segue.destinationViewController as! SessionListTableViewController
+            if let sessions = sender as? [SISession] {
+                destination.sessions = self.sortSessionsByDate(sessions)
+            }
+        }
     }
     
-    override func setSelected(selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
+    // MARK: - Other Functions
+    private func sortSessionsByDate(sender: [SISession]) -> [SISession] {
+        var sessions = sender
+        for i in 0 ..< sessions.count - 1 {
+            
+            for n in 0 ..< sessions.count - i - 1 {
+                
+                if sessions[n].startDate.isGreaterThanDate(sessions[n+1].startDate) {
+                    let session = sessions[n]
+                    sessions[n] = sessions[n+1]
+                    sessions[n+1] = session
+                }
+            }
+        }
+        
+        return sessions
     }
     
 }
 
-class SchedulesTableViewController: UITableViewController {
-
-    var event:Event!
-
-    var dataToSend = [EventSession]()
+// MARK: - Table view data source
+extension SchedulesTableViewController {
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-    
-    
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let cell = tableView.cellForRowAtIndexPath(indexPath) as! SchedulesTableViewCell
-        dataToSend = cell.sessions!
-        performSegueWithIdentifier("SessionListView", sender: self)
-    }
-    
-    // MARK: - Table view data source
-
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return self.event!.eventAgenda.days_array.count
-        } else {
-            return 1
-        }
+        return agendas.count
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("ScheduleCell", forIndexPath: indexPath) as! SchedulesTableViewCell
-        
-        switch indexPath.section {
-        case 0:
-            cell.sessions = self.event.eventAgenda.days_array[indexPath.row].sessions
-            
-            let formatter = NSDateFormatter()
-            formatter.dateStyle = .MediumStyle
-            let date_string = formatter.stringFromDate(cell.sessions[0].start_end_date!.0)
-            
-            cell.textLabel?.text = (self.event?.eventAgenda.days_array[indexPath.row].dayOfWeek)! + " " + date_string
-        default:
-            break
-        }
+        cell.updateCell(agendas[indexPath.row])
         return cell
     }
 
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView();
-//        view.backgroundColor = UIColor(netHex: 0xde9a42);
         view.backgroundColor = .clearColor()
         let header = UILabel();
-        header.text = event.name;
+        header.text = eventName;
         header.lineBreakMode = .ByWordWrapping;
         header.textAlignment = .Center;
         header.numberOfLines = 2;
         header.textColor = .whiteColor();
         header.font = UIFont.boldSystemFontOfSize(16.0);
         header.clipsToBounds = true;
-        header.backgroundColor = UIColor(netHex: 0xde9a42);
+        header.backgroundColor = SIColor().shingoOrangeColor
         header.layer.borderWidth = 1.0;
         header.layer.cornerRadius = 5;
         view.addSubview(header);
@@ -93,55 +92,48 @@ class SchedulesTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 50;
+        return 50
     }
     
-    // MARK: - Navigation
-
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "SessionListView" {
-            let dest_vc = segue.destinationViewController as! SessionListTableViewController
-            if dest_vc.sessions == nil || dest_vc.event != nil {
-                sortSessionsByDate(&dataToSend)
-                dest_vc.sessions = dataToSend
-                dest_vc.event = self.event!
-            }
-        }
-    }
-    
-    
-    // MARK: - Custom functions
-    
-    func sortSessionsByDate(inout sessions:[EventSession]) {
-    
-        for i in 0 ..< sessions.count - 1 {
-            for j in 0 ..< sessions.count - i - 1 {
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        
+        if agendas[indexPath.row].didLoadSessions {
+            self.performSegueWithIdentifier("SessionListView", sender: agendas[indexPath.row].sessions)
+        } else {
             
-                if sessions[j].start_end_date == nil { continue }
-                
-                if sessions[j].start_end_date!.0.timeIntervalSince1970 > sessions[j+1].start_end_date!.0.timeIntervalSince1970
-                {
-                    let temp = sessions[j]
-                    sessions[j] = sessions[j+1]
-                    sessions[j+1] = temp
+            let av = ActivityViewController()
+            av.modalPresentationStyle = .OverCurrentContext
+            
+            self.presentViewController(av, animated: true, completion: {
+                self.agendas[indexPath.row].requestAgendaSessions() {
+                    self.dismissViewControllerAnimated(false, completion: {
+                        self.performSegueWithIdentifier("SessionListView", sender: self.agendas[indexPath.row].sessions)
+                    });
                 }
-                
-                if sessions[j].start_end_date!.0.timeIntervalSince1970 == sessions[j+1].start_end_date!.0.timeIntervalSince1970
-                {
-                    if sessions[j].start_end_date!.1.timeIntervalSince1970 > sessions[j+1].start_end_date!.1.timeIntervalSince1970
-                    {
-                        let temp = sessions[j]
-                        sessions[j] = sessions[j+1]
-                        sessions[j+1] = temp
-                    }
-                }
-            }
+            });
         }
     }
-    
 }
 
 
+class SchedulesTableViewCell: UITableViewCell {
+    
+    @IBOutlet weak var agendaLabel: UILabel!
+    var agenda : SIAgenda!
+    
+    func updateCell(agenda: SIAgenda) {
+        self.agenda = agenda
+        
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.dateStyle = .MediumStyle
+        
+        let date = dateFormatter.stringFromDate(agenda.date)
+        
+        agendaLabel.text = "\(agenda.displayName), \(date)"
+    }
+    
+}
 
 
 
