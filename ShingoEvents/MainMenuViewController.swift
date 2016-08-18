@@ -236,7 +236,7 @@ class MainMenuViewController: UIViewController {
 
         if eventsDidLoad {
             performSegueWithIdentifier("EventsView", sender: self.events)
-        } else if !SIRequest().checkForInternetConnection() {
+        } else if !Reach().checkForInternetConnection() {
             displayBadRequestNotification()
         } else {
             presentViewController(activityView, animated: false, completion: {

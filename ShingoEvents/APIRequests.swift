@@ -30,7 +30,7 @@ class SIRequest {
     ///////////////
     
     /// Gets all events from Salesforce
-    func requestEvents(callback: (events: [SIEvent]) -> Void) {
+    func requestEvents(callback: (events: [SIEvent]?) -> Void) {
         
         getRequest(url: EVENTS_URL) { json in
             
@@ -38,9 +38,16 @@ class SIRequest {
             
             if let json = json {
                 
-                if json["events"].isExists() {
+                if let records = json["events"].array {
                     
-                    for record in json["events"].array! {
+                    for record in records {
+                        
+                        if let publishToApp = record["Publish_to_App_c"].bool {
+                            if !publishToApp {
+                                continue
+                            }
+                        }
+                        
                         let event = SIEvent()
                         
                         if let id = record["Id"].string {
@@ -94,37 +101,37 @@ class SIRequest {
             
             if json["event"].isExists() {
                 
-                let eventJSON = json["event"]
+                let record = json["event"]
                 
-                if let id = eventJSON["Id"].string {
+                if let id = record["Id"].string {
                     event.id = id
                 }
                 
-                if let name = eventJSON["Name"].string {
+                if let name = record["Name"].string {
                     event.name = name
                 }
                 
-                if let startDate = eventJSON["Start_Date__c"].string {
+                if let startDate = record["Start_Date__c"].string {
                     if let startDate = self.dateFormatter.dateFromString(startDate) {
                         event.startDate = startDate
                     }
                 }
                 
-                if let endDate = eventJSON["End_Date__c"].string {
+                if let endDate = record["End_Date__c"].string {
                     if let endDate = self.dateFormatter.dateFromString(endDate) {
                         event.endDate = endDate
                     }
                 }
                 
-                if let type = eventJSON["Event_Type__c"].string {
+                if let type = record["Event_Type__c"].string {
                     event.eventType = type
                 }
                 
-                if let bannerURL = eventJSON["Banner_URL__c"].string {
+                if let bannerURL = record["Banner_URL__c"].string {
                     event.bannerURL = bannerURL
                 }
                 
-                if let salesText = eventJSON["Sales_Text__c"].string {
+                if let salesText = record["Sales_Text__c"].string {
                     event.salesText = salesText
                 }
                 
@@ -167,8 +174,8 @@ class SIRequest {
         
         var agendas = [SIAgenda]()
         
-        if json["days"].isExists() {
-            for record in json["days"].array! {
+        if let records = json["days"].array {
+            for record in records {
                 
                 let agenda = SIAgenda()
                 
@@ -287,9 +294,9 @@ class SIRequest {
         
         
         
-        if json["sessions"].isExists() {
+        if let records = json["sessions"].array {
             
-            for record in json["sessions"].array! {
+            for record in records {
                 let session = SISession()
                 
                 if let id = record["Id"].string {
@@ -465,9 +472,9 @@ class SIRequest {
         
         var speakers = [SISpeaker]()
         
-        if json["speakers"].isExists() {
+        if let records = json["speakers"].array {
             
-            for record in json["speakers"].array! {
+            for record in records {
                 let speaker = SISpeaker()
                 
                 if let id = record["Id"].string {
@@ -1225,27 +1232,9 @@ class SIRequest {
     }
     
     // MARK: - Supporting Functions
-    //////////////////////////
-    // Supporting Functions //
-    //////////////////////////
     
     // Check for internet connectivity
-    func checkForInternetConnection() -> Bool {
-        let status = Reach().connectionStatus()
-        switch status {
-        case .Unknown, .Offline:
-            return false
-        case .Online(.WWAN), .Online(.WiFi):
-            return true
-        }
-    }
     
-//    func sessionDateTimeStringParser(rawDate r: String) -> String {
-//        // The API returns a string that looks like "2016-09-21T19:30:00.000+0000"
-//        // The "+0000" in the returned string needs to be removed for self.sessionDateFormatter
-//        // to correctly parse the date
-//        return r.split("+")[0]!
-//    }
     
     // make HTTP POST request
     private func postRequest(url url: String, parameters: [String:String], callback: (value: JSON?) -> ())  {

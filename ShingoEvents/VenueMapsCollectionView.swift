@@ -49,10 +49,6 @@ class VenueMapsCollectionView: UIViewController {
 
 }
 
-extension VenueMapsCollectionView: UICollectionViewDelegate {
-    
-}
-
 extension VenueMapsCollectionView: UICollectionViewDataSource {
     
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {

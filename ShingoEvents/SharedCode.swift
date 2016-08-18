@@ -35,6 +35,16 @@ extension Double {
     }
 }
 
+extension UIImageView {
+    func sizeThatFitsView(view: UIView) -> CGSize {
+        if let image = self.image {
+            return CGSizeMake(view.frame.width, image.size.height * (view.frame.width / image.size.width))
+        }
+        
+        return CGSizeZero
+    }
+}
+
 extension UIImage {
     func isEmpty() -> Bool {
         return CGImage == nil && CIImage == nil
@@ -107,10 +117,7 @@ extension String {
     
 }
 
-///////////////////////
-// NSDate Extensions //
-///////////////////////
-
+// NSDate comparison operator
 func > (left: NSDate, right: NSDate) -> Bool {
     if left.isGreaterThanDate(right) {
         return true
@@ -131,9 +138,7 @@ extension NSDate {
     func equalToDate(dateToCompare: NSDate) -> Bool {
         return (compare(dateToCompare) == NSComparisonResult.OrderedSame)
     }
-}
-
-extension NSDate {
+    
     func isNotionallyEmpty() -> Bool {
         if self.isEqualToDate(NSDate().notionallyEmptyDate()) {
             return true
@@ -145,13 +150,9 @@ extension NSDate {
     func notionallyEmptyDate() -> NSDate {
         return NSDate.init(timeIntervalSince1970: 0)
     }
-    
 }
 
-// NSDateFormatter Extension
-
 extension NSDateFormatter {
-    
     /// Returns an object initialized with a set locale, date format, and time zone.
     convenience init(locale: String, dateFormat: String, timeZone: String) {
         self.init()
@@ -162,8 +163,61 @@ extension NSDateFormatter {
     
 }
 
-
-
+extension Array where Element:NSLayoutConstraint {
+    var active: Bool {
+        get {
+            for i in self {
+                if !i.active {
+                    return false
+                }
+            }
+            return true
+        }
+        set {
+            for i in self {
+                i.active = newValue
+            }
+        }
+    }
+    
+    var height: CGFloat {
+        get {
+            var height: CGFloat = 0
+            for i in self {
+                if i.firstAttribute == .Height {
+                    height += i.constant
+                }
+            }
+            return height
+        }
+        set {
+            for i in self {
+                if i.firstAttribute == .Height {
+                    i.constant = newValue
+                }
+            }
+        }
+    }
+    
+    var width: CGFloat {
+        get {
+            var width: CGFloat = 0
+            for i in self {
+                if i.firstAttribute == .Width {
+                    width += i.constant
+                }
+            }
+            return width
+        }
+        set {
+            for i in self {
+                if i.firstAttribute == .Width {
+                    i.constant = newValue
+                }
+            }
+        }
+    }
+}
 
 
 

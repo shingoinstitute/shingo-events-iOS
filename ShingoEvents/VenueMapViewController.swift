@@ -13,7 +13,7 @@ class VenueMapViewController: UIViewController, UIScrollViewDelegate {
     var venueMap: SIVenueMap!
     
     var scrollView = UIScrollView()
-    var image = UIImageView()
+    var imageView = UIImageView()
     
     var didUpdateConstraints = false
     
@@ -34,14 +34,13 @@ class VenueMapViewController: UIViewController, UIScrollViewDelegate {
         
         navigationItem.title = venueMap.name
         
-        image.image = venueMap.getVenueMapImage()
-        image.contentMode = UIViewContentMode.ScaleAspectFit
+        imageView.image = venueMap.getVenueMapImage()
+        imageView.contentMode = UIViewContentMode.ScaleAspectFit
         
         scrollView.delegate = self
         
         scrollView.maximumZoomScale = 4.0
         scrollView.minimumZoomScale = 1.0
-        
         
         updateViewConstraints()
     }
@@ -51,8 +50,8 @@ class VenueMapViewController: UIViewController, UIScrollViewDelegate {
         if !didUpdateConstraints {
             
             scrollView.autoPinEdgesToSuperviewEdges()
-            scrollView.addSubview(image)
-            image.autoPinEdgesToSuperviewEdges()
+            scrollView.addSubview(imageView)
+            imageView.autoPinEdgesToSuperviewEdges()
             
             didUpdateConstraints = true
         }
@@ -60,7 +59,7 @@ class VenueMapViewController: UIViewController, UIScrollViewDelegate {
     }
     
     func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
-        return image
+        return imageView
     }
     
 }

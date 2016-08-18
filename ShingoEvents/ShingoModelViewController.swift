@@ -14,14 +14,14 @@ class ShingoModelViewController: UIViewController {
     var scrollView:UIScrollView = {
         let view = UIScrollView.newAutoLayoutView()
         view.backgroundColor = .whiteColor()
-        view.translatesAutoresizingMaskIntoConstraints = false
+        view.translatesAutoresizingMaskIntoConstraints = true
+        view.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
         return view
     }()
     
     var contentView:UIView = {
         let view = UIView.newAutoLayoutView()
         view.backgroundColor = UIColor.whiteColor()
-        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
@@ -29,6 +29,7 @@ class ShingoModelViewController: UIViewController {
         let view = UIImageView.newAutoLayoutView()
         view.backgroundColor = .clearColor()
         view.image = UIImage(named: "Shingo Model")
+        view.contentMode = .ScaleAspectFit
         return view
     }()
     
@@ -36,49 +37,87 @@ class ShingoModelViewController: UIViewController {
         let view = UIImageView.newAutoLayoutView()
         view.backgroundColor = .clearColor()
         view.image = UIImage(named: "Guiding Principles Portrait")
+        view.contentMode = .ScaleAspectFit
         return view
     }()
     
+    let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        delegate.shouldSupportAllOrientation = true
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        delegate.shouldSupportAllOrientation = false
+    }
+    
+    var shingoModelDimensionConstraints = [NSLayoutConstraint]()
+    var guidingPrinciplesDimensionConstraints = [NSLayoutConstraint]()
+    
+    var didUpdateConstraints = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        view.backgroundColor = .blueColor()
+        
+        view.backgroundColor = .blackColor()
         
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         contentView.addSubview(shingoModel)
         contentView.addSubview(guidingPrinciples)
         
-        scrollView.autoSetDimensionsToSize(CGSize(width: self.view.frame.width, height: self.view.frame.height))
+        updateViewConstraints()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
 
-        let imageHeightRatioToViewHeight:CGFloat = 1.4
+        shingoModelDimensionConstraints.active = false
+        shingoModelDimensionConstraints = shingoModel.autoSetDimensionsToSize(shingoModel.sizeThatFitsView(view))
         
-        contentView.autoSetDimensionsToSize(CGSize(width: self.view.frame.width, height: self.view.frame.height * imageHeightRatioToViewHeight))
-        contentView.autoPinEdgeToSuperviewEdge(.Top)
-        contentView.autoPinEdgeToSuperviewEdge(.Left)
-        contentView.autoPinEdgeToSuperviewEdge(.Right)
-        contentView.autoPinEdgeToSuperviewEdge(.Bottom)
-        
-        shingoModel.autoSetDimension(.Height, toSize: view.frame.height * (imageHeightRatioToViewHeight / 2))
-        shingoModel.autoPinEdgeToSuperviewEdge(.Top)
-        shingoModel.autoPinEdgeToSuperviewEdge(.Right)
-        shingoModel.autoPinEdgeToSuperviewEdge(.Left)
-        
-        guidingPrinciples.autoSetDimension(.Height, toSize: view.frame.height * (imageHeightRatioToViewHeight / 2))
-        guidingPrinciples.autoPinEdge(.Top, toEdge: .Bottom, ofView: shingoModel, withOffset: 8.0)
-        guidingPrinciples.autoPinEdgeToSuperviewEdge(.Right)
-        guidingPrinciples.autoPinEdgeToSuperviewEdge(.Left)
-
-        scrollView.contentSize = CGSize(width: self.view.frame.width, height: contentView.frame.height)
-        
+        guidingPrinciplesDimensionConstraints.active = false
+        guidingPrinciplesDimensionConstraints = guidingPrinciples.autoSetDimensionsToSize(guidingPrinciples.sizeThatFitsView(view))
         
     }
+    
+    override func updateViewConstraints() {
+        if !didUpdateConstraints {
+            
+            shingoModelDimensionConstraints = shingoModel.autoSetDimensionsToSize(shingoModel.sizeThatFitsView(view))
+            
+            guidingPrinciplesDimensionConstraints = guidingPrinciples.autoSetDimensionsToSize(guidingPrinciples.sizeThatFitsView(view))
+            
+            let width = shingoModelDimensionConstraints.width + guidingPrinciplesDimensionConstraints.width
+            let height = shingoModelDimensionConstraints.height + guidingPrinciplesDimensionConstraints.height
+            scrollView.contentSize = CGSizeMake(width, height)
+            
+            scrollView.autoPinEdge(.Top, toEdge: .Top, ofView: view)
+            scrollView.autoPinEdge(.Left, toEdge: .Left, ofView: view)
+            scrollView.autoPinEdge(.Right, toEdge: .Right, ofView: view)
+            scrollView.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: view)
+            
+            contentView.autoPinEdge(.Top, toEdge: .Top, ofView: scrollView)
+            contentView.autoPinEdge(.Left, toEdge: .Left, ofView: scrollView)
+            contentView.autoPinEdge(.Right, toEdge: .Right, ofView: scrollView)
+            contentView.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: scrollView)
+            
+            shingoModel.autoPinEdge(.Top, toEdge: .Top, ofView: contentView)
+            shingoModel.autoAlignAxis(.Vertical, toSameAxisOfView: view)
+            
+            guidingPrinciples.autoPinEdge(.Top, toEdge: .Bottom, ofView: shingoModel)
+            guidingPrinciples.autoAlignAxis(.Vertical, toSameAxisOfView: view)
+            guidingPrinciples.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: contentView)
+            
+            didUpdateConstraints = true
+        }
+        
+        super.updateViewConstraints()
+    }
 
-
-
+    
 }
-
 
 
 
