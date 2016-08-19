@@ -9,6 +9,79 @@
 import Foundation
 import UIKit
 
+// Shingo IP Colors
+class SIColor: UIColor {
+    
+    convenience init(netHex: Int) {
+        let red = (netHex >> 16) & 0xff
+        let green = (netHex >> 8) & 0xff
+        let blue = netHex & 0xff
+        
+        assert(red >= 0 && red <= 255, "Invalid red component")
+        assert(green >= 0 && green <= 255, "Invalid green component")
+        assert(blue >= 0 && blue <= 255, "Invalid blue component")
+        
+        self.init(red: CGFloat(red) / 255.0, green: CGFloat(green) / 255.0, blue: CGFloat(blue) / 255.0, alpha: 1.0)
+    }
+    
+    class func lightBlueColor() -> SIColor {
+        return SIColor(netHex: 0x155c97)
+    }
+    
+    class func shingoBlueColor() -> SIColor {
+        return SIColor(netHex: 0x002f56)
+    }
+    
+    class func prussianBlueColor() -> SIColor {
+        return SIColor(netHex: 0x002F56)
+    }
+    
+    class func shingoRedColor() -> SIColor {
+        return SIColor(netHex: 0x650820)
+    }
+    
+    class func darkShingoBlueColor() -> SIColor {
+        return SIColor(netHex: 0x0e2145)
+    }
+    
+    class func shingoGoldColor() -> SIColor {
+        return SIColor(netHex: 0xcd8931)
+    }
+    
+}
+
+extension UIColor {
+    convenience init(red: Int, green: Int, blue: Int) {
+        assert(red >= 0 && red <= 255, "Invalid red component")
+        assert(green >= 0 && green <= 255, "Invalid green component")
+        assert(blue >= 0 && blue <= 255, "Invalid blue component")
+        
+        self.init(red: CGFloat(red) / 255.0, green: CGFloat(green) / 255.0, blue: CGFloat(blue) / 255.0, alpha: 1.0)
+    }
+    
+    convenience init(netHex:Int) {
+        self.init(red:(netHex >> 16) & 0xff, green:(netHex >> 8) & 0xff, blue:netHex & 0xff)
+    }
+}
+
+extension String {
+    func trim() -> String {
+        return self.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+    }
+    
+    func split(character: Character) -> [String?]{
+        return self.characters.split{$0 == character}.map(String.init)
+    }
+    
+}
+
+extension UIBarButtonItem {
+    convenience init(title: String) {
+        self.init()
+        self.title = title
+    }
+}
+
 extension UIView {
     func addSubviews(views: [UIView]) {
         for view in views {
@@ -36,7 +109,8 @@ extension Double {
 }
 
 extension UIImageView {
-    func sizeThatFitsView(view: UIView) -> CGSize {
+    /// Returns a CGSize that fits inside the given view while maintaining the UIImageView aspect ratio.
+    func sizeThatViewFits(view view: UIView) -> CGSize {
         if let image = self.image {
             return CGSizeMake(view.frame.width, image.size.height * (view.frame.width / image.size.width))
         }
@@ -73,48 +147,6 @@ extension UIImage {
         }
         return -9999
     }
-}
-
-extension UIBarButtonItem {
-    convenience init(title: String) {
-        self.init()
-        self.title = title
-    }
-}
-
-// Shingo IP Colors
-struct SIColor {
-    let lightBlueColor = UIColor(netHex: 0x155c97)
-    let shingoBlueColor = UIColor(netHex: 0x002f56)
-    let prussianBlueColor = UIColor(netHex: 0x002F56)
-    let shingoRedColor = UIColor(netHex: 0x650820)
-    let darkShingoBlueColor = UIColor(netHex: 0x0e2145)
-    let shingoOrangeColor = UIColor(netHex: 0xcd8931)
-}
-
-extension UIColor {
-    convenience init(red: Int, green: Int, blue: Int) {
-        assert(red >= 0 && red <= 255, "Invalid red component")
-        assert(green >= 0 && green <= 255, "Invalid green component")
-        assert(blue >= 0 && blue <= 255, "Invalid blue component")
-        
-        self.init(red: CGFloat(red) / 255.0, green: CGFloat(green) / 255.0, blue: CGFloat(blue) / 255.0, alpha: 1.0)
-    }
-    
-    convenience init(netHex:Int) {
-        self.init(red:(netHex >> 16) & 0xff, green:(netHex >> 8) & 0xff, blue:netHex & 0xff)
-    }
-}
-
-extension String {
-    func trim() -> String {
-        return self.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-    }
-    
-    func split(character: Character) -> [String?]{
-        return self.characters.split{$0 == character}.map(String.init)
-    }
-    
 }
 
 // NSDate comparison operator

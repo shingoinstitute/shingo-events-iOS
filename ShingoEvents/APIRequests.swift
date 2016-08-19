@@ -29,7 +29,7 @@ class SIRequest {
     // API Calls //
     ///////////////
     
-    /// Gets all events from Salesforce
+    /// Gets all events from Salesforce.
     func requestEvents(callback: (events: [SIEvent]?) -> Void) {
         
         getRequest(url: EVENTS_URL) { json in
@@ -42,7 +42,7 @@ class SIRequest {
                     
                     for record in records {
                         
-                        if let publishToApp = record["Publish_to_App_c"].bool {
+                        if let publishToApp = record["Publish_to_Web_App__c"].bool {
                             if !publishToApp {
                                 continue
                             }
@@ -1231,12 +1231,7 @@ class SIRequest {
         
     }
     
-    // MARK: - Supporting Functions
-    
-    // Check for internet connectivity
-    
-    
-    // make HTTP POST request
+    /// Makes an HTTP POST request.
     private func postRequest(url url: String, parameters: [String:String], callback: (value: JSON?) -> ())  {
         Alamofire.request(.POST, url, parameters: parameters).responseJSON { response in
             
@@ -1258,7 +1253,7 @@ class SIRequest {
         }
     }
     
-    // make HTTP GET request
+    /// Makes an HTTP GET request.
     private func getRequest(url url: String, callback: (value: JSON?) -> ()) {
         Alamofire.request(.GET, url).responseJSON { response in
             

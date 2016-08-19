@@ -104,13 +104,13 @@ class SIEvent: SIObject {
     // Requests for information on event objects.
     func requestEvent(callback: (event: SIEvent?) -> ()) {
         SIRequest().requestEvent(eventId: id) { (event) in
-            guard let event = event else {
-                self.didLoadEventData = true
-                callback(event: nil)
+            if let event = event {
+                event.didLoadEventData = true
+                callback(event: event)
                 return
             }
             
-            callback(event: event)
+            callback(event: nil)
         }
     }
     

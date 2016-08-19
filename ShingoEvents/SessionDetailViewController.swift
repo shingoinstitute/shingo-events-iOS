@@ -86,8 +86,8 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
         
         tableView.removeFromSuperview() // remove tableView before re-adding it... because...
         
-        scrollView.backgroundColor = SIColor().shingoBlueColor
-        tableView.backgroundColor = SIColor().shingoRedColor
+        scrollView.backgroundColor = SIColor.shingoBlueColor()
+        tableView.backgroundColor = SIColor.shingoRedColor()
         
         // Get correct text for labels
         titleLabel.text = session.displayName

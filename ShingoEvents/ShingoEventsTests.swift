@@ -25,9 +25,7 @@ class ShingoEventsTests: XCTestCase {
     
     func testExample() {
         
-        sum += 2
-        
-        XCTAssert(sum == 4, "Something went wrong")
+        XCTAssert(sum + 2 == 4, "Something went wrong")
         
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.

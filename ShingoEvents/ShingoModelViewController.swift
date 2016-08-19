@@ -13,17 +13,13 @@ class ShingoModelViewController: UIViewController {
 
     var scrollView:UIScrollView = {
         let view = UIScrollView.newAutoLayoutView()
-        view.backgroundColor = .whiteColor()
         view.translatesAutoresizingMaskIntoConstraints = true
+        view.backgroundColor = .whiteColor()
         view.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
         return view
     }()
     
-    var contentView:UIView = {
-        let view = UIView.newAutoLayoutView()
-        view.backgroundColor = UIColor.whiteColor()
-        return view
-    }()
+    var contentView:UIView = UIView.newAutoLayoutView()
     
     var shingoModel:UIImageView = {
         let view = UIImageView.newAutoLayoutView()
@@ -61,8 +57,6 @@ class ShingoModelViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .blackColor()
-        
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         contentView.addSubview(shingoModel)
@@ -74,24 +68,21 @@ class ShingoModelViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
+        //Must set height and width constraints active property to false before resizing them
         shingoModelDimensionConstraints.active = false
-        shingoModelDimensionConstraints = shingoModel.autoSetDimensionsToSize(shingoModel.sizeThatFitsView(view))
-        
         guidingPrinciplesDimensionConstraints.active = false
-        guidingPrinciplesDimensionConstraints = guidingPrinciples.autoSetDimensionsToSize(guidingPrinciples.sizeThatFitsView(view))
+        
+        //Resizes images height/width constraints after screen rotation
+        shingoModelDimensionConstraints = shingoModel.autoSetDimensionsToSize(shingoModel.sizeThatViewFits(view: view))
+        guidingPrinciplesDimensionConstraints = guidingPrinciples.autoSetDimensionsToSize(guidingPrinciples.sizeThatViewFits(view: view))
         
     }
     
     override func updateViewConstraints() {
         if !didUpdateConstraints {
             
-            shingoModelDimensionConstraints = shingoModel.autoSetDimensionsToSize(shingoModel.sizeThatFitsView(view))
-            
-            guidingPrinciplesDimensionConstraints = guidingPrinciples.autoSetDimensionsToSize(guidingPrinciples.sizeThatFitsView(view))
-            
-            let width = shingoModelDimensionConstraints.width + guidingPrinciplesDimensionConstraints.width
-            let height = shingoModelDimensionConstraints.height + guidingPrinciplesDimensionConstraints.height
-            scrollView.contentSize = CGSizeMake(width, height)
+            shingoModelDimensionConstraints = shingoModel.autoSetDimensionsToSize(shingoModel.sizeThatViewFits(view: view))
+            guidingPrinciplesDimensionConstraints = guidingPrinciples.autoSetDimensionsToSize(guidingPrinciples.sizeThatViewFits(view: view))
             
             scrollView.autoPinEdge(.Top, toEdge: .Top, ofView: view)
             scrollView.autoPinEdge(.Left, toEdge: .Left, ofView: view)
@@ -115,8 +106,6 @@ class ShingoModelViewController: UIViewController {
         
         super.updateViewConstraints()
     }
-
-    
 }
 
 

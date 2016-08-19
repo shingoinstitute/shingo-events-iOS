@@ -20,18 +20,18 @@ class VenueMapCollectionCell: UICollectionViewCell {
     @IBOutlet weak var mapNameLabel: UILabel!
     
     func updateCell() {
-        self.layer.borderColor = UIColor.grayColor().CGColor
-        self.layer.borderWidth = 1.0
-        self.layer.cornerRadius = 3
+        layer.borderColor = UIColor.grayColor().CGColor
+        layer.borderWidth = 1.0
+        layer.cornerRadius = 3
         
-        if venueMap == nil {
-            return
+        if venueMap != nil {
+            mapNameLabel.text = venueMap.name
+            mapNameLabel.font = UIFont(name: "Helvetica", size: 16.0)
+            venueImage.image = venueMap.getVenueMapImage()
+            venueImage.contentMode = .ScaleAspectFit
         }
         
-        self.mapNameLabel.text = venueMap.name
         
-        venueImage.image = venueMap.getVenueMapImage()
-        venueImage.contentMode = .ScaleAspectFit
     }
 }
 
@@ -49,15 +49,15 @@ class VenueMapInformationCell: UICollectionViewCell {
     
     func updateCell() {
         
-        contentView.backgroundColor = SIColor().shingoBlueColor
+        contentView.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.9)
         contentView.layer.cornerRadius = 3.0
-        contentView.layer.borderColor = UIColor.lightGrayColor().CGColor
-        contentView.layer.borderWidth = 5.0
         
-        title.textColor = UIColor.whiteColor()
-        address.textColor = UIColor.whiteColor()
-        
+        title.textColor = UIColor.yellowColor()
         title.text = venue.name
+        title.font = UIFont(name: "Helvetica", size: 18.0)
+        
+        address.textColor = UIColor.yellowColor()
+        address.font = UIFont(name: "Helvetica", size: 18.0)
         address.text = venue.address
         
         if venue.name.isEmpty {

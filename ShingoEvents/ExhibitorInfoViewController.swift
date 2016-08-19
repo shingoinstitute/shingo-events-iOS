@@ -16,7 +16,7 @@ class ExhibitorInfoViewController: UIViewController {
     var scrollView = UIScrollView.newAutoLayoutView()
     var backdrop: UIView = {
         let view = UIView()
-        view.backgroundColor = SIColor().shingoBlueColor
+        view.backgroundColor = SIColor.shingoBlueColor()
         return view
     }()
     
@@ -56,7 +56,7 @@ class ExhibitorInfoViewController: UIViewController {
         descriptionTextField.autoPinEdge(.Right, toEdge: .Right, ofView: view)
         descriptionTextField.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: scrollView, withOffset: 0)
         descriptionTextField.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
-        descriptionTextField.backgroundColor = SIColor().shingoBlueColor
+        descriptionTextField.backgroundColor = SIColor.shingoBlueColor()
         descriptionTextField.editable = false
         descriptionTextField.dataDetectorTypes = [UIDataDetectorTypes.Link, UIDataDetectorTypes.PhoneNumber]
         

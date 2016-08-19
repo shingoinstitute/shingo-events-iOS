@@ -43,7 +43,7 @@ class MainMenuViewController: UIViewController {
     }()
     var shingoLogoImageView : UIImageView = {
         let view = UIImageView.newAutoLayoutView()
-        if let image = UIImage(named: "Shingo logo with Home BIG") {
+        if let image = UIImage(named: "shingo_icon_with_home_Large") {
             view.image = image
         }
         view.contentMode = .ScaleAspectFit
@@ -51,9 +51,10 @@ class MainMenuViewController: UIViewController {
     }()
     var contentView: UIView = {
         let view = UIView.newAutoLayoutView()
-        view.backgroundColor = SIColor().prussianBlueColor.colorWithAlphaComponent(0.5)
+        view.backgroundColor = .clearColor()
         return view
     }()
+    
     var didSetupConstraints = false
     var didAnimateLayout = false
     
@@ -119,8 +120,8 @@ class MainMenuViewController: UIViewController {
                 contentView.autoPinEdge(.Left, toEdge: .Left, ofView: view, withOffset: 200.0)
                 contentView.autoPinEdge(.Right, toEdge: .Right, ofView: view, withOffset: -200.0)
             } else {
-                contentView.autoPinEdge(.Left, toEdge: .Left, ofView: view, withOffset: 5.0)
-                contentView.autoPinEdge(.Right, toEdge: .Right, ofView: view, withOffset: -5.0)
+                contentView.autoPinEdge(.Left, toEdge: .Left, ofView: view, withOffset: 10.0)
+                contentView.autoPinEdge(.Right, toEdge: .Right, ofView: view, withOffset: -10.0)
             }
             
             eventsBtn.autoSetDimension(.Height, toSize: 60)
@@ -129,9 +130,9 @@ class MainMenuViewController: UIViewController {
             eventsBtn.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -5)
             
             shingoModelBtn.autoSetDimension(.Height, toSize: 60)
+            shingoModelBtn.autoPinEdge(.Top, toEdge: .Bottom, ofView: eventsBtn, withOffset: 5)
             shingoModelBtn.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 5)
             shingoModelBtn.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -5)
-            shingoModelBtn.autoPinEdge(.Top, toEdge: .Bottom, ofView: eventsBtn, withOffset: 5)
             
             settingsBtn.autoSetDimension(.Height, toSize: 60)
             settingsBtn.autoPinEdge(.Top, toEdge: .Bottom, ofView: shingoModelBtn, withOffset: 5)
@@ -151,9 +152,28 @@ class MainMenuViewController: UIViewController {
             let buttons:NSArray = [eventsBtn, shingoModelBtn, settingsBtn, reloadEventsBtn]
             for button in buttons as! [UIButton] {
                 contentView.bringSubviewToFront(button)
-                button.backgroundColor = UIColor(white: 0.9, alpha: 0.9)
-                button.setTitleColor(SIColor().darkShingoBlueColor, forState: .Normal)
+                button.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.75)
+                button.layer.cornerRadius = 5
+                button.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+                
+                let arrow = UILabel.newAutoLayoutView()
+                arrow.text = ">"
+                arrow.font = UIFont(name: "Helvetica", size: 18)
+                arrow.textColor = .whiteColor()
+                button.addSubview(arrow)
+                
+                arrow.autoSetDimension(.Width, toSize: 20)
+                arrow.autoPinEdge(.Right, toEdge: .Right, ofView: button, withOffset: -5)
+                arrow.autoPinEdge(.Top, toEdge: .Top, ofView: button, withOffset: 0)
+                arrow.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: button, withOffset: 0)
             }
+            
+//            for button in buttons as! [UIButton] {
+//                contentView.bringSubviewToFront(button)
+//                button.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.8)
+//                button.layer.cornerRadius = 5
+//                button.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+//            }
             
             didSetupConstraints = true
         }
@@ -175,36 +195,35 @@ class MainMenuViewController: UIViewController {
     func animateLayout() {
         if !didAnimateLayout {
             
+            // Sets new constraint constant to make the menu appear onscreen in an appropriate position depending on the screen size.
             switch Int(UIDevice.currentDevice().deviceType.rawValue) {
-            case 1, 2:
+            case 1 ..< 3:
                 contentViewHeightConstraint.constant = -50
-            case 3:
+            case 3 ..< 4:
                 contentViewHeightConstraint.constant = -60
-            case 4, 5:
+            case 4 ..< 6:
                 contentViewHeightConstraint.constant = -80
-            case 6, 7:
+            case 6 ..< 8:
                 contentViewHeightConstraint.constant = -view.frame.height / 3
             default:
                 contentViewHeightConstraint.constant = -80
             }
             
-            //        Uncomment the line below to make constraints appear animated (for deployment)
-            //        UIView.animateWithDuration(1.5,
-            //                                   delay: 0.2,
-            //                                   usingSpringWithDamping: 0.5,
-            //                                   initialSpringVelocity: 0,
-            //                                   options: UIViewAnimationOptions(),
-            //                                   animations: { self.view.layoutIfNeeded() },
-            //                                   completion: nil)
-            
-            //        Uncomment the line below to make menu options appear instantly (for during production)
-            UIView.animateWithDuration(0.01,
-                                       delay: 0,
-                                       usingSpringWithDamping: 0.01,
-                                       initialSpringVelocity: 0,
-                                       options: UIViewAnimationOptions(),
-                                       animations: { self.view.layoutIfNeeded() },
-                                       completion: nil)
+            // @deployment
+            // Uncomment lines below to use animated constraints
+            /*        
+                    UIView.animateWithDuration(1.5,
+                                               delay: 0.2,
+                                               usingSpringWithDamping: 0.5,
+                                               initialSpringVelocity: 0,
+                                               options: UIViewAnimationOptions(),
+                                               animations: { self.view.layoutIfNeeded() },
+                                               completion: nil)
+            */
+ 
+            // @production
+            // Uncomment line below to make the menu (contentView) appear instantly (non animated)
+            view.layoutIfNeeded()
             
             didAnimateLayout = true
         }

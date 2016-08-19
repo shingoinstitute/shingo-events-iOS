@@ -26,11 +26,18 @@ class EventsTableViewController: UITableViewController {
     
     override func loadView() {
         super.loadView()
+//        for i in 0 ..< events.count {
+//            SIRequest().requestEvent(eventId: events[i].id, callback: { event in
+//                if let event = event {
+//                    self.events[i] = event
+//                    self.events[i].didLoadEventData = true
+//                }
+//            });
+//        }
         for i in 0 ..< events.count {
-            SIRequest().requestEvent(eventId: events[i].id, callback: { event in
+            events[i].requestEvent({ (event) in
                 if let event = event {
                     self.events[i] = event
-                    self.events[i].didLoadEventData = true
                 }
             });
         }
@@ -52,7 +59,7 @@ class EventsTableViewController: UITableViewController {
         definesPresentationContext = true
         providesPresentationContextTransitionStyle = true
         
-        view.backgroundColor = SIColor().prussianBlueColor
+        view.backgroundColor = SIColor.prussianBlueColor()
     }
     
     func displayBadRequestNotification() {
@@ -63,9 +70,11 @@ class EventsTableViewController: UITableViewController {
         alert.addAction(action)
         presentViewController(alert, animated: true, completion: nil)
     }
-    
+}
+
+extension EventsTableViewController {
+
     // MARK: - Table view data source
-    
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -100,15 +109,38 @@ class EventsTableViewController: UITableViewController {
         return 155.0 as CGFloat
     }
     
+//    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+//        return "\(events.count) Events Found"
+//    }
+    
+    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = UILabel()
+        
+        switch events.count {
+        case 1:
+            view.text = "   \(events.count) Event Found"
+        default:
+            view.text = "   \(events.count) Events Found"
+        }
+        
+        view.textColor = .whiteColor()
+        view.font = UIFont(name: "Helvetica", size: 12)
+        return view
+    }
+    
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 32
+    }
+    
     override func tableView(tableView: UITableView, didHighlightRowAtIndexPath indexPath: NSIndexPath) {
         let cell = tableView.cellForRowAtIndexPath(indexPath) as! EventTableViewCell
-        cell.backgroundColor = SIColor().lightBlueColor
+        cell.backgroundColor = SIColor.lightBlueColor()
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         
         let cell = tableView.cellForRowAtIndexPath(indexPath) as! EventTableViewCell
-        cell.backgroundColor = SIColor().lightBlueColor
+        cell.backgroundColor = SIColor.lightBlueColor()
         
         let activityView = ActivityViewController()
         activityView.modalPresentationStyle = .OverCurrentContext

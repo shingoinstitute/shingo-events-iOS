@@ -79,7 +79,6 @@ class EventMenuViewController: UIViewController {
     
     var backgroundImage: UIImageView = {
         let view = UIImageView.newAutoLayoutView()
-//        view.image = ShingoIconImages().shingoIconForDevice()
         view.image = UIImage(named: "shingo_icon")
         view.contentMode = .ScaleAspectFill
         return view
@@ -101,8 +100,6 @@ class EventMenuViewController: UIViewController {
     
     override func loadView() {
         super.loadView()
-        
-        navigationItem.title = event.name
         
         // Load Agenda
         event.requestAgendas() {self.event.didLoadAgendas = true} //Note: requestAgendas will request session data underneath
@@ -129,7 +126,7 @@ class EventMenuViewController: UIViewController {
         contentView.backgroundColor = .clearColor()
         
         eventNameLabel.text = event.name
-        eventNameLabel.backgroundColor = SIColor().prussianBlueColor.colorWithAlphaComponent(0.5)
+        eventNameLabel.backgroundColor = SIColor.prussianBlueColor().colorWithAlphaComponent(0.5)
         eventNameLabel.textColor = UIColor.whiteColor()
         
         buttonViews = [
@@ -152,6 +149,7 @@ class EventMenuViewController: UIViewController {
 
         if let image = event.getBannerImage() {
             eventHeaderImage.image = image
+            navigationItem.title = event.name
         }
         
         definesPresentationContext = true
@@ -167,7 +165,7 @@ class EventMenuViewController: UIViewController {
         affiliatesButton.addTarget(self, action: #selector(EventMenuViewController.didTapAffiliates(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         sponsorsButton.addTarget(self, action: #selector(EventMenuViewController.didTapSponsors(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         
-        setButtonConstraintsToBottomOfView()
+        updateViewConstraints()
         
     }
     
@@ -209,7 +207,7 @@ class EventMenuViewController: UIViewController {
             speakerButton.autoPinEdge(.Bottom, toEdge: .Top, ofView: directionsButton, withOffset: verticalButtonSpacing)
             speakerButton.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -edgeSpacing)
             
-            //Note: eventNameLabel's top, left, and right constraints are defined in Main.storyboard
+            //Note: eventNameLabel's top, left, and right constraints are set in Main.storyboard
             eventNameLabel.autoPinEdge(.Bottom, toEdge: .Top, ofView: scheduleButton, withOffset: -12)
             
             if eventHeaderImage.image != nil {
@@ -218,7 +216,6 @@ class EventMenuViewController: UIViewController {
             }
             
             // constraints for backgroundImage
-//            backgroundImage.autoPinToTopLayoutGuideOfViewController(self, withInset: 0)
             backgroundImage.autoPinEdge(.Top, toEdge: .Bottom, ofView: eventNameLabel)
             backgroundImage.autoPinEdge(.Left, toEdge: .Left, ofView: view)
             backgroundImage.autoPinEdge(.Right, toEdge: .Right, ofView: view)
@@ -236,12 +233,6 @@ class EventMenuViewController: UIViewController {
         let action = UIAlertAction(title: "OK", style: .Default, handler: nil)
         alert.addAction(action)
         presentViewController(alert, animated: true, completion: nil)
-    }
-    
-    // constraints for UIButtons
-    func setButtonConstraintsToBottomOfView() {
-        
-        
     }
     
     

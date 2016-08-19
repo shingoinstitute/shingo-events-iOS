@@ -93,9 +93,10 @@ extension VenueMapsCollectionView: UICollectionViewDataSource {
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         if indexPath.row > 0 {
             let cell = collectionView.cellForItemAtIndexPath(indexPath) as! VenueMapCollectionCell
-            self.performSegueWithIdentifier("MapView", sender: cell.venueMap)
+            if let venueMap = cell.venueMap {
+                self.performSegueWithIdentifier("MapView", sender: venueMap)
+            }
         }
-        
     }
     
 }

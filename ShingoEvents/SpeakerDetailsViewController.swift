@@ -24,10 +24,10 @@ class SpeakerDetailsViewController: UIViewController {
         view = UIView()
         scrollView = UIScrollView.newAutoLayoutView()
         
-        view.backgroundColor = SIColor().shingoBlueColor
+        view.backgroundColor = SIColor.shingoBlueColor()
         view.addSubview(scrollView)
         
-        scrollView.backgroundColor = SIColor().shingoBlueColor
+        scrollView.backgroundColor = SIColor.shingoBlueColor()
         
         // Set correct text for speaker label
         if !speaker.name.isEmpty {
