@@ -32,7 +32,7 @@ class MainMenuViewController: UIViewController {
     @IBOutlet weak var eventsBtn: UIButton!
     @IBOutlet weak var shingoModelBtn: UIButton!
     @IBOutlet weak var settingsBtn: UIButton!
-    @IBOutlet weak var reloadEventsBtn: UIButton!
+//    @IBOutlet weak var reloadEventsBtn: UIButton!
     
     // Other views
     var menuBackgroundImage: UIImageView = {
@@ -72,6 +72,12 @@ class MainMenuViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if let nav = navigationController?.navigationBar {
+            nav.barStyle = UIBarStyle.Black
+            nav.tintColor = UIColor.yellowColor()
+        }
+        
         updateViewConstraints()
     }
     
@@ -93,15 +99,13 @@ class MainMenuViewController: UIViewController {
     override func updateViewConstraints() {
         if !didSetupConstraints {
             
-            eventsBtn.removeFromSuperview()
-            shingoModelBtn.removeFromSuperview()
-            settingsBtn.removeFromSuperview()
-            reloadEventsBtn.removeFromSuperview()
+//            eventsBtn.removeFromSuperview()
+//            shingoModelBtn.removeFromSuperview()
+//            settingsBtn.removeFromSuperview()
             
             contentView.addSubview(eventsBtn)
             contentView.addSubview(shingoModelBtn)
             contentView.addSubview(settingsBtn)
-            contentView.addSubview(reloadEventsBtn)
 
             view.addSubview(menuBackgroundImage)
             view.addSubview(contentView)
@@ -130,26 +134,21 @@ class MainMenuViewController: UIViewController {
             eventsBtn.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -5)
             
             shingoModelBtn.autoSetDimension(.Height, toSize: 60)
-            shingoModelBtn.autoPinEdge(.Top, toEdge: .Bottom, ofView: eventsBtn, withOffset: 5)
+            shingoModelBtn.autoPinEdge(.Top, toEdge: .Bottom, ofView: eventsBtn, withOffset: 8)
             shingoModelBtn.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 5)
             shingoModelBtn.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -5)
             
             settingsBtn.autoSetDimension(.Height, toSize: 60)
-            settingsBtn.autoPinEdge(.Top, toEdge: .Bottom, ofView: shingoModelBtn, withOffset: 5)
+            settingsBtn.autoPinEdge(.Top, toEdge: .Bottom, ofView: shingoModelBtn, withOffset: 8)
             settingsBtn.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 5)
             settingsBtn.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -5)
-            
-            reloadEventsBtn.autoSetDimension(.Height, toSize: 60)
-            reloadEventsBtn.autoPinEdge(.Top, toEdge: .Bottom, ofView: settingsBtn, withOffset: 5)
-            reloadEventsBtn.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 5)
-            reloadEventsBtn.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -5)
             
             shingoLogoImageView.autoSetDimension(.Height, toSize: 125)
             shingoLogoImageView.autoPinToTopLayoutGuideOfViewController(self, withInset: 8)
             shingoLogoImageView.autoPinEdgeToSuperviewEdge(.Left, withInset: 8)
             shingoLogoImageView.autoPinEdgeToSuperviewEdge(.Right, withInset: 8)
             
-            let buttons:NSArray = [eventsBtn, shingoModelBtn, settingsBtn, reloadEventsBtn]
+            let buttons:NSArray = [eventsBtn, shingoModelBtn, settingsBtn]
             for button in buttons as! [UIButton] {
                 contentView.bringSubviewToFront(button)
                 button.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.75)
@@ -168,13 +167,6 @@ class MainMenuViewController: UIViewController {
                 arrow.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: button, withOffset: 0)
             }
             
-//            for button in buttons as! [UIButton] {
-//                contentView.bringSubviewToFront(button)
-//                button.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.8)
-//                button.layer.cornerRadius = 5
-//                button.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-//            }
-            
             didSetupConstraints = true
         }
         super.updateViewConstraints()
@@ -182,8 +174,8 @@ class MainMenuViewController: UIViewController {
     
     func displayInternetAlert() {
         let alert = UIAlertController(
-            title: "No Internet Connection Detected",
-            message: "Your device must be connected to the internet to use this app.",
+            title: "Internet Connection Not Detected",
+            message: "Your device must be connected to the internet to recieve data about conferences and events.",
             preferredStyle: UIAlertControllerStyle.Alert)
         let action = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel) { _ in
             self.animateLayout()
@@ -195,18 +187,18 @@ class MainMenuViewController: UIViewController {
     func animateLayout() {
         if !didAnimateLayout {
             
-            // Sets new constraint constant to make the menu appear onscreen in an appropriate position depending on the screen size.
-            switch Int(UIDevice.currentDevice().deviceType.rawValue) {
-            case 1 ..< 3:
+            // Sets new constraint constant to make the menu appear onscreen in an appropriate position depending on screen size.
+            switch UIDevice.currentDevice().deviceType.rawValue {
+            case 1.0 ..< 3.0:
                 contentViewHeightConstraint.constant = -50
-            case 3 ..< 4:
+            case 3.0 ..< 4.0:
                 contentViewHeightConstraint.constant = -60
-            case 4 ..< 6:
-                contentViewHeightConstraint.constant = -80
-            case 6 ..< 8:
+            case 4.0 ..< 6.0:
+                contentViewHeightConstraint.constant = -40
+            case 6.0 ..< 8.0:
                 contentViewHeightConstraint.constant = -view.frame.height / 3
             default:
-                contentViewHeightConstraint.constant = -80
+                contentViewHeightConstraint.constant = -40
             }
             
             // @deployment
@@ -233,16 +225,6 @@ class MainMenuViewController: UIViewController {
         loadUpcomingEvents()
     }
     
-    @IBAction func reloadEventData(sender: AnyObject) {
-        presentViewController(activityView, animated: true) {
-            SIRequest().requestEvents({ events in
-                self.dismissViewControllerAnimated(true, completion: nil)
-                self.events = events
-                self.eventsDidLoad = true
-            })
-        }
-        
-    }
     @IBAction func didTapShingoModel(sender: AnyObject) {
         self.performSegueWithIdentifier("ShingoModel", sender: self)
     }
@@ -298,7 +280,6 @@ class MainMenuViewController: UIViewController {
             });
         }
     }
-
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "EventsView" {
@@ -308,6 +289,24 @@ class MainMenuViewController: UIViewController {
             }
         }
         
+        if segue.identifier == "Support" {
+            let destination = segue.destinationViewController as! SettingsTableViewController
+            destination.delegate = self
+        }
+        
     }
     
 }
+
+extension MainMenuViewController: UnwindToMainVC {
+    func updateEvents(events: [SIEvent]?) {
+        if let events = events {
+            self.events = events
+        }
+    }
+}
+
+
+
+
+

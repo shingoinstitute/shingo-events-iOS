@@ -306,10 +306,10 @@
 		C2FF6B241CB2E52400331ED2 /* Settings Views */ = {
 			isa = PBXGroup;
 			children = (
+				C2CFC3031C4576D00036E485 /* SettingsTableViewController.swift */,
 				C2B7EB411C7CD89900162AFB /* ReportABugViewController.swift */,
 				C2B7EB3F1C7B813100162AFB /* ContactUsViewController.swift */,
 				C224C8971C92138700F4E393 /* AboutPageViewController.swift */,
-				C2CFC3031C4576D00036E485 /* SettingsTableViewController.swift */,
 			);
 			name = "Settings Views";
 			sourceTree = "<group>";

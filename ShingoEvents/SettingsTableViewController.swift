@@ -10,12 +10,19 @@ import UIKit
 import Crashlytics
 import Fabric
 
-class SettingsTableViewController: UITableViewController {
+protocol UnwindToMainVC {
+    func updateEvents(events: [SIEvent]?)
+}
 
-    var buttonPushedString:String!
+class SettingsTableViewController: UITableViewController {
+    
+    var events: [SIEvent]?
+    
+    var delegate: UnwindToMainVC?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
     }
 
     override func canPerformUnwindSegueAction(action: Selector, fromViewController: UIViewController, withSender sender: AnyObject) -> Bool {
@@ -27,31 +34,39 @@ class SettingsTableViewController: UITableViewController {
     }
     
     @IBAction func didTapProfileSettings(sender: AnyObject) {
-        
     }
 
     @IBAction func didTapReportABug(sender: AnyObject) {
-        buttonPushedString = "Report a bug"
+        performSegueWithIdentifier("reportABug", sender: sender)
     }
 
     @IBAction func didTapLeaveSuggestion(sender: AnyObject) {
-        buttonPushedString = "Leave a suggestion"
+        performSegueWithIdentifier("feedback", sender: sender)
     }
     
+    @IBAction func didTapReloadData(sender: AnyObject) {
+        let activityView = ActivityViewController()
+        presentViewController(activityView, animated: true) {
+            SIRequest().requestEvents({ events in
+                self.dismissViewControllerAnimated(true, completion: {
+                    if self.delegate != nil {
+                        self.delegate?.updateEvents(events)
+                    }
+                })
+            })
+        }
+    }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        if segue.identifier == "reportABug" || segue.identifier == "feedback"
-        {
+        if segue.identifier == "reportABug" {
             let destination = segue.destinationViewController as? ReportABugViewController
-            if buttonPushedString == "Report a bug"
-            {
-                destination?.titleLabelString = self.buttonPushedString
-            }
-            else
-            {
-                destination?.titleLabelString = self.buttonPushedString
-            }
+            destination?.titleLabel.text = "Report Bug"
+        }
+        
+        if segue.identifier == "feedback" {
+            let destination = segue.destinationViewController as? ReportABugViewController
+            destination?.titleLabel.text = "Leave Suggestion"
         }
         
     }

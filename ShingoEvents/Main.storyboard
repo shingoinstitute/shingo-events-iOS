@@ -156,15 +156,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="f7N-c4-lYZ">
-                                <rect key="frame" x="231" y="470" width="140" height="78"/>
-                                <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="18"/>
-                                <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
-                                <state key="normal" title="REFRESH DATA"/>
-                                <connections>
-                                    <action selector="reloadEventData:" destination="ZAg-ba-yVl" eventType="touchUpInside" id="pOl-EE-29J"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="vlY-KD-jc9">
                                 <rect key="frame" x="252" y="384" width="97" height="78"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -203,7 +194,6 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="eventsBtn" destination="0qP-cY-Jaf" id="8X9-nM-8gE"/>
-                        <outlet property="reloadEventsBtn" destination="f7N-c4-lYZ" id="S1F-S8-V58"/>
                         <outlet property="settingsBtn" destination="vlY-KD-jc9" id="i0b-nH-Xlw"/>
                         <outlet property="shingoModelBtn" destination="tak-ux-Hkh" id="gGT-8J-pBs"/>
                         <segue destination="3gh-6S-bFF" kind="show" identifier="EventsView" id="iHG-N7-94G"/>
@@ -409,7 +399,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mFs-jf-5gd">
+                                                <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mFs-jf-5gd">
                                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
                                                     <state key="normal" title="Report a bug"/>
                                                     <connections>
@@ -433,7 +423,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kVC-FP-m26">
+                                                <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kVC-FP-m26">
                                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
                                                     <state key="normal" title="Leave a suggestion"/>
                                                     <connections>
@@ -452,10 +442,10 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="" id="h2r-ED-5Qz">
+                            <tableViewSection headerTitle="About" id="h2r-ED-5Qz">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="1vs-7Q-Cer">
-                                        <rect key="frame" x="0.0" y="333" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="348" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1vs-7Q-Cer" id="wtH-06-VeD">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
@@ -474,6 +464,33 @@
                                                 <constraint firstItem="ETj-bI-OwL" firstAttribute="leading" secondItem="wtH-06-VeD" secondAttribute="leading" id="IJ4-pJ-tGQ"/>
                                                 <constraint firstAttribute="bottom" secondItem="ETj-bI-OwL" secondAttribute="bottom" id="Ymo-Uo-fqS"/>
                                                 <constraint firstAttribute="trailing" secondItem="ETj-bI-OwL" secondAttribute="trailing" id="nKw-RU-twy"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection headerTitle="Data" footerTitle="Forces a refresh of app data." id="Saw-I1-x81">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="0X9-1i-tvy">
+                                        <rect key="frame" x="0.0" y="443" width="600" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0X9-1i-tvy" id="MEn-RV-VAy">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dKK-GO-sUg">
+                                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                                    <state key="normal" title="Reload Data"/>
+                                                    <connections>
+                                                        <action selector="didTapReloadData:" destination="6xI-ZT-ju6" eventType="touchUpInside" id="NmI-6g-ROv"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="dKK-GO-sUg" secondAttribute="trailing" id="45g-AZ-hbT"/>
+                                                <constraint firstItem="dKK-GO-sUg" firstAttribute="top" secondItem="MEn-RV-VAy" secondAttribute="top" id="AVx-Sl-Cd8"/>
+                                                <constraint firstItem="dKK-GO-sUg" firstAttribute="leading" secondItem="MEn-RV-VAy" secondAttribute="leading" id="k13-6G-Axj"/>
+                                                <constraint firstAttribute="bottom" secondItem="dKK-GO-sUg" secondAttribute="bottom" id="wPO-Dp-UBg"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
