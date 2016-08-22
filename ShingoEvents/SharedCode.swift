@@ -83,10 +83,17 @@ extension UIBarButtonItem {
 }
 
 extension UIView {
-    func addSubviews(views: [UIView]) {
+    public func addSubviews(views: [UIView]) {
         for view in views {
             self.addSubview(view)
         }
+    }
+    
+    public func autoPinEdgesToSuperviewEdgesWithNavbar(viewController: UIViewController, withTopInset: CGFloat) {
+        self.autoPinToTopLayoutGuideOfViewController(viewController, withInset: withTopInset)
+        self.autoPinEdgeToSuperviewEdge(.Left)
+        self.autoPinEdgeToSuperviewEdge(.Right)
+        self.autoPinEdgeToSuperviewEdge(.Bottom)
     }
 }
 

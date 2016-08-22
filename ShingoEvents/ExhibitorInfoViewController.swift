@@ -11,68 +11,76 @@ import PureLayout
 
 class ExhibitorInfoViewController: UIViewController {
 
-    var exhibitorImage = UIImageView.newAutoLayoutView()
-    var descriptionTextField = UITextView.newAutoLayoutView()
-    var scrollView = UIScrollView.newAutoLayoutView()
-    var backdrop: UIView = {
-        let view = UIView()
-        view.backgroundColor = SIColor.shingoBlueColor()
+    var exhibitor: SIExhibitor!
+    
+    var exhibitorImageView: UIImageView = {
+        let view = UIImageView.newAutoLayoutView()
+        view.backgroundColor = .clearColor()
+        view.contentMode = .ScaleAspectFit
         return view
     }()
-    
-    var exhibitor: SIExhibitor!
+    var contentImageView: UIView = {
+        let view = UIView.newAutoLayoutView()
+        view.backgroundColor = .whiteColor()
+        return view
+    }()
+    var descriptionTextField: UITextView = {
+        let view = UITextView.newAutoLayoutView()
+        view.text = ""
+        view.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        view.backgroundColor = SIColor.shingoBlueColor()
+        view.editable = false
+        view.scrollEnabled = false
+        view.dataDetectorTypes = [UIDataDetectorTypes.Link, UIDataDetectorTypes.PhoneNumber]
+        return view
+    }()
+    var scrollView = UIScrollView.newAutoLayoutView()
+
+    var didUpdateConstraints = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.navigationItem.title = exhibitor.name
+        navigationItem.title = exhibitor.name
+        view.backgroundColor = SIColor.shingoBlueColor()
         
-        descriptionTextField.text = ""
+        exhibitor.getLogoImage { (image) in
+            self.exhibitorImageView.image = image
+        }
+        
+        view.addSubview(scrollView)
+        scrollView.addSubviews([contentImageView, descriptionTextField])
+        contentImageView.addSubview(exhibitorImageView)
         
         getDescriptionForRichText()
         
-        view.addSubview(scrollView)
-        view.addSubview(backdrop)
-        
-        scrollView.autoPinToTopLayoutGuideOfViewController(self, withInset: 0)
-        scrollView.autoPinEdgeToSuperviewEdge(.Left)
-        scrollView.autoPinEdgeToSuperviewEdge(.Right)
-        scrollView.autoPinEdgeToSuperviewEdge(.Bottom)
-        
-        scrollView.addSubview(exhibitorImage)
-        scrollView.addSubview(descriptionTextField)
-        view.bringSubviewToFront(scrollView)
-        
-        exhibitorImage.image = exhibitor.getLogoImage()
-        exhibitorImage.contentMode = .ScaleAspectFit
-        exhibitorImage.autoSetDimension(.Height, toSize: 150.0)
-        exhibitorImage.autoPinEdgeToSuperviewEdge(.Top, withInset: 8)
-        exhibitorImage.autoAlignAxisToSuperviewAxis(.Vertical)
-        exhibitorImage.layer.cornerRadius = 3
-        exhibitorImage.clipsToBounds = true
-        
-        descriptionTextField.autoPinEdge(.Top, toEdge: .Bottom, ofView: exhibitorImage, withOffset: 8)
-        descriptionTextField.autoPinEdge(.Left, toEdge: .Left, ofView: view)
-        descriptionTextField.autoPinEdge(.Right, toEdge: .Right, ofView: view)
-        descriptionTextField.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: scrollView, withOffset: 0)
-        descriptionTextField.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
-        descriptionTextField.backgroundColor = SIColor.shingoBlueColor()
-        descriptionTextField.editable = false
-        descriptionTextField.dataDetectorTypes = [UIDataDetectorTypes.Link, UIDataDetectorTypes.PhoneNumber]
-        
-        backdrop.autoPinEdge(.Top, toEdge: .Top, ofView: descriptionTextField)
-        backdrop.autoPinEdgeToSuperviewEdge(.Right)
-        backdrop.autoPinEdgeToSuperviewEdge(.Left)
-        backdrop.autoPinEdgeToSuperviewEdge(.Bottom)
-        
-        
-        var frame:CGRect = descriptionTextField.frame
-        frame.size.height = descriptionTextField.contentSize.height
-        descriptionTextField.frame = frame
-        descriptionTextField.scrollEnabled = false
+        updateViewConstraints()
     }
     
-    
+    override func updateViewConstraints() {
+        if !didUpdateConstraints {
+            
+            scrollView.autoPinEdgesToSuperviewEdgesWithNavbar(self, withTopInset: 0)
+            
+            contentImageView.autoSetDimension(.Height, toSize: 150.0)
+            contentImageView.autoPinEdgeToSuperviewEdge(.Top, withInset: 0)
+            contentImageView.autoPinEdge(.Left, toEdge: .Left, ofView: view)
+            contentImageView.autoPinEdge(.Right, toEdge: .Right, ofView: view)
+            
+            print(contentImageView)
+            print(exhibitorImageView.superview)
+            
+            exhibitorImageView.autoPinEdgesToSuperviewEdgesWithInsets(UIEdgeInsetsMake(5, 5, 5, 5))
+
+            descriptionTextField.autoPinEdge(.Top, toEdge: .Bottom, ofView: contentImageView, withOffset: 8)
+            descriptionTextField.autoPinEdge(.Left, toEdge: .Left, ofView: view)
+            descriptionTextField.autoPinEdge(.Right, toEdge: .Right, ofView: view)
+            descriptionTextField.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: scrollView, withOffset: 0)
+            
+            didUpdateConstraints = true
+        }
+        super.updateViewConstraints()
+    }
     
     func getDescriptionForRichText() {
         let richText = NSMutableAttributedString()
@@ -113,3 +121,5 @@ class ExhibitorInfoViewController: UIViewController {
     
 
 }
+
+

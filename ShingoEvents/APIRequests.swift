@@ -967,6 +967,8 @@ class SIRequest {
                 return
             }
             
+//            let testJSON = TestCode.generateTestCode()
+            
             var sponsors = [SISponsor]()
             
             if let records = json["sponsors"].array {

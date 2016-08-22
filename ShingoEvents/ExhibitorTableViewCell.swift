@@ -69,7 +69,10 @@ class ExhibitorTableViewCell: UITableViewCell {
     private func updateCell() {
         if let exhibitor = exhibitor {
             nameLabel.text = exhibitor.name
-            logoImage.image = exhibitor.getLogoImage()
+            exhibitor.getLogoImage() { image in
+                self.logoImage.image = image
+                self.setNeedsDisplay()
+            }
         }
     }
     

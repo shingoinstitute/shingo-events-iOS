@@ -457,7 +457,7 @@ class SISpeaker: SIObject {
         return middleInitial
     }
     
-    /// Returns name in format of: Lastname, Firstname M.I.
+    /// Returns name in format of: "lastname, firstname M.I."
     func getFormattedName() -> String {
         
         var fullName = getLastName() + ", " + getFirstName()
@@ -478,12 +478,12 @@ class SIExhibitor: SIObject {
     var website : String
     var logoURL : String {
         didSet {
-            requestExhibitorLogoImage()
+            requestExhibitorLogoImage(nil)
         }
     }
     var bannerURL : String {
         didSet {
-            requestExhibitorLogoImage()
+            requestExhibitorBannerImage(nil)
         }
     }
     var mapCoordinate : (Double, Double)
@@ -500,56 +500,95 @@ class SIExhibitor: SIObject {
         super.init()
     }
     
-    private func requestExhibitorLogoImage() {
+    private func requestExhibitorLogoImage(callback: (() -> Void)?) {
         
-        if image != nil { return }
+        if image != nil {
+            if let cb = callback {
+                cb()
+            }
+            return
+        }
         
-        if logoURL.isEmpty { return }
+        if logoURL.isEmpty {
+            if let cb = callback {
+                cb()
+            }
+            return
+        }
         
-        requestImage(logoURL) { image in
+        requestImage(logoURL, callback: { image in
             if let image = image as UIImage? {
                 self.image = image
             }
-        }
+            
+            if let cb = callback {
+                cb()
+            }
+        });
     }
     
-    func requestExhibitorBannerImage() {
+    private func requestExhibitorBannerImage(callback: (() -> Void)?) {
         
-        if bannerImage != nil { return }
+        if bannerImage != nil {
+            if let cb = callback {
+                cb()
+            }
+            return
+        }
         
-        if bannerURL.isEmpty { return }
+        if bannerURL.isEmpty {
+            if let cb = callback {
+                cb()
+            }
+            return
+        }
         
         requestImage(bannerURL, callback: { image in
             if let image = image as UIImage? {
                 self.bannerImage = image
             }
+            
+            if let cb = callback {
+                cb()
+            }
         });
     }
     
-    func getLogoImage() -> UIImage {
+    func getLogoImage(callback: (image: UIImage) -> ()) {
+        
         if let image = self.image {
-            return image
+            callback(image: image)
+            return
         }
         
-        if let image = UIImage(named: "logoComingSoon") {
-            return image
+        requestExhibitorLogoImage() {
+            if let image = self.image {
+                callback(image: image)
+            } else if let image = UIImage(named: "logoComingSoon") {
+                callback(image: image)
+            } else {
+                callback(image: UIImage())
+            }
         }
-        
-        return UIImage()
     }
     
-    func getBannerImage() -> UIImage {
+    func getBannerImage(callback: (image: UIImage) -> ()) {
+        
         if let image = self.bannerImage {
-            return image
+            callback(image: image)
+            return
         }
         
-        if let image = UIImage(named: "logoComingSoon") {
-            return image
+        requestExhibitorBannerImage() {
+            if let image = self.image {
+                callback(image: image)
+            } else if let image = UIImage(named: "logoComingSoon") {
+                callback(image: image)
+            } else {
+                callback(image: UIImage())
+            }
         }
-        
-        return UIImage()
     }
-    
 }
 
 
@@ -574,7 +613,6 @@ class SIHotel: SIObject {
         prices = [Double]()
         super.init()
     }
-    
 }
 
 
@@ -598,7 +636,7 @@ class SIRecipient: SIObject {
     var summary : String
     var logoURL : String {
         didSet {
-            requestRecipientImage(self.logoURL)
+            requestRecipientImage()
         }
     }
 
@@ -619,8 +657,8 @@ class SIRecipient: SIObject {
         self.name = name
     }
     
-    func requestRecipientImage(url:String) {
-        requestImage(url) { image in
+    private func requestRecipientImage() {
+        requestImage(logoURL) { image in
             guard let image = image else {
                 self.image = UIImage(named: "logoComingSoon500x500")
                 return
@@ -646,17 +684,6 @@ class SIRecipient: SIObject {
         
         return nil
     }
-    
-    //TODO: Needs to be implemented
-    func parsePhotoList() -> [UIImage]? {
-        return nil
-    }
-    
-    //TODO: Needs to be implemented
-    func parseVideoList() -> [String]? {
-        return nil
-    }
-    
 }
 
 class SIRoom: SIObject {
@@ -686,21 +713,31 @@ class SISponsor: SIObject {
     var sponsorType : SponsorType
     var logoURL : String {
         didSet {
-            requestLogoImage()
+            requestLogoImage(nil)
         }
     }
     var bannerURL : String {
         didSet {
-            requestBannerImage()
+            requestBannerImage(nil)
         }
     }
     var splashScreenURL : String {
         didSet {
-            requestSplashScreenImage()
+            requestSplashScreenImage(nil)
         }
     }
     private var bannerImage : UIImage?
     private var splashScreenImage : UIImage?
+    
+    convenience init(name: String, id: String, sponsorType: SponsorType, summary: String, logoURL: String, bannerURL: String) {
+        self.init()
+        self.name = name
+        self.id = id
+        self.sponsorType = sponsorType
+        self.summary = summary
+        self.logoURL = logoURL
+        self.bannerURL = bannerURL
+    }
     
     override init() {
         sponsorType = .None
@@ -719,78 +756,136 @@ class SISponsor: SIObject {
         self.sponsorType = type
     }
     
-    private func requestLogoImage() {
+    private func requestLogoImage(callback: (() -> Void)?) {
         
-        if image != nil { return }
+        if image != nil {
+            if let cb = callback {
+                cb()
+            }
+            return
+        }
         
-        if logoURL.isEmpty { return }
+        if logoURL.isEmpty {
+            if let cb = callback {
+                cb()
+            }
+            return
+        }
         
         self.requestImage(logoURL) { image in
             if let image = image {
                 self.image = image
             }
+            if let cb = callback {
+                cb()
+            }
         }
     }
     
-    private func requestBannerImage() {
+    private func requestBannerImage(callback: (() -> Void)?) {
         
-        if bannerImage != nil { return }
+        if bannerImage != nil {
+            if let cb = callback {
+                cb()
+            }
+            return
+        }
         
-        if bannerURL.isEmpty { return }
+        if bannerURL.isEmpty {
+            if let cb = callback {
+                cb()
+            }
+            return
+        }
         
         requestImage(bannerURL) { image in
             if let image = image as UIImage? {
                 self.bannerImage = image
             }
+            if let cb = callback {
+                cb()
+            }
         }
     }
     
-    private func requestSplashScreenImage() {
+    private func requestSplashScreenImage(callback: (() -> Void)?) {
         
-        if splashScreenImage != nil { return }
+        if splashScreenImage != nil {
+            if let cb = callback {
+                cb()
+            }
+            return
+        }
         
-        if splashScreenURL.isEmpty { return }
+        if splashScreenURL.isEmpty {
+            if let cb = callback {
+                cb()
+            }
+            return
+        }
         
         requestImage(splashScreenURL, callback: { image in
             if let image = image {
                 self.splashScreenImage = image
             }
+            if let cb = callback {
+                cb()
+            }
         });
     }
     
-    func getLogoImage() -> UIImage {
-        
-        if let image = self.image {
-            return image
-        }
-        
-        if let image = UIImage(named: "sponsor_banner_pl") {
-            return image
-        }
-        
-        return UIImage()
-    }
-    
-    func getBannerImage() -> UIImage {
+    func getBannerImage(callback: (image: UIImage) -> ()) {
         
         if let image = self.bannerImage {
-            return image
+            callback(image: image)
+            return
         }
         
-        if let image = UIImage(named: "sponsor_banner_pl") {
-            return image
+        requestBannerImage() {
+            if let image = self.image {
+                callback(image: image)
+            } else if let image = UIImage(named: "shingo_icon") {
+                callback(image: image)
+            } else {
+                callback(image: UIImage())
+            }
         }
-        
-        return UIImage()
     }
     
-    func getSplashScreenImage() -> UIImage? {
+    func getLogoImage(callback: (image: UIImage) -> ()) {
         
-        if let image = self.splashScreenImage {
-            return image
+        if let image = self.image {
+            callback(image: image)
+            return
         }
         
-        return nil
+        requestLogoImage {
+            if let image = self.image {
+                callback(image: image)
+            } else if let image = UIImage(named: "sponsor_banner_pl") {
+                callback(image: image)
+            } else {
+                callback(image: UIImage())
+            }
+        }
+    }
+    
+    func getSplashScreenImage(callback: (image: UIImage) -> ()) {
+        
+        if let image = self.splashScreenImage {
+            callback(image: image)
+            return
+        }
+        
+        requestSplashScreenImage { 
+            if let image = self.image {
+                callback(image: image)
+            } else if let image = UIImage(named: "Sponsor_Splash_Screen_pl") {
+                callback(image: image)
+            } else {
+                callback(image: UIImage())
+            }
+        }
     }
 }
 

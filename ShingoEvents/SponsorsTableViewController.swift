@@ -176,38 +176,31 @@ class SponsorTableViewCell: UITableViewCell {
         return view
     }()
     
-    var bannerImage: UIImageView = {
+    var logoImageView: UIImageView = {
         let image = UIImageView.newAutoLayoutView()
         image.contentMode = .ScaleAspectFit
         return image
     }()
     
-    override init(style: UITableViewCellStyle, reuseIdentifier: String!) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
     override func updateConstraints() {
         if !didSetupConstraints {
             
             contentView.addSubview(nameLabel)
-            contentView.addSubview(bannerImage)
+            contentView.addSubview(logoImageView)
             
             NSLayoutConstraint.autoSetPriority(UILayoutPriorityRequired) {
-                self.bannerImage.autoSetContentCompressionResistancePriorityForAxis(.Vertical)
+                self.logoImageView.autoSetContentCompressionResistancePriorityForAxis(.Vertical)
             }
             
             nameLabel.sizeToFit()
-            nameLabel.autoPinEdge(.Top, toEdge: .Top, ofView: contentView, withOffset: 8)
+            nameLabel.autoSetDimension(.Height, toSize: 24)
+            nameLabel.autoPinEdge(.Top, toEdge: .Top, ofView: contentView, withOffset: 5)
             nameLabel.autoAlignAxis(.Vertical, toSameAxisOfView: contentView)
             
-            bannerImage.autoPinEdge(.Top, toEdge: .Bottom, ofView: nameLabel, withOffset: 8)
-            bannerImage.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 8)
-            bannerImage.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -8)
-            bannerImage.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: contentView, withOffset: -8)
+            logoImageView.autoPinEdge(.Top, toEdge: .Bottom, ofView: nameLabel, withOffset: 5)
+            logoImageView.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 5)
+            logoImageView.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -5)
+            logoImageView.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: contentView, withOffset: -5)
             
             didSetupConstraints = true
         }
@@ -215,10 +208,12 @@ class SponsorTableViewCell: UITableViewCell {
     }
     
     private func updateCell() {
-        
         if let sponsor = sponsor {
             nameLabel.text = sponsor.name
-            bannerImage.image = sponsor.getBannerImage()
+            sponsor.getLogoImage() { image in
+                self.logoImageView.image = image
+                self.setNeedsDisplay()
+            }
         }
         
     }

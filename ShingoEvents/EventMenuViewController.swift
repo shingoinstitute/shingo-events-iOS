@@ -423,6 +423,7 @@ extension EventMenuViewController {
         }
         
         if segue.identifier == "ExhibitorsListView" {
+            
             let destination = segue.destinationViewController as! ExhibitorTableViewController
             if let exhibitors = sender as? [SIExhibitor] {
                 
