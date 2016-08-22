@@ -960,7 +960,7 @@ class SIRequest {
     
     func requestSponsors(eventId id: String, callback: (sponsors: [SISponsor]?) -> Void) {
         
-        getRequest(url: EVENTS_URL + "/sponsors", callback: { json in
+        getRequest(url: EVENTS_URL + "/sponsors?event_id=\(id)", callback: { json in
         
             guard let json = json else {
                 callback(sponsors: nil)

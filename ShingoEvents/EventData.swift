@@ -51,6 +51,7 @@ class SIEvent: SIObject {
     var didLoadAffiliates : Bool
     var didLoadExhibitors : Bool
     var didLoadSponsors : Bool
+    var didLoadBannerImage : Bool
     
     // related objects
     var speakers : [String:SISpeaker] // Speakers are stored in a dictionary to prevent duplicate speakers from appearing that may be recieved from the API response
@@ -68,11 +69,7 @@ class SIEvent: SIObject {
     var salesText : String
     var bannerURL : String {
         didSet {
-            requestBannerImage() { image in
-                if let image = image {
-                    self.image = image
-                }
-            }
+            requestBannerImage() {}
         }
     }
     
@@ -86,6 +83,7 @@ class SIEvent: SIObject {
         didLoadAffiliates = false
         didLoadExhibitors = false
         didLoadSponsors = false
+        didLoadBannerImage = false
         speakers = [String:SISpeaker]() // key = speaker's name, value = SISpeaker object
         agendaItems = [SIAgenda]()
         venues = [SIVenue]()
@@ -215,34 +213,46 @@ class SIEvent: SIObject {
         }
     }
     
-    func requestBannerImage(callback: (image: UIImage?) -> ()) {
+    private func requestBannerImage(callback: (() -> Void)?) {
         
-        if let image = image {
-            callback(image: image)
+        if self.image != nil {
+            if let cb = callback {
+                cb()
+            }
             return
         }
         
         if bannerURL.isEmpty {
-            callback(image: nil)
+            if let cb = callback {
+                cb()
+            }
             return
         }
         
         requestImage(bannerURL) { image in
             if let image = image as UIImage? {
                 self.image = image
+                self.didLoadBannerImage = true
+            }
+            if let cb = callback {
+                cb()
+            }
+        }
+    }
+    
+    func getBannerImage(callback: (image: UIImage?) -> Void) {
+        if let image = self.image {
+            callback(image: image)
+            return
+        }
+        
+        requestBannerImage() {
+            if let image = self.image {
                 callback(image: image)
             } else {
                 callback(image: nil)
             }
         }
-    }
-    
-    func getBannerImage() -> UIImage? {
-        if let image = self.image {
-            return image
-        }
-        
-        return nil
     }
     
 }

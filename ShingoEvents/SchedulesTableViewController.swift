@@ -15,6 +15,11 @@ class SchedulesTableViewController: UITableViewController {
 
     var dataToSend = [SISession]()
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationItem.title = "Schedule"
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -24,7 +29,7 @@ class SchedulesTableViewController: UITableViewController {
  
     // MARK: - Navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
+        navigationItem.title = ""
         if segue.identifier == "SessionListView" {
             let destination = segue.destinationViewController as! SessionListTableViewController
             if let sessions = sender as? [SISession] {
@@ -69,33 +74,6 @@ extension SchedulesTableViewController {
         cell.updateCell(agendas[indexPath.row])
         return cell
     }
-
-//    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        let view = UIView()
-//        view.backgroundColor = .clearColor()
-//        let header = UILabel()
-//        header.text = eventName
-//        header.lineBreakMode = .ByWordWrapping
-//        header.textAlignment = .Center
-//        header.numberOfLines = 0
-//        header.textColor = .whiteColor()
-//        header.font = UIFont.boldSystemFontOfSize(16.0)
-//        header.clipsToBounds = true
-//        header.backgroundColor = SIColor().shingoOrangeColor
-//        header.layer.cornerRadius = 3
-//        view.addSubview(header)
-//        
-//        header.sizeToFit()
-//        header.autoAlignAxisToSuperviewAxis(.Vertical)
-//        header.autoAlignAxisToSuperviewAxis(.Horizontal)
-//        header.autoPinEdgesToSuperviewEdgesWithInsets(UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4))
-//        
-//        return view
-//    }
-//    
-//    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//        return 50
-//    }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         

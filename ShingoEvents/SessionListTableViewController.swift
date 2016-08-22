@@ -13,6 +13,11 @@ class SessionListTableViewController: UITableViewController {
     
     var sessions: [SISession]!
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationItem.title = "Sessions"
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -32,7 +37,7 @@ class SessionListTableViewController: UITableViewController {
     
     // MARK: - Navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
+        navigationItem.title = ""
         if segue.identifier == "SessionDetailView" {
             let destination = segue.destinationViewController as! SessionDetailViewController
             destination.session = sender as! SISession

@@ -98,7 +98,7 @@ extension EventsTableViewController {
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
-        if events[indexPath.row].getBannerImage() == nil {
+        if !events[indexPath.row].didLoadBannerImage {
             return 75.0
         }
         
@@ -204,8 +204,8 @@ class EventTableViewCell: UITableViewCell {
         let dates = "\(dateFormatter.stringFromDate(event.startDate)) - \(dateFormatter.stringFromDate(event.endDate))"
         dateRangeLabel.text = dates
         
-        if let image = event.getBannerImage() {
-            eventImage.image = image
+        event.getBannerImage() { image in
+            self.eventImage.image = image
         }
     }
     

@@ -144,12 +144,22 @@ class EventMenuViewController: UIViewController {
         contentView.addSubviews(buttonViews)
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        if event.didLoadBannerImage {
+            navigationItem.title = self.event.name
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if let image = event.getBannerImage() {
-            eventHeaderImage.image = image
-            navigationItem.title = event.name
+        event.getBannerImage() { image in
+            if let image = image {
+                self.eventHeaderImage.image = image
+            } else {
+                self.navigationItem.title = ""
+            }
         }
         
         definesPresentationContext = true
@@ -367,7 +377,7 @@ extension EventMenuViewController {
     
     // MARK: - Navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
+        navigationItem.title = ""
         if segue.identifier == "SchedulesView" {
             let destination = segue.destinationViewController as! SchedulesTableViewController
             sortAgendaDays()
