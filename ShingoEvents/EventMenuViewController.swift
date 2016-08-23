@@ -12,15 +12,11 @@ import PureLayout
 
 class EventMenuViewController: UIViewController {
     
-    var event : SIEvent!
+    var event: SIEvent!
 
     var eventSpeakers = [String : SISpeaker]()
     
-    var activityVC : ActivityViewController = {
-        let view = ActivityViewController()
-        view.modalPresentationStyle = .OverCurrentContext
-        return view
-    }()
+    var activityVC : ActivityViewController = ActivityViewController()
     
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var eventNameLabel: UILabel!

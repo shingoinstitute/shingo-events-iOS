@@ -10,7 +10,7 @@ import UIKit
 import Crashlytics
 import Fabric
 
-protocol UnwindToMainVC {
+protocol UnwindToMainVCProtocol {
     func updateEvents(events: [SIEvent]?)
 }
 
@@ -18,7 +18,7 @@ class SettingsTableViewController: UITableViewController {
     
     var events: [SIEvent]?
     
-    var delegate: UnwindToMainVC?
+    var delegate: UnwindToMainVCProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -209,18 +209,18 @@
         <scene sceneID="vVb-K5-mFD">
             <objects>
                 <tableViewController id="3gh-6S-bFF" customClass="EventsTableViewController" customModule="Shingo_Events" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="111" sectionHeaderHeight="18" sectionFooterHeight="18" id="eXo-c8-zLs">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="111" sectionHeaderHeight="18" sectionFooterHeight="18" id="eXo-c8-zLs">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.79002403846153846" green="0.54432377668445986" blue="0.16418382044220106" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="sectionIndexBackgroundColor" red="0.054901960784313725" green="0.12941176470588237" blue="0.27058823529411763" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="sectionIndexTrackingBackgroundColor" red="0.054901960784313725" green="0.12941176470588237" blue="0.27058823529411763" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="EventsCell" rowHeight="181" id="Bv6-6M-9tv" customClass="EventTableViewCell" customModule="Shingo_Events" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="EventsCell" rowHeight="181" id="Bv6-6M-9tv" customClass="EventTableViewCell" customModule="Shingo_Events" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="114" width="600" height="181"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Bv6-6M-9tv" id="cih-eM-vG3">
-                                    <rect key="frame" x="0.0" y="0.0" width="567" height="180"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="181"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="EventDateRange" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VKy-vA-DJM">
@@ -242,24 +242,31 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="uDy-er-5Jq">
-                                            <rect key="frame" x="8" y="48" width="559" height="118"/>
+                                            <rect key="frame" x="8" y="48" width="546" height="119"/>
+                                        </imageView>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="right-arrow" translatesAutoresizingMaskIntoConstraints="NO" id="AFK-6e-iNI">
+                                            <rect key="frame" x="562" y="71" width="30" height="40"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="40" id="cSc-V6-AZd"/>
+                                                <constraint firstAttribute="width" constant="30" id="ni1-SN-RGl"/>
+                                            </constraints>
                                         </imageView>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="rIl-i5-L7m" firstAttribute="top" secondItem="cih-eM-vG3" secondAttribute="topMargin" constant="-7" id="BhT-um-z95"/>
+                                        <constraint firstItem="AFK-6e-iNI" firstAttribute="leading" secondItem="uDy-er-5Jq" secondAttribute="trailing" constant="8" id="CPG-RG-diG"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="uDy-er-5Jq" secondAttribute="bottom" constant="6" id="D5I-Zj-Rx1"/>
+                                        <constraint firstItem="AFK-6e-iNI" firstAttribute="centerY" secondItem="cih-eM-vG3" secondAttribute="centerY" id="KTr-tb-mm6"/>
                                         <constraint firstItem="uDy-er-5Jq" firstAttribute="top" secondItem="VKy-vA-DJM" secondAttribute="bottom" constant="8" id="U04-Xc-IKs"/>
                                         <constraint firstAttribute="leadingMargin" secondItem="VKy-vA-DJM" secondAttribute="leading" id="UV2-ZD-Aup"/>
                                         <constraint firstItem="uDy-er-5Jq" firstAttribute="leading" secondItem="cih-eM-vG3" secondAttribute="leadingMargin" id="Y0X-na-Vug"/>
                                         <constraint firstItem="VKy-vA-DJM" firstAttribute="top" secondItem="rIl-i5-L7m" secondAttribute="bottom" constant="1" id="fph-7e-VbJ"/>
                                         <constraint firstAttribute="leadingMargin" secondItem="rIl-i5-L7m" secondAttribute="leading" id="tRn-Lk-h9d"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="AFK-6e-iNI" secondAttribute="trailing" id="w3R-Is-7lM"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="uDy-er-5Jq" secondAttribute="trailing" constant="33" id="1Ud-Yn-J9d"/>
-                                </constraints>
                                 <connections>
                                     <outlet property="dateRangeLabel" destination="VKy-vA-DJM" id="uk3-p9-MnK"/>
                                     <outlet property="eventImage" destination="uDy-er-5Jq" id="KjR-he-bjP"/>
@@ -1432,6 +1439,7 @@
     <resources>
         <image name="100x100PL" width="100" height="100"/>
         <image name="200x200PL" width="200" height="200"/>
+        <image name="right-arrow" width="108" height="192"/>
         <image name="send button" width="152" height="61"/>
         <image name="sponsor_banner_pl" width="400" height="200"/>
     </resources>

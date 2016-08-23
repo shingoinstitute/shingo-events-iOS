@@ -13,10 +13,7 @@ import Foundation
 class EventsTableViewController: UITableViewController {
     
     // MARK: - Properties
-    var events = [SIEvent]()
-    var event : SIEvent?
-    var time : Double = 0
-    var timer : NSTimer!
+    var events: [SIEvent] = [SIEvent]()
 
     var activityView : ActivityViewController = {
         let view = ActivityViewController()
@@ -26,20 +23,10 @@ class EventsTableViewController: UITableViewController {
     
     override func loadView() {
         super.loadView()
-//        for i in 0 ..< events.count {
-//            SIRequest().requestEvent(eventId: events[i].id, callback: { event in
-//                if let event = event {
-//                    self.events[i] = event
-//                    self.events[i].didLoadEventData = true
-//                }
-//            });
-//        }
-        for i in 0 ..< events.count {
-            events[i].requestEvent({ (event) in
-                if let event = event {
-                    self.events[i] = event
-                }
-            });
+        
+        //Begin requests for each event.
+        for event in events {
+            event.requestEvent(nil)
         }
     }
     
@@ -50,9 +37,7 @@ class EventsTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-        
+
         definesPresentationContext = true
         providesPresentationContextTransitionStyle = true
         
@@ -106,10 +91,6 @@ extension EventsTableViewController {
         return 155.0 as CGFloat
     }
     
-//    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        return "\(events.count) Events Found"
-//    }
-    
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UILabel()
         
@@ -148,15 +129,9 @@ extension EventsTableViewController {
             self.performSegueWithIdentifier("EventMenu", sender: event)
         } else {
             presentViewController(activityView, animated: false, completion: { 
-                event.requestEvent() { event in
+                event.requestEvent() {
                     self.dismissViewControllerAnimated(true, completion: {
-                        guard let event = event else {
-                            self.displayBadRequestNotification()
-                            return
-                        }
-                        
-                        self.events[indexPath.row] = event
-                        self.performSegueWithIdentifier("EventMenu", sender: event)
+                        self.performSegueWithIdentifier("EventMenu", sender: self.events[indexPath.row])
                     });
                 }
             });
@@ -164,16 +139,16 @@ extension EventsTableViewController {
     }
     
     // MARK: - Navigation
-    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
         if segue.identifier == "EventMenu" {
             let destination = segue.destinationViewController as! EventMenuViewController
-            destination.event = sender as! SIEvent
+            if let event = sender as? SIEvent {
+                destination.event = event
+            }
             navigationItem.title = ""
         }
     }
-    
     
 }
 

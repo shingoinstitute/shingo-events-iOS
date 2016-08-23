@@ -12,16 +12,18 @@ import Fabric
 
 class MainMenuViewController: UIViewController {
     
+    //Mark: - Properties
+    var events : [SIEvent]?
+    
     // Activity view used for the loading screen
     var activityView : ActivityViewController = {
         let view = ActivityViewController()
         view.message = "Loading Upcoming Conferences..."
         return view
     }()
-    var eventsDidLoad = false
+    
     var timer : NSTimer!
-    var time : Double = 0
-    var events : [SIEvent]?
+    var time : Double!
     
     // Used to set inital placement of menu items off screen so they can later be animated
     var contentViewHeightConstraint: NSLayoutConstraint!
@@ -52,10 +54,11 @@ class MainMenuViewController: UIViewController {
         return view
     }()
     
+    var eventsDidLoad = false
     var didSetupConstraints = false
     var didAnimateLayout = false
     
-    // MARK: - class methods
+    // MARK: - Setup
     
     override func loadView() {
         super.loadView()
@@ -164,6 +167,39 @@ class MainMenuViewController: UIViewController {
         super.updateViewConstraints()
     }
     
+    @IBAction func didTapEvents(sender: AnyObject) {
+        loadUpcomingEvents()
+    }
+    
+    @IBAction func didTapShingoModel(sender: AnyObject) {
+        self.performSegueWithIdentifier("ShingoModel", sender: self)
+    }
+    
+    @IBAction func didTapSupport(sender: AnyObject) {
+        self.performSegueWithIdentifier("Support", sender: self)
+    }
+    
+    //Mark: - Navigation
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "EventsView" {
+            let destination = segue.destinationViewController as! EventsTableViewController
+            if let events = sender as? [SIEvent] {
+                destination.events = events
+            }
+        }
+        
+        if segue.identifier == "Support" {
+            let destination = segue.destinationViewController as! SettingsTableViewController
+            destination.delegate = self
+        }
+        
+    }
+    
+}
+
+extension MainMenuViewController {
+    
+    //MARK: - Class Methods
     func displayInternetAlert() {
         let alert = UIAlertController(
             title: "Internet Connection Not Detected",
@@ -215,27 +251,15 @@ class MainMenuViewController: UIViewController {
             didAnimateLayout = true
         }
     }
-    
-    @IBAction func didTapEvents(sender: AnyObject) {
-        loadUpcomingEvents()
-    }
-    
-    @IBAction func didTapShingoModel(sender: AnyObject) {
-        self.performSegueWithIdentifier("ShingoModel", sender: self)
-    }
-    
-    @IBAction func didTapSupport(sender: AnyObject) {
-        self.performSegueWithIdentifier("Support", sender: self)
-    }
 
     func loadUpcomingEvents() {
-
-        if eventsDidLoad {
+        if !Reach().checkForInternetConnection() {
+            displayInternetAlert()
+        } else if eventsDidLoad {
             performSegueWithIdentifier("EventsView", sender: self.events)
-        } else if !Reach().checkForInternetConnection() {
-            displayBadRequestNotification()
         } else {
             presentViewController(activityView, animated: false, completion: {
+                self.time = 0
                 self.timer = NSTimer.scheduledTimerWithTimeInterval(0.1,
                                                                     target: self,
                                                                     selector: #selector(MainMenuViewController.checkOnRequestStatus), 
@@ -257,43 +281,25 @@ class MainMenuViewController: UIViewController {
     }
     
     func checkOnRequestStatus() {
-        time += 0.1
+        time! += 0.1
         
         if eventsDidLoad {
             timer.invalidate()
-            time = 0
             self.dismissViewControllerAnimated(true, completion: {
                 self.performSegueWithIdentifier("EventsView", sender: self.events)
             });
-        }
-        
-        if time > 12.0 {
+        } else if time > 12.0 {
             timer.invalidate()
-            time = 0
             self.dismissViewControllerAnimated(true, completion: { 
                 self.displayBadRequestNotification()
             });
         }
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "EventsView" {
-            let destination = segue.destinationViewController as! EventsTableViewController
-            if let events = sender as? [SIEvent] {
-                destination.events = events
-            }
-        }
-        
-        if segue.identifier == "Support" {
-            let destination = segue.destinationViewController as! SettingsTableViewController
-            destination.delegate = self
-        }
-        
-    }
-    
 }
 
-extension MainMenuViewController: UnwindToMainVC {
+extension MainMenuViewController: UnwindToMainVCProtocol {
+    // Protocol implementation
     func updateEvents(events: [SIEvent]?) {
         if let events = events {
             self.events = events

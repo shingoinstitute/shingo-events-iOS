@@ -24,12 +24,67 @@ class SIRequest {
                                                dateFormat: "yyyy-MM-dd'T'HH:mm:ss.SSS",
                                                timeZone: "UTC")
     
-    // MARK: - API Calls
-    ///////////////
-    // API Calls //
-    ///////////////
+    //Mark: - Private Methods
     
-    /// Gets all events from Salesforce.
+    /// HTTP POST request method.
+    private func postRequest(url url: String, parameters: [String:String], callback: (value: JSON?) -> ())  {
+        Alamofire.request(.POST, url, parameters: parameters).responseJSON { response in
+            
+            guard response.result.isSuccess else {
+                print("Error while performing API POST request: \(response.result.error)")
+                callback(value: nil)
+                return
+            }
+            
+            guard let response = response.result.value else {
+                print("Error while performing API POST request: Invalid response")
+                callback(value: nil)
+                return
+            }
+            
+            let responseJSON = JSON(response)
+            print(responseJSON)
+            callback(value: responseJSON)
+        }
+    }
+    
+    /// HTTP GET request method.
+    private func getRequest(url url: String, callback: (value: JSON?) -> ()) {
+        Alamofire.request(.GET, url).responseJSON { response in
+            
+            guard response.result.isSuccess else {
+                print("Error while performing API GET request: \(response.result.error!)")
+                callback(value: nil)
+                return
+            }
+            
+            guard let response = response.result.value else {
+                print("Error while performing API GET request: Invalid response")
+                callback(value: nil)
+                return
+            }
+            
+            let responseJSON = JSON(response)
+            
+            if let success = responseJSON["success"].bool {
+                if !success {
+                    callback(value: nil)
+                    return
+                }
+            }
+            
+            print(responseJSON)
+            callback(value: responseJSON)
+        }
+    }
+    
+}
+
+extension SIRequest {
+
+    // MARK: - API Calls
+    
+    /// Returns all ready-to-publish events from Salesforce.
     func requestEvents(callback: (events: [SIEvent]?) -> Void) {
         
         getRequest(url: EVENTS_URL) { json in
@@ -87,7 +142,7 @@ class SIRequest {
         }
     }
     
-    /// Gets an event from Salesforce using an event ID.
+    /// Returns an event from Salesforce using an event ID.
     func requestEvent(eventId id: String, callback: (event: SIEvent?) -> Void) {
         
         getRequest(url: EVENTS_URL + "/\(id)") { json in
@@ -1232,58 +1287,5 @@ class SIRequest {
         }
         
     }
-    
-    /// Makes an HTTP POST request.
-    private func postRequest(url url: String, parameters: [String:String], callback: (value: JSON?) -> ())  {
-        Alamofire.request(.POST, url, parameters: parameters).responseJSON { response in
-            
-            guard response.result.isSuccess else {
-                print("Error while performing API POST request: \(response.result.error)")
-                callback(value: nil)
-                return
-            }
-            
-            guard let response = response.result.value else {
-                print("Error while performing API POST request: Invalid response")
-                callback(value: nil)
-                return
-            }
-            
-            let responseJSON = JSON(response)
-            print(responseJSON)
-            callback(value: responseJSON)
-        }
-    }
-    
-    /// Makes an HTTP GET request.
-    private func getRequest(url url: String, callback: (value: JSON?) -> ()) {
-        Alamofire.request(.GET, url).responseJSON { response in
-            
-            guard response.result.isSuccess else {
-                print("Error while performing API GET request: \(response.result.error!)")
-                callback(value: nil)
-                return
-            }
-            
-            guard let response = response.result.value else {
-                print("Error while performing API GET request: Invalid response")
-                callback(value: nil)
-                return
-            }
-            
-            let responseJSON = JSON(response)
-            
-            if let success = responseJSON["success"].bool {
-                if !success {
-                    callback(value: nil)
-                    return
-                }
-            }
-            
-            print(responseJSON)
-            callback(value: responseJSON)
-        }
-    }
-
     
 }

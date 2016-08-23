@@ -100,15 +100,28 @@ class SIEvent: SIObject {
     }
     
     // Requests for information on event objects.
-    func requestEvent(callback: (event: SIEvent?) -> ()) {
+    func requestEvent(callback: (() -> Void)?) {
+        didLoadEventData = false
         SIRequest().requestEvent(eventId: id) { (event) in
             if let event = event {
-                event.didLoadEventData = true
-                callback(event: event)
-                return
+                self.didLoadEventData = true
+                self.speakers = event.speakers
+                self.agendaItems = event.agendaItems
+                self.venues = event.venues
+                self.recipients = event.recipients
+                self.affiliates = event.affiliates
+                self.exhibitors = event.exhibitors
+                self.sponsors = event.sponsors
+                self.startDate = event.startDate
+                self.endDate = event.endDate
+                self.salesText = event.salesText
+                self.eventType = event.eventType
+                self.bannerURL = event.bannerURL
             }
             
-            callback(event: nil)
+            if let cb = callback {
+                cb()
+            }
         }
     }
     
