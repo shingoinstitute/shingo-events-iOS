@@ -11,7 +11,7 @@ import Alamofire
 
 class ReportABugViewController: UIViewController, UITextViewDelegate {
 
-    var titleLabelString:String!
+    var titleLabelText:String!
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var messageTextField: UITextView!
@@ -23,7 +23,8 @@ class ReportABugViewController: UIViewController, UITextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        titleLabel.text = titleLabelString
+        titleLabel.text = titleLabelText
+        reportButton.setTitle(titleLabelText, forState: .Normal)
         
         messageTextField.delegate = self
         
@@ -48,9 +49,9 @@ class ReportABugViewController: UIViewController, UITextViewDelegate {
         view.bringSubviewToFront(messageTextField)
         view.bringSubviewToFront(reportButton)
         
-        if titleLabelString != "Report a bug" {
-            reportButton.setTitle("Send Feedback", forState: UIControlState.Normal)
-        }
+//        if titleLabelText != "Report a bug" {
+//            reportButton.setTitle("Send Feedback", forState: UIControlState.Normal)
+//        }
     }
     
 
@@ -68,7 +69,7 @@ class ReportABugViewController: UIViewController, UITextViewDelegate {
                 let report:String = messageTextField.text + "\n\n"
                 var type:String = ""
                 
-                if titleLabelString == "Report a bug" {
+                if titleLabelText == "Report a bug" {
                     type = " Bug report"
                 } else {
                     type = " Feedback"

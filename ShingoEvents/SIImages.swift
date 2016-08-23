@@ -41,44 +41,42 @@ class SIImages: UIImage {
 }
 
 enum DeviceType: Double {
-    case NotAvailable
+    case NotAvailable = -1.0
     
-    case IPhone2G = 1.0
-    case IPhone3G = 1.1
-    case IPhone3GS = 1.2
-    case IPhone4 = 2.0
-    case IPhone4S = 2.1
-    case IPhone5 = 3.0
-    case IPhone5C = 3.1
-    case IPhone5S = 3.2
-    case IPhone6Plus = 5.0
-    case IPhone6 = 4.0
-    case IPhone6S = 4.1
+    case IPhone2G     = 1.0
+    case IPhone3G     = 1.1
+    case IPhone3GS    = 1.2
+    case IPhone4      = 2.0
+    case IPhone4S     = 2.1
+    case IPhone5      = 3.0
+    case IPhone5C     = 3.1
+    case IPhone5S     = 3.2
+    case IPhone6Plus  = 5.0
+    case IPhone6      = 4.0
+    case IPhone6S     = 4.1
     case IPhone6SPlus = 5.1
-    case IPhoneSE = 3.3
+    case IPhoneSE     = 3.3
     
     case IPodTouch1G = 1.3
     case IPodTouch2G = 1.4
     case IPodTouch3G = 1.5
     case IPodTouch4G = 2.2
     case IPodTouch5G = 3.4
-    case IPodTouch6 = 3.5
+    case IPodTouch6  = 3.5
     
-    case IPad = 6.0
-    case IPad2 = 6.1
-    case IPad3 = 6.2
-    case IPad4 = 6.3
-    case IPadMini = 6.4
+    case IPad           = 6.0
+    case IPad2          = 6.1
+    case IPad3          = 6.2
+    case IPad4          = 6.3
+    case IPadMini       = 6.4
     case IPadMiniRetina = 7.0
-    case IPadMini3 = 7.1
-    case IPadMini4 = 7.2
+    case IPadMini3      = 7.1
+    case IPadMini4      = 7.2
+    case IPadAir        = 7.3
+    case IPadAir2       = 7.4
+    case IPadPro        = 8.0
     
-    case IPadAir = 7.3
-    case IPadAir2 = 7.4
-    
-    case IPadPro = 8.0
-    
-    case Simulator = 0.1
+    case Simulator = 0
 }
 
 func parseDeviceType(identifier: String) -> DeviceType {

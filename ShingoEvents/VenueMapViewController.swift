@@ -34,15 +34,16 @@ class VenueMapViewController: UIViewController, UIScrollViewDelegate {
         
         navigationItem.title = venueMap.name
         
-        imageView.image = venueMap.getVenueMapImage()
+//        imageView.image = venueMap.getVenueMapImage()
         imageView.contentMode = UIViewContentMode.ScaleAspectFit
+        imageView.image = resizeImage(venueMap.getVenueMapImage(), toSize: view.frame.width)
         
         scrollView.contentMode = .Center
         
         scrollView.delegate = self
         
-        scrollView.maximumZoomScale = 4.0
-        scrollView.minimumZoomScale = 1.0
+        scrollView.maximumZoomScale = 4
+        scrollView.minimumZoomScale = 1
         
         view.addSubview(scrollView)
         scrollView.addSubview(imageView)
@@ -50,6 +51,28 @@ class VenueMapViewController: UIViewController, UIScrollViewDelegate {
         updateViewConstraints()
     }
 
+    private func resizeImage(image: UIImage, toSize: CGFloat) -> UIImage {
+        
+        let height = image.size.height * (toSize / image.size.width)
+        UIGraphicsBeginImageContext(CGSizeMake(toSize, height))
+        image.drawInRect(CGRectMake(0, 0, toSize, height))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return newImage
+    }
+    
+    override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
+        switch toInterfaceOrientation {
+        case .Portrait:
+            imageView.image = resizeImage(venueMap.getVenueMapImage(), toSize: view.frame.height)
+        case .LandscapeLeft, .LandscapeRight:
+            imageView.image = resizeImage(venueMap.getVenueMapImage(), toSize: view.frame.height)
+        default:
+            break
+        }
+    }
+    
     override func updateViewConstraints() {
         
         if !didUpdateConstraints {

@@ -17,6 +17,7 @@ class AboutPageViewController: UIViewController {
         if let image = UIImage(named: "shigeo_graduate_noclip_full") {
             view.image = image
         }
+        view.clipsToBounds = true
         view.contentMode = .ScaleAspectFill
         return view
     }()
@@ -29,28 +30,24 @@ class AboutPageViewController: UIViewController {
         view.addSubview(background)
         view.bringSubviewToFront(aboutTextField)
 
-        background.autoPinEdgesToSuperviewEdges()
-        
-        automaticallyAdjustsScrollViewInsets = false
-        
         aboutTextField.scrollEnabled = false
         aboutTextField.text = text
-        aboutTextField.font = UIFont.systemFontOfSize(16.0)
+        aboutTextField.font = UIFont.systemFontOfSize(16)
         aboutTextField.sizeToFit()
         aboutTextField.layoutIfNeeded()
 
         aboutTextField.clipsToBounds = true
         aboutTextField.layer.borderColor = UIColor.grayColor().CGColor
-        aboutTextField.layer.borderWidth = 1.0
-        aboutTextField.layer.cornerRadius = 3.0
+        aboutTextField.layer.borderWidth = 1
+        aboutTextField.layer.cornerRadius = 3
         aboutTextField.textAlignment = .Center
         aboutTextField.alpha = 0.7
         
     }
 
-    override func viewWillDisappear(animated: Bool) {
-        background.image = UIImage()
+    override func updateViewConstraints() {
+        background.autoPinEdgesToSuperviewEdges()
+        super.updateViewConstraints()
     }
     
-
 }

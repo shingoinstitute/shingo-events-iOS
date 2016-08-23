@@ -9,8 +9,6 @@
 import UIKit
 import Crashlytics
 import Fabric
-import Alamofire
-
 
 class MainMenuViewController: UIViewController {
     
@@ -25,14 +23,13 @@ class MainMenuViewController: UIViewController {
     var time : Double = 0
     var events : [SIEvent]?
     
-    // used to set inital placement of menu items off screen so they can later be animated
+    // Used to set inital placement of menu items off screen so they can later be animated
     var contentViewHeightConstraint: NSLayoutConstraint!
     
-    // buttons
+    // Menu buttons
     @IBOutlet weak var eventsBtn: UIButton!
     @IBOutlet weak var shingoModelBtn: UIButton!
     @IBOutlet weak var settingsBtn: UIButton!
-//    @IBOutlet weak var reloadEventsBtn: UIButton!
     
     // Other views
     var menuBackgroundImage: UIImageView = {
@@ -99,10 +96,6 @@ class MainMenuViewController: UIViewController {
     override func updateViewConstraints() {
         if !didSetupConstraints {
             
-//            eventsBtn.removeFromSuperview()
-//            shingoModelBtn.removeFromSuperview()
-//            settingsBtn.removeFromSuperview()
-            
             contentView.addSubview(eventsBtn)
             contentView.addSubview(shingoModelBtn)
             contentView.addSubview(settingsBtn)
@@ -155,16 +148,15 @@ class MainMenuViewController: UIViewController {
                 button.layer.cornerRadius = 5
                 button.setTitleColor(UIColor.whiteColor(), forState: .Normal)
                 
-                let arrow = UILabel.newAutoLayoutView()
-                arrow.text = ">"
-                arrow.font = UIFont(name: "Helvetica", size: 18)
-                arrow.textColor = .whiteColor()
+                let arrow = UIImageView()
+                arrow.image = UIImage(named: "right-arrow")
+                arrow.contentMode = .ScaleAspectFit
+
                 button.addSubview(arrow)
                 
-                arrow.autoSetDimension(.Width, toSize: 20)
-                arrow.autoPinEdge(.Right, toEdge: .Right, ofView: button, withOffset: -5)
-                arrow.autoPinEdge(.Top, toEdge: .Top, ofView: button, withOffset: 0)
-                arrow.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: button, withOffset: 0)
+                arrow.autoSetDimensionsToSize(CGSizeMake(30, 30))
+                arrow.autoPinEdge(.Right, toEdge: .Right, ofView: button, withOffset: -8)
+                arrow.autoAlignAxis(.Horizontal, toSameAxisOfView: button)
             }
             
             didSetupConstraints = true
@@ -190,32 +182,35 @@ class MainMenuViewController: UIViewController {
             // Sets new constraint constant to make the menu appear onscreen in an appropriate position depending on screen size.
             switch UIDevice.currentDevice().deviceType.rawValue {
             case 1.0 ..< 3.0:
-                contentViewHeightConstraint.constant = -50
+                //iPhone 2 - iPhone 4/SE
+                contentViewHeightConstraint.constant = 20
             case 3.0 ..< 4.0:
-                contentViewHeightConstraint.constant = -60
+                //iPhone 5 series
+                contentViewHeightConstraint.constant = -20
             case 4.0 ..< 6.0:
+                //iPhone 6 - iPhone 6+
                 contentViewHeightConstraint.constant = -40
             case 6.0 ..< 8.0:
-                contentViewHeightConstraint.constant = -view.frame.height / 3
+                //iPad series
+                contentViewHeightConstraint.constant = -view.frame.height / 6
             default:
                 contentViewHeightConstraint.constant = -40
             }
             
             // @deployment
-            // Uncomment lines below to use animated constraints
-            /*        
-                    UIView.animateWithDuration(1.5,
-                                               delay: 0.2,
-                                               usingSpringWithDamping: 0.5,
-                                               initialSpringVelocity: 0,
-                                               options: UIViewAnimationOptions(),
-                                               animations: { self.view.layoutIfNeeded() },
-                                               completion: nil)
-            */
+            // Uncomment lines below to animate constraints
+            UIView.animateWithDuration(1.5,
+                                       delay: 0.5,
+                                       usingSpringWithDamping: 0.5,
+                                       initialSpringVelocity: 0,
+                                       options: UIViewAnimationOptions(),
+                                       animations: { self.view.layoutIfNeeded() },
+                                       completion: nil)
+ 
  
             // @production
-            // Uncomment line below to make the menu (contentView) appear instantly (non animated)
-            view.layoutIfNeeded()
+            // Uncomment line below for non-animated constraints
+//            view.layoutIfNeeded()
             
             didAnimateLayout = true
         }

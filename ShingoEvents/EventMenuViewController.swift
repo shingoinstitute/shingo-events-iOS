@@ -86,6 +86,7 @@ class EventMenuViewController: UIViewController {
     var eventHeaderImage: UIImageView = {
         let view = UIImageView.newAutoLayoutView()
         view.contentMode = .ScaleAspectFill
+        
         view.clipsToBounds = true
         view.image = nil
         return view

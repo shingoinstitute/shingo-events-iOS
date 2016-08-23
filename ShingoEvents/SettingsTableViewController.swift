@@ -37,11 +37,11 @@ class SettingsTableViewController: UITableViewController {
     }
 
     @IBAction func didTapReportABug(sender: AnyObject) {
-        performSegueWithIdentifier("reportABug", sender: sender)
+        performSegueWithIdentifier("ReportBugView", sender: sender)
     }
 
     @IBAction func didTapLeaveSuggestion(sender: AnyObject) {
-        performSegueWithIdentifier("feedback", sender: sender)
+        performSegueWithIdentifier("ReportBugView", sender: sender)
     }
     
     @IBAction func didTapReloadData(sender: AnyObject) {
@@ -59,14 +59,18 @@ class SettingsTableViewController: UITableViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        if segue.identifier == "reportABug" {
-            let destination = segue.destinationViewController as? ReportABugViewController
-            destination?.titleLabel.text = "Report Bug"
-        }
-        
-        if segue.identifier == "feedback" {
-            let destination = segue.destinationViewController as? ReportABugViewController
-            destination?.titleLabel.text = "Leave Suggestion"
+        if let button = sender as? UIButton {
+            switch button.tag {
+            case 1:
+                let destination = segue.destinationViewController as? ReportABugViewController
+                destination?.titleLabelText = "Report Bug"
+            case 2:
+                let destination = segue.destinationViewController as? ReportABugViewController
+                destination?.titleLabelText = "Leave Suggestion"
+            default:
+                break
+            }
+            
         }
         
     }

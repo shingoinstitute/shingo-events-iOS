@@ -159,7 +159,7 @@
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="vlY-KD-jc9">
                                 <rect key="frame" x="252" y="384" width="97" height="78"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="18"/>
+                                <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="16"/>
                                 <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
                                 <state key="normal" title="SUPPORT"/>
                                 <connections>
@@ -169,7 +169,7 @@
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="tak-ux-Hkh">
                                 <rect key="frame" x="208" y="298" width="187" height="78"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="18"/>
+                                <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="16"/>
                                 <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
                                 <state key="normal" title="THE SHINGO MODEL"/>
                                 <connections>
@@ -179,7 +179,7 @@
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="0qP-cY-Jaf">
                                 <rect key="frame" x="171" y="212" width="269" height="78"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="18"/>
+                                <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="16"/>
                                 <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
                                 <state key="normal" title="EVENTS AND CONFERENCES"/>
                                 <connections>
@@ -404,7 +404,6 @@
                                                     <state key="normal" title="Report a bug"/>
                                                     <connections>
                                                         <action selector="didTapReportABug:" destination="6xI-ZT-ju6" eventType="touchUpInside" id="mJK-eS-FSW"/>
-                                                        <segue destination="b1Y-X9-6h0" kind="show" identifier="reportABug" id="LO7-jO-vPg"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -428,7 +427,6 @@
                                                     <state key="normal" title="Leave a suggestion"/>
                                                     <connections>
                                                         <action selector="didTapLeaveSuggestion:" destination="6xI-ZT-ju6" eventType="touchUpInside" id="p64-JL-hKB"/>
-                                                        <segue destination="b1Y-X9-6h0" kind="show" identifier="feedback" id="eVQ-Ri-Rbe"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -455,7 +453,7 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
                                                     <state key="normal" title="About"/>
                                                     <connections>
-                                                        <segue destination="ZU6-5D-QyP" kind="show" id="dFS-3K-yaO"/>
+                                                        <segue destination="ZU6-5D-QyP" kind="show" id="JJ9-Ev-xvE"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -505,6 +503,9 @@
                     <navigationItem key="navigationItem" title="Support" id="QlB-E6-WPe">
                         <barButtonItem key="backBarButtonItem" title="Back" id="DIj-sQ-sWx"/>
                     </navigationItem>
+                    <connections>
+                        <segue destination="b1Y-X9-6h0" kind="show" identifier="ReportBugView" id="fMK-Td-vKh"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sw1-Kr-d3H" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -513,7 +514,7 @@
         <!--About-->
         <scene sceneID="cUb-ND-g6e">
             <objects>
-                <viewController id="ZU6-5D-QyP" customClass="AboutPageViewController" customModule="Shingo_Events" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalTransitionStyle="crossDissolve" id="ZU6-5D-QyP" customClass="AboutPageViewController" customModule="Shingo_Events" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="CPb-h7-OWq"/>
                         <viewControllerLayoutGuide type="bottom" id="Iwo-c5-Ru0"/>
@@ -533,7 +534,6 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                         </subviews>
-                        <color key="backgroundColor" red="0.30588236451148987" green="0.011764706112444401" blue="0.094117648899555206" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="fYu-MO-yXx" firstAttribute="top" secondItem="CPb-h7-OWq" secondAttribute="bottom" constant="8" id="ItK-SJ-N1L"/>
                             <constraint firstAttribute="leadingMargin" secondItem="fYu-MO-yXx" secondAttribute="leading" id="iFD-CO-Dlj"/>
@@ -1436,7 +1436,6 @@
         <image name="sponsor_banner_pl" width="400" height="200"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="LO7-jO-vPg"/>
         <segue reference="WFw-TS-8kO"/>
     </inferredMetricsTieBreakers>
 </document>
