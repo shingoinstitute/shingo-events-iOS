@@ -73,6 +73,8 @@ class MainMenuViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationItem.title = ""
+        
         if let nav = navigationController?.navigationBar {
             nav.barStyle = UIBarStyle.Black
             nav.tintColor = UIColor.yellowColor()
