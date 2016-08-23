@@ -71,7 +71,7 @@ extension SchedulesTableViewController {
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("ScheduleCell", forIndexPath: indexPath) as! SchedulesTableViewCell
-        cell.updateCell(agendas[indexPath.row])
+        cell.agenda = agendas[indexPath.row]
         return cell
     }
     
@@ -99,18 +99,25 @@ extension SchedulesTableViewController {
 class SchedulesTableViewCell: UITableViewCell {
     
     @IBOutlet weak var agendaLabel: UILabel!
-    var agenda : SIAgenda!
+    var agenda : SIAgenda! {
+        didSet {
+            updateCell()
+        }
+    }
     
-    func updateCell(agenda: SIAgenda) {
-        self.agenda = agenda
+    func updateCell() {
         
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        dateFormatter.dateStyle = .MediumStyle
+        if let agenda = self.agenda {
+            let dateFormatter = NSDateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            dateFormatter.dateStyle = .MediumStyle
+
+            let dateText: String = dateFormatter.stringFromDate(agenda.date.dateByAddingTimeInterval(60*60*24))
+            
+            agendaLabel.text = "\(agenda.displayName), \(dateText)"
+        }
         
-        let date = dateFormatter.stringFromDate(agenda.date)
         
-        agendaLabel.text = "\(agenda.displayName), \(date)"
     }
     
 }

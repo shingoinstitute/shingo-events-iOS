@@ -64,9 +64,11 @@ class MainMenuViewController: UIViewController {
         super.loadView()
         
         SIRequest().requestEvents({ events in
-            self.events = events
-            self.eventsDidLoad = true
-        })
+            if let events = events {
+                self.events = events
+                self.eventsDidLoad = true
+            }
+        });
         
     }
     
@@ -125,7 +127,7 @@ class MainMenuViewController: UIViewController {
                 contentView.autoPinEdge(.Left, toEdge: .Left, ofView: view, withOffset: 10.0)
                 contentView.autoPinEdge(.Right, toEdge: .Right, ofView: view, withOffset: -10.0)
             }
-            
+        
             eventsBtn.autoSetDimension(.Height, toSize: 60)
             eventsBtn.autoPinEdge(.Top, toEdge: .Top, ofView: contentView, withOffset: 5)
             eventsBtn.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 5)

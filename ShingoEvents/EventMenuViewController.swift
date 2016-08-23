@@ -375,6 +375,7 @@ extension EventMenuViewController {
     // MARK: - Navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         navigationItem.title = ""
+        
         if segue.identifier == "SchedulesView" {
             let destination = segue.destinationViewController as! SchedulesTableViewController
             sortAgendaDays()
