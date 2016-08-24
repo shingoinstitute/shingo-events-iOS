@@ -294,22 +294,22 @@ class SIAgenda: SIObject {
     /// Gets session information for SIAgenda object using an agenda ID.
     func requestAgendaSessions(callback: () -> ()) {
         
-        if id.isEmpty {
+        switch id.isEmpty {
+        case true:
             callback()
-            return
+        case false:
+            SIRequest().requestSessions(agendaId: id, callback: { sessions in
+                
+                if let sessions = sessions {
+                    self.sessions = sessions
+                    self.didLoadSessions = true
+                }
+                
+                callback()
+            });
         }
-        
-        SIRequest().requestSessions(agendaId: id, callback: { sessions in
-            
-            if let sessions = sessions {
-                self.sessions = sessions
-                self.didLoadSessions = true
-            }
-            
-            callback()
-        });
     }
-    
+
 }
 
 
@@ -525,17 +525,8 @@ class SIExhibitor: SIObject {
     
     private func requestExhibitorLogoImage(callback: (() -> Void)?) {
         
-        if image != nil {
-            if let cb = callback {
-                cb()
-            }
-            return
-        }
-        
-        if logoURL.isEmpty {
-            if let cb = callback {
-                cb()
-            }
+        if image != nil || logoURL.isEmpty{
+            if let cb = callback { cb() }
             return
         }
         
@@ -544,22 +535,13 @@ class SIExhibitor: SIObject {
                 self.image = image
             }
             
-            if let cb = callback {
-                cb()
-            }
+            if let cb = callback { cb() }
         });
     }
     
     private func requestExhibitorBannerImage(callback: (() -> Void)?) {
         
-        if bannerImage != nil {
-            if let cb = callback {
-                cb()
-            }
-            return
-        }
-        
-        if bannerURL.isEmpty {
+        if bannerImage != nil || bannerURL.isEmpty {
             if let cb = callback {
                 cb()
             }
@@ -567,7 +549,7 @@ class SIExhibitor: SIObject {
         }
         
         requestImage(bannerURL, callback: { image in
-            if let image = image as UIImage? {
+            if let image = image {
                 self.bannerImage = image
             }
             
@@ -579,38 +561,39 @@ class SIExhibitor: SIObject {
     
     func getLogoImage(callback: (image: UIImage) -> ()) {
         
-        if let image = self.image {
-            callback(image: image)
+        guard let image = self.image else {
+            requestExhibitorLogoImage() {
+                if let image = self.image {
+                    callback(image: image)
+                } else if let image = UIImage(named: "logoComingSoon") {
+                    callback(image: image)
+                } else {
+                    callback(image: UIImage())
+                }
+            }
             return
         }
         
-        requestExhibitorLogoImage() {
-            if let image = self.image {
-                callback(image: image)
-            } else if let image = UIImage(named: "logoComingSoon") {
-                callback(image: image)
-            } else {
-                callback(image: UIImage())
-            }
-        }
+        callback(image: image)
     }
     
     func getBannerImage(callback: (image: UIImage) -> ()) {
         
-        if let image = self.bannerImage {
-            callback(image: image)
+        guard let image = self.bannerImage else {
+            requestExhibitorBannerImage() {
+                if let image = self.image {
+                    callback(image: image)
+                } else if let image = UIImage(named: "logoComingSoon") {
+                    callback(image: image)
+                } else {
+                    callback(image: UIImage())
+                }
+            }
             return
         }
         
-        requestExhibitorBannerImage() {
-            if let image = self.image {
-                callback(image: image)
-            } else if let image = UIImage(named: "logoComingSoon") {
-                callback(image: image)
-            } else {
-                callback(image: UIImage())
-            }
-        }
+        callback(image: image)
+        
     }
 }
 
@@ -650,6 +633,7 @@ class SIRecipient: SIObject {
         None
     }
 
+    var didLoadImage : Bool
     var awardType : AwardType
     var organization : String
     var photoList : String //Comma separated list of URLs to photos
@@ -659,11 +643,12 @@ class SIRecipient: SIObject {
     var summary : String
     var logoURL : String {
         didSet {
-            requestRecipientImage()
+            requestRecipientImage(nil)
         }
     }
 
     override init() {
+        didLoadImage = false
         awardType = AwardType.None
         organization = ""
         logoURL = ""
@@ -680,32 +665,38 @@ class SIRecipient: SIObject {
         self.name = name
     }
     
-    private func requestRecipientImage() {
-        requestImage(logoURL) { image in
-            guard let image = image else {
-                self.image = UIImage(named: "logoComingSoon500x500")
-                return
+    private func requestRecipientImage(callback: (() -> Void)?) {
+        
+        if image != nil || logoURL.isEmpty {
+            if let cb = callback { cb() }
+        } else {
+            requestImage(logoURL) { image in
+                if let image = image {
+                    self.image = image
+                    self.didLoadImage = true
+                }
+                if let cb = callback { cb() }
             }
-            
-            self.image = image
         }
+        
+        
     }
     
-    func getRecipientImage() -> UIImage? {
+    func getRecipientImage(callback: (UIImage?) -> Void) {
         
-        if awardType == AwardType.None {
-            return nil
+        if let image = self.image {
+            callback(image)
+        } else {
+            requestRecipientImage() {
+                if let image = self.image {
+                    callback(image)
+                } else if let image = UIImage(named: "logoComingSoon500x500") {
+                    callback(image)
+                } else {
+                    callback(nil)
+                }
+            }
         }
-        
-        if let image = image {
-            return image
-        }
-        
-        if let image = UIImage(named: "logoComingSoon500x500") {
-            return image
-        }
-        
-        return nil
     }
 }
 
@@ -781,17 +772,8 @@ class SISponsor: SIObject {
     
     private func requestLogoImage(callback: (() -> Void)?) {
         
-        if image != nil {
-            if let cb = callback {
-                cb()
-            }
-            return
-        }
-        
-        if logoURL.isEmpty {
-            if let cb = callback {
-                cb()
-            }
+        if image != nil || logoURL.isEmpty {
+            if let cb = callback { cb() }
             return
         }
         
@@ -799,25 +781,14 @@ class SISponsor: SIObject {
             if let image = image {
                 self.image = image
             }
-            if let cb = callback {
-                cb()
-            }
+            if let cb = callback { cb() }
         }
     }
     
     private func requestBannerImage(callback: (() -> Void)?) {
         
-        if bannerImage != nil {
-            if let cb = callback {
-                cb()
-            }
-            return
-        }
-        
-        if bannerURL.isEmpty {
-            if let cb = callback {
-                cb()
-            }
+        if bannerImage != nil || bannerURL.isEmpty {
+            if let cb = callback { cb() }
             return
         }
         
@@ -833,17 +804,8 @@ class SISponsor: SIObject {
     
     private func requestSplashScreenImage(callback: (() -> Void)?) {
         
-        if splashScreenImage != nil {
-            if let cb = callback {
-                cb()
-            }
-            return
-        }
-        
-        if splashScreenURL.isEmpty {
-            if let cb = callback {
-                cb()
-            }
+        if splashScreenImage != nil || splashScreenURL.isEmpty {
+            if let cb = callback { cb() }
             return
         }
         
@@ -951,13 +913,15 @@ class SIVenue: SIObject {
         }
     }
     
-    func getVenueMapImages() -> [UIImage] {
-        var maps = [UIImage]()
-        for map in self.venueMaps {
-            maps.append(map.getVenueMapImage())
-        }
-        return maps
-    }
+//    func getVenueMapImages() -> [UIImage] {
+//        var maps = [UIImage]()
+//        for map in self.venueMaps {
+//            map.getVenueMapImage() { image in
+//                maps.append(image)
+//            }
+//        }
+//        return maps
+//    }
     
 }
 
@@ -965,7 +929,7 @@ class SIVenueMap: SIObject {
     
     var mapURL : String {
         didSet {
-            requestMapImage()
+            requestVenueMapImage(nil)
         }
     }
     var floor : Int
@@ -976,30 +940,34 @@ class SIVenueMap: SIObject {
         super.init()
     }
     
-    func getVenueMapImage() -> UIImage {
+    func getVenueMapImage(callback: (UIImage) -> Void) {
         
-        if let image = self.image {
-            return image
+        guard let image = self.image else {
+            requestVenueMapImage() {
+                if let image = self.image {
+                    callback(image)
+                } else if let image = UIImage(named: "mapNotAvailable") {
+                    callback(image)
+                } else {
+                    callback(UIImage())
+                }
+            }
+            return
         }
         
-        if let image = UIImage(named: "mapNotAvailable") {
-            return image
-        }
-        
-        requestMapImage()
-        
-        return UIImage()
+        callback(image)
     }
     
-    private func requestMapImage() {
+    private func requestVenueMapImage(callback: (() -> Void)?) {
         
-        if image != nil { return }
-        
-        if mapURL.isEmpty { return }
-        
-        self.requestImage(mapURL) { (image) in
-            if let image = image {
-                self.image = image
+        if image != nil || mapURL.isEmpty {
+            if let cb = callback { cb() }
+        } else {
+            self.requestImage(mapURL) { (image) in
+                if let image = image {
+                    self.image = image
+                }
+                if let cb = callback { cb() }
             }
         }
     }
@@ -1012,7 +980,7 @@ class SIAffiliate: SIObject {
     var summary : String
     var logoURL : String {
         didSet {
-            requestLogoImage()
+            requestAffiliateLogoImage(nil)
         }
     }
     var websiteURL : String
@@ -1027,40 +995,40 @@ class SIAffiliate: SIObject {
         super.init()
     }
     
-    private func requestLogoImage() {
+    private func requestAffiliateLogoImage(callback: (() -> Void)?) {
         
-        if logoURL.isEmpty {
-            return
+        if logoURL.isEmpty || image != nil {
+            if let cb = callback { cb() }
         }
         
         requestImage(logoURL) { (image) in
             if let image = image {
                 self.image = image
             }
+            
+            if let cb = callback { cb() }
         }
     }
     
-    func getLogoImage() -> UIImage {
-        if let image = self.image {
-            return image
+    func getLogoImage(callback: (UIImage) -> ()) {
+        
+        guard let image = self.image else {
+            requestAffiliateLogoImage() {
+                if let image = self.image {
+                    callback(image)
+                } else if let image = UIImage(named: "shingo_icon") {
+                    callback(image)
+                } else {
+                    callback(UIImage())
+                }
+            }
+            return
         }
         
-        if let image = UIImage(named: "shingo_icon") {
-            return image
-        }
-        
-        requestLogoImage()
-        
-        return UIImage()
+        callback(image)
     }
     
 }
-
-
-
-
-
-
 
 
 

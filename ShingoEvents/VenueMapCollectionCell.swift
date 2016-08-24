@@ -27,7 +27,9 @@ class VenueMapCollectionCell: UICollectionViewCell {
         if venueMap != nil {
             mapNameLabel.text = venueMap.name
             mapNameLabel.font = UIFont(name: "Helvetica", size: 16.0)
-            venueImage.image = venueMap.getVenueMapImage()
+            venueMap.getVenueMapImage() { image in
+                self.venueImage.image = image
+            }
             venueImage.contentMode = .ScaleAspectFit
         }
         

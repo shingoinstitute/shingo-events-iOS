@@ -60,7 +60,9 @@ class AfilliateViewController: UIViewController {
         backdrop.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: view, withOffset: 0)
         backdrop.backgroundColor = shingoBlue
         
-        logoImage.image = affiliate.getLogoImage()
+        affiliate.getLogoImage() { image in
+            self.logoImage.image = image
+        }
         logoImage.contentMode = .ScaleAspectFit
         
         let attrs = [NSFontAttributeName : UIFont.systemFontOfSize(16.0),

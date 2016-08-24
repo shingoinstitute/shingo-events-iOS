@@ -138,10 +138,6 @@ extension RecipientsTableViewController {
         }
     }
     
-//    override func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
-//
-//    }
-    
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 42
     }
@@ -150,23 +146,23 @@ extension RecipientsTableViewController {
         
         switch indexPath.section {
         case 0:
-            if spRecipients[indexPath.row].getRecipientImage() == nil {
+            if !spRecipients[indexPath.row].didLoadImage {
                 return 42
             }
         case 1:
-            if silverRecipients[indexPath.row].getRecipientImage() == nil {
+            if !silverRecipients[indexPath.row].didLoadImage {
                 return 42
             }
         case 2:
-            if bronzeRecipients[indexPath.row].getRecipientImage() == nil {
+            if !bronzeRecipients[indexPath.row].didLoadImage {
                 return 42
             }
         case 3:
-            if researchRecipients[indexPath.row].getRecipientImage() == nil {
+            if !researchRecipients[indexPath.row].didLoadImage {
                 return 42
             }
         case 4:
-            if publicationRecipients[indexPath.row].getRecipientImage() == nil {
+            if !publicationRecipients[indexPath.row].didLoadImage {
                 return 42
             }
         default:

@@ -62,10 +62,15 @@ class RecipientTableViewCell: UITableViewCell {
     private func updateCell() {
         if let recipient = recipient {
             nameLabel.text = recipient.name
-            if let image = recipient.getRecipientImage() {
-                logoImage.image = image
-            } else {
-                self.accessoryType = .None
+            
+            if recipient.didLoadImage {
+                recipient.getRecipientImage() { image in
+                    if let image = image {
+                        self.logoImage.image = image
+                    } else {
+                        self.accessoryType = .None
+                    }
+                }
             }
         }
     }

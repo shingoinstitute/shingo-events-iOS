@@ -20,9 +20,7 @@ class ResearchInfoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.title = recipient.name
-        
-        let shingoBlue = UIColor(netHex: 0x002f56)
+        navigationItem.title = recipient.name
         
         bookImage.removeFromSuperview()
         abstractTextField.removeFromSuperview()
@@ -47,22 +45,22 @@ class ResearchInfoViewController: UIViewController {
         abstractTextField.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: scrollView, withOffset: 0)
         abstractTextField.scrollEnabled = false
         abstractTextField.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
-        abstractTextField.backgroundColor = shingoBlue
+        abstractTextField.backgroundColor = SIColor.shingoBlueColor()
         
         view.bringSubviewToFront(scrollView)
         backdrop.autoPinEdge(.Top, toEdge: .Bottom, ofView: bookImage, withOffset: 8)
         backdrop.autoPinEdgeToSuperviewEdge(.Left)
         backdrop.autoPinEdgeToSuperviewEdge(.Right)
         backdrop.autoPinEdgeToSuperviewEdge(.Bottom)
-        backdrop.backgroundColor = shingoBlue
+        backdrop.backgroundColor = SIColor.shingoBlueColor()
         
-        self.automaticallyAdjustsScrollViewInsets = false
+        automaticallyAdjustsScrollViewInsets = false
 
-//        if recipient.logoBookCoverImage != nil {
-             bookImage.image = recipient.getRecipientImage()
-//        } else {
-//            bookImage.image = UIImage(named: "shingo_icon")
-//        }
+        recipient.getRecipientImage() { image in
+            if let image = image {
+                self.bookImage.image = image
+            }
+        }
         
         abstractTextField.text = ""
         

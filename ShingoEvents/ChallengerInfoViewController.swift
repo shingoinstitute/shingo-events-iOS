@@ -59,7 +59,11 @@ class ChallengerInfoViewController: UIViewController {
         abstractTextField.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         self.automaticallyAdjustsScrollViewInsets = false
         logoImage.contentMode = UIViewContentMode.ScaleAspectFit
-        logoImage.image = recipient.getRecipientImage()
+        recipient.getRecipientImage() { image in
+            if let image = image {
+                self.logoImage.image = image
+            }
+        }
         
         
         if !recipient.summary.isEmpty {

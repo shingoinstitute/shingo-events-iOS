@@ -34,9 +34,11 @@ class VenueMapViewController: UIViewController, UIScrollViewDelegate {
         
         navigationItem.title = venueMap.name
         
-//        imageView.image = venueMap.getVenueMapImage()
         imageView.contentMode = UIViewContentMode.ScaleAspectFit
-        imageView.image = resizeImage(venueMap.getVenueMapImage(), toSize: view.frame.width)
+        venueMap.getVenueMapImage() { image in
+            self.imageView.image = self.resizeImage(image, toSize: self.view.frame.width)
+        }
+        
         
         scrollView.contentMode = .Center
         
@@ -63,13 +65,16 @@ class VenueMapViewController: UIViewController, UIScrollViewDelegate {
     }
     
     override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
-        switch toInterfaceOrientation {
-        case .Portrait:
-            imageView.image = resizeImage(venueMap.getVenueMapImage(), toSize: view.frame.height)
-        case .LandscapeLeft, .LandscapeRight:
-            imageView.image = resizeImage(venueMap.getVenueMapImage(), toSize: view.frame.height)
-        default:
-            break
+//        switch toInterfaceOrientation {
+//        case .Portrait:
+//            imageView.image = resizeImage(venueMap.getVenueMapImage(), toSize: view.frame.height)
+//        case .LandscapeLeft, .LandscapeRight:
+//            imageView.image = resizeImage(venueMap.getVenueMapImage(), toSize: view.frame.height)
+//        default:
+//            break
+//        }
+        venueMap.getVenueMapImage() { image in
+            self.imageView.image = self.resizeImage(image, toSize: self.view.frame.height)
         }
     }
     

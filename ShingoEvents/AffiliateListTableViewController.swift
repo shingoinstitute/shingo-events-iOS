@@ -28,7 +28,6 @@ class AffiliateListTableViewController: UITableViewController {
     }
     
     // MARK: - User interaction
-    
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let cell = tableView.cellForRowAtIndexPath(indexPath) as! AffiliateTableViewCell
         if let affiliate = cell.affiliate {
@@ -37,7 +36,6 @@ class AffiliateListTableViewController: UITableViewController {
     }
     
     // MARK: - Table view data source
-
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         if affiliateSections != nil {
             return affiliateSections.count
@@ -77,12 +75,7 @@ class AffiliateListTableViewController: UITableViewController {
 //        let cell = tableView.dequeueReusableCellWithIdentifier("AffiliateCell", forIndexPath: indexPath) as! AffiliateTableViewCell
         let cell = AffiliateTableViewCell()
         
-        let affiliate = affiliateSections[indexPath.section].1[indexPath.row]
-        cell.affiliate = affiliate
-        cell.logoImage.image = affiliate.getLogoImage()
-        cell.nameLabel.text = affiliate.name
-        
-        cell.accessoryType = .DisclosureIndicator
+        cell.affiliate = affiliateSections[indexPath.section].1[indexPath.row]
         
         cell.setNeedsUpdateConstraints()
         cell.updateConstraintsIfNeeded()
@@ -112,10 +105,23 @@ class AffiliateListTableViewController: UITableViewController {
 
 public class AffiliateTableViewCell: UITableViewCell {
     
-    var logoImage:UIImageView = UIImageView.newAutoLayoutView()
-    var nameLabel:UILabel = UILabel.newAutoLayoutView()
+    var logoImage:UIImageView = {
+        let view = UIImageView.newAutoLayoutView()
+        view.contentMode = .ScaleAspectFit
+        return view
+    }()
+    var nameLabel:UILabel = {
+        let view = UILabel.newAutoLayoutView()
+        view.numberOfLines = 0
+        view.lineBreakMode = .ByWordWrapping
+        return view
+    }()
     
-    var affiliate: SIAffiliate!
+    var affiliate: SIAffiliate! {
+        didSet {
+            updateCell()
+        }
+    }
     
     var didSetupConstraints = false
     
@@ -130,17 +136,11 @@ public class AffiliateTableViewCell: UITableViewCell {
                 self.logoImage.autoSetContentCompressionResistancePriorityForAxis(.Vertical)
             }
             
-            logoImage.image = affiliate.getLogoImage()
-            nameLabel.text = affiliate.name
-            
-            logoImage.contentMode = .ScaleAspectFit
             logoImage.autoSetDimension(.Width, toSize: contentView.frame.width * 0.33)
             logoImage.autoAlignAxis(.Horizontal, toSameAxisOfView: contentView, withOffset: 0)
             logoImage.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 8.0)
             
             nameLabel.autoSetDimension(.Height, toSize: 42.0)
-            nameLabel.numberOfLines = 0
-            nameLabel.lineBreakMode = .ByWordWrapping
             nameLabel.autoAlignAxis(.Horizontal, toSameAxisOfView: contentView)
             nameLabel.autoPinEdge(.Left, toEdge: .Right, ofView: logoImage, withOffset: 8.0)
             nameLabel.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -8.0)
@@ -148,5 +148,18 @@ public class AffiliateTableViewCell: UITableViewCell {
             didSetupConstraints = true
         }
         super.updateConstraints()
+    }
+    
+    private func updateCell() {
+        
+        accessoryType = .DisclosureIndicator
+        
+        if let affiliate = affiliate {
+            affiliate.getLogoImage() { image in
+                self.logoImage.image = image
+            }
+            
+            nameLabel.text = affiliate.name
+        }
     }
 }
