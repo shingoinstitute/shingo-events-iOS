@@ -1,3 +1,10 @@
-Shingo Events.xcworkspace/xcuserdata/craigblackburn.xcuserdatad/UserInterfaceState.xcuserstate
+#XCode files
+*.xcuserstate
+*.xccheckout
+*.xcscmblueprint
+
+#Git
 README.md
+
+#OS X
 .DS_Store
