@@ -13,6 +13,7 @@ import MapKit
 
 let BASE_URL = "https://api.shingo.org"
 let EVENTS_URL = BASE_URL + "/salesforce/events"
+let SUPPORT_URL = BASE_URL + "/support"
 
 class SIRequest {
     
@@ -25,28 +26,6 @@ class SIRequest {
                                                timeZone: "UTC")
     
     //Mark: - Private Methods
-    
-    /// HTTP POST request method.
-    private func postRequest(url url: String, parameters: [String:String], callback: (value: JSON?) -> ())  {
-        Alamofire.request(.POST, url, parameters: parameters).responseJSON { response in
-            
-            guard response.result.isSuccess else {
-                print("Error while performing API POST request: \(response.result.error)")
-                callback(value: nil)
-                return
-            }
-            
-            guard let response = response.result.value else {
-                print("Error while performing API POST request: Invalid response")
-                callback(value: nil)
-                return
-            }
-            
-            let responseJSON = JSON(response)
-            print(responseJSON)
-            callback(value: responseJSON)
-        }
-    }
     
     /// HTTP GET request method.
     private func getRequest(url url: String, callback: (value: JSON?) -> ()) {
@@ -73,6 +52,29 @@ class SIRequest {
                 }
             }
             
+            print(responseJSON)
+            callback(value: responseJSON)
+        }
+    }
+    
+    
+    /// HTTP POST request method.
+    private func postRequest(url url: String, parameters: [String:String], callback: (value: JSON?) -> ())  {
+        Alamofire.request(.POST, url, parameters: parameters).responseJSON { response in
+            
+            guard response.result.isSuccess else {
+                print("Error while performing API POST request: \(response.result.error)")
+                callback(value: nil)
+                return
+            }
+            
+            guard let response = response.result.value else {
+                print("Error while performing API POST request: Invalid response")
+                callback(value: nil)
+                return
+            }
+            
+            let responseJSON = JSON(response)
             print(responseJSON)
             callback(value: responseJSON)
         }
@@ -1288,4 +1290,45 @@ extension SIRequest {
         
     }
     
+    func postBugReport(parameters: [String:String], callback: (Bool) -> Void) {
+        
+        postRequest(url: SUPPORT_URL + "/bugs", parameters: parameters) { (json) in
+            guard let json = json else {
+                callback(false)
+                return
+            }
+            
+            if let success = json["success"].bool {
+                callback(success)
+            } else {
+                callback(false)
+            }
+        }
+    }
+    
+    func postFeedback(parameters: [String:String], callback: (Bool) -> Void) {
+        
+        postRequest(url: SUPPORT_URL + "/feedback", parameters: parameters) { (json) in
+            guard let json = json else {
+                callback(false)
+                return
+            }
+            
+            if let success = json["success"].bool {
+                callback(success)
+            } else {
+                callback(false)
+            }
+        }
+        
+    }
 }
+
+
+
+
+
+
+
+
+

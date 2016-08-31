@@ -33,14 +33,9 @@ class SettingsTableViewController: UITableViewController {
         }
     }
     
-    @IBAction func didTapProfileSettings(sender: AnyObject) {
-    }
+    @IBAction func didTapProfileSettings(sender: AnyObject) {}
 
     @IBAction func didTapReportABug(sender: AnyObject) {
-        performSegueWithIdentifier("ReportBugView", sender: sender)
-    }
-
-    @IBAction func didTapLeaveSuggestion(sender: AnyObject) {
         performSegueWithIdentifier("ReportBugView", sender: sender)
     }
     
@@ -57,20 +52,14 @@ class SettingsTableViewController: UITableViewController {
         }
     }
     
+    //MARK: - Navigation
+    
+    @IBAction func unwindToSettings(segue: UIStoryboardSegue) {}
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        if let button = sender as? UIButton {
-            switch button.tag {
-            case 1:
-                let destination = segue.destinationViewController as? ReportABugViewController
-                destination?.titleLabelText = "Report Bug"
-            case 2:
-                let destination = segue.destinationViewController as? ReportABugViewController
-                destination?.titleLabelText = "Leave Suggestion"
-            default:
-                break
-            }
-            
+        if segue.identifier == "ReportBugView" {
+//            let destination = segue.destinationViewController as? BugReportViewController
         }
         
     }

@@ -1,30 +1,30 @@
+////
+////  ReportABugViewController.swift
+////  Shingo Events
+////
+////  Created by Craig Blackburn on 2/23/16.
+////  Copyright © 2016 Shingo Institute. All rights reserved.
+////
 //
-//  ContactUsViewController.swift
-//  Shingo Events
-//
-//  Created by Craig Blackburn on 2/22/16.
-//  Copyright © 2016 Shingo Institute. All rights reserved.
-//
-
 import UIKit
 import Alamofire
 
-class ContactUsViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
-
+class BugReportViewController: UIViewController, UITextViewDelegate, UITextFieldDelegate {
+    
+    var didMakeEdit = false
+    var messageSent = false
+    
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var descriptionTextField: UITextView!
     @IBOutlet weak var submitButton: UIButton!
-
-    var didMakeEdit = false
-    var messageSent = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = SIColor.shingoGoldColor()
         
-        emailTextField.delegate = self
         descriptionTextField.delegate = self
+        emailTextField.delegate = self
         
         descriptionTextField.text = "Enter message here."
         descriptionTextField.textColor = UIColor.lightGrayColor()
@@ -38,10 +38,10 @@ class ContactUsViewController: UIViewController, UITextFieldDelegate, UITextView
         
     }
     
-    @IBAction func sendMessage(sender: AnyObject) {
 
+    @IBAction func didTapSubmit(sender: AnyObject) {
+        
         if !messageSent {
-            
             if !didMakeEdit || descriptionTextField.text.isEmpty {
                 
                 displayAlert(title: "Oops...", message: "Your message is still empty!")
@@ -51,27 +51,26 @@ class ContactUsViewController: UIViewController, UITextFieldDelegate, UITextView
                 displayAlert(title: "Invalid Email Address", message: "Please enter a valid email address")
                 
             } else {
-                
+            
                 let parameters: [String:String] = [
-                    "description": descriptionTextField.text!,
                     "device": "\(UIDevice.currentDevice().deviceType)",
+                    "description": descriptionTextField.text,
                     "details": "iOS Version: \(UIDevice.currentDevice().systemVersion)",
-                    "rating": "5",
                     "email": emailTextField.text!
                 ]
                 
-                let activity = ActivityViewController(message: "Sending Feedback...")
+                let activity = ActivityViewController(message: "Sending Bug Report...")
                 presentViewController(activity, animated: true, completion: { 
-                    SIRequest().postFeedback(parameters, callback: { (success) in
-                        self.dismissViewControllerAnimated(false, completion: { 
+                    SIRequest().postBugReport(parameters, callback: { (success) in
+                        self.dismissViewControllerAnimated(false, completion: {
                             switch success {
                             case true:
                                 
                                 self.messageSent = true
                                 
                                 let message = UIAlertController(title: "Message Sent", message: "Thank you for contacting us, your feedback is greatly appreciated!", preferredStyle: .Alert)
-                                let action = UIAlertAction(title: "Okay", style: .Default, handler: { (_) in
-                                    self.performSegueWithIdentifier("UnwindToSupport", sender: self)
+                                let action = UIAlertAction(title: "Okay", style: .Default, handler: { _ in
+                                    self.performSegueWithIdentifier("UnwindToSettings", sender: self)
                                 })
                                 message.addAction(action)
                                 
@@ -82,6 +81,7 @@ class ContactUsViewController: UIViewController, UITextFieldDelegate, UITextView
                                 let message = UIAlertController(title: "Error", message: "Your message could not be sent, please try again later. If you have a secure internet connection and this problem persists, you may email us at shingo.events@usu.edu", preferredStyle: .Alert)
                                 let action = UIAlertAction(title: "Okay", style: .Default, handler: nil)
                                 message.addAction(action)
+                                
                                 self.presentViewController(message, animated: true, completion: nil)
                                 
                             }
@@ -90,7 +90,6 @@ class ContactUsViewController: UIViewController, UITextFieldDelegate, UITextView
                 })
             }
         }
-        
     }
     
     private func displayAlert(title title: String, message: String) {
@@ -101,27 +100,14 @@ class ContactUsViewController: UIViewController, UITextFieldDelegate, UITextView
         presentViewController(alert, animated: true, completion: nil)
     }
     
-}
-
-extension ContactUsViewController {
-
-    // MARK: - UITextFieldDelegate
+    //MARK: - UITextFieldDelegate
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         emailTextField.resignFirstResponder()
         return true
     }
     
-    // MARK: - UITextViewDeleagte
-    
-    func textViewDidBeginEditing(textView: UITextView) {
-        if !didMakeEdit {
-            textView.text = ""
-            textView.textColor = .blackColor()
-//            textView.text.sizeWithAttributes([NSFontAttributeName: UIFont.systemFontOfSize(12.0)])
-            didMakeEdit = true
-        }
-    }
+    //MARK: - UITextViewDelegate
     
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
         if text == "\n" {
@@ -130,5 +116,14 @@ extension ContactUsViewController {
         }
         return true
     }
-
+    
+    func textViewDidBeginEditing(textView: UITextView) {
+        if !didMakeEdit {
+            textView.text = ""
+            textView.textColor = .blackColor()
+            didMakeEdit = true
+        }
+    }
+    
 }
+

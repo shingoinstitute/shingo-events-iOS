@@ -36,8 +36,9 @@ class ActivityViewController: UIViewController {
     var activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
     var didAddActivityIndicatorConstraints = false
     
-    convenience init() {
+    convenience init(message m: String) {
         self.init(nibName: nil, bundle: nil)
+        message = m
         modalTransitionStyle = .CrossDissolve
         modalPresentationStyle = .OverCurrentContext
         view.backgroundColor = UIColor.clearColor()

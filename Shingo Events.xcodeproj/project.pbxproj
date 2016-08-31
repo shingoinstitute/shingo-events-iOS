@@ -36,7 +36,7 @@
 		C2A695241C35E30F00F6E0B8 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A695231C35E30F00F6E0B8 /* SwiftyJSON.swift */; };
 		C2B155111D626BE00099330F /* ExhibitorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B155101D626BE00099330F /* ExhibitorTableViewCell.swift */; };
 		C2B7EB401C7B813100162AFB /* ContactUsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B7EB3F1C7B813100162AFB /* ContactUsViewController.swift */; };
-		C2B7EB421C7CD89900162AFB /* ReportABugViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B7EB411C7CD89900162AFB /* ReportABugViewController.swift */; };
+		C2B7EB421C7CD89900162AFB /* BugReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B7EB411C7CD89900162AFB /* BugReportViewController.swift */; };
 		C2C021231C6272D3008732DC /* SponsorsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C021221C6272D3008732DC /* SponsorsTableViewController.swift */; };
 		C2CFC3041C4576D00036E485 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CFC3031C4576D00036E485 /* SettingsTableViewController.swift */; };
 		C2CFC3101C481EAB0036E485 /* MainMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CFC30F1C481EAB0036E485 /* MainMenuViewController.swift */; };
@@ -107,7 +107,7 @@
 		C2A695231C35E30F00F6E0B8 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
 		C2B155101D626BE00099330F /* ExhibitorTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExhibitorTableViewCell.swift; sourceTree = "<group>"; };
 		C2B7EB3F1C7B813100162AFB /* ContactUsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactUsViewController.swift; sourceTree = "<group>"; };
-		C2B7EB411C7CD89900162AFB /* ReportABugViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReportABugViewController.swift; sourceTree = "<group>"; };
+		C2B7EB411C7CD89900162AFB /* BugReportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BugReportViewController.swift; sourceTree = "<group>"; };
 		C2C021221C6272D3008732DC /* SponsorsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SponsorsTableViewController.swift; sourceTree = "<group>"; };
 		C2CFC3031C4576D00036E485 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		C2CFC30F1C481EAB0036E485 /* MainMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMenuViewController.swift; sourceTree = "<group>"; };
@@ -307,7 +307,7 @@
 			isa = PBXGroup;
 			children = (
 				C2CFC3031C4576D00036E485 /* SettingsTableViewController.swift */,
-				C2B7EB411C7CD89900162AFB /* ReportABugViewController.swift */,
+				C2B7EB411C7CD89900162AFB /* BugReportViewController.swift */,
 				C2B7EB3F1C7B813100162AFB /* ContactUsViewController.swift */,
 				C224C8971C92138700F4E393 /* AboutPageViewController.swift */,
 			);
@@ -523,7 +523,7 @@
 				C22EF40E1D6E427F00C4C5DC /* TestCode.swift in Sources */,
 				C26DC9041C597A8600BB4DDA /* ExhibitorInfoViewController.swift in Sources */,
 				C21ECE281C5FB21500689FDE /* AffiliateListTableViewController.swift in Sources */,
-				C2B7EB421C7CD89900162AFB /* ReportABugViewController.swift in Sources */,
+				C2B7EB421C7CD89900162AFB /* BugReportViewController.swift in Sources */,
 				C28B67F31C406BDE00AC9193 /* EventMenuViewController.swift in Sources */,
 				C2FF6B221CB2E43200331ED2 /* VenueMapCollectionCell.swift in Sources */,
 				C264CCF01C5834A5005CDB11 /* ChallengerInfoViewController.swift in Sources */,
