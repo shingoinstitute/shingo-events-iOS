@@ -3,6 +3,10 @@
 *.xccheckout
 *.xcscmblueprint
 
+#CocoaPods
+Podfile.lock
+Pods
+
 #Git
 README.md
 
