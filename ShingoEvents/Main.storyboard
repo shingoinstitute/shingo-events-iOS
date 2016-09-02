@@ -307,14 +307,17 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress"/>
                             </textField>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="HT1-ql-mAx">
-                                <rect key="frame" x="20" y="213" width="560" height="199"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="HT1-ql-mAx">
+                                <rect key="frame" x="20" y="168" width="560" height="200"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="200" id="U9T-yf-oic"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done"/>
                             </textView>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JQQ-2L-S5s">
-                                <rect key="frame" x="255" y="420" width="90" height="34"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JQQ-2L-S5s">
+                                <rect key="frame" x="255" y="376" width="90" height="34"/>
                                 <color key="backgroundColor" red="0.97086027370000005" green="0.97100502560000002" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="34" id="0AD-E2-qjT"/>
@@ -325,24 +328,93 @@
                                     <action selector="sendMessage:" destination="BMR-CH-MuX" eventType="touchUpInside" id="tl4-Qr-DeM"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fea-zE-fib" customClass="SIButton" customModule="Shingo_Events" customModuleProvider="target">
+                                <rect key="frame" x="474" y="110" width="106" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="O3h-oH-pie"/>
+                                </constraints>
+                                <state key="normal" image="white_star"/>
+                                <connections>
+                                    <action selector="didTapStar:" destination="BMR-CH-MuX" eventType="touchUpInside" id="Ibb-u1-gil"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vbb-wt-sj3" customClass="SIButton" customModule="Shingo_Events" customModuleProvider="target">
+                                <rect key="frame" x="20" y="110" width="106" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="7gE-DI-rSH"/>
+                                </constraints>
+                                <state key="normal" image="white_star"/>
+                                <connections>
+                                    <action selector="didTapStar:" destination="BMR-CH-MuX" eventType="touchUpInside" id="Arj-D5-ytc"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pfj-cc-vs7" customClass="SIButton" customModule="Shingo_Events" customModuleProvider="target">
+                                <rect key="frame" x="247" y="110" width="106" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="rcX-Hv-elM"/>
+                                </constraints>
+                                <state key="normal" image="white_star"/>
+                                <connections>
+                                    <action selector="didTapStar:" destination="BMR-CH-MuX" eventType="touchUpInside" id="ydw-oa-xCa"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YnA-zX-27K" customClass="SIButton" customModule="Shingo_Events" customModuleProvider="target">
+                                <rect key="frame" x="361" y="110" width="105" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="hw5-BZ-buU"/>
+                                </constraints>
+                                <state key="normal" image="white_star"/>
+                                <connections>
+                                    <action selector="didTapStar:" destination="BMR-CH-MuX" eventType="touchUpInside" id="LeL-V9-aJT"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9K7-c5-8gj" customClass="SIButton" customModule="Shingo_Events" customModuleProvider="target">
+                                <rect key="frame" x="134" y="110" width="105" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="4iW-8v-Bw4"/>
+                                </constraints>
+                                <state key="normal" image="white_star"/>
+                                <connections>
+                                    <action selector="didTapStar:" destination="BMR-CH-MuX" eventType="touchUpInside" id="Naj-jb-AxF"/>
+                                </connections>
+                            </button>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="0.5" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="Pfj-cc-vs7" firstAttribute="top" secondItem="peZ-HJ-R5n" secondAttribute="bottom" constant="8" id="1mz-FM-5hS"/>
                             <constraint firstAttribute="leadingMargin" secondItem="HT1-ql-mAx" secondAttribute="leading" id="3o6-SN-5E1"/>
-                            <constraint firstItem="gYw-RP-lar" firstAttribute="top" secondItem="JQQ-2L-S5s" secondAttribute="bottom" constant="205" id="7il-Y8-4GG"/>
-                            <constraint firstItem="HT1-ql-mAx" firstAttribute="top" secondItem="peZ-HJ-R5n" secondAttribute="bottom" constant="8" id="Amj-KL-xEA"/>
                             <constraint firstAttribute="trailingMargin" secondItem="peZ-HJ-R5n" secondAttribute="trailing" id="G2j-et-7i1"/>
                             <constraint firstAttribute="leadingMargin" secondItem="peZ-HJ-R5n" secondAttribute="leading" id="JUk-GS-D5x"/>
+                            <constraint firstItem="YnA-zX-27K" firstAttribute="top" secondItem="peZ-HJ-R5n" secondAttribute="bottom" constant="8" id="KMx-iv-aUQ"/>
+                            <constraint firstItem="9K7-c5-8gj" firstAttribute="top" secondItem="peZ-HJ-R5n" secondAttribute="bottom" constant="8" id="L0w-Qo-nh1"/>
                             <constraint firstItem="JQQ-2L-S5s" firstAttribute="top" secondItem="HT1-ql-mAx" secondAttribute="bottom" constant="8" id="L1S-na-MMB"/>
                             <constraint firstAttribute="trailingMargin" secondItem="HT1-ql-mAx" secondAttribute="trailing" id="O95-2A-ENs"/>
+                            <constraint firstItem="9K7-c5-8gj" firstAttribute="leading" secondItem="Vbb-wt-sj3" secondAttribute="trailing" constant="8" id="TkB-q1-Q6l"/>
                             <constraint firstItem="peZ-HJ-R5n" firstAttribute="top" secondItem="Dz1-rO-zsf" secondAttribute="bottom" constant="8" id="VbU-pP-a7P"/>
+                            <constraint firstItem="9K7-c5-8gj" firstAttribute="width" secondItem="Vbb-wt-sj3" secondAttribute="width" id="Wtq-Cb-jXJ"/>
+                            <constraint firstItem="fea-zE-fib" firstAttribute="width" secondItem="Vbb-wt-sj3" secondAttribute="width" id="XYU-We-DXN"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="fea-zE-fib" secondAttribute="trailing" id="ho8-HN-l3p"/>
+                            <constraint firstItem="YnA-zX-27K" firstAttribute="leading" secondItem="Pfj-cc-vs7" secondAttribute="trailing" constant="8" id="jZw-Af-mit"/>
+                            <constraint firstItem="Pfj-cc-vs7" firstAttribute="width" secondItem="Vbb-wt-sj3" secondAttribute="width" id="k9e-yV-E5s"/>
+                            <constraint firstItem="fea-zE-fib" firstAttribute="top" secondItem="peZ-HJ-R5n" secondAttribute="bottom" constant="8" id="lqL-Dc-6Vh"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="Vbb-wt-sj3" secondAttribute="leading" id="mnR-gu-3E9"/>
                             <constraint firstItem="JQQ-2L-S5s" firstAttribute="centerX" secondItem="QQC-BW-JC5" secondAttribute="centerX" id="o5d-IQ-uAA"/>
+                            <constraint firstItem="Vbb-wt-sj3" firstAttribute="top" secondItem="peZ-HJ-R5n" secondAttribute="bottom" constant="8" id="q1l-Eb-Erw"/>
+                            <constraint firstItem="HT1-ql-mAx" firstAttribute="top" secondItem="Vbb-wt-sj3" secondAttribute="bottom" constant="8" id="qXB-yg-53W"/>
+                            <constraint firstItem="fea-zE-fib" firstAttribute="leading" secondItem="YnA-zX-27K" secondAttribute="trailing" constant="8" id="qgh-pj-F2s"/>
+                            <constraint firstItem="YnA-zX-27K" firstAttribute="width" secondItem="Vbb-wt-sj3" secondAttribute="width" id="tdE-sy-AjS"/>
+                            <constraint firstItem="Pfj-cc-vs7" firstAttribute="leading" secondItem="9K7-c5-8gj" secondAttribute="trailing" constant="8" id="w1w-Nj-kQp"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Contact Us" id="OXH-ld-J2I"/>
                     <connections>
                         <outlet property="descriptionTextField" destination="HT1-ql-mAx" id="ySz-Fq-eSh"/>
                         <outlet property="emailTextField" destination="peZ-HJ-R5n" id="8n8-wP-VVV"/>
+                        <outlet property="star1" destination="Vbb-wt-sj3" id="Jle-dQ-aas"/>
+                        <outlet property="star2" destination="9K7-c5-8gj" id="i0x-sI-gLd"/>
+                        <outlet property="star3" destination="Pfj-cc-vs7" id="Raq-KU-icE"/>
+                        <outlet property="star4" destination="YnA-zX-27K" id="nI9-QN-0xI"/>
+                        <outlet property="star5" destination="fea-zE-fib" id="yW9-sm-OcU"/>
                         <outlet property="submitButton" destination="JQQ-2L-S5s" id="FSR-7B-Pe6"/>
                         <segue destination="20j-iq-fd6" kind="unwind" identifier="UnwindToSupport" unwindAction="unwindToSettings:" id="S0A-X9-t4T"/>
                     </connections>
@@ -539,13 +611,13 @@
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress"/>
                             </textField>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="knU-Qb-3MQ">
-                                <rect key="frame" x="20" y="110" width="560" height="199"/>
+                                <rect key="frame" x="20" y="110" width="560" height="200"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iy8-cm-kMt">
-                                <rect key="frame" x="255" y="317" width="90" height="34"/>
+                                <rect key="frame" x="255" y="318" width="90" height="34"/>
                                 <color key="backgroundColor" red="0.97086027370000005" green="0.97100502560000002" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="90" id="8gF-X6-HDO"/>
@@ -564,7 +636,7 @@
                             <constraint firstAttribute="leadingMargin" secondItem="yS0-43-Xsl" secondAttribute="leading" id="7KB-gg-Ire"/>
                             <constraint firstAttribute="trailingMargin" secondItem="yS0-43-Xsl" secondAttribute="trailing" id="Gss-h1-UVk"/>
                             <constraint firstAttribute="leadingMargin" secondItem="knU-Qb-3MQ" secondAttribute="leading" id="PbD-go-11t"/>
-                            <constraint firstItem="Qpz-Dn-Uay" firstAttribute="top" secondItem="iy8-cm-kMt" secondAttribute="bottom" constant="205" id="QMI-Fb-iu6"/>
+                            <constraint firstItem="Qpz-Dn-Uay" firstAttribute="top" secondItem="iy8-cm-kMt" secondAttribute="bottom" constant="204" id="QMI-Fb-iu6"/>
                             <constraint firstItem="knU-Qb-3MQ" firstAttribute="top" secondItem="yS0-43-Xsl" secondAttribute="bottom" constant="8" id="R60-Pm-lVe"/>
                             <constraint firstAttribute="trailingMargin" secondItem="knU-Qb-3MQ" secondAttribute="trailing" id="Y8w-8O-Sos"/>
                             <constraint firstItem="iy8-cm-kMt" firstAttribute="centerX" secondItem="6FF-i2-v8c" secondAttribute="centerX" id="gR8-gp-Ybt"/>
@@ -1412,6 +1484,7 @@
         <image name="200x200PL" width="200" height="200"/>
         <image name="right-arrow" width="108" height="192"/>
         <image name="sponsor_banner_pl" width="400" height="200"/>
+        <image name="white_star" width="50" height="50"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="WFw-TS-8kO"/>

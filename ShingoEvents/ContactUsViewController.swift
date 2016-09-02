@@ -7,13 +7,24 @@
 //
 
 import UIKit
-import Alamofire
+
+class SIButton: UIButton {
+    var starSelected = false
+}
 
 class ContactUsViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
 
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var descriptionTextField: UITextView!
     @IBOutlet weak var submitButton: UIButton!
+
+    @IBOutlet weak var star1: SIButton!
+    @IBOutlet weak var star2: SIButton!
+    @IBOutlet weak var star3: SIButton!
+    @IBOutlet weak var star4: SIButton!
+    @IBOutlet weak var star5: SIButton!
+    
+    var rating = 0
 
     var didMakeEdit = false
     var messageSent = false
@@ -22,6 +33,12 @@ class ContactUsViewController: UIViewController, UITextFieldDelegate, UITextView
         super.viewDidLoad()
         
         view.backgroundColor = SIColor.shingoGoldColor()
+        
+        let starButtons: [SIButton] = [star1, star2, star3, star4, star5]
+        
+        for star in starButtons {
+            star.contentMode = .ScaleAspectFit
+        }
         
         emailTextField.delegate = self
         descriptionTextField.delegate = self
@@ -56,7 +73,7 @@ class ContactUsViewController: UIViewController, UITextFieldDelegate, UITextView
                     "description": descriptionTextField.text!,
                     "device": "\(UIDevice.currentDevice().deviceType)",
                     "details": "iOS Version: \(UIDevice.currentDevice().systemVersion)",
-                    "rating": "5",
+                    "rating": "\(rating)",
                     "email": emailTextField.text!
                 ]
                 
@@ -103,6 +120,33 @@ class ContactUsViewController: UIViewController, UITextFieldDelegate, UITextView
     
 }
 
+
+
+extension ContactUsViewController {
+    
+    // MARK: - Rating buttons
+    
+    @IBAction func didTapStar(sender: AnyObject) {
+        if let button = sender as? SIButton {
+            changeStars(button)
+        }
+    }
+
+    private func changeStars(sender: SIButton) {
+        for i in 1 ..< 6 {
+            if let button = view.viewWithTag(i) as? SIButton {
+                if i <= sender.tag {
+                    button.setImage(UIImage(named: "gold_star"), forState: .Normal)
+                    rating = i
+                } else {
+                    button.setImage(UIImage(named: "white_star"), forState: .Normal)
+                }
+            }
+        }
+    }
+    
+}
+
 extension ContactUsViewController {
 
     // MARK: - UITextFieldDelegate
@@ -118,7 +162,6 @@ extension ContactUsViewController {
         if !didMakeEdit {
             textView.text = ""
             textView.textColor = .blackColor()
-//            textView.text.sizeWithAttributes([NSFontAttributeName: UIFont.systemFontOfSize(12.0)])
             didMakeEdit = true
         }
     }
@@ -132,3 +175,7 @@ extension ContactUsViewController {
     }
 
 }
+
+
+
+
