@@ -37,7 +37,8 @@ class MainMenuViewController: UIViewController {
     var menuBackgroundImage: UIImageView = {
         let view = UIImageView.newAutoLayoutView()
         view.backgroundColor = .whiteColor()
-        view.image = SIImages().shingoIconForDevice()
+        view.contentMode = .ScaleAspectFill
+        view.image = UIImage(named: "Shingo Icon Fullscreen")
         return view
     }()
     var shingoLogoImageView : UIImageView = {
@@ -113,7 +114,7 @@ class MainMenuViewController: UIViewController {
             view.addSubview(shingoLogoImageView)
             view.bringSubviewToFront(shingoLogoImageView)
             
-            menuBackgroundImage.autoPinToTopLayoutGuideOfViewController(self, withInset: 0)
+            menuBackgroundImage.autoPinEdgeToSuperviewEdge(.Top)
             menuBackgroundImage.autoPinEdge(.Left, toEdge: .Left, ofView: view)
             menuBackgroundImage.autoPinEdge(.Right, toEdge: .Right, ofView: view)
             menuBackgroundImage.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: view)

@@ -127,8 +127,7 @@ public class AffiliateTableViewCell: UITableViewCell {
     
     override public func updateConstraints() {
         if !didSetupConstraints {
-            logoImage.removeFromSuperview()
-            nameLabel.removeFromSuperview()
+
             contentView.addSubview(logoImage)
             contentView.addSubview(nameLabel)
             
