@@ -2,6 +2,7 @@
 *.xcuserstate
 *.xccheckout
 *.xcscmblueprint
+*.xcbkptlist
 
 #Git
 README.md
