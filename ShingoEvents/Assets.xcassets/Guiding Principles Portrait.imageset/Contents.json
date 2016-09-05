@@ -1,17 +1,28 @@
 {
   "images" : [
     {
-      "idiom" : "universal",
-      "filename" : "Guiding Principles Portrait.png",
+      "idiom" : "iphone",
       "scale" : "1x"
     },
     {
-      "idiom" : "universal",
+      "idiom" : "iphone",
+      "filename" : "Guiding Principles Portrait-iPhone@2x.png",
       "scale" : "2x"
     },
     {
-      "idiom" : "universal",
+      "idiom" : "iphone",
+      "filename" : "Guiding Principles Portrait-iPhone@3x.png",
       "scale" : "3x"
+    },
+    {
+      "idiom" : "ipad",
+      "filename" : "Guiding Principles Portrait-iPad@1x.png",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "ipad",
+      "filename" : "Guiding Principles Portrait-iPad@2x.png",
+      "scale" : "2x"
     }
   ],
   "info" : {

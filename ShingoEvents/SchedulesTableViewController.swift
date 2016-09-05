@@ -19,13 +19,6 @@ class SchedulesTableViewController: UITableViewController {
         super.viewWillAppear(animated)
         navigationItem.title = "Schedule"
     }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        providesPresentationContextTransitionStyle = true
-        definesPresentationContext = true
-    }
  
     // MARK: - Navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -38,7 +31,7 @@ class SchedulesTableViewController: UITableViewController {
         }
     }
     
-    // MARK: - Other Functions
+    // MARK: - Sorting
     private func sortSessionsByDate(sender: [SISession]) -> [SISession] {
         var sessions = sender
         for i in 0 ..< sessions.count - 1 {
@@ -58,9 +51,10 @@ class SchedulesTableViewController: UITableViewController {
     
 }
 
-// MARK: - Table view data source
+
 extension SchedulesTableViewController {
-    
+
+    // MARK: - Table view data source
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -82,7 +76,6 @@ extension SchedulesTableViewController {
         } else {
             
             let av = ActivityViewController()
-            av.modalPresentationStyle = .OverCurrentContext
             
             self.presentViewController(av, animated: true, completion: {
                 self.agendas[indexPath.row].requestAgendaSessions() {
@@ -116,8 +109,6 @@ class SchedulesTableViewCell: UITableViewCell {
             
             agendaLabel.text = "\(agenda.displayName), \(dateText)"
         }
-        
-        
     }
     
 }

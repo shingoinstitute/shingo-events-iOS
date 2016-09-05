@@ -54,7 +54,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Iv9-zT-ptl">
-                                                    <rect key="frame" x="124" y="16" width="34" height="21"/>
+                                                    <rect key="frame" x="8" y="16" width="267" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -69,11 +69,12 @@
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <constraints>
+                                            <constraint firstAttribute="leadingMargin" secondItem="Iv9-zT-ptl" secondAttribute="leading" id="402-kU-yge"/>
                                             <constraint firstAttribute="topMargin" secondItem="Iv9-zT-ptl" secondAttribute="top" constant="-8" id="GAr-cB-KRN"/>
                                             <constraint firstAttribute="trailingMargin" secondItem="ILH-PV-dt5" secondAttribute="trailing" id="LPa-oD-LRn"/>
                                             <constraint firstAttribute="leadingMargin" secondItem="ILH-PV-dt5" secondAttribute="leading" id="YPx-KD-eiF"/>
+                                            <constraint firstAttribute="trailingMargin" secondItem="Iv9-zT-ptl" secondAttribute="trailing" id="bFw-Ij-ghC"/>
                                             <constraint firstItem="ILH-PV-dt5" firstAttribute="top" secondItem="Iv9-zT-ptl" secondAttribute="bottom" constant="8" id="j38-hB-5L0"/>
-                                            <constraint firstItem="Iv9-zT-ptl" firstAttribute="centerX" secondItem="ILH-PV-dt5" secondAttribute="centerX" id="rG6-lh-qlG"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="address" destination="ILH-PV-dt5" id="NdW-cx-xIF"/>
@@ -186,10 +187,10 @@
                                     <action selector="didTapEvents:" destination="ZAg-ba-yVl" eventType="touchUpInside" id="75H-5b-Sxi"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="  Copyright © 2016 Utah State University. All rights reserved." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jGp-hJ-dBZ">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="  Copyright © 2016 Utah State University. All rights reserved." textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jGp-hJ-dBZ">
                                 <rect key="frame" x="20" y="527" width="560" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
@@ -204,6 +205,7 @@
                     <navigationItem key="navigationItem" id="ymz-lO-ffe"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="copyRightLabel" destination="jGp-hJ-dBZ" id="6QI-nw-JXv"/>
                         <outlet property="eventsBtn" destination="0qP-cY-Jaf" id="8X9-nM-8gE"/>
                         <outlet property="settingsBtn" destination="vlY-KD-jc9" id="i0b-nH-Xlw"/>
                         <outlet property="shingoModelBtn" destination="tak-ux-Hkh" id="gGT-8J-pBs"/>
@@ -579,10 +581,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fYu-MO-yXx">
-                                <rect key="frame" x="20" y="72" width="560" height="280"/>
+                                <rect key="frame" x="20" y="72" width="560" height="90"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="280" placeholder="YES" id="20I-iJ-ma4"/>
+                                    <constraint firstAttribute="height" constant="90" placeholder="YES" id="20I-iJ-ma4"/>
                                 </constraints>
                                 <string key="text">Join with us as we enter a new era of enterprise excellence where organizational culture is founded on timeless principles that enable sustainable results. Hear from leaders who have led a culture change, network with others all striving for measurable results and gain powerful insights that wil rejuvenate and refine your quest for organizational excellence.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
@@ -1466,8 +1468,8 @@
         </scene>
     </scenes>
     <resources>
-        <image name="right-arrow" width="108" height="192"/>
-        <image name="sponsor_banner_pl" width="400" height="200"/>
+        <image name="right-arrow" width="36" height="64"/>
+        <image name="sponsor_banner_pl" width="133" height="66"/>
         <image name="white_star" width="50" height="50"/>
     </resources>
     <inferredMetricsTieBreakers>

@@ -2,7 +2,6 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "right-arrow.png",
       "scale" : "1x"
     },
     {
@@ -11,6 +10,7 @@
     },
     {
       "idiom" : "universal",
+      "filename" : "rightArrow-universal.png",
       "scale" : "3x"
     }
   ],

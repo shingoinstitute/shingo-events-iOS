@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7CCDA641804EC78E12D067A2 /* Pods_Shingo_Events.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D893190879C0BB6AAC6D82B /* Pods_Shingo_Events.framework */; };
-		C2130BD81C987650009B3BB8 /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2130BD71C987650009B3BB8 /* ActivityView.swift */; };
+		C2130BD81C987650009B3BB8 /* ActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2130BD71C987650009B3BB8 /* ActivityViewController.swift */; };
 		C21B3ED81D1B433400C54FA4 /* ShingoEventsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21B3ED51D1B09DE00C54FA4 /* ShingoEventsTests.swift */; };
 		C21ECE281C5FB21500689FDE /* AffiliateListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21ECE271C5FB21500689FDE /* AffiliateListTableViewController.swift */; };
 		C21ECE2A1C5FB22A00689FDE /* AfilliateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21ECE291C5FB22A00689FDE /* AfilliateViewController.swift */; };
@@ -18,7 +18,6 @@
 		C22EF40E1D6E427F00C4C5DC /* TestCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22CBB801D6B915200649A4F /* TestCode.swift */; };
 		C234BD561C5293CF002E9814 /* SpeakerListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C234BD551C5293CF002E9814 /* SpeakerListTableViewController.swift */; };
 		C234BD581C529597002E9814 /* SpeakerDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C234BD571C529597002E9814 /* SpeakerDetailsViewController.swift */; };
-		C2494E261C88E4F600E2969D /* SIImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2494E251C88E4F600E2969D /* SIImages.swift */; };
 		C2494E281C89FBFE00E2969D /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2494E271C89FBFE00E2969D /* Reachability.swift */; };
 		C262CA8D1C3B1C29005845AF /* EventsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C262CA8C1C3B1C29005845AF /* EventsTableViewController.swift */; };
 		C262DCBA1C861BA900712D4E /* SessionDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C262DCB91C861BA900712D4E /* SessionDetailViewController.swift */; };
@@ -73,7 +72,7 @@
 		2D372B05CBBB2E7BF78EA707 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D893190879C0BB6AAC6D82B /* Pods_Shingo_Events.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Shingo_Events.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EC5F842FB1C431B1896102C /* Pods-Shingo Events.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shingo Events.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Shingo Events/Pods-Shingo Events.debug.xcconfig"; sourceTree = "<group>"; };
-		C2130BD71C987650009B3BB8 /* ActivityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
+		C2130BD71C987650009B3BB8 /* ActivityViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityViewController.swift; sourceTree = "<group>"; };
 		C21B3ED41D1B09DD00C54FA4 /* Shingo EventsTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Shingo EventsTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		C21B3ED51D1B09DE00C54FA4 /* ShingoEventsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShingoEventsTests.swift; sourceTree = "<group>"; };
 		C21ECE271C5FB21500689FDE /* AffiliateListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AffiliateListTableViewController.swift; sourceTree = "<group>"; };
@@ -88,7 +87,6 @@
 		C22CBB801D6B915200649A4F /* TestCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestCode.swift; sourceTree = "<group>"; };
 		C234BD551C5293CF002E9814 /* SpeakerListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeakerListTableViewController.swift; sourceTree = "<group>"; };
 		C234BD571C529597002E9814 /* SpeakerDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeakerDetailsViewController.swift; sourceTree = "<group>"; };
-		C2494E251C88E4F600E2969D /* SIImages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SIImages.swift; sourceTree = "<group>"; };
 		C2494E271C89FBFE00E2969D /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		C262CA8C1C3B1C29005845AF /* EventsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsTableViewController.swift; sourceTree = "<group>"; };
 		C262DCB91C861BA900712D4E /* SessionDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionDetailViewController.swift; sourceTree = "<group>"; };
@@ -162,8 +160,7 @@
 		C21B3ED11D1B078800C54FA4 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				C2130BD71C987650009B3BB8 /* ActivityView.swift */,
-				C2494E251C88E4F600E2969D /* SIImages.swift */,
+				C2130BD71C987650009B3BB8 /* ActivityViewController.swift */,
 				C2E9508C1D1C83F500178C03 /* SharedCode.swift */,
 				C2A695231C35E30F00F6E0B8 /* SwiftyJSON.swift */,
 				C2494E271C89FBFE00E2969D /* Reachability.swift */,
@@ -534,7 +531,6 @@
 				C2CFC3101C481EAB0036E485 /* MainMenuViewController.swift in Sources */,
 				C26DC9021C59785700BB4DDA /* ExhibitorTableViewController.swift in Sources */,
 				C21ECE2A1C5FB22A00689FDE /* AfilliateViewController.swift in Sources */,
-				C2494E261C88E4F600E2969D /* SIImages.swift in Sources */,
 				C2B155111D626BE00099330F /* ExhibitorTableViewCell.swift in Sources */,
 				C2986DC41C65136600ADCF40 /* ShingoModelViewController.swift in Sources */,
 				C2A695241C35E30F00F6E0B8 /* SwiftyJSON.swift in Sources */,
@@ -548,7 +544,7 @@
 				C2B7EB401C7B813100162AFB /* ContactUsViewController.swift in Sources */,
 				C2FF6B261CB4313200331ED2 /* VenueMapViewController.swift in Sources */,
 				C224C8981C92138700F4E393 /* AboutPageViewController.swift in Sources */,
-				C2130BD81C987650009B3BB8 /* ActivityView.swift in Sources */,
+				C2130BD81C987650009B3BB8 /* ActivityViewController.swift in Sources */,
 				C2A695111C35AC2900F6E0B8 /* AppDelegate.swift in Sources */,
 				C2C021231C6272D3008732DC /* SponsorsTableViewController.swift in Sources */,
 				C2E9508D1D1C83F500178C03 /* SharedCode.swift in Sources */,

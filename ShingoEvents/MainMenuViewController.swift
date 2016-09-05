@@ -33,6 +33,9 @@ class MainMenuViewController: UIViewController {
     @IBOutlet weak var shingoModelBtn: UIButton!
     @IBOutlet weak var settingsBtn: UIButton!
     
+    @IBOutlet weak var copyRightLabel: UILabel!
+    
+    
     // Other views
     var menuBackgroundImage: UIImageView = {
         let view = UIImageView.newAutoLayoutView()
@@ -43,7 +46,7 @@ class MainMenuViewController: UIViewController {
     }()
     var shingoLogoImageView : UIImageView = {
         let view = UIImageView.newAutoLayoutView()
-        if let image = UIImage(named: "shingo_icon_with_home_Large") {
+        if let image = UIImage(named: "Shingo Title") {
             view.image = image
         }
         view.contentMode = .ScaleAspectFit
@@ -104,15 +107,11 @@ class MainMenuViewController: UIViewController {
     override func updateViewConstraints() {
         if !didSetupConstraints {
             
-            contentView.addSubview(eventsBtn)
-            contentView.addSubview(shingoModelBtn)
-            contentView.addSubview(settingsBtn)
+            contentView.addSubviews([eventsBtn, shingoModelBtn, settingsBtn])
 
-            view.addSubview(menuBackgroundImage)
-            view.addSubview(contentView)
-            view.bringSubviewToFront(contentView)
-            view.addSubview(shingoLogoImageView)
-            view.bringSubviewToFront(shingoLogoImageView)
+            view.addSubviews([menuBackgroundImage, contentView, shingoLogoImageView])
+            
+            view.bringSubviewToFront(copyRightLabel)
             
             menuBackgroundImage.autoPinEdgeToSuperviewEdge(.Top)
             menuBackgroundImage.autoPinEdge(.Left, toEdge: .Left, ofView: view)
@@ -224,7 +223,7 @@ extension MainMenuViewController {
             switch UIDevice.currentDevice().deviceType.rawValue {
             case 1.0 ..< 3.0:
                 //iPhone 2 - iPhone 4/SE
-                contentViewHeightConstraint.constant = 20
+                contentViewHeightConstraint.constant = 15
             case 3.0 ..< 4.0:
                 //iPhone 5 series
                 contentViewHeightConstraint.constant = -20
@@ -240,18 +239,18 @@ extension MainMenuViewController {
             
             // @deployment
             // Uncomment lines below to animate constraints
-            UIView.animateWithDuration(1.5,
-                                       delay: 0.5,
-                                       usingSpringWithDamping: 0.5,
-                                       initialSpringVelocity: 0,
-                                       options: UIViewAnimationOptions(),
-                                       animations: { self.view.layoutIfNeeded() },
-                                       completion: nil)
+//            UIView.animateWithDuration(1.5,
+//                                       delay: 0.5,
+//                                       usingSpringWithDamping: 0.5,
+//                                       initialSpringVelocity: 0,
+//                                       options: UIViewAnimationOptions(),
+//                                       animations: { self.view.layoutIfNeeded() },
+//                                       completion: nil)
  
  
             // @production
             // Uncomment line below for non-animated constraints
-//            view.layoutIfNeeded()
+            view.layoutIfNeeded()
             
             didAnimateLayout = true
         }
