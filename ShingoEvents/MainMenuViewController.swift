@@ -303,7 +303,8 @@ extension MainMenuViewController {
 }
 
 extension MainMenuViewController: UnwindToMainVCProtocol {
-    // Protocol implementation
+    // Protocal for passing data back from the Support 
+    // page when the 'reload data' button is pressed
     func updateEvents(events: [SIEvent]?) {
         if let events = events {
             self.events = events

@@ -13,7 +13,7 @@ import Foundation
 class EventsTableViewController: UITableViewController {
     
     // MARK: - Properties
-    var events: [SIEvent] = [SIEvent]()
+    var events: [SIEvent]!
 
     var activityView : ActivityViewController = {
         let view = ActivityViewController()
@@ -26,7 +26,9 @@ class EventsTableViewController: UITableViewController {
         
         //Begin requests for each event.
         for event in events {
-            event.requestEvent(nil)
+            if !event.didLoadEventData {
+                event.requestEvent(nil)
+            }
         }
     }
     

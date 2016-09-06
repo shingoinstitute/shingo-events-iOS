@@ -100,25 +100,41 @@ class EventMenuViewController: UIViewController {
         super.loadView()
         
         // Load Agenda
-        event.requestAgendas() {self.event.didLoadAgendas = true} //Note: requestAgendas will request session data underneath
+        if !event.didLoadAgendas {
+            //Note: requestAgendas will request session data under the hood
+            event.requestAgendas() { self.event.didLoadAgendas = true }
+        }
         
-        // Load Speakers for entire event
-        event.requestSpeakers() {self.event.didLoadSpeakers = true}
+        if !event.didLoadSpeakers {
+            // Load Speakers for entire event
+            event.requestSpeakers() {self.event.didLoadSpeakers = true}
+        }
         
-        // Load venue photos
-        event.requestVenues() {self.event.didLoadVenues = true}
+        if !event.didLoadVenues {
+            // Load venue photos
+            event.requestVenues() {self.event.didLoadVenues = true}
+        }
         
-        // Load Recipient information
-        event.requestRecipients() {self.event.didLoadRecipients  = true}
+        if !event.didLoadRecipients {
+            // Load Recipient information
+            event.requestRecipients() {self.event.didLoadRecipients  = true}
+        }
         
-        // Load Affiliate information
-        event.requestAffiliates() {self.event.didLoadAffiliates = true}
+        if !event.didLoadAffiliates {
+            // Load Affiliate information
+            event.requestAffiliates() {self.event.didLoadAffiliates = true}
+        }
         
-        // Load Exhibitor information
-        event.requestExhibitors() {self.event.didLoadExhibitors = true}
+        if !event.didLoadExhibitors {
+            // Load Exhibitor information
+            event.requestExhibitors() {self.event.didLoadExhibitors = true}
+        }
         
-        // Load Sponsor information
-        event.requestSponsors() {self.event.didLoadSponsors = true}
+        if !event.didLoadSponsors {
+            // Load Sponsor information
+            event.requestSponsors() {self.event.didLoadSponsors = true}
+        }
+        
         
         // Setup views
         contentView.backgroundColor = .clearColor()

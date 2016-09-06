@@ -5,7 +5,7 @@
 ////  Created by Craig Blackburn on 2/23/16.
 ////  Copyright © 2016 Shingo Institute. All rights reserved.
 ////
-//
+
 import UIKit
 import DropDown
 
@@ -60,12 +60,12 @@ class BugReportViewController: UIViewController {
         
         dropDown.bottomOffset = CGPoint(x: 0, y: bugTypeButton.bounds.height)
         
-        dropDown.selectionAction = { [unowned self] (index, item) in
+        dropDown.selectionAction = { (index, item) in
             self.bugTypeButton.setTitle(item, forState: .Normal)
             self.dropDownImageView.hidden = true
         }
         
-        dropDown.cancelAction = { [unowned self] in
+        dropDown.cancelAction = { _ in
             self.bugTypeButton.setTitle("No Selection", forState: .Normal)
             self.dropDownImageView.hidden = false
         }
@@ -105,7 +105,7 @@ class BugReportViewController: UIViewController {
                                 
                                 self.messageSent = true
                                 
-                                let message = UIAlertController(title: "Message Sent", message: "Thank you for contacting us, your feedback is greatly appreciated!", preferredStyle: .Alert)
+                                let message = UIAlertController(title: "Message Sent", message: "Thank you for contacting us. Your feedback is greatly appreciated!", preferredStyle: .Alert)
                                 let action = UIAlertAction(title: "Okay", style: .Default, handler: { _ in
                                     self.performSegueWithIdentifier("UnwindToSettings", sender: self)
                                 })
@@ -116,7 +116,7 @@ class BugReportViewController: UIViewController {
                             case false:
                                 
                                 let message = UIAlertController(title: "Error", message: "Your message could not be sent, please try again later. If you have a secure internet connection and this problem persists, you may email us at shingo.events@usu.edu", preferredStyle: .Alert)
-                                let action = UIAlertAction(title: "Okay", style: .Default, handler: nil)
+                                let action = UIAlertAction(title: "Dismiss", style: .Default, handler: nil)
                                 message.addAction(action)
                                 
                                 self.presentViewController(message, animated: true, completion: nil)
@@ -130,7 +130,7 @@ class BugReportViewController: UIViewController {
     }
     
     private func displayAlert(title title: String, message: String) {
-        let alert = UIAlertController(title: "Empty Message", message: message, preferredStyle: .Alert)
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
         let action = UIAlertAction(title: "Okay", style: .Default, handler: nil)
         alert.addAction(action)
         

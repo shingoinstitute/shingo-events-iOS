@@ -25,12 +25,14 @@ class SessionListTableViewController: UITableViewController {
         providesPresentationContextTransitionStyle = true
         
         for i in 0 ..< sessions.count {
-            sessions[i].requestSessionInformation({
-                if let cell = self.tableView.cellForRowAtIndexPath(NSIndexPath(forRow: i, inSection: 0)) as? SessionTableViewCell {
-                    cell.updateCellProperties(session: self.sessions[i])
-                    cell.setNeedsDisplay()
-                }
-            });
+            if !sessions[i].didLoadSessionInformation {
+                sessions[i].requestSessionInformation({
+                    if let cell = self.tableView.cellForRowAtIndexPath(NSIndexPath(forRow: i, inSection: 0)) as? SessionTableViewCell {
+                        cell.updateCellProperties(session: self.sessions[i])
+                        cell.setNeedsDisplay()
+                    }
+                });
+            }
         }
         
     }

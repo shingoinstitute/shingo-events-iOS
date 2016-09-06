@@ -2,6 +2,7 @@
   "images" : [
     {
       "idiom" : "iphone",
+      "filename" : "Shingo Title-iPhone@1x.png",
       "scale" : "1x"
     },
     {
@@ -16,11 +17,12 @@
     },
     {
       "idiom" : "ipad",
+      "filename" : "Shingo Title-iPad@1x.png",
       "scale" : "1x"
     },
     {
       "idiom" : "ipad",
-      "filename" : "Shingo Title-iPad@2x.png",
+      "filename" : "Shingo Title-iPad@1x-1.png",
       "scale" : "2x"
     }
   ],
