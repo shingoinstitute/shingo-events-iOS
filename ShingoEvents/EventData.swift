@@ -690,7 +690,7 @@ class SIRecipient: SIObject {
             requestRecipientImage() {
                 if let image = self.image {
                     callback(image)
-                } else if let image = UIImage(named: "logoComingSoon500x500") {
+                } else if let image = UIImage(named: "logoComingSoon") {
                     callback(image)
                 } else {
                     callback(nil)
@@ -829,7 +829,7 @@ class SISponsor: SIObject {
         requestBannerImage() {
             if let image = self.image {
                 callback(image: image)
-            } else if let image = UIImage(named: "shingo_icon") {
+            } else if let image = UIImage(named: "Shingo Icon Small") {
                 callback(image: image)
             } else {
                 callback(image: UIImage())
@@ -1016,7 +1016,7 @@ class SIAffiliate: SIObject {
             requestAffiliateLogoImage() {
                 if let image = self.image {
                     callback(image)
-                } else if let image = UIImage(named: "shingo_icon") {
+                } else if let image = UIImage(named: "Shingo Icon Small") {
                     callback(image)
                 } else {
                     callback(UIImage())

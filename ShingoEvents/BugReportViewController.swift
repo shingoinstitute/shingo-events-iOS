@@ -7,9 +7,9 @@
 ////
 //
 import UIKit
-import Alamofire
+import DropDown
 
-class BugReportViewController: UIViewController, UITextViewDelegate, UITextFieldDelegate {
+class BugReportViewController: UIViewController {
     
     var didMakeEdit = false
     var messageSent = false
@@ -17,6 +17,11 @@ class BugReportViewController: UIViewController, UITextViewDelegate, UITextField
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var descriptionTextField: UITextView!
     @IBOutlet weak var submitButton: UIButton!
+    
+    @IBOutlet weak var bugTypeButton: UIButton!
+    @IBOutlet weak var dropDownImageView: UIImageView!
+    
+    var dropDown = DropDown()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,9 +41,37 @@ class BugReportViewController: UIViewController, UITextViewDelegate, UITextField
         submitButton.layer.borderWidth = 1
         submitButton.layer.borderColor = UIColor.lightGrayColor().CGColor
         
+        view.bringSubviewToFront(dropDownImageView)
+        setupDropDown()
     }
     
-
+    private func setupDropDown() {
+        
+        bugTypeButton.layer.cornerRadius = 4
+        bugTypeButton.layer.borderColor = UIColor.lightGrayColor().CGColor
+        bugTypeButton.layer.borderWidth = 1
+        
+        dropDown.dataSource = ["App Crash", "Feature Request", "General Feedback", "Spelling/Grammar", "Unexpected Behavior", "User Interface", "Other"]
+        
+        dropDown.dismissMode = .OnTap
+        dropDown.direction = .Bottom
+        
+        dropDown.anchorView = bugTypeButton
+        
+        dropDown.bottomOffset = CGPoint(x: 0, y: bugTypeButton.bounds.height)
+        
+        dropDown.selectionAction = { [unowned self] (index, item) in
+            self.bugTypeButton.setTitle(item, forState: .Normal)
+            self.dropDownImageView.hidden = true
+        }
+        
+        dropDown.cancelAction = { [unowned self] in
+            self.bugTypeButton.setTitle("No Selection", forState: .Normal)
+            self.dropDownImageView.hidden = false
+        }
+        
+    }
+    
     @IBAction func didTapSubmit(sender: AnyObject) {
         
         if !messageSent {
@@ -46,16 +79,20 @@ class BugReportViewController: UIViewController, UITextViewDelegate, UITextField
                 
                 displayAlert(title: "Oops...", message: "Your message is still empty!")
                 
-            } else if !isValidEmail(emailTextField.text!) {
+            } else if let email = emailTextField.text {
+                if !email.isEmpty {
+                    if isValidEmail(email) {
+                        displayAlert(title: "Invalid Email Address", message: "Please enter a valid email address")
+                    }
+                }
                 
-                displayAlert(title: "Invalid Email Address", message: "Please enter a valid email address")
                 
             } else {
             
                 let parameters: [String:String] = [
-                    "device": "\(UIDevice.currentDevice().deviceType)",
+                    "device": "\(UIDevice.currentDevice().deviceType), iOS Version: \(UIDevice.currentDevice().systemVersion)",
                     "description": descriptionTextField.text,
-                    "details": "iOS Version: \(UIDevice.currentDevice().systemVersion)",
+                    "details": "Bug Type: \(bugTypeButton.titleLabel!.text!)",
                     "email": emailTextField.text!
                 ]
                 
@@ -99,9 +136,21 @@ class BugReportViewController: UIViewController, UITextViewDelegate, UITextField
         
         presentViewController(alert, animated: true, completion: nil)
     }
+}
+
+extension BugReportViewController {
     
+    
+    @IBAction func didTapDropDown(sender: AnyObject) {
+        dropDown.show()
+    }
+    
+    
+    
+}
+
+extension BugReportViewController: UITextViewDelegate, UITextFieldDelegate {
     //MARK: - UITextFieldDelegate
-    
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         emailTextField.resignFirstResponder()
         return true

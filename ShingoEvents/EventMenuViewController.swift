@@ -75,8 +75,9 @@ class EventMenuViewController: UIViewController {
     
     var backgroundImage: UIImageView = {
         let view = UIImageView.newAutoLayoutView()
-        view.image = UIImage(named: "shingo_icon")
+        view.image = UIImage(named: "Shingo Icon Large")
         view.contentMode = .ScaleAspectFill
+        view.clipsToBounds = true
         return view
     }()
     var eventHeaderImage: UIImageView = {

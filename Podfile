@@ -8,4 +8,5 @@ target 'Shingo Events' do
 	pod 'Fabric'
 	pod 'Crashlytics'
 	pod 'PureLayout'
+	pod 'DropDown'
 end

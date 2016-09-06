@@ -205,6 +205,14 @@ extension UIView {
     }
 }
 
+extension UILabel {
+    public convenience init(text: String, font: UIFont!) {
+        self.init()
+        self.text = text
+        self.font = font
+    }
+}
+
 struct Alphabet {
     
     func alphabet() -> [String] {

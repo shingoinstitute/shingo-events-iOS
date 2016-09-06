@@ -96,7 +96,7 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
         }
         
         if session.summary.isEmpty {
-            textField.text = "Session details coming soon."
+            textField.text = "Details coming soon."
         } else {
 
             do {
