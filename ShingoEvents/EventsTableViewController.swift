@@ -10,11 +10,11 @@ import UIKit
 import Foundation
 
 
-class EventsTableViewController: UITableViewController {
+class EventsTableViewController: UITableViewController, EventTBLVCellDelegate {
     
     // MARK: - Properties
     var events: [SIEvent]!
-
+    
     var activityView : ActivityViewController = {
         let view = ActivityViewController()
         view.modalPresentationStyle = .OverCurrentContext
@@ -74,9 +74,10 @@ extension EventsTableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("EventsCell", forIndexPath: indexPath) as! EventTableViewCell
-        cell.backgroundColor = .clearColor()
-        cell.selectionStyle = .None
-        cell.updateCell(event: events[indexPath.row])
+        
+        cell.delegate = self
+        cell.event = events[indexPath.row]
+        
         return cell
     }
     
@@ -152,6 +153,11 @@ extension EventsTableViewController {
         }
     }
     
+    func updateCells() {
+        tableView.beginUpdates()
+        tableView.endUpdates()
+    }
+    
 }
 
 
@@ -162,10 +168,23 @@ class EventTableViewCell: UITableViewCell {
     @IBOutlet weak var dateRangeLabel: UILabel!
     @IBOutlet weak var eventImage: UIImageView!
     
-    var event: SIEvent!
+    var event: SIEvent! {
+        didSet {
+            updateCell()
+        }
+    }
     
-    func updateCell(event event: SIEvent) {
-        self.event = event
+    var delegate: EventTBLVCellDelegate?
+    
+    func updateCell() {
+        
+        backgroundColor = .clearColor()
+        selectionStyle = .None
+        
+        guard let event = event else {
+            return
+        }
+
         nameLabel.text = event.name
         
         eventImage.contentMode = .ScaleAspectFill
@@ -180,7 +199,11 @@ class EventTableViewCell: UITableViewCell {
         
         event.getBannerImage() { image in
             self.eventImage.image = image
+            if let delegate = self.delegate {
+                delegate.updateCells()
+            }
         }
+        
     }
     
 }

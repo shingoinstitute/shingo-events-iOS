@@ -138,14 +138,17 @@ class BugReportViewController: UIViewController {
     }
 }
 
+extension DropDown {
+    func setWidth(width: CGFloat) {
+        
+    }
+}
+
 extension BugReportViewController {
-    
     
     @IBAction func didTapDropDown(sender: AnyObject) {
         dropDown.show()
     }
-    
-    
     
 }
 

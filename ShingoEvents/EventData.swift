@@ -394,6 +394,7 @@ class SISpeaker: SIObject {
     var biography : String
     var organizationName : String
     var contactEmail : String
+    var isKeynoteSpeaker : Bool
     
     override init() {
         title = ""
@@ -401,6 +402,7 @@ class SISpeaker: SIObject {
         biography = ""
         organizationName = ""
         contactEmail = ""
+        isKeynoteSpeaker = false
         associatedSessionIds = [String]()
         super.init()
     }
@@ -409,17 +411,19 @@ class SISpeaker: SIObject {
     private func requestSpeakerInformation(callback: () -> ()) {
         SIRequest().requestSpeaker(speakerId: id) { (speaker) in
             if let speaker = speaker {
-                self.title = speaker.title
                 
+                self.name = speaker.name
+                self.id = speaker.id
+                
+                self.title = speaker.title
                 if self.pictureURL.isEmpty {
                     self.pictureURL = speaker.pictureURL
                 }
-                
                 self.biography = speaker.biography
                 self.organizationName = speaker.organizationName
+                self.contactEmail = speaker.contactEmail
+//                self.isKeynoteSpeaker = speaker.isKeynoteSpeaker
                 self.associatedSessionIds = speaker.associatedSessionIds
-                self.name = speaker.name
-                self.id = speaker.id
             }
         }
     }

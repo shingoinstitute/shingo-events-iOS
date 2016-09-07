@@ -562,6 +562,16 @@ extension SIRequest {
                     speaker.organizationName = organization
                 }
 
+                if let sessionAssocs = record["Session_Speaker_Associations__r"]["records"].array {
+                    for session in sessionAssocs {
+                        if let isKeynoteSpeaker = session["Is_Keynote_Speaker__c"].bool {
+                            if isKeynoteSpeaker {
+                                speaker.isKeynoteSpeaker = true
+                            }
+                        }
+                    }
+                }
+                
                 if let assocs = record["Session_Speaker_Associations__r"]["records"].array {
                     for assoc in assocs {
                         if let id = assoc["Session__r"]["Id"].string {

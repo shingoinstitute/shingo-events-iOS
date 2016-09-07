@@ -141,21 +141,17 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
             contentView.autoPinEdgeToSuperviewEdge(.Bottom)
         }
         
-//        titleLabel.autoSetDimension(.Width, toSize: view.frame.width)
         titleLabel.autoPinEdge(.Top, toEdge: .Top, ofView: contentView, withOffset: 8.0)
         titleLabel.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 8.0)
         titleLabel.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -8.0)
         
-//        roomLabel.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 42)
         roomLabel.autoPinEdge(.Top, toEdge: .Bottom, ofView: titleLabel, withOffset: 8.0)
         roomLabel.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 8.0)
         roomLabel.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -8.0)
         
-//        summaryLabel.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 42)
         summaryLabel.autoPinEdge(.Top, toEdge: .Bottom, ofView: roomLabel, withOffset: 8.0)
         summaryLabel.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: 8.0)
         summaryLabel.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: -8.0)
-        
         
         textField.sizeToFit()
         textField.layoutIfNeeded()

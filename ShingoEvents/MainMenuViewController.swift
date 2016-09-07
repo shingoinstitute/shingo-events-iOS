@@ -36,7 +36,7 @@ class MainMenuViewController: UIViewController {
     @IBOutlet weak var copyRightLabel: UILabel!
     
     
-    // Other views
+    // Shingo Logo background image
     var menuBackgroundImage: UIImageView = {
         let view = UIImageView.newAutoLayoutView()
         view.backgroundColor = .whiteColor()
@@ -44,6 +44,8 @@ class MainMenuViewController: UIViewController {
         view.image = UIImage(named: "Shingo Icon Fullscreen")
         return view
     }()
+    
+    // Shingo Institute Title
     var shingoLogoImageView : UIImageView = {
         let view = UIImageView.newAutoLayoutView()
         if let image = UIImage(named: "Shingo Title") {
@@ -52,6 +54,8 @@ class MainMenuViewController: UIViewController {
         view.contentMode = .ScaleAspectFit
         return view
     }()
+    
+    // Container for menu items
     var contentView: UIView = {
         let view = UIView.newAutoLayoutView()
         view.backgroundColor = .clearColor()
@@ -64,20 +68,15 @@ class MainMenuViewController: UIViewController {
     
     // MARK: - Setup
     
-    override func loadView() {
-        super.loadView()
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
         SIRequest().requestEvents({ events in
             if let events = events {
                 self.events = events
                 self.eventsDidLoad = true
             }
-        });
-        
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+        })
         
         navigationItem.title = ""
         
@@ -121,8 +120,8 @@ class MainMenuViewController: UIViewController {
             contentView.autoSetDimension(.Height, toSize: 265)
             contentViewHeightConstraint = contentView.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: view, withOffset: -view.frame.height)
             if UIDevice.currentDevice().deviceType.rawValue >= 6.0 {
-                contentView.autoPinEdge(.Left, toEdge: .Left, ofView: view, withOffset: 200.0)
-                contentView.autoPinEdge(.Right, toEdge: .Right, ofView: view, withOffset: -200.0)
+                contentView.autoPinEdge(.Left, toEdge: .Left, ofView: view, withOffset: 175.0)
+                contentView.autoPinEdge(.Right, toEdge: .Right, ofView: view, withOffset: -175.0)
             } else {
                 contentView.autoPinEdge(.Left, toEdge: .Left, ofView: view, withOffset: 10.0)
                 contentView.autoPinEdge(.Right, toEdge: .Right, ofView: view, withOffset: -10.0)
@@ -171,19 +170,52 @@ class MainMenuViewController: UIViewController {
         super.updateViewConstraints()
     }
     
+}
+
+extension MainMenuViewController {
+    
+    // MARK: - Button Listeners
+    
     @IBAction func didTapEvents(sender: AnyObject) {
-        loadUpcomingEvents()
+        shouldPerformSegueToEvents()
     }
     
     @IBAction func didTapShingoModel(sender: AnyObject) {
-        self.performSegueWithIdentifier("ShingoModel", sender: self)
+        performSegueWithIdentifier("ShingoModel", sender: self)
     }
     
     @IBAction func didTapSupport(sender: AnyObject) {
-        self.performSegueWithIdentifier("Support", sender: self)
+        performSegueWithIdentifier("Support", sender: self)
     }
     
-    //Mark: - Navigation
+}
+
+extension MainMenuViewController {
+    
+    // Mark: - Navigation
+    
+    private func shouldPerformSegueToEvents() {
+        if !Reach().checkForInternetConnection() {
+            displayInternetAlert()
+        } else if eventsDidLoad {
+            performSegueWithIdentifier("EventsView", sender: self.events)
+        } else {
+            presentViewController(activityView, animated: true, completion: {
+                SIRequest().requestEvents({ events in
+                    self.dismissViewControllerAnimated(false, completion: {
+                        if let events = events {
+                            self.events = events
+                            self.eventsDidLoad = true
+                            self.performSegueWithIdentifier("EventsView", sender: self.events)
+                        } else {
+                            self.displayBadRequestNotification()
+                        }
+                    })
+                })
+            })
+        }
+    }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "EventsView" {
             let destination = segue.destinationViewController as! EventsTableViewController
@@ -203,7 +235,7 @@ class MainMenuViewController: UIViewController {
 
 extension MainMenuViewController {
     
-    //MARK: - Class Methods
+    //MARK: - Other Methods
     func displayInternetAlert() {
         let alert = UIAlertController(
             title: "Internet Connection Not Detected",
@@ -255,23 +287,6 @@ extension MainMenuViewController {
             didAnimateLayout = true
         }
     }
-
-    func loadUpcomingEvents() {
-        if !Reach().checkForInternetConnection() {
-            displayInternetAlert()
-        } else if eventsDidLoad {
-            performSegueWithIdentifier("EventsView", sender: self.events)
-        } else {
-            presentViewController(activityView, animated: false, completion: {
-                self.time = 0
-                self.timer = NSTimer.scheduledTimerWithTimeInterval(0.1,
-                                                                    target: self,
-                                                                    selector: #selector(MainMenuViewController.checkOnRequestStatus), 
-                                                                    userInfo: nil, 
-                                                                    repeats: true)
-            });
-        }
-    }
     
     func displayBadRequestNotification() {
         let alert = UIAlertController(title: "There seems to be a problem.",
@@ -282,22 +297,6 @@ extension MainMenuViewController {
         dismissViewControllerAnimated(true, completion: {
             self.presentViewController(alert, animated: true, completion: nil)
         });
-    }
-    
-    func checkOnRequestStatus() {
-        time! += 0.1
-        
-        if eventsDidLoad {
-            timer.invalidate()
-            self.dismissViewControllerAnimated(true, completion: {
-                self.performSegueWithIdentifier("EventsView", sender: self.events)
-            });
-        } else if time > 12.0 {
-            timer.invalidate()
-            self.dismissViewControllerAnimated(true, completion: { 
-                self.displayBadRequestNotification()
-            });
-        }
     }
     
 }
