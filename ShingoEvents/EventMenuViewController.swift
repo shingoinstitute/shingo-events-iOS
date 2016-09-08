@@ -402,7 +402,28 @@ extension EventMenuViewController {
         
         if segue.identifier == "SpeakerList" {
             let destination = segue.destinationViewController as! SpeakerListTableViewController
-            destination.speakers = self.sortSpeakersByLastName()
+            
+            var keynoteSpeakers = [SISpeaker]()
+            var concurrentSpeakers = [SISpeaker]()
+            
+            let speakers: [SISpeaker] = Array(event.speakers.values)
+            
+            for speaker in speakers {
+                
+                switch speaker.isKeynoteSpeaker {
+                case true:
+                    keynoteSpeakers.append(speaker)
+                case false:
+                    concurrentSpeakers.append(speaker)
+                }
+                
+            }
+            
+            sortSpeakersInPlaceByLastName(&keynoteSpeakers)
+            sortSpeakersInPlaceByLastName(&concurrentSpeakers)
+            
+            destination.keyNoteSpeakers = keynoteSpeakers
+            destination.concurrentSpeakers = concurrentSpeakers
         }
         
         if segue.identifier == "RecipientsView" {
@@ -602,9 +623,10 @@ extension EventMenuViewController {
         }
     }
     
-    func sortSpeakersByLastName() -> [SISpeaker]{
-        var speakers = Array(event.speakers.values)
-        if speakers.isEmpty { return [SISpeaker]() }
+    func sortSpeakersInPlaceByLastName(inout speakers: [SISpeaker]) {
+        
+        if speakers.isEmpty { return }
+        
         for i in 0 ..< speakers.count - 1 {
             
             for n in 0 ..< speakers.count - i - 1 {
@@ -618,8 +640,6 @@ extension EventMenuViewController {
             }
             
         }
-        
-        return speakers
     }
 
 }

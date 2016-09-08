@@ -210,7 +210,7 @@ extension SessionDetailViewController {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("SpeakerCell", forIndexPath: indexPath) as! SessionSpeakerCell
         
-        cell.updateCell(session.speakers[indexPath.row])
+        cell.speaker = session.speakers[indexPath.row]
         
         return cell
         
@@ -233,14 +233,18 @@ class SessionSpeakerCell: UITableViewCell {
     
     @IBOutlet weak var speakerNameLabel: UILabel!
     @IBOutlet weak var speakerImage: UIImageView!
-    var speaker: SISpeaker!
     
-    func updateCell(speaker: SISpeaker) {
-        
-        self.speaker = speaker
-        
+    var speaker: SISpeaker! {
+        didSet {
+            updateCell()
+        }
+    }
+    
+    func updateCell() {
         speakerNameLabel.text = speaker.name
-        speakerImage.image = speaker.getSpeakerImage()
+        speaker.getSpeakerImage() { image in
+            self.speakerImage.image = image
+        }
         speakerImage.layer.cornerRadius = 3.0
     }
     

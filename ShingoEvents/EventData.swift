@@ -384,13 +384,15 @@ class SISpeaker: SIObject {
     
     // speaker specific properties
     var title : String
-    var pictureURL : String {
+    var pictureURL : String /*{
         didSet {
             if !pictureURL.isEmpty {
-                requestSpeakerImage()
+                dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), {
+                    self.requestSpeakerImage(nil)
+                })
             }
         }
-    }
+    }*/
     var biography : String
     var organizationName : String
     var contactEmail : String
@@ -428,27 +430,39 @@ class SISpeaker: SIObject {
         }
     }
     
-    private func requestSpeakerImage() {
-        if !pictureURL.isEmpty {
-            requestImage(pictureURL) { image in
-                if let image = image as UIImage? {
-                    self.image = image
-                }
-            }
+    private func requestSpeakerImage(callback: (() -> Void)?) {
+        
+        if image != nil || pictureURL.isEmpty{
+            if let cb = callback { cb() }
+            return
         }
+        
+        requestImage(pictureURL, callback: { image in
+            if let image = image as UIImage? {
+                self.image = image
+            }
+            
+            if let cb = callback { cb() }
+        });
     }
     
-    func getSpeakerImage() -> UIImage {
+    func getSpeakerImage(callback: (UIImage) -> Void) {
         
-        if let image = self.image {
-            return image
+        guard let image = self.image else {
+            requestSpeakerImage() {
+                if let image = self.image {
+                    callback(image)
+                } else if let image = UIImage(named: "silhouette") {
+                    callback(image)
+                } else {
+                    callback(UIImage())
+                }
+            }
+            return
         }
         
-        if let image = UIImage(named: "silhouette") {
-            return image
-        }
+        callback(image)
         
-        return UIImage()
     }
     
     func getLastName() -> String {

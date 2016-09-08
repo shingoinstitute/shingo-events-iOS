@@ -10,16 +10,10 @@ import UIKit
 import Foundation
 
 
-class EventsTableViewController: UITableViewController, EventTBLVCellDelegate {
+class EventsTableViewController: UITableViewController, SICellDelegate {
     
     // MARK: - Properties
     var events: [SIEvent]!
-    
-    var activityView : ActivityViewController = {
-        let view = ActivityViewController()
-        view.modalPresentationStyle = .OverCurrentContext
-        return view
-    }()
     
     override func loadView() {
         super.loadView()
@@ -124,7 +118,6 @@ extension EventsTableViewController {
         cell.backgroundColor = SIColor.lightBlueColor()
         
         let activityView = ActivityViewController()
-        activityView.modalPresentationStyle = .OverCurrentContext
         activityView.message = "Loading Event Data..."
 
         let event = events[indexPath.row]
@@ -134,10 +127,15 @@ extension EventsTableViewController {
             presentViewController(activityView, animated: false, completion: { 
                 event.requestEvent() {
                     self.dismissViewControllerAnimated(true, completion: {
-                        self.performSegueWithIdentifier("EventMenu", sender: self.events[indexPath.row])
-                    });
+                        if event.didLoadEventData {
+                            self.performSegueWithIdentifier("EventMenu", sender: self.events[indexPath.row])
+                        } else {
+                            self.displayBadRequestNotification()
+                        }
+                        
+                    })
                 }
-            });
+            })
         }
     }
     
@@ -153,7 +151,7 @@ extension EventsTableViewController {
         }
     }
     
-    func updateCells() {
+    func updateCell() {
         tableView.beginUpdates()
         tableView.endUpdates()
     }
@@ -174,7 +172,7 @@ class EventTableViewCell: UITableViewCell {
         }
     }
     
-    var delegate: EventTBLVCellDelegate?
+    var delegate: SICellDelegate?
     
     func updateCell() {
         
@@ -200,7 +198,7 @@ class EventTableViewCell: UITableViewCell {
         event.getBannerImage() { image in
             self.eventImage.image = image
             if let delegate = self.delegate {
-                delegate.updateCells()
+                delegate.updateCell()
             }
         }
         

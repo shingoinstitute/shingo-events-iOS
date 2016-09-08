@@ -8,28 +8,12 @@
 
 import UIKit
 
-class SpeakerListCell: UITableViewCell {
-    
-    var speaker: SISpeaker!
-    @IBOutlet weak var speakerNameLabel: UILabel!
-    @IBOutlet weak var speakerImage: UIImageView!
-    
-    func updateCellProperties(speaker: SISpeaker) {
-        self.speaker = speaker
-        speakerNameLabel.text = speaker.name
-        speakerImage.image = speaker.getSpeakerImage()
-    }
-    
-}
-
 class SpeakerListTableViewController: UITableViewController {
 
-    var speakers: [SISpeaker]!
+    var keyNoteSpeakers: [SISpeaker]!
+    var concurrentSpeakers: [SISpeaker]!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-    }
+    // MARK: - Table view data source
     
     override func tableView(tableView: UITableView, accessoryButtonTappedForRowWithIndexPath indexPath: NSIndexPath) {
         let cell = tableView.cellForRowAtIndexPath(indexPath) as! SpeakerListCell
@@ -45,29 +29,61 @@ class SpeakerListTableViewController: UITableViewController {
         }
     }
     
-    // MARK: - Table view data source
-    
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return speakers.count
+            return keyNoteSpeakers.count
         case 1:
-            return 0
+            return concurrentSpeakers.count
         default:
             return 0
         }
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCellWithIdentifier("SpeakerListCell", forIndexPath: indexPath) as! SpeakerListCell
-        let speaker = speakers[indexPath.row]
-        cell.updateCellProperties(speaker)
-
+        
+        cell.aiv.hidesWhenStopped = true
+        
+        switch indexPath.section {
+        case 0:
+            cell.speaker = keyNoteSpeakers[indexPath.row]
+        case 1:
+            cell.speaker = concurrentSpeakers[indexPath.row]
+        default:
+            break
+        }
+        
+        if cell.speakerImage.image == nil {
+            cell.aiv.startAnimating()
+        }
+        
         return cell
+    }
+    
+    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
+        let header = UILabel(text: "", font: UIFont(name: "Helvetica", size: 12))
+        header.textColor = .whiteColor()
+        switch section {
+            case 0:
+                header.text = "  Keynote Speakers"
+            case 1:
+                header.text = "  Concurrent Speakers"
+            default:
+            break
+        }
+        
+        return header
+    }
+    
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 32
     }
     
     // MARK: - Navigation
@@ -84,6 +100,27 @@ class SpeakerListTableViewController: UITableViewController {
 }
 
 
+class SpeakerListCell: UITableViewCell {
+
+    @IBOutlet weak var speakerNameLabel: UILabel!
+    @IBOutlet weak var speakerImage: UIImageView!
+    @IBOutlet weak var aiv: UIActivityIndicatorView!
+    
+    var speaker: SISpeaker! {
+        didSet {
+            updateCell()
+        }
+    }
+    
+    func updateCell() {
+        speakerNameLabel.text = speaker.name
+        speaker.getSpeakerImage() { image in
+            self.aiv.stopAnimating()
+            self.speakerImage.image = image
+        }
+    }
+    
+}
 
 
 

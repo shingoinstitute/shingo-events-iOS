@@ -913,16 +913,22 @@
                                                 <constraint firstAttribute="width" constant="100" id="A4f-p4-MVk"/>
                                             </constraints>
                                         </imageView>
+                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="SFS-jv-hkJ">
+                                            <rect key="frame" x="40" y="39" width="37" height="37"/>
+                                        </activityIndicatorView>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="Q26-JM-lln" firstAttribute="bottom" secondItem="iCl-Bn-cnf" secondAttribute="bottomMargin" id="HWr-b1-lNm"/>
+                                        <constraint firstItem="SFS-jv-hkJ" firstAttribute="centerY" secondItem="iCl-Bn-cnf" secondAttribute="centerY" id="Hls-TY-TTe"/>
                                         <constraint firstItem="7zI-7I-8Bu" firstAttribute="top" secondItem="iCl-Bn-cnf" secondAttribute="topMargin" id="Ouy-yE-NfC"/>
                                         <constraint firstItem="Q26-JM-lln" firstAttribute="leading" secondItem="iCl-Bn-cnf" secondAttribute="leadingMargin" id="Rok-bv-BGJ"/>
                                         <constraint firstItem="7zI-7I-8Bu" firstAttribute="leading" secondItem="Q26-JM-lln" secondAttribute="trailing" constant="8" symbolic="YES" id="YJ4-zk-ttw"/>
                                         <constraint firstItem="Q26-JM-lln" firstAttribute="top" secondItem="7zI-7I-8Bu" secondAttribute="top" id="aw9-JL-SqV"/>
+                                        <constraint firstItem="SFS-jv-hkJ" firstAttribute="centerX" secondItem="Q26-JM-lln" secondAttribute="centerX" id="bJh-80-cvM"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="aiv" destination="SFS-jv-hkJ" id="Jd3-0n-MZW"/>
                                     <outlet property="speakerImage" destination="Q26-JM-lln" id="lId-2D-Ume"/>
                                     <outlet property="speakerNameLabel" destination="7zI-7I-8Bu" id="qa5-Da-sXX"/>
                                 </connections>

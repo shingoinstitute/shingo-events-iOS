@@ -38,7 +38,7 @@
 		C2B7EB421C7CD89900162AFB /* BugReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B7EB411C7CD89900162AFB /* BugReportViewController.swift */; };
 		C2C021231C6272D3008732DC /* SponsorsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C021221C6272D3008732DC /* SponsorsTableViewController.swift */; };
 		C2CFC3041C4576D00036E485 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CFC3031C4576D00036E485 /* SettingsTableViewController.swift */; };
-		C2CFC3101C481EAB0036E485 /* MainMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CFC30F1C481EAB0036E485 /* MainMenuViewController.swift */; };
+		C2CFC3101C481EAB0036E485 /* LaunchMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CFC30F1C481EAB0036E485 /* LaunchMenuViewController.swift */; };
 		C2CFC3141C483C1C0036E485 /* SchedulesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CFC3131C483C1C0036E485 /* SchedulesTableViewController.swift */; };
 		C2CFC3181C4954C20036E485 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C2CFC3171C4954C20036E485 /* Main.storyboard */; };
 		C2E9508D1D1C83F500178C03 /* SharedCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E9508C1D1C83F500178C03 /* SharedCode.swift */; };
@@ -108,7 +108,7 @@
 		C2B7EB411C7CD89900162AFB /* BugReportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BugReportViewController.swift; sourceTree = "<group>"; };
 		C2C021221C6272D3008732DC /* SponsorsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SponsorsTableViewController.swift; sourceTree = "<group>"; };
 		C2CFC3031C4576D00036E485 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
-		C2CFC30F1C481EAB0036E485 /* MainMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMenuViewController.swift; sourceTree = "<group>"; };
+		C2CFC30F1C481EAB0036E485 /* LaunchMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchMenuViewController.swift; sourceTree = "<group>"; };
 		C2CFC3131C483C1C0036E485 /* SchedulesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchedulesTableViewController.swift; sourceTree = "<group>"; };
 		C2CFC3171C4954C20036E485 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		C2E9508C1D1C83F500178C03 /* SharedCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedCode.swift; sourceTree = "<group>"; };
@@ -182,7 +182,7 @@
 		C224CDF71CB6C960003147F0 /* Menus */ = {
 			isa = PBXGroup;
 			children = (
-				C2CFC30F1C481EAB0036E485 /* MainMenuViewController.swift */,
+				C2CFC30F1C481EAB0036E485 /* LaunchMenuViewController.swift */,
 				C262CA8C1C3B1C29005845AF /* EventsTableViewController.swift */,
 				C28B67F21C406BDE00AC9193 /* EventMenuViewController.swift */,
 				C2986DC31C65136600ADCF40 /* ShingoModelViewController.swift */,
@@ -528,7 +528,7 @@
 				C2494E281C89FBFE00E2969D /* Reachability.swift in Sources */,
 				C234BD581C529597002E9814 /* SpeakerDetailsViewController.swift in Sources */,
 				C28B67E91C3F0BD700AC9193 /* EventData.swift in Sources */,
-				C2CFC3101C481EAB0036E485 /* MainMenuViewController.swift in Sources */,
+				C2CFC3101C481EAB0036E485 /* LaunchMenuViewController.swift in Sources */,
 				C26DC9021C59785700BB4DDA /* ExhibitorTableViewController.swift in Sources */,
 				C21ECE2A1C5FB22A00689FDE /* AfilliateViewController.swift in Sources */,
 				C2B155111D626BE00099330F /* ExhibitorTableViewCell.swift in Sources */,

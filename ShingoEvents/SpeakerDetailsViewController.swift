@@ -85,7 +85,9 @@ class SpeakerDetailsViewController: UIViewController {
         }
         
         speakerImageView = UIImageView.newAutoLayoutView()
-        speakerImageView.image = speaker.getSpeakerImage()
+        speaker.getSpeakerImage() { image in
+            self.speakerImageView.image = image
+        }
         speakerImageView.contentMode = UIViewContentMode.ScaleAspectFit
         speakerImageView.layer.borderColor = UIColor.clearColor().CGColor
         speakerImageView.layer.cornerRadius = 5.0

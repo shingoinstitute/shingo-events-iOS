@@ -10,8 +10,8 @@ import Foundation
 import UIKit
 
 // Used for updating cells in EventsTableViewController
-protocol EventTBLVCellDelegate {
-    func updateCells()
+protocol SICellDelegate {
+    func updateCell()
 }
 
 // Shingo IP Colors
