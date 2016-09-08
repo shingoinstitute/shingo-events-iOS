@@ -7,18 +7,19 @@
 //
 
 import UIKit
-import Crashlytics
-import Fabric
+import Alamofire
 
 protocol UnwindToMainVCProtocol {
     func updateEvents(events: [SIEvent]?)
 }
 
-class SettingsTableViewController: UITableViewController {
+class SettingsTableViewController: UITableViewController, SIRequestDelegate {
     
     var events: [SIEvent]?
     
     var delegate: UnwindToMainVCProtocol?
+    
+    var request: Alamofire.Request?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,29 +41,37 @@ class SettingsTableViewController: UITableViewController {
     }
     
     @IBAction func didTapReloadData(sender: AnyObject) {
+        
         let activityView = ActivityViewController()
+        activityView.delegate = self
+        
         presentViewController(activityView, animated: true) {
-            SIRequest().requestEvents({ events in
+            
+            self.request = SIRequest().requestEvents({ events in
                 self.dismissViewControllerAnimated(true, completion: {
-                    if self.delegate != nil {
-                        self.delegate?.updateEvents(events)
+                    if let events = events {
+                        if let delegate = self.delegate {
+                            delegate.updateEvents(events)
+                            self.performSegueWithIdentifier("UnwindToMainVC", sender: self)
+                        }
+                    } else {
+                        SIRequest.displayInternetAlert(forViewController: self, completion: nil)
                     }
                 })
             })
         }
     }
     
-    //MARK: - Navigation
-    
-    @IBAction func unwindToSettings(segue: UIStoryboardSegue) {}
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    func cancelRequest() {
         
-        if segue.identifier == "ReportBugView" {
-//            let destination = segue.destinationViewController as? BugReportViewController
+        if let request = request {
+            request.cancel()
         }
         
+        dismissViewControllerAnimated(true, completion: nil)
     }
     
+    //MARK: - Navigation
+    @IBAction func unwindToSettings(segue: UIStoryboardSegue) {}
+    
 }
-

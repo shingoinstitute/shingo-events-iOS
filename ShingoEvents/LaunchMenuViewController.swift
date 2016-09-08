@@ -9,18 +9,16 @@
 import UIKit
 import Crashlytics
 import Fabric
+import Alamofire
 
 class MainMenuViewController: UIViewController {
     
     //Mark: - Properties
     var events : [SIEvent]?
+    var request: Alamofire.Request?
     
     // Activity view used for the loading screen
-    var activityView : ActivityViewController = {
-        let view = ActivityViewController()
-        view.message = "Loading Upcoming Conferences..."
-        return view
-    }()
+    var activityView : ActivityViewController!
     
     var timer : NSTimer!
     var time : Double!
@@ -70,6 +68,8 @@ class MainMenuViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        activityView = ActivityViewController(message: "Loading Upcoming Conferences...")
         
         SIRequest().requestEvents({ events in
             if let events = events {
@@ -190,18 +190,20 @@ extension MainMenuViewController {
     
 }
 
-extension MainMenuViewController {
+extension MainMenuViewController: UnwindToMainVCProtocol {
     
     // Mark: - Navigation
     
     private func shouldPerformSegueToEvents() {
         if !Reach().checkForInternetConnection() {
-            displayInternetAlert()
+            SIRequest.displayInternetAlert(forViewController: self, completion: { _ in
+                self.animateLayout()
+            })
         } else if eventsDidLoad {
             performSegueWithIdentifier("EventsView", sender: self.events)
         } else {
             presentViewController(activityView, animated: true, completion: {
-                SIRequest().requestEvents({ events in
+                self.request = SIRequest().requestEvents({ events in
                     self.dismissViewControllerAnimated(false, completion: {
                         if let events = events {
                             self.events = events
@@ -231,11 +233,19 @@ extension MainMenuViewController {
         
     }
     
+    // Protocal for passing data back from the Support
+    // page when the 'reload data' button is pressed
+    func updateEvents(events: [SIEvent]?) {
+        if let events = events {
+            self.events = events
+        }
+    }
+    
 }
 
 extension MainMenuViewController {
     
-    //MARK: - Other Methods
+    //MARK: - Other
     func displayInternetAlert() {
         let alert = UIAlertController(
             title: "Internet Connection Not Detected",
@@ -301,15 +311,6 @@ extension MainMenuViewController {
     
 }
 
-extension MainMenuViewController: UnwindToMainVCProtocol {
-    // Protocal for passing data back from the Support 
-    // page when the 'reload data' button is pressed
-    func updateEvents(events: [SIEvent]?) {
-        if let events = events {
-            self.events = events
-        }
-    }
-}
 
 
 

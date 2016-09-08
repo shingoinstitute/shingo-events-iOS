@@ -18,6 +18,7 @@ let SUPPORT_URL = BASE_URL + "/support"
 class SIRequest {
     
     // MARK: - Properties
+    
     var dateFormatter = NSDateFormatter(locale: "en_US_POSIX",
                                         dateFormat: "yyyy-MM-dd",
                                         timeZone: "UTC")
@@ -25,20 +26,32 @@ class SIRequest {
                                                dateFormat: "yyyy-MM-dd'T'HH:mm:ss.SSS",
                                                timeZone: "UTC")
     
-    //Mark: - Private Methods
+    
+    // Mark: - Alamofire
     
     /// HTTP GET request method.
-    private func getRequest(url url: String, callback: (value: JSON?) -> ()) {
-        Alamofire.request(.GET, url).responseJSON { response in
+    private func getRequest(url url: String, description: String, callback: (value: JSON?) -> ()) -> Alamofire.Request? {
+        
+        return Alamofire.request(.GET, url).responseJSON { response in
+            
+            print("+-\(self.marks(description))")
+            print("| \(description) |")
+            print("+-\(self.marks(description))")
             
             guard response.result.isSuccess else {
                 print("Error while performing API GET request: \(response.result.error!)")
+                print("+-\(self.marks(description + " - END"))")
+                print("| \(description + " - END") |")
+                print("+-\(self.marks(description + " - END"))")
                 callback(value: nil)
                 return
             }
             
             guard let response = response.result.value else {
                 print("Error while performing API GET request: Invalid response")
+                print("+-\(self.marks(description + " - END"))")
+                print("| \(description + " - END") |")
+                print("+-\(self.marks(description + " - END"))")
                 callback(value: nil)
                 return
             }
@@ -47,19 +60,27 @@ class SIRequest {
             
             if let success = responseJSON["success"].bool {
                 if !success {
+                    print("+-\(self.marks(description + " - END"))")
+                    print("| \(description + " - END") |")
+                    print("+-\(self.marks(description + " - END"))")
                     callback(value: nil)
                     return
                 }
             }
             
             print(responseJSON)
+            
+            print("+-\(self.marks(description + " - END"))")
+            print("| \(description + " - END") |")
+            print("+-\(self.marks(description + " - END"))")
+            
             callback(value: responseJSON)
         }
     }
     
     
     /// HTTP POST request method.
-    private func postRequest(url url: String, parameters: [String:String], callback: (value: JSON?) -> ())  {
+    private func postRequest(url url: String, description: String, parameters: [String:String], callback: (value: JSON?) -> ()) {
         Alamofire.request(.POST, url, parameters: parameters).responseJSON { response in
             
             guard response.result.isSuccess else {
@@ -75,7 +96,13 @@ class SIRequest {
             }
             
             let responseJSON = JSON(response)
+            
             print(responseJSON)
+            
+            print("+-\(self.marks(description + " - END"))")
+            print("| \(description + " - END") |")
+            print("+-\(self.marks(description + " - END"))")
+            
             callback(value: responseJSON)
         }
     }
@@ -87,9 +114,9 @@ extension SIRequest {
     // MARK: - API Calls
     
     /// Returns all ready-to-publish events from Salesforce.
-    func requestEvents(callback: (events: [SIEvent]?) -> Void) {
+    func requestEvents(callback: (events: [SIEvent]?) -> Void) -> Alamofire.Request? {
         
-        getRequest(url: EVENTS_URL) { json in
+        return getRequest(url: EVENTS_URL, description: "REQUEST EVENTS") { json in
             
             var events = [SIEvent]()
             
@@ -147,7 +174,7 @@ extension SIRequest {
     /// Returns an event from Salesforce using an event ID.
     func requestEvent(eventId id: String, callback: (event: SIEvent?) -> Void) {
         
-        getRequest(url: EVENTS_URL + "/\(id)") { json in
+        getRequest(url: EVENTS_URL + "/\(id)", description: "REQUEST EVENT") { json in
             
             let event = SIEvent()
             
@@ -201,7 +228,7 @@ extension SIRequest {
     /// Gets all days for a single event using an event ID.
     func requestAgendaDays(eventId eventId: String, callback: (agendas: [SIAgenda]?) -> Void) {
 
-        getRequest(url: EVENTS_URL + "/days?event_id=\(eventId)") { json in
+        getRequest(url: EVENTS_URL + "/days?event_id=\(eventId)", description: "REQUEST AGENDA FOR EVENT") { json in
             
             guard let json = json else {
                 callback(agendas: nil)
@@ -215,7 +242,7 @@ extension SIRequest {
     /// Gets all days from Salesforce.
     func requestAgendaDays(callback: (agendas: [SIAgenda]?) -> ()) {
         
-        getRequest(url: EVENTS_URL + "/days") { json in
+        getRequest(url: EVENTS_URL + "/days", description: "REQUEST AGENDAS, ALL") { json in
             
             guard let json = json else {
                 callback(agendas: nil)
@@ -263,7 +290,7 @@ extension SIRequest {
     /// Gets basic information for sessions associated with an SIAgenda.
     func requestAgendaSessions(agendaId id: String, callback: (sessions: [SISession]?) -> Void) {
         
-        getRequest(url: EVENTS_URL + "/days/\(id)") { json in
+        getRequest(url: EVENTS_URL + "/days/\(id)", description: "REQUEST SESSIONS, BASIC") { json in
             
             guard let json = json else {
                 callback(sessions: nil)
@@ -318,7 +345,7 @@ extension SIRequest {
     
     /// Gets all sessions for a single event using an agenda ID. Note: Provides more detail than requestAgendaSessions().
     func requestSessions(agendaId id: String, callback: (sessions: [SISession]?) -> ()) {
-        getRequest(url: EVENTS_URL + "/sessions?agenda_id=\(id)") { json in
+        getRequest(url: EVENTS_URL + "/sessions?agenda_id=\(id)", description: "REQUEST SESSIONS, DETAILED") { json in
             
             guard let json = json else {
                 callback(sessions: nil)
@@ -332,7 +359,7 @@ extension SIRequest {
     /// Gets all sessions from Salesforce.
     func requestSessions(callback: (sessions: [SISession]?) -> ()) {
         
-        getRequest(url: EVENTS_URL + "/sessions") { json in
+        getRequest(url: EVENTS_URL + "/sessions", description: "REQUEST SESSIONS, ALL") { json in
             
             guard let json = json else {
                 callback(sessions: nil)
@@ -417,7 +444,7 @@ extension SIRequest {
     /// Gets a single session using a session ID.
     func requestSession(id: String, callback: (session: SISession?) -> ()) {
         
-        getRequest(url: EVENTS_URL + "/sessions/\(id)") { json in
+        getRequest(url: EVENTS_URL + "/sessions/\(id)", description: "REQUEST SESSION") { json in
             
             guard let json = json else {
                 callback(session: nil)
@@ -479,7 +506,7 @@ extension SIRequest {
     ///Gets all speakers from Salesforce, or use event ID to get all speakers for an event.
     func requestSpeakers(eventId id: String, callback: (speakers: [SISpeaker]?) -> Void) {
         
-        getRequest(url: EVENTS_URL + "/speakers?event_id=\(id)", callback: { json in
+        getRequest(url: EVENTS_URL + "/speakers?event_id=\(id)", description: "REQUEST SPEAKERS, EVENT", callback: { json in
             
             guard let json = json else {
                 callback(speakers: nil)
@@ -496,7 +523,7 @@ extension SIRequest {
     ///Gets all speakers from Salesforce, or use session ID to get all speakers for a session.
     func requestSpeakers(sessionId id: String, callback: (speakers: [SISpeaker]?) -> Void) {
         
-        getRequest(url: EVENTS_URL + "/speakers?session_id=\(id)") { json in
+        getRequest(url: EVENTS_URL + "/speakers?session_id=\(id)", description: "REQUEST SPEAKERS, SESSION") { json in
             
             guard let json = json else {
                 callback(speakers: nil)
@@ -509,10 +536,10 @@ extension SIRequest {
         
     }
     
-    /// Gets all speakers for a single session
+    /// Gets all speakers from salesforce.
     func requestSpeakers(callback: (speakers: [SISpeaker]?) -> Void) {
         
-        getRequest(url: EVENTS_URL + "/speakers") { json in
+        getRequest(url: EVENTS_URL + "/speakers", description: "REQUEST SPEAKERS, ALL") { json in
             
             guard let json = json else {
                 callback(speakers: nil)
@@ -590,7 +617,7 @@ extension SIRequest {
     /// Gets a single speaker using a speaker ID.
     func requestSpeaker(speakerId id: String, callback: (speaker: SISpeaker?) -> ()) {
         
-        getRequest(url: EVENTS_URL + "/speakers/\(id)", callback: { json in
+        getRequest(url: EVENTS_URL + "/speakers/\(id)", description: "REQUEST SPEAKER, SINGLE", callback: { json in
             
             guard let json = json else {
                 callback(speaker: nil)
@@ -644,9 +671,10 @@ extension SIRequest {
         
     }
     
+    /// Gets all exhibitors for an event.
     func requestExhibitors(eventId id: String, callback: (exhibitors: [SIExhibitor]?) -> ()) {
         
-        getRequest(url: EVENTS_URL + "/exhibitors?event_id=\(id)", callback: { json in
+        getRequest(url: EVENTS_URL + "/exhibitors?event_id=\(id)", description: "REQUEST EXHIBITORS, EVENT", callback: { json in
         
             guard let json = json else {
                 callback(exhibitors: nil)
@@ -688,10 +716,10 @@ extension SIRequest {
         
     }
     
-    
+    /// Requests additional information for an exhibitor using an exhibitor ID.
     func requestExhibitor(exhibitorId id: String, callback: (exhibitor: SIExhibitor?) -> ()) {
         
-        getRequest(url: EVENTS_URL + "/exhibitors/\(id)", callback: { json in
+        getRequest(url: EVENTS_URL + "/exhibitors/\(id)", description: "REQUEST EXHIBITOR, SINGLE", callback: { json in
             
             guard let json = json else {
                 callback(exhibitor: nil)
@@ -748,9 +776,10 @@ extension SIRequest {
         
     }
     
+    /// Requests all hotels for a single event.
     func requestHotels(eventId id: String, callback: (hotels: [SIHotel]?) -> ()) {
         
-        getRequest(url: EVENTS_URL + "/hotels?event_id=\(id)", callback: { json in
+        getRequest(url: EVENTS_URL + "/hotels?event_id=\(id)", description: "REQUEST HOTEL, EVENT", callback: { json in
         
             guard let json = json else {
                 callback(hotels: nil)
@@ -795,9 +824,10 @@ extension SIRequest {
         
     }
     
+    /// Requets hotel and provides additional information than requestHotels().
     func requestHotel(hotelId id: String, callback: (hotel: SIHotel?) -> Void) {
         
-        getRequest(url: EVENTS_URL + "/hotels/\(id)", callback: { json in
+        getRequest(url: EVENTS_URL + "/hotels/\(id)", description: "REQUEST HOTEL, DETAIL", callback: { json in
         
             guard let json = json else {
                 callback(hotel: nil)
@@ -837,9 +867,10 @@ extension SIRequest {
         
     }
     
+    /// Requests basic information for all recipients for an event.
     func requestRecipients(eventId id: String, callback: (recipients: [SIRecipient]?) -> Void) {
         
-        getRequest(url: EVENTS_URL + "/recipients?event_id=\(id)", callback: { json in
+        getRequest(url: EVENTS_URL + "/recipients?event_id=\(id)", description: "REQUEST RECIPIENTS, EVENT", callback: { json in
         
             guard let json = json else {
                 callback(recipients: nil)
@@ -874,9 +905,10 @@ extension SIRequest {
         
     }
     
+    /// Requests a single recipient with additional information.
     func requestRecipient(recipientId id: String, callback: (recipient: SIRecipient?) -> Void) {
         
-        getRequest(url: EVENTS_URL + "/recipients/\(id)", callback: { json in
+        getRequest(url: EVENTS_URL + "/recipients/\(id)", description: "REQUEST RECIPIENT, DETAIL", callback: { json in
         
             guard let json = json else {
                 callback(recipient: nil)
@@ -949,9 +981,10 @@ extension SIRequest {
         }
     }
     
+    /// Requests rooms for a venue.
     func requestRooms(venueId id: String, callback: (rooms: [SIRoom]?) -> Void) {
         
-        getRequest(url: EVENTS_URL + "/rooms?venue_id=\(id)", callback: { json in
+        getRequest(url: EVENTS_URL + "/rooms?venue_id=\(id)", description: "REQUEST ROOMS, VENUE", callback: { json in
         
             guard let json = json else {
                 callback(rooms: nil)
@@ -986,9 +1019,10 @@ extension SIRequest {
         
     }
     
+    /// Requests a room and provides additional information than requestRooms().
     func requestRoom(roomId id: String, callback: (room: SIRoom?) -> Void) {
         
-        getRequest(url: EVENTS_URL + "/rooms/\(id)", callback: { json in
+        getRequest(url: EVENTS_URL + "/rooms/\(id)", description: "REQUEST ROOM, DETAIL", callback: { json in
         
             guard let json = json else {
                 callback(room: nil)
@@ -1025,9 +1059,10 @@ extension SIRequest {
         
     }
     
+    /// Requests all sponsors for an event.
     func requestSponsors(eventId id: String, callback: (sponsors: [SISponsor]?) -> Void) {
         
-        getRequest(url: EVENTS_URL + "/sponsors?event_id=\(id)", callback: { json in
+        getRequest(url: EVENTS_URL + "/sponsors?event_id=\(id)", description: "REQUEST SPONSORS, EVENT", callback: { json in
         
             guard let json = json else {
                 callback(sponsors: nil)
@@ -1078,9 +1113,10 @@ extension SIRequest {
         
     }
     
+    /// Requests detailed information for a sponsor.
     func requestSponsor(sponsorId id: String, callback: (sponsor: SISponsor?) -> Void) {
        
-        getRequest(url: EVENTS_URL + "/sponsors/\(id)", callback: { json in
+        getRequest(url: EVENTS_URL + "/sponsors/\(id)", description: "REQUEST SPONSOR, DETAIL", callback: { json in
         
             guard let json = json else {
                 callback(sponsor: nil)
@@ -1139,9 +1175,10 @@ extension SIRequest {
         }
     }
     
+    /// Requests all venues for an event. Typically there will only be one venue per event, but there is the possibility of being more than one.
     func requestVenues(eventId id: String, callback: (venues: [SIVenue]?) -> Void) {
        
-        getRequest(url: EVENTS_URL + "/venues?event_id=\(id)", callback: { json in
+        getRequest(url: EVENTS_URL + "/venues?event_id=\(id)", description: "REQUEST VENUES, EVENT", callback: { json in
         
             guard let json = json else {
                 callback(venues: nil)
@@ -1178,9 +1215,10 @@ extension SIRequest {
         
     }
     
+    /// Requests detailed information for a single venue.
     func requestVenue(venueId id: String, callback: (venue: SIVenue?) -> Void) {
         
-        getRequest(url: EVENTS_URL + "/venues/\(id)", callback: { json in
+        getRequest(url: EVENTS_URL + "/venues/\(id)", description: "REQUEST VENUE, DETAIL", callback: { json in
         
             guard let json = json else {
                 callback(venue: nil)
@@ -1256,9 +1294,10 @@ extension SIRequest {
         
     }
     
+    /// Requests all affiliates from salesforce.
     func requestAffiliates(callback: (affiliates: [SIAffiliate]?) -> ()) {
         
-        getRequest(url: BASE_URL + "/salesforce/affiliates") { (json) in
+        getRequest(url: BASE_URL + "/salesforce/affiliates", description: "REQUEST AFFILIATES, ALL") { (json) in
             guard let json = json else {
                 callback(affiliates: nil)
                 return
@@ -1300,9 +1339,10 @@ extension SIRequest {
         
     }
     
+    /// Posts a bug report to the backend server.
     func postBugReport(parameters: [String:String], callback: (Bool) -> Void) {
         
-        postRequest(url: SUPPORT_URL + "/bugs", parameters: parameters) { (json) in
+        postRequest(url: SUPPORT_URL + "/bugs", description: "POST BUG REPORT",parameters: parameters) { (json) in
             guard let json = json else {
                 callback(false)
                 return
@@ -1316,9 +1356,10 @@ extension SIRequest {
         }
     }
     
+    /// Posts feedback to the backend server.
     func postFeedback(parameters: [String:String], callback: (Bool) -> Void) {
         
-        postRequest(url: SUPPORT_URL + "/feedback", parameters: parameters) { (json) in
+        postRequest(url: SUPPORT_URL + "/feedback", description: "POST FEEDBACK", parameters: parameters) { (json) in
             guard let json = json else {
                 callback(false)
                 return
@@ -1330,8 +1371,33 @@ extension SIRequest {
                 callback(false)
             }
         }
-        
     }
+    
+    // MARK: - Other
+    
+    class func displayInternetAlert(forViewController vc: UIViewController, completion: ((UIAlertAction) -> Void)?) {
+        
+        let alert = UIAlertController(
+            title: "Error",
+            message: "An internet connection was not detected or has limited access. Please make sure your device's celluar data is enabled or is connected to wifi and try again.",
+            preferredStyle: UIAlertControllerStyle.Alert)
+        
+        let action = UIAlertAction(title: "Okay", style: .Cancel, handler: completion)
+
+        alert.addAction(action)
+        
+        vc.presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    private func marks(string: String) -> String {
+        let count = string.characters.count
+        var marks = ""
+        for _ in 0 ..< count + 1 {
+            marks += "-"
+        }
+        return "\(marks)+"
+    }
+    
 }
 
 

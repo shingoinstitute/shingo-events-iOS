@@ -12,6 +12,8 @@ import Alamofire
 
 class ActivityViewController: UIViewController {
     
+    var delegate: SIRequestDelegate?
+    
     var message = "Loading..." {
         didSet {
             messageLabel.text = message
@@ -28,10 +30,22 @@ class ActivityViewController: UIViewController {
         view.font = UIFont.boldSystemFontOfSize(UIFont.labelFontSize())
         view.textColor = UIColor.whiteColor()
         view.textAlignment = .Center
-        view.shadowColor = UIColor.blackColor()
-        view.shadowOffset = CGSizeMake(0.0, 1.0)
-        view.numberOfLines = 3
+        view.layer.shadowColor = UIColor.blackColor().CGColor
+        view.layer.shadowOffset = CGSizeMake(100, 100)
+        
+        view.numberOfLines = 0
         return view
+    }()
+    var cancelRequestButton: UIButton = {
+        let button = UIButton.newAutoLayoutView()
+        button.setTitle("Cancel", forState: .Normal)
+        button.setTitleColor(UIView().tintColor, forState: .Normal)
+        button.layer.shadowColor = UIColor.blackColor().CGColor
+        button.layer.shadowOffset = CGSizeMake(100, 100)
+        
+        button.layer.cornerRadius = 12
+        button.backgroundColor = .whiteColor()
+        return button
     }()
     var activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
     var didAddActivityIndicatorConstraints = false
@@ -51,8 +65,9 @@ class ActivityViewController: UIViewController {
         modalTransitionStyle = .CrossDissolve
         modalPresentationStyle = .OverCurrentContext
         view.backgroundColor = UIColor.clearColor()
-        view.addSubview(activityView)
+        view.addSubviews([activityView, cancelRequestButton])
         activityView.addSubviews([activityIndicatorView, messageLabel])
+        cancelRequestButton.addTarget(self, action: #selector(ActivityViewController.didTapCancel(_:)), forControlEvents: .TouchUpInside)
     }
     
     override func viewDidLoad() {
@@ -82,9 +97,24 @@ class ActivityViewController: UIViewController {
             activityIndicatorView.autoAlignAxis(.Vertical, toSameAxisOfView: activityView)
             activityIndicatorView.autoAlignAxis(.Horizontal, toSameAxisOfView: activityView, withOffset: 8)
             
+            if delegate != nil {
+                cancelRequestButton.autoPinEdge(.Top, toEdge: .Bottom, ofView: activityView, withOffset: 8)
+                cancelRequestButton.autoPinEdge(.Left, toEdge: .Left, ofView: activityView)
+                cancelRequestButton.autoPinEdge(.Right, toEdge: .Right, ofView: activityView)
+                cancelRequestButton.autoSetDimension(.Height, toSize: 42)
+            } else {
+                cancelRequestButton.hidden = true
+            }
+            
             didAddActivityIndicatorConstraints = true
         }
         super.updateViewConstraints()
+    }
+
+    func didTapCancel(sender: AnyObject) {
+        if let delegate = self.delegate {
+            delegate.cancelRequest()
+        }
     }
     
 }

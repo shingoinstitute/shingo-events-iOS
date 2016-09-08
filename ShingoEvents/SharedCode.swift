@@ -9,10 +9,9 @@
 import Foundation
 import UIKit
 
-// Used for updating cells in EventsTableViewController
-protocol SICellDelegate {
-    func updateCell()
-}
+protocol SICellDelegate { func updateCell() }
+
+protocol SIRequestDelegate { func cancelRequest() }
 
 // Shingo IP Colors
 class SIColor: UIColor {
