@@ -8,6 +8,7 @@
 
 import UIKit
 import PureLayout
+import Crashlytics
 
 class ExhibitorInfoViewController: UIViewController {
 
@@ -67,9 +68,6 @@ class ExhibitorInfoViewController: UIViewController {
             contentImageView.autoPinEdge(.Left, toEdge: .Left, ofView: view)
             contentImageView.autoPinEdge(.Right, toEdge: .Right, ofView: view)
             
-            print(contentImageView)
-            print(exhibitorImageView.superview)
-            
             exhibitorImageView.autoPinEdgesToSuperviewEdgesWithInsets(UIEdgeInsetsMake(5, 5, 5, 5))
 
             descriptionTextField.autoPinEdge(.Top, toEdge: .Bottom, ofView: contentImageView, withOffset: 8)
@@ -99,7 +97,10 @@ class ExhibitorInfoViewController: UIViewController {
                                                         documentAttributes: nil)
             richText.appendAttributedString(description)
             } catch {
-                print("Error with richText in ExhibitorInfoViewController")
+                let error = NSError(domain: "NSAttributedString",
+                                    code: 111,
+                                    userInfo: ["Richtext formatting error" : "Could not parse text for exhibitor summary."])
+                Crashlytics.sharedInstance().recordError(error)
             }
         } else {
             richText.appendAttributedString(NSAttributedString(string: "Description coming soon."));
@@ -112,8 +113,6 @@ class ExhibitorInfoViewController: UIViewController {
         }
         if !exhibitor.contactEmail.isEmpty {
             richText.appendAttributedString(NSAttributedString(string: String("Email: " + exhibitor.contactEmail + "\n"), attributes: attrs))
-        } else {
-            richText.appendAttributedString(NSAttributedString(string: "Email: Not available\n", attributes: attrs))
         }
         
         descriptionTextField.attributedText = richText;

@@ -16,37 +16,33 @@ class RecipientsTableViewController: UITableViewController {
     var researchRecipients: [SIRecipient]!
     var publicationRecipients: [SIRecipient]!
     
+    lazy var recipients: [[SIRecipient]] = [
+        self.spRecipients,
+        self.silverRecipients,
+        self.bronzeRecipients,
+        self.researchRecipients,
+        self.publicationRecipients
+    ]
+    
+    var dataSource: [[SIRecipient]] {
+        get {
+            var value = [[SIRecipient]]()
+            for r in recipients {
+                if !r.isEmpty {
+                    value.append(r)
+                }
+            }
+            return value
+        }
+    }
+    
     override func loadView() {
         super.loadView()
-        
-        let r = SIRecipient(name: "No Recipients", type: .None)
-        
-        if spRecipients.isEmpty {
-            spRecipients.append(r)
-        }
-        
-        if silverRecipients.isEmpty {
-            silverRecipients.append(r)
-        }
-
-        if bronzeRecipients.isEmpty {
-            bronzeRecipients.append(r)
-        }
-        
-        if researchRecipients.isEmpty {
-            researchRecipients.append(r)
-        }
-        
-        if publicationRecipients.isEmpty {
-            publicationRecipients.append(r)
-        }
-        
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
     }
-    
     
     // MARK: - Navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -55,6 +51,7 @@ class RecipientsTableViewController: UITableViewController {
             let destination = segue.destinationViewController as! ChallengerInfoViewController
             if let recipient = sender as? SIRecipient {
                 destination.navigationController?.topViewController?.title = recipient.name
+                destination.recipient = recipient
                 // Send something
             }
         }
@@ -64,6 +61,7 @@ class RecipientsTableViewController: UITableViewController {
             
             if let recipient = sender as? SIRecipient {
                 destination.navigationController?.topViewController?.title = recipient.name
+                destination.recipient = recipient
                 // Send something
             }
             
@@ -77,52 +75,24 @@ extension RecipientsTableViewController {
     
     // MARK: - Table view data source
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 5
+        return dataSource.count
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
-        switch section {
-        case 0:
-            return spRecipients.count
-        case 1:
-            return silverRecipients.count
-        case 2:
-            return bronzeRecipients.count
-        case 3:
-            return researchRecipients.count
-        case 4:
-            return publicationRecipients.count
-        default:
-            return 0
-        }
+        return dataSource[section].count
     }
 
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("RecipientCell", forIndexPath: indexPath) as! RecipientTableViewCell
-        switch indexPath.section {
-            case 0:
-                cell.recipient = spRecipients[indexPath.row]
-            case 1:
-                cell.recipient = silverRecipients[indexPath.row]
-            case 2:
-                cell.recipient = bronzeRecipients[indexPath.row]
-            case 3:
-                cell.recipient = researchRecipients[indexPath.row]
-            case 4:
-                cell.recipient = publicationRecipients[indexPath.row]
-            default:
-                cell.recipient = SIRecipient(name: "No Recipients", type: .None)
-        }
-        
+        cell.recipient = dataSource[indexPath.section][indexPath.row]
         return cell
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let cell = tableView.cellForRowAtIndexPath(indexPath) as! RecipientTableViewCell
+        
         if let recipient = cell.recipient {
-            
             switch recipient.awardType {
                 case .ShingoPrize,
                      .Silver,
@@ -131,7 +101,8 @@ extension RecipientsTableViewController {
                 case .Research:
                     self.performSegueWithIdentifier("ResearchInfoView", sender: recipient)
                 case .Publication:
-                    self.performSegueWithIdentifier("PublicationInfoView", sender: recipient)
+                    // Might change segue later to be a screen customized to publication recipients
+                    self.performSegueWithIdentifier("ResearchInfoView", sender: recipient)
                 default:
                     return
             }
@@ -141,33 +112,8 @@ extension RecipientsTableViewController {
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 42
     }
-//    6:50 - 8:40
+
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        
-        switch indexPath.section {
-        case 0:
-            if !spRecipients[indexPath.row].didLoadImage {
-                return 42
-            }
-        case 1:
-            if !silverRecipients[indexPath.row].didLoadImage {
-                return 42
-            }
-        case 2:
-            if !bronzeRecipients[indexPath.row].didLoadImage {
-                return 42
-            }
-        case 3:
-            if !researchRecipients[indexPath.row].didLoadImage {
-                return 42
-            }
-        case 4:
-            if !publicationRecipients[indexPath.row].didLoadImage {
-                return 42
-            }
-        default:
-            break
-        }
         return 132
     }
     
@@ -179,20 +125,7 @@ extension RecipientsTableViewController {
         header.font = UIFont.boldSystemFontOfSize(18)
         header.textColor = .whiteColor()
         
-        switch section {
-        case 0:
-            header.text = " Shingo Prize Recipients"
-        case 1:
-            header.text = " Silver Medallion Recipients"
-        case 2:
-            header.text = " Bronze Medallion Recipients"
-        case 3:
-            header.text = " Research Award Recipients"
-        case 4:
-            header.text = " Publication Award Recipients"
-        default:
-            header.text = ""
-        }
+        header.text = "\(dataSource[section][0].awardType.rawValue) Recipients"
         
         view.addSubview(header)
         

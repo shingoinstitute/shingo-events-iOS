@@ -17,11 +17,13 @@ class SIObject : AnyObject {
     var name : String
     var id : String
     private var image : UIImage?
+    var didLoadImage: Bool
     
     init() {
         name = ""
         id = ""
         image = nil
+        didLoadImage = false
     }
     
     private func requestImage(url : String, callback: (image : UIImage?) -> Void) {
@@ -51,7 +53,6 @@ class SIEvent: SIObject {
     var didLoadAffiliates : Bool
     var didLoadExhibitors : Bool
     var didLoadSponsors : Bool
-    var didLoadBannerImage : Bool
     
     // related objects
     var speakers : [String:SISpeaker] // Speakers are stored in a dictionary to prevent duplicate speakers from appearing that may be recieved from the API response
@@ -83,7 +84,6 @@ class SIEvent: SIObject {
         didLoadAffiliates = false
         didLoadExhibitors = false
         didLoadSponsors = false
-        didLoadBannerImage = false
         speakers = [String:SISpeaker]() // key = speaker's name, value = SISpeaker object
         agendaItems = [SIAgenda]()
         venues = [SIVenue]()
@@ -245,7 +245,7 @@ class SIEvent: SIObject {
         requestImage(bannerURL) { image in
             if let image = image as UIImage? {
                 self.image = image
-                self.didLoadBannerImage = true
+                self.didLoadImage = true
             }
             if let cb = callback {
                 cb()
@@ -440,6 +440,7 @@ class SISpeaker: SIObject {
         requestImage(pictureURL, callback: { image in
             if let image = image as UIImage? {
                 self.image = image
+                self.didLoadImage = true
             }
             
             if let cb = callback { cb() }
@@ -527,6 +528,7 @@ class SIExhibitor: SIObject {
             requestExhibitorBannerImage(nil)
         }
     }
+    var didLoadBannerImage: Bool
     var mapCoordinate : (Double, Double)
     private var bannerImage : UIImage?
     
@@ -538,6 +540,7 @@ class SIExhibitor: SIObject {
         bannerURL = ""
         mapCoordinate = (0, 0)
         bannerImage = nil
+        didLoadBannerImage = false
         super.init()
     }
     
@@ -551,6 +554,7 @@ class SIExhibitor: SIObject {
         requestImage(logoURL, callback: { image in
             if let image = image as UIImage? {
                 self.image = image
+                self.didLoadImage = true
             }
             
             if let cb = callback { cb() }
@@ -569,6 +573,7 @@ class SIExhibitor: SIObject {
         requestImage(bannerURL, callback: { image in
             if let image = image {
                 self.bannerImage = image
+                self.didLoadBannerImage = true
             }
             
             if let cb = callback {
@@ -642,16 +647,15 @@ class SIHotel: SIObject {
 
 class SIRecipient: SIObject {
     
-    enum AwardType {
-        case ShingoPrize,
-        Silver,
-        Bronze,
-        Research,
-        Publication,
-        None
+    enum AwardType: String {
+        case ShingoPrize = "Shingo Prize",
+        Silver = "Silver Medallion",
+        Bronze = "Bronze Medallion",
+        Research = "Research Award",
+        Publication = "Publication Award",
+        None = "N/A"
     }
 
-    var didLoadImage : Bool
     var awardType : AwardType
     var organization : String
     var photoList : String //Comma separated list of URLs to photos
@@ -666,7 +670,6 @@ class SIRecipient: SIObject {
     }
 
     override init() {
-        didLoadImage = false
         awardType = AwardType.None
         organization = ""
         logoURL = ""
@@ -687,20 +690,20 @@ class SIRecipient: SIObject {
         
         if image != nil || logoURL.isEmpty {
             if let cb = callback { cb() }
-        } else {
-            requestImage(logoURL) { image in
-                if let image = image {
-                    self.image = image
-                    self.didLoadImage = true
-                }
-                if let cb = callback { cb() }
-            }
+            return
         }
         
+        requestImage(logoURL) { image in
+            if let image = image {
+                self.image = image
+                self.didLoadImage = true
+            }
+            if let cb = callback { cb() }
+        }
         
     }
     
-    func getRecipientImage(callback: (UIImage?) -> Void) {
+    func getRecipientImage(callback: (UIImage) -> Void) {
         
         if let image = self.image {
             callback(image)
@@ -708,10 +711,8 @@ class SIRecipient: SIObject {
             requestRecipientImage() {
                 if let image = self.image {
                     callback(image)
-                } else if let image = UIImage(named: "logoComingSoon") {
-                    callback(image)
                 } else {
-                    callback(nil)
+                    callback(UIImage(named: "logoComingSoon")!)
                 }
             }
         }
@@ -760,6 +761,8 @@ class SISponsor: SIObject {
     }
     private var bannerImage : UIImage?
     private var splashScreenImage : UIImage?
+    var didLoadBannerImage: Bool
+    var didLoadSplashScreen: Bool
     
     convenience init(name: String, id: String, sponsorType: SponsorType, summary: String, logoURL: String, bannerURL: String) {
         self.init()
@@ -779,6 +782,8 @@ class SISponsor: SIObject {
         splashScreenURL = ""
         bannerImage = nil
         splashScreenImage = nil
+        didLoadBannerImage = false
+        didLoadSplashScreen = false
         super.init()
     }
     
@@ -798,6 +803,7 @@ class SISponsor: SIObject {
         self.requestImage(logoURL) { image in
             if let image = image {
                 self.image = image
+                self.didLoadImage = true
             }
             if let cb = callback { cb() }
         }
@@ -813,6 +819,7 @@ class SISponsor: SIObject {
         requestImage(bannerURL) { image in
             if let image = image as UIImage? {
                 self.bannerImage = image
+                self.didLoadBannerImage = true
             }
             if let cb = callback {
                 cb()
@@ -830,6 +837,7 @@ class SISponsor: SIObject {
         requestImage(splashScreenURL, callback: { image in
             if let image = image {
                 self.splashScreenImage = image
+                self.didLoadSplashScreen = true
             }
             if let cb = callback {
                 cb()
@@ -984,6 +992,7 @@ class SIVenueMap: SIObject {
             self.requestImage(mapURL) { (image) in
                 if let image = image {
                     self.image = image
+                    self.didLoadImage = true
                 }
                 if let cb = callback { cb() }
             }
@@ -1022,6 +1031,7 @@ class SIAffiliate: SIObject {
         requestImage(logoURL) { (image) in
             if let image = image {
                 self.image = image
+                self.didLoadImage = true
             }
             
             if let cb = callback { cb() }

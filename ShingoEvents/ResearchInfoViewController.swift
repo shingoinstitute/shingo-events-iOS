@@ -57,9 +57,7 @@ class ResearchInfoViewController: UIViewController {
         automaticallyAdjustsScrollViewInsets = false
 
         recipient.getRecipientImage() { image in
-            if let image = image {
-                self.bookImage.image = image
-            }
+            self.bookImage.image = image
         }
         
         abstractTextField.text = ""

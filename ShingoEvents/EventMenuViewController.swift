@@ -160,7 +160,7 @@ class EventMenuViewController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        if event.didLoadBannerImage {
+        if event.didLoadImage {
             navigationItem.title = self.event.name
         }
     }

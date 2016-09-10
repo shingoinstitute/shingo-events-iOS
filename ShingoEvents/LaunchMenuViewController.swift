@@ -69,7 +69,7 @@ class MainMenuViewController: UIViewController, SIRequestDelegate {
         activityView = ActivityViewController(message: "Loading Upcoming Conferences...")
         activityView.delegate = self
         
-//        requestEvents()
+        requestEvents()
         
         navigationItem.title = ""
         

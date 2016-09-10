@@ -44,17 +44,16 @@ class ChallengerInfoViewController: UIViewController {
             abstractTextField.removeFromSuperview()
 
             view.addSubviews([backgroundView, scrollView])
+            scrollView.addSubviews([logoImage, abstractTextField])
             
             scrollView.autoPinToTopLayoutGuideOfViewController(self, withInset: 8)
             scrollView.autoPinEdgeToSuperviewEdge(.Left)
             scrollView.autoPinEdgeToSuperviewEdge(.Right)
             scrollView.autoPinEdgeToSuperviewEdge(.Bottom)
-            scrollView.addSubview(logoImage)
-            scrollView.addSubview(abstractTextField)
             
             logoImage.autoPinEdgeToSuperviewEdge(.Top)
-            logoImage.autoPinEdgeToSuperviewEdge(.Left, withInset: 8)
-            logoImage.autoPinEdgeToSuperviewEdge(.Right, withInset: 8)
+            logoImage.autoPinEdge(.Left, toEdge: .Left, ofView: view, withOffset: 8)
+            logoImage.autoPinEdge(.Right, toEdge: .Right, ofView: view, withOffset: 8)
             logoImage.contentMode = .ScaleAspectFit
             
             abstractTextField.autoPinEdge(.Top, toEdge: .Bottom, ofView: logoImage, withOffset: 8)
@@ -63,7 +62,7 @@ class ChallengerInfoViewController: UIViewController {
             abstractTextField.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: scrollView, withOffset: 0)
             abstractTextField.scrollEnabled = false
             
-            backgroundView.autoPinEdge(.Top, toEdge: .Bottom, ofView: logoImage)
+            backgroundView.autoPinEdge(.Top, toEdge: .Bottom, ofView: logoImage, withOffset: 8)
             backgroundView.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: view)
             backgroundView.autoPinEdge(.Left, toEdge: .Left, ofView: view)
             backgroundView.autoPinEdge(.Right, toEdge: .Right, ofView: view)
@@ -77,12 +76,11 @@ class ChallengerInfoViewController: UIViewController {
         
         abstractTextField.backgroundColor = SIColor.prussianBlueColor()
         abstractTextField.text = ""
+        abstractTextField.textColor = .whiteColor()
         abstractTextField.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         
         recipient.getRecipientImage() { image in
-            if let image = image {
-                self.logoImage.image = image
-            }
+            self.logoImage.image = image
         }
         
         if !recipient.summary.isEmpty {

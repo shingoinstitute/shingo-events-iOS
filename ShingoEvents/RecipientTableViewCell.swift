@@ -9,7 +9,7 @@
 import UIKit
 
 class RecipientTableViewCell: UITableViewCell {
-
+    
     var recipient: SIRecipient! {
         didSet {
             updateCell()
@@ -61,17 +61,13 @@ class RecipientTableViewCell: UITableViewCell {
     
     private func updateCell() {
         if let recipient = recipient {
+            
             nameLabel.text = recipient.name
             
-            if recipient.didLoadImage {
-                recipient.getRecipientImage() { image in
-                    if let image = image {
-                        self.logoImage.image = image
-                    } else {
-                        self.accessoryType = .None
-                    }
-                }
+            recipient.getRecipientImage() { image in
+                self.logoImage.image = image
             }
+            
         }
     }
     

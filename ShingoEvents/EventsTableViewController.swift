@@ -77,15 +77,15 @@ extension EventsTableViewController {
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
-        if !events[indexPath.row].didLoadBannerImage {
-            return 75.0
+        if !events[indexPath.row].didLoadImage {
+            return 75
         }
         
         if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
             return 240
         }
         
-        return 155.0 as CGFloat
+        return 155
     }
     
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
