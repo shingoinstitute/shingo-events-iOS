@@ -19,12 +19,9 @@ class SIRequest {
     
     // MARK: - Properties
     
-    var dateFormatter = NSDateFormatter(locale: "en_US_POSIX",
-                                        dateFormat: "yyyy-MM-dd",
-                                        timeZone: "UTC")
-    var sessionDateFormatter = NSDateFormatter(locale: "en_US_POSIX",
-                                               dateFormat: "yyyy-MM-dd'T'HH:mm:ss.SSS",
-                                               timeZone: "UTC")
+    // Date formatters uses convenience init that defaults timezone to GMT
+    var dateFormatter = NSDateFormatter(locale: "en_US_POSIX", dateFormat: "yyyy-MM-dd")
+    var sessionDateFormatter = NSDateFormatter(locale: "en_US_POSIX", dateFormat: "yyyy-MM-dd'T'HH:mm:ss.SSS")
     
     
     // Mark: - Alamofire

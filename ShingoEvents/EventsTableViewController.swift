@@ -190,6 +190,7 @@ class EventTableViewCell: UITableViewCell {
         eventImage.layer.cornerRadius = 3.0
         
         let dateFormatter = NSDateFormatter()
+        dateFormatter.timeZone = NSTimeZone(abbreviation: "GMT")
         dateFormatter.dateFormat = "yyyy-MM-dd"
         dateFormatter.dateStyle = .MediumStyle
         let dates = "\(dateFormatter.stringFromDate(event.startDate)) - \(dateFormatter.stringFromDate(event.endDate))"

@@ -313,11 +313,11 @@ extension NSDate {
 
 extension NSDateFormatter {
     /// Returns an object initialized with a set locale, date format, and time zone.
-    convenience init(locale: String, dateFormat: String, timeZone: String) {
+    convenience init(locale: String, dateFormat: String) {
         self.init()
         self.locale = NSLocale(localeIdentifier: locale)
         self.dateFormat = dateFormat
-        self.timeZone = NSTimeZone(abbreviation: timeZone)
+        self.timeZone = NSTimeZone(abbreviation: "GMT")
     }
     
 }

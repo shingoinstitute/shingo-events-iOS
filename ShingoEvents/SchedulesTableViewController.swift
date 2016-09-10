@@ -104,10 +104,11 @@ class SchedulesTableViewCell: UITableViewCell {
             let dateFormatter = NSDateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"
             dateFormatter.dateStyle = .MediumStyle
-
-            let dateText: String = dateFormatter.stringFromDate(agenda.date.dateByAddingTimeInterval(60*60*24))
+            dateFormatter.timeZone = NSTimeZone(abbreviation: "GMT")
             
-            agendaLabel.text = "\(agenda.displayName), \(dateText)"
+//            let dateText: String = dateFormatter.stringFromDate(agenda.date.dateByAddingTimeInterval(60*60*24))
+            
+            agendaLabel.text = "\(agenda.displayName), \(dateFormatter.stringFromDate(agenda.date))"
         }
     }
     
