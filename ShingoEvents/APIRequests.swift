@@ -118,53 +118,55 @@ extension SIRequest {
         
         return getRequest(url: EVENTS_URL, description: "REQUEST EVENTS") { json in
             
-            var events = [SIEvent]()
+            guard let json = json else {
+                callback(events: nil)
+                return
+            }
             
-            if let json = json {
+            var events = [SIEvent]()
                 
-                if let records = json["events"].array {
+            if let records = json["events"].array {
+                
+                for record in records {
                     
-                    for record in records {
-                        
-                        if let publishToApp = record["Publish_to_Web_App__c"].bool {
-                            if !publishToApp {
-                                continue
-                            }
+                    if let publishToApp = record["Publish_to_Web_App__c"].bool {
+                        if !publishToApp {
+                            continue
                         }
-                        
-                        let event = SIEvent()
-                        
-                        if let id = record["Id"].string {
-                            event.id = id
-                        }
-                        
-                        if let name = record["Name"].string {
-                            event.name = name
-                        }
-                        
-                        if let startDate = record["Start_Date__c"].string {
-                            if let startDate = self.dateFormatter.dateFromString(startDate) {
-                                event.startDate = startDate
-                            }
-                            
-                        }
-                        
-                        if let endDate = record["End_Date__c"].string {
-                            if let endDate = self.dateFormatter.dateFromString(endDate) {
-                                event.endDate = endDate
-                            }
-                        }
-                        
-                        if let eventType = record["Event_Type__c"].string {
-                            event.eventType = eventType
-                        }
-                        
-                        if let bannerURL = record["Banner_URL__c"].string {
-                            event.bannerURL = bannerURL
-                        }
-                        
-                        events.append(event)
                     }
+                    
+                    let event = SIEvent()
+                    
+                    if let id = record["Id"].string {
+                        event.id = id
+                    }
+                    
+                    if let name = record["Name"].string {
+                        event.name = name
+                    }
+                    
+                    if let startDate = record["Start_Date__c"].string {
+                        if let startDate = self.dateFormatter.dateFromString(startDate) {
+                            event.startDate = startDate
+                        }
+                        
+                    }
+                    
+                    if let endDate = record["End_Date__c"].string {
+                        if let endDate = self.dateFormatter.dateFromString(endDate) {
+                            event.endDate = endDate
+                        }
+                    }
+                    
+                    if let eventType = record["Event_Type__c"].string {
+                        event.eventType = eventType
+                    }
+                    
+                    if let bannerURL = record["Banner_URL__c"].string {
+                        event.bannerURL = bannerURL
+                    }
+                    
+                    events.append(event)
                 }
             }
             callback(events: events)
@@ -176,14 +178,14 @@ extension SIRequest {
         
         getRequest(url: EVENTS_URL + "/\(id)", description: "REQUEST EVENT") { json in
             
-            let event = SIEvent()
-            
             guard let json = json else {
                 callback(event: nil)
                 return
             }
             
-            if json["event"].isExists() {
+            let event = SIEvent()
+            
+            if json["event"] != nil {
                 
                 let record = json["event"]
                 
@@ -375,9 +377,7 @@ extension SIRequest {
     private func parseSessionResponse(json: JSON) -> [SISession] {
         
         var sessions = [SISession]()
-        
-        
-        
+
         if let records = json["sessions"].array {
             
             for record in records {
@@ -453,7 +453,8 @@ extension SIRequest {
             
             let session = SISession()
             
-            if json["session"].isExists() {
+            if json["session"] != nil {
+                
                 let record = json["session"]
                 
                 if let id = record["Id"].string {
@@ -654,9 +655,8 @@ extension SIRequest {
                     speaker.organizationName = organization
                 }
             
-                if record["Session_Speaker_Associations__r"]["records"].isExists() {
-                    for assoc in record["Session_Speaker_Associations__r"]["records"].array! {
-                        
+                if let assocs = record["Session_Speaker_Associations__r"]["records"].array {
+                    for assoc in assocs {
                         if let id = assoc["Session__r"]["Id"].string {
                             speaker.associatedSessionIds.append(id)
                         }
@@ -726,10 +726,11 @@ extension SIRequest {
                 return
             }
             
-            if json["exhibitor"].isExists() {
+            let exhibitor = SIExhibitor()
+            
+            if json["exhibitor"] != nil {
                 
                 let record = json["exhibitor"]
-                let exhibitor = SIExhibitor()
                 
                 if let id = record["Id"].string {
                     exhibitor.id = id
@@ -768,9 +769,10 @@ extension SIRequest {
                 if let website = organization["Website"].string {
                     exhibitor.website = website
                 }
-                
-                
+
             }
+            
+            callback(exhibitor: exhibitor)
             
         })
         
@@ -788,9 +790,9 @@ extension SIRequest {
             
             var hotels = [SIHotel]()
             
-            if json["hotels"].isExists() {
+            if let records = json["hotels"].array {
                 
-                for record in json["hotels"].array! {
+                for record in records {
                     
                     let hotel = SIHotel()
                     
@@ -836,7 +838,7 @@ extension SIRequest {
             
             let hotel = SIHotel()
             
-            if json["hotel"].isExists() {
+            if json["hotel"] != nil {
                 
                 let record = json["hotel"]
                 
@@ -853,9 +855,11 @@ extension SIRequest {
                 }
                 
                 if record["Shingo_Prices__r"]["totalSize"].int! > 0 {
-                    for record in record["Shingo_Prices__r"]["records"].array! {
-                        if let price = record["Price__c"].double {
-                            hotel.prices.append(price)
+                    if let records = record["Shingo_Prices__r"]["records"].array {
+                        for record in records {
+                            if let price = record["Price__c"].double {
+                                hotel.prices.append(price)
+                            }
                         }
                     }
                 }
@@ -879,24 +883,33 @@ extension SIRequest {
             
             var recipients = [SIRecipient]()
             
-            if json["recipient"].isExists() {
+            if let records = json["recipients"].array {
                 
-                let record = json["recipient"]
-                let recipient = SIRecipient()
-                
-                if let id = record["Id"].string {
-                    recipient.id = id
+                for record in records {
+                    let recipient = SIRecipient()
+                    
+                    if let id = record["Id"].string {
+                        recipient.id = id
+                    }
+                    
+                    if let name = record["Organization__r"]["Name"].string {
+                        recipient.name = name
+                    }
+                    
+                    if let logoURL = record["Organization__r"]["Logo__c"].string {
+                        recipient.logoURL = logoURL
+                    }
+                    
+                    if let awardType = record["Award_Type__c"].string {
+                        recipient.awardType = self.parseRecipientAwardType(awardType)
+                    }
+                    
+                    if let summary = record["Summary__c"].string {
+                        recipient.summary = summary
+                    }
+                    
+                    recipients.append(recipient)
                 }
-                
-                if let name = record["Organization__r"]["Name"].string {
-                    recipient.name = name
-                }
-                
-                if let awardType = record["Award_Type__c"].string {
-                    recipient.awardType = self.parseRecipientAwardType(awardType)
-                }
-                
-                recipients.append(recipient)
             }
             
             callback(recipients: recipients)
@@ -1031,7 +1044,7 @@ extension SIRequest {
             
             let room = SIRoom()
             
-            if json["room"].isExists() {
+            if json["room"] != nil {
                 
                 let record = json["room"]
                 
@@ -1187,9 +1200,9 @@ extension SIRequest {
             
             var venues = [SIVenue]()
             
-            if json["venues"].isExists() {
+            if let records = json["venues"].array {
                 
-                for record in json["venues"].array! {
+                for record in records {
                     
                     let venue = SIVenue()
                     
@@ -1378,8 +1391,8 @@ extension SIRequest {
     class func displayInternetAlert(forViewController vc: UIViewController, completion: ((UIAlertAction) -> Void)?) {
         
         let alert = UIAlertController(
-            title: "Error",
-            message: "An internet connection was not detected or has limited access. Please make sure your device's celluar data is enabled or is connected to wifi and try again.",
+            title: "Connection Error",
+            message: "Could not connect to server. The Internet connection appears to be offline.",
             preferredStyle: UIAlertControllerStyle.Alert)
         
         let action = UIAlertAction(title: "Okay", style: .Cancel, handler: completion)

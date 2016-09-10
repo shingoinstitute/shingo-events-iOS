@@ -562,7 +562,7 @@
                     </navigationItem>
                     <connections>
                         <segue destination="b1Y-X9-6h0" kind="show" identifier="ReportBugView" id="fMK-Td-vKh"/>
-                        <segue destination="8cF-6O-f27" kind="unwind" identifier="UnwindToMainVC" unwindAction="unwindToSettings:" id="CQA-DA-ZGH"/>
+                        <segue destination="8cF-6O-f27" kind="unwind" identifier="UnwindToMainVC" unwindAction="unwindToLaunchMenu:" id="Z92-WT-iHO"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sw1-Kr-d3H" userLabel="First Responder" sceneMemberID="firstResponder"/>

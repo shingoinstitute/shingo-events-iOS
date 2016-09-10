@@ -11,7 +11,7 @@ import Crashlytics
 import Fabric
 import Alamofire
 
-class MainMenuViewController: UIViewController {
+class MainMenuViewController: UIViewController, SIRequestDelegate {
     
     //Mark: - Properties
     var events : [SIEvent]?
@@ -19,9 +19,6 @@ class MainMenuViewController: UIViewController {
     
     // Activity view used for the loading screen
     var activityView : ActivityViewController!
-    
-    var timer : NSTimer!
-    var time : Double!
     
     // Used to set inital placement of menu items off screen so they can later be animated
     var contentViewHeightConstraint: NSLayoutConstraint!
@@ -70,13 +67,9 @@ class MainMenuViewController: UIViewController {
         super.viewDidLoad()
         
         activityView = ActivityViewController(message: "Loading Upcoming Conferences...")
+        activityView.delegate = self
         
-        SIRequest().requestEvents({ events in
-            if let events = events {
-                self.events = events
-                self.eventsDidLoad = true
-            }
-        })
+//        requestEvents()
         
         navigationItem.title = ""
         
@@ -170,6 +163,23 @@ class MainMenuViewController: UIViewController {
         super.updateViewConstraints()
     }
     
+    func cancelRequest() {
+        dismissViewControllerAnimated(false, completion: {
+            if let request = self.request {
+                request.cancel()
+            }
+        })
+    }
+    
+    private func requestEvents() {
+        SIRequest().requestEvents({ events in
+            if let events = events {
+                self.events = events
+                self.eventsDidLoad = true
+            }
+        })
+    }
+    
 }
 
 extension MainMenuViewController {
@@ -210,13 +220,15 @@ extension MainMenuViewController: UnwindToMainVCProtocol {
                             self.eventsDidLoad = true
                             self.performSegueWithIdentifier("EventsView", sender: self.events)
                         } else {
-                            self.displayBadRequestNotification()
+                            self.displayServerError()
                         }
                     })
                 })
             })
         }
     }
+    
+    @IBAction func unwindToLaunchMenu(segue: UIStoryboardSegue) {}
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "EventsView" {
@@ -246,19 +258,16 @@ extension MainMenuViewController: UnwindToMainVCProtocol {
 extension MainMenuViewController {
     
     //MARK: - Other
-    func displayInternetAlert() {
-        let alert = UIAlertController(
-            title: "Internet Connection Not Detected",
-            message: "Your device must be connected to the internet to recieve data about conferences and events.",
-            preferredStyle: UIAlertControllerStyle.Alert)
-        let action = UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel) { _ in
+    private func displayServerError() {
+        let alert = UIAlertController(title: "Server Error", message: "We're currently experiencing a problem with our server and are working on a solution to fix it as quickly as possible. We're sorry for any inconvenience this has caused.", preferredStyle: .Alert)
+        let action = UIAlertAction(title: "Dismiss", style: .Cancel, handler: { _ in
             self.animateLayout()
-        }
+        })
         alert.addAction(action)
         self.presentViewController(alert, animated: true, completion: nil)
     }
     
-    func animateLayout() {
+    private func animateLayout() {
         if !didAnimateLayout {
             
             // Sets new constraint constant to make the menu appear onscreen in an appropriate position depending on screen size.
@@ -296,17 +305,6 @@ extension MainMenuViewController {
             
             didAnimateLayout = true
         }
-    }
-    
-    func displayBadRequestNotification() {
-        let alert = UIAlertController(title: "There seems to be a problem.",
-                                      message: "We were unable to fetch any data for you. Please make sure you are connected to the internet.",
-                                      preferredStyle: UIAlertControllerStyle.Alert)
-        let action = UIAlertAction(title: "OK", style: .Default, handler: nil)
-        alert.addAction(action)
-        dismissViewControllerAnimated(true, completion: {
-            self.presentViewController(alert, animated: true, completion: nil)
-        });
     }
     
 }

@@ -48,7 +48,7 @@ class SettingsTableViewController: UITableViewController, SIRequestDelegate {
         presentViewController(activityView, animated: true) {
             
             self.request = SIRequest().requestEvents({ events in
-                self.dismissViewControllerAnimated(true, completion: {
+                self.dismissViewControllerAnimated(false, completion: {
                     if let events = events {
                         if let delegate = self.delegate {
                             delegate.updateEvents(events)

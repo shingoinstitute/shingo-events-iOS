@@ -22,7 +22,7 @@ class ActivityViewController: UIViewController {
     var activityView:UIView = {
         let view = UIView.newAutoLayoutView()
         view.backgroundColor = UIColor(white: 0.0, alpha: 0.5)
-        view.layer.cornerRadius = 12.0
+        view.layer.cornerRadius = 12
         return view
     }()
     var messageLabel : UILabel = {
@@ -30,9 +30,6 @@ class ActivityViewController: UIViewController {
         view.font = UIFont.boldSystemFontOfSize(UIFont.labelFontSize())
         view.textColor = UIColor.whiteColor()
         view.textAlignment = .Center
-        view.layer.shadowColor = UIColor.blackColor().CGColor
-        view.layer.shadowOffset = CGSizeMake(100, 100)
-        
         view.numberOfLines = 0
         return view
     }()
@@ -40,10 +37,14 @@ class ActivityViewController: UIViewController {
         let button = UIButton.newAutoLayoutView()
         button.setTitle("Cancel", forState: .Normal)
         button.setTitleColor(UIView().tintColor, forState: .Normal)
-        button.layer.shadowColor = UIColor.blackColor().CGColor
-        button.layer.shadowOffset = CGSizeMake(100, 100)
         
-        button.layer.cornerRadius = 12
+        button.layer.shadowColor = UIColor.grayColor().CGColor
+        button.layer.shadowOffset = CGSizeMake(0, 1.0)
+        button.layer.shadowOpacity = 1
+        button.layer.shadowRadius = 2
+        button.layer.masksToBounds = false
+        button.layer.cornerRadius = 5
+        
         button.backgroundColor = .whiteColor()
         return button
     }()
