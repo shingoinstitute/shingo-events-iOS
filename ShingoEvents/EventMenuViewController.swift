@@ -488,6 +488,7 @@ extension EventMenuViewController {
                 }
                 
                 for letter in Alphabet().alphabet() {
+                    print(letter)
                     if let section = sections[letter] {
                         exhibitorSections.append((letter, section))
                     }
@@ -511,7 +512,7 @@ extension EventMenuViewController {
                     
                     // Get first letter of affiliate name
                     let character = getCharacterForSection(affiliate.name)
-                    
+
                     // Add to dictionary
                     if var section = sections[character] {
                         section.append(affiliate)
@@ -522,6 +523,7 @@ extension EventMenuViewController {
                 }
                 
                 for letter in Alphabet().alphabet() {
+
                     if let section = sections[letter] {
                         affiliateSections.append((letter, section))
                     }
@@ -583,7 +585,9 @@ extension EventMenuViewController {
 
     // MARK: - Custom Class Functions
     func getCharacterForSection(name: String) -> String {
-        
+        if name.characters.first == "M" {
+            print("")
+        }
         // Get first letter of name
         let fullName : [String?] = name.split(" ")
         var temp = ""
