@@ -91,8 +91,8 @@ class SIEvent: SIObject {
         affiliates = [SIAffiliate]()
         exhibitors = [SIExhibitor]()
         sponsors = [SISponsor]()
-        startDate = NSDate().notionallyEmptyDate()
-        endDate = NSDate().notionallyEmptyDate()
+        startDate = NSDate.notionallyEmptyDate()
+        endDate = NSDate.notionallyEmptyDate()
         salesText = ""
         eventType = ""
         bannerURL = ""
@@ -287,7 +287,7 @@ class SIAgenda: SIObject {
         didLoadSessions = false
         sessions = [SISession]()
         displayName = ""
-        date = NSDate().notionallyEmptyDate()
+        date = NSDate.notionallyEmptyDate()
         super.init()
     }
     
@@ -332,8 +332,8 @@ class SISession: SIObject {
         didLoadSessionInformation = false
         speakers = [SISpeaker]()
         displayName = "No Display Name"
-        startDate = NSDate().notionallyEmptyDate()
-        endDate = NSDate().notionallyEmptyDate()
+        startDate = NSDate.notionallyEmptyDate()
+        endDate = NSDate.notionallyEmptyDate()
         sessionType = ""
         sessionTrack = ""
         summary = ""

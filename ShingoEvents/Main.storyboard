@@ -1166,33 +1166,55 @@
         <scene sceneID="AYG-7x-KYt">
             <objects>
                 <tableViewController id="PqC-BM-dR8" customClass="SchedulesTableViewController" customModule="Shingo_Events" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="4Tz-rr-5lK">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="139" sectionHeaderHeight="18" sectionFooterHeight="18" id="4Tz-rr-5lK">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.054901961239999998" green="0.1294117719" blue="0.270588249" alpha="1" colorSpace="calibratedRGB"/>
-                        <imageView key="tableFooterView" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="j0m-4U-Hd7">
-                            <rect key="frame" x="0.0" y="182" width="600" height="492"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        </imageView>
+                        <color key="backgroundColor" white="0.75" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="ScheduleCell" textLabel="5Oz-lF-59s" rowHeight="50" style="IBUITableViewCellStyleDefault" id="40e-eU-7Lv" customClass="SchedulesTableViewCell" customModule="Shingo_Events" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="114" width="600" height="50"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ScheduleCell" rowHeight="106" id="40e-eU-7Lv" customClass="SchedulesTableViewCell" customModule="Shingo_Events" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="114" width="600" height="106"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="40e-eU-7Lv" id="9k3-pq-DYy">
-                                    <rect key="frame" x="0.0" y="0.0" width="567" height="49"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="105"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="day of week" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5Oz-lF-59s">
-                                            <rect key="frame" x="15" y="0.0" width="550" height="49"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Session Time" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nkt-ZO-gHb">
+                                            <rect key="frame" x="8" y="8" width="584" height="20"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
-                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qdQ-gs-Yqi">
+                                            <rect key="frame" x="8" y="36" width="584" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="749" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" text="Select For More Info &gt;" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ozf-Nq-AaI">
+                                            <rect key="frame" x="8" y="65" width="584" height="32"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="textColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                        </textView>
                                     </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailingMargin" secondItem="qdQ-gs-Yqi" secondAttribute="trailing" id="2U9-hr-lkt"/>
+                                        <constraint firstItem="Ozf-Nq-AaI" firstAttribute="trailing" secondItem="9k3-pq-DYy" secondAttribute="trailingMargin" id="8tz-OL-cQP"/>
+                                        <constraint firstItem="Ozf-Nq-AaI" firstAttribute="bottom" secondItem="9k3-pq-DYy" secondAttribute="bottomMargin" id="B0p-4z-psG"/>
+                                        <constraint firstItem="Nkt-ZO-gHb" firstAttribute="leading" secondItem="9k3-pq-DYy" secondAttribute="leadingMargin" id="KsA-Cr-YOE"/>
+                                        <constraint firstItem="Ozf-Nq-AaI" firstAttribute="leading" secondItem="9k3-pq-DYy" secondAttribute="leadingMargin" id="Oqh-4x-pxM"/>
+                                        <constraint firstItem="Nkt-ZO-gHb" firstAttribute="trailing" secondItem="9k3-pq-DYy" secondAttribute="trailingMargin" id="W1O-vB-07w"/>
+                                        <constraint firstItem="Ozf-Nq-AaI" firstAttribute="top" secondItem="qdQ-gs-Yqi" secondAttribute="bottom" constant="8" id="cnZ-iQ-apH"/>
+                                        <constraint firstItem="qdQ-gs-Yqi" firstAttribute="leading" secondItem="9k3-pq-DYy" secondAttribute="leadingMargin" id="kiP-lX-4GW"/>
+                                        <constraint firstItem="qdQ-gs-Yqi" firstAttribute="top" secondItem="Nkt-ZO-gHb" secondAttribute="bottom" constant="8" id="qFh-th-9dn"/>
+                                        <constraint firstItem="Nkt-ZO-gHb" firstAttribute="top" secondItem="9k3-pq-DYy" secondAttribute="topMargin" id="qri-Iu-oPS"/>
+                                    </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="agendaLabel" destination="5Oz-lF-59s" id="VSC-bG-cGN"/>
+                                    <outlet property="infoTextView" destination="9k3-pq-DYy" id="ZtC-Ty-e0d"/>
+                                    <outlet property="timeLabel" destination="9k3-pq-DYy" id="FcC-Qg-rR7"/>
+                                    <outlet property="titleLabel" destination="9k3-pq-DYy" id="FOM-v6-58l"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -1202,9 +1224,6 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Schedule" id="8ax-Rv-lw8"/>
-                    <connections>
-                        <segue destination="skg-Ca-vnm" kind="show" identifier="SessionListView" id="KuT-Bg-DHs"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RRo-Iz-2vy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1258,7 +1277,7 @@
                         <color key="sectionIndexBackgroundColor" red="0.61176470588235299" green="0.41960784313725491" blue="0.12156862745098039" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="SessionCell" rowHeight="130" id="jxJ-RT-hus" customClass="SessionTableViewCell" customModule="Shingo_Events" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="114" width="600" height="130"/>
+                                <rect key="frame" x="0.0" y="50" width="600" height="130"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="jxJ-RT-hus" id="e6s-fr-ReA">
                                     <rect key="frame" x="0.0" y="0.0" width="567" height="129"/>
@@ -1338,7 +1357,7 @@
                                 <rect key="frame" x="0.0" y="354" width="600" height="246"/>
                                 <color key="backgroundColor" red="0.30588235294117649" green="0.011764705882352941" blue="0.094117647058823528" alpha="1" colorSpace="calibratedRGB"/>
                                 <label key="tableHeaderView" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Session Speakers" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="032-p9-1R2">
-                                    <rect key="frame" x="0.0" y="64" width="600" height="32"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="32"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
@@ -1346,7 +1365,7 @@
                                 </label>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" tag="100" contentMode="scaleToFill" selectionStyle="none" accessoryType="detailButton" indentationWidth="10" reuseIdentifier="SpeakerCell" rowHeight="117" id="vUf-uh-bpx" customClass="SessionSpeakerCell" customModule="Shingo_Events" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="146" width="600" height="117"/>
+                                        <rect key="frame" x="0.0" y="82" width="600" height="117"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vUf-uh-bpx" id="bAp-Tx-eTo">
                                             <rect key="frame" x="0.0" y="0.0" width="553" height="116"/>

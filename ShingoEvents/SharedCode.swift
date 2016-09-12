@@ -219,7 +219,7 @@ extension UILabel {
 
 struct Alphabet {
     
-    func alphabet() -> [String] {
+    static func alphabet() -> [String] {
         var alphabet = [String]()
         for char in Array("ABCDEFGHIJKLM‌​NOPQRSTUVWXYZ#".characters) {
             alphabet.append(String(char))
@@ -298,17 +298,70 @@ extension NSDate {
         return (compare(dateToCompare) == NSComparisonResult.OrderedSame)
     }
     
-    func isNotionallyEmpty() -> Bool {
-        if self.isEqualToDate(NSDate().notionallyEmptyDate()) {
-            return true
-        } else {
-            return false
+    class func notionallyEmptyDate() -> NSDate {
+        return NSDate.init(timeIntervalSince1970: 0)
+    }
+    
+    var isNotionallyEmpty: Bool {
+        get {
+            if self.isEqualToDate(NSDate.notionallyEmptyDate()) {
+                return true
+            } else {
+                return false
+            }
         }
     }
     
-    func notionallyEmptyDate() -> NSDate {
-        return NSDate.init(timeIntervalSince1970: 0)
+    /// Returns time frame between a start date and end date.
+    class func timeFrameBetweenDates(startDate start: NSDate, endDate end: NSDate) -> String {
+
+        let calendar = NSCalendar.currentCalendar()
+        let startComponents = calendar.components([.Hour, .Minute], fromDate: start)
+        let endComponents = calendar.components([.Hour, .Minute], fromDate: start)
+        
+        var timeFrame = ""
+        
+        for i in 0 ..< 2 {
+            
+            var hour: Int = 0
+            var minute: Int = 0
+            
+            if i == 0 {
+                hour = startComponents.hour
+                minute = startComponents.minute
+            } else {
+                hour = endComponents.hour
+                minute = endComponents.minute
+            }
+            
+            var am_pm = ""
+            
+            switch hour {
+            case 0 ..< 12:
+                hour = hour - 12
+                am_pm = " pm"
+            case 12:
+                am_pm = " pm"
+            default:
+                am_pm = " am"
+            }
+
+            timeFrame += "\(hour):"
+            
+            if minute < 10 {
+                timeFrame += "0\(minute) \(am_pm)"
+            } else {
+                timeFrame += "\(minute) \(am_pm)"
+            }
+            
+            if i == 0 { timeFrame += " - " }
+            
+        }
+        
+        return timeFrame
     }
+    
+    
 }
 
 extension NSDateFormatter {

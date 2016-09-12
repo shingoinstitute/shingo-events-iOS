@@ -487,7 +487,7 @@ extension EventMenuViewController {
                     }
                 }
                 
-                for letter in Alphabet().alphabet() {
+                for letter in Alphabet.alphabet() {
                     if let section = sections[letter] {
                         exhibitorSections.append((letter, section))
                     }
@@ -504,7 +504,7 @@ extension EventMenuViewController {
                 
                 // Populate section headers so affiliates can be presented alphabetically in seperate tableView sections
                 var sections = [String : [SIAffiliate]]()
-                
+                print(sections)
                 var affiliateSections = [(String, [SIAffiliate])]()
                 
                 for affiliate in affiliates {
@@ -521,7 +521,7 @@ extension EventMenuViewController {
                     }
                 }
                 
-                for letter in Alphabet().alphabet() {
+                for letter in Alphabet.alphabet() {
                     if let section = sections[letter] {
                         affiliateSections.append((letter, section))
                     }
