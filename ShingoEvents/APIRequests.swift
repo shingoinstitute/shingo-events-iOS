@@ -393,13 +393,13 @@ extension SIRequest {
                 }
                 
                 if let startDate = record["Start_Date_Time__c"].string {
-                    if let startDate = self.sessionDateFormatter.dateFromString(startDate.split("+")[0]!) {
+                    if let startDate = self.sessionDateFormatter.dateFromString(startDate.split("+")![0]) {
                         session.startDate = startDate
                     }
                 }
             
                 if let endDate = record["End_Date_Time__c"].string {
-                    if let endDate = self.sessionDateFormatter.dateFromString(endDate.split("+")[0]!) {
+                    if let endDate = self.sessionDateFormatter.dateFromString(endDate.split("+")![0]) {
                         session.endDate = endDate
                     }
                 }
@@ -467,13 +467,13 @@ extension SIRequest {
                 }
                 
                 if let startDate = record["Start_Date_Time__c"].string {
-                    if let startDate = self.sessionDateFormatter.dateFromString(startDate.split("+")[0]!) {
+                    if let startDate = self.sessionDateFormatter.dateFromString(startDate.split("+")![0]) {
                         session.startDate = startDate
                     }
                 }
                 
                 if let endDate = record["End_Date_Time__c"].string {
-                    if let endDate = self.sessionDateFormatter.dateFromString(endDate.split("+")[0]!) {
+                    if let endDate = self.sessionDateFormatter.dateFromString(endDate.split("+")![0]) {
                         session.endDate = endDate
                     }
                 }

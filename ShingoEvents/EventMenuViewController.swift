@@ -504,7 +504,7 @@ extension EventMenuViewController {
                 
                 // Populate section headers so affiliates can be presented alphabetically in seperate tableView sections
                 var sections = [String : [SIAffiliate]]()
-                print(sections)
+                
                 var affiliateSections = [(String, [SIAffiliate])]()
                 
                 for affiliate in affiliates {
@@ -584,28 +584,29 @@ extension EventMenuViewController {
     // MARK: - Custom Class Functions
     func getCharacterForSection(name: String) -> String {
         
-        // Get first letter of name
-        let fullName : [String?] = name.split(" ")
-        var temp = ""
-        if let first = fullName[0] {
+        guard let fullname = name.split(" ") else {
+            return ""
+        }
+        
+        var usedName = ""
+
+        // Check that the first word in the name is not "the", and if so, use the next word in name.
+        if let first = fullname.first {
             if first.lowercaseString == "the" {
-                if let second = fullName[1] {
-                    temp = second
-                }
+                usedName = name.next(first, delimiter: " ")!
             } else {
-                temp = first
+                usedName = first
             }
         }
         
-        let char : Character = temp.characters.first!
-        var value : String = String(char).uppercaseString
+        let sectionCharacter = String(usedName.characters.first!).uppercaseString
         
-        // If name begins with a number, change to the # character
-        if Int(value) != nil {
-            value = "#"
+        // If name begins with a number, change to the '#' character.
+        guard let _ = Int(sectionCharacter) else {
+            return sectionCharacter
         }
         
-        return value
+        return "#"
     }
     
     func sortAgendaDays() {
@@ -631,7 +632,7 @@ extension EventMenuViewController {
             
             for n in 0 ..< speakers.count - i - 1 {
                 
-                if speakers[n].getLastName() > speakers[n+1].getLastName() {
+                if speakers[n].name.last! > speakers[n+1].name.last! {
                     let speaker = speakers[n]
                     speakers[n] = speakers[n+1]
                     speakers[n+1] = speaker

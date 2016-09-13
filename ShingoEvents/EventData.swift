@@ -466,48 +466,32 @@ class SISpeaker: SIObject {
         
     }
     
-    func getLastName() -> String {
-        let fullName = name.split(" ")
-        return fullName[fullName.count - 1]!
-    }
-    
-    private func getFirstName() -> String {
-        let fullName = name.split(" ")
-        
-        if let firstName = fullName.first {
-            return firstName!
-        }
-        
-        return ""
-    }
-    
     private func getMiddleInitial() -> [String] {
-        let fullName = name.split(" ")
-        
-        var middleInitial = [String]()
-        
-        if fullName.count > 2 {
-            for name in fullName {
-                if name != fullName[0] && name != fullName[fullName.count - 1] {
-                    let char = name!.characters.first!
-                    let initial = String(char).uppercaseString
-                    middleInitial.append("\(initial).")
+        if let fullname = name.split(" ") {
+            
+            var middle = [String]()
+            
+                for n in fullname {
+                    if n != name.first! || n != name.last! {
+                        middle.append(String(n.characters.first!).uppercaseString)
+                    }
                 }
-            }
+            
+            return middle
+        } else {
+            return [""]
         }
-        
-        return middleInitial
     }
     
     /// Returns name in format of: "lastname, firstname M.I."
     func getFormattedName() -> String {
         
-        var fullName = getLastName() + ", " + getFirstName()
+        var formattedName = name.first! + ", " + name.last!
         for mi in getMiddleInitial() {
-            fullName += " \(mi) "
+            formattedName += " \(mi) "
         }
         
-        return fullName
+        return formattedName
     }
     
 }

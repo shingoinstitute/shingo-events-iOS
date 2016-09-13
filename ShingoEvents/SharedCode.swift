@@ -181,8 +181,55 @@ extension String {
         return self.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
     }
     
-    func split(character: Character) -> [String?]{
+    func split(character: Character) -> [String]? {
         return self.characters.split{$0 == character}.map(String.init)
+    }
+    
+    /// Is the last formation of characters
+    var last: String? {
+        get {
+            if self.isEmpty {
+                return nil
+            } else if let array = self.split(" ") {
+                if array.count == 1 {
+                    return self
+                } else {
+                    return array[array.count - 1]
+                }
+            }
+            return nil
+        }
+    }
+    
+    var first: String? {
+        get {
+            if self.isEmpty {
+                return nil
+            } else if let array = self.split(" ") {
+                if let first = array.first {
+                    return first
+                } else {
+                    return nil
+                }
+            }
+            return nil
+        }
+    }
+    
+    ///Returns the next contiguous string of characters (i.e. the next "word") separated by the given delimiter as a String, or nil if it does not exist.
+    func next(after: String, delimiter: Character) -> String? {
+        if let array = self.split(delimiter) {
+            for i in 0 ..< array.count {
+                if array[i] == after {
+                    if array.indices.contains(i + 1) {
+                        return array[i+1]
+                    } else {
+                        return nil
+                    }
+                }
+            }
+        }
+        return nil
     }
     
 }
@@ -220,11 +267,7 @@ extension UILabel {
 struct Alphabet {
     
     static func alphabet() -> [String] {
-        var alphabet = [String]()
-        for char in Array("ABCDEFGHIJKLM‌​NOPQRSTUVWXYZ#".characters) {
-            alphabet.append(String(char))
-        }
-        return alphabet
+        return ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "#"]
     }
     
 }
@@ -256,7 +299,7 @@ extension UIImage {
         if let representation = UIImagePNGRepresentation(self) {
             return NSData(data: representation).length / 1024
         }
-        return -9999
+        return 0
     }
     
     /// Returns the filesize in KB of a UIImage in a JPEG format with a compression quality of 1.
@@ -264,7 +307,7 @@ extension UIImage {
         if let representation = UIImageJPEGRepresentation(self, 1) {
             return NSData(data: representation).length / 1024
         }
-        return -9999
+        return 0
     }
     
     /// Returns the filesize in KB of a UIImage in a JPEG format with a given compression quality.
@@ -272,7 +315,7 @@ extension UIImage {
         if let representation = UIImageJPEGRepresentation(self, quality) {
             return NSData(data: representation).length / 1024
         }
-        return -9999
+        return 0
     }
 }
 
