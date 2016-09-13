@@ -216,7 +216,7 @@ extension String {
         }
     }
     
-    ///Returns the next contiguous string of characters (i.e. the next "word") separated by the given delimiter as a String, or nil if it does not exist.
+    ///Returns the next contiguous string of characters (i.e. the next "word") as a String, separated by the given delimiter, or nil if it does not exist.
     func next(after: String, delimiter: Character) -> String? {
         if let array = self.split(delimiter) {
             for i in 0 ..< array.count {
