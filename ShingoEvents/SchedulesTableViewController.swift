@@ -13,11 +13,13 @@ class SchedulesTableViewController: UITableViewController, SISpeakerDelegate {
     var agendas: [SIAgenda]!
     var eventName: String!
     
+    var cellExpansionDataSource = [String:[String:Bool]]()
+
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         navigationItem.title = "Schedule"
     }
- 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.estimatedRowHeight = 106
@@ -28,12 +30,19 @@ class SchedulesTableViewController: UITableViewController, SISpeakerDelegate {
                 agenda.requestAgendaSessions({
                     if let sessions = self.sortSessionsByDate(agenda.sessions) {
                         agenda.sessions = sessions
+                        
+                        self.cellExpansionDataSource[agenda.id] = [String:Bool]()
+                        if var agendaData = self.cellExpansionDataSource[agenda.id] {
+                            for session in sessions {
+                                agendaData[session.id] = false
+                            }
+                        }
+                        
                         self.tableView.reloadData()
                     }
                 })
             }
         }
-        
     }
     
     func performActionOnSpeakers(data: [SISpeaker]) {
@@ -100,10 +109,26 @@ extension SchedulesTableViewController {
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("ScheduleCell", forIndexPath: indexPath) as! SchedulesTableViewCell
+        
         cell.speakersButton.hidden = true
         cell.speakersButton.userInteractionEnabled = false
+        
         cell.session = agendas[indexPath.section].sessions[indexPath.row]
         cell.delegate = self
+        
+        let agenda = agendas[indexPath.section]
+        let session = agenda.sessions[indexPath.row]
+        
+        if let keyForAgenda = cellExpansionDataSource[agenda.id] {
+            if let keyForSession = keyForAgenda[session.id] {
+                if keyForSession {
+                    cell.expandCell()
+                } else {
+                    cell.shrinkCell()
+                }
+            }
+        }
+        
         return cell
     }
     
@@ -111,6 +136,13 @@ extension SchedulesTableViewController {
         let cell = tableView.cellForRowAtIndexPath(indexPath) as! SchedulesTableViewCell
         
         cell.isExpanded = !cell.isExpanded
+        let agendaForSection = self.agendas[indexPath.section]
+        let sessionForRow = agendaForSection.sessions[indexPath.row]
+        if var sectionSource = cellExpansionDataSource[agendaForSection.id] {
+            if let _ = sectionSource[sessionForRow.id] {
+                sectionSource[sessionForRow.id] = cell.isExpanded
+            }
+        }
         
         tableView.beginUpdates()
         tableView.endUpdates()
@@ -164,8 +196,26 @@ class SchedulesTableViewCell: UITableViewCell {
     
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var infoTextView: UITextView!
-    @IBOutlet weak var speakersButton: UIButton!
+    @IBOutlet weak var infoTextView: UITextView! {
+        didSet {
+            infoTextView.layer.shadowColor = UIColor.grayColor().CGColor
+            infoTextView.layer.shadowOffset = CGSizeMake(0, 2.0)
+            infoTextView.layer.shadowOpacity = 1
+            infoTextView.layer.shadowRadius = 3
+            infoTextView.layer.masksToBounds = false
+            infoTextView.layer.cornerRadius = 3
+        }
+    }
+    @IBOutlet weak var speakersButton: UIButton! {
+        didSet {
+            speakersButton.imageView?.contentMode = .ScaleAspectFit
+        }
+    }
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView! {
+        didSet {
+            activityIndicator.hidesWhenStopped = true
+        }
+    }
     
     var delegate: SISpeakerDelegate?
     
@@ -188,7 +238,6 @@ class SchedulesTableViewCell: UITableViewCell {
     func updateCell() {
         
         selectionStyle = .None
-        speakersButton.imageView?.contentMode = .ScaleAspectFit
         
         speakersButton.addTarget(self, action: #selector(SchedulesTableViewCell.didTapSpeakersButton), forControlEvents: .TouchUpInside)
         
@@ -199,11 +248,13 @@ class SchedulesTableViewCell: UITableViewCell {
             titleLabel.text = "\(session.sessionType.rawValue): \(session.displayName)"
             
             if !session.didLoadSessionInformation {
+                activityIndicator.startAnimating()
                 session.requestSessionInformation({
                     if !session.speakers.isEmpty {
                         self.speakersButton.hidden = false
                         self.speakersButton.userInteractionEnabled = true
                     }
+                    self.activityIndicator.stopAnimating()
                 })
             } else {
                 if !session.speakers.isEmpty {
@@ -216,21 +267,28 @@ class SchedulesTableViewCell: UITableViewCell {
     }
     
     private func expandCell() {
-        if let info = getAttributedStringForSession(room: session.room, summary: session.summary) {
-            infoTextView.attributedText = info
+        guard let info = getAttributedStringForSession(room: session.room, summary: session.summary) else {
+            infoTextView.text = "Check back later for more information."
+            infoTextView.font = UIFont.helveticaOfFontSize(14)
+            return
         }
+        
+        if info.string.isEmpty {
+            infoTextView.text = "Check back later for more information."
+            infoTextView.font = UIFont.helveticaOfFontSize(14)
+            return
+        }
+        
+        infoTextView.attributedText = info
         infoTextView.textAlignment = .Left
         infoTextView.textColor = .blackColor()
-        infoTextView.layer.borderColor = UIColor.blackColor().CGColor
-        infoTextView.layer.borderWidth = 1
-        infoTextView.layer.cornerRadius = 3
     }
     
     private func shrinkCell() {
         infoTextView.text = "Select For More Info >"
         infoTextView.textAlignment = .Center
         infoTextView.textColor = .grayColor()
-        infoTextView.font = UIFont.systemFontOfSize(14)
+        infoTextView.font = UIFont.helveticaOfFontSize(14)
         infoTextView.layer.borderWidth = 0
     }
     
@@ -241,24 +299,6 @@ class SchedulesTableViewCell: UITableViewCell {
             }
         }
     }
-    
-//    func updateCellDisplay() {
-//        if infoTextView.text == selectText {
-//            if let info = getAttributedStringForSession(room: session.room, summary: session.summary) {
-//                infoTextView.attributedText = info
-//            }
-//            infoTextView.textAlignment = .Left
-//            infoTextView.textColor = .blackColor()
-//            
-//        } else {
-//            infoTextView.text = selectText
-//            infoTextView.textAlignment = .Center
-//            infoTextView.textColor = UIColor.grayColor()
-//            infoTextView.font = UIFont.systemFontOfSize(14)
-//        }
-//    }
-    
-    
     
     private func getAttributedStringForSession(room room: SIRoom?, summary: String) -> NSAttributedString? {
         
@@ -276,15 +316,15 @@ class SchedulesTableViewCell: UITableViewCell {
         }
         
         do {
-            let attributedRoomName = try NSMutableAttributedString(data: roomName.dataUsingEncoding(NSUTF8StringEncoding)!,
+            let attributedRoomName = try NSMutableAttributedString(data: "<font face=\"Arial, Helvetica, sans-serif\" size=\"4\">\(roomName)</font>".dataUsingEncoding(NSUTF8StringEncoding)!,
                                                                options: attributes,
                                                                documentAttributes: nil)
-            attributedRoomName.addAttributes([NSFontAttributeName : UIFont.boldSystemFontOfSize(16)], range: NSMakeRange(0, attributedRoomName.string.characters.count))
+//            attributedRoomName.addAttributes([NSFontAttributeName : UIFont.helveticaOfFontSize(15)], range: NSMakeRange(0, attributedRoomName.string.characters.count))
             
-            let attrSummary = try NSMutableAttributedString(data: summary.dataUsingEncoding(NSUTF8StringEncoding)!,
+            let attrSummary = try NSMutableAttributedString(data: "<font face=\"Arial, Helvetica, sans-serif\" size=\"4\">\(summary)</font>".dataUsingEncoding(NSUTF8StringEncoding)!,
                                                         options: attributes,
                                                         documentAttributes: nil)
-            attrSummary.addAttributes([NSFontAttributeName : UIFont.systemFontOfSize(16)], range: NSMakeRange(0, (attrSummary.string.characters.count)))
+//            attrSummary.addAttributes([NSFontAttributeName : UIFont.helveticaOfFontSize(15)], range: NSMakeRange(0, (attrSummary.string.characters.count)))
             
             attributedRoomName.appendAttributedString(attrSummary)
             

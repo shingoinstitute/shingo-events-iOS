@@ -264,6 +264,16 @@ extension UILabel {
     }
 }
 
+extension UIFont {
+    class func helveticaOfFontSize(size: CGFloat) -> UIFont {
+        if let font = UIFont(name: "Helvetica", size: size) {
+            return font
+        } else {
+            return UIFont.systemFontOfSize(size)
+        }
+    }
+}
+
 struct Alphabet {
     
     static func alphabet() -> [String] {

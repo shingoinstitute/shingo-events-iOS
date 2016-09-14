@@ -31,6 +31,14 @@ class SpeakerListTableViewController: UITableViewController {
         }
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        tableView.estimatedRowHeight = 117
+        tableView.rowHeight = UITableViewAutomaticDimension
+        
+    }
+    
     // MARK: - Table view data source
     
     override func tableView(tableView: UITableView, accessoryButtonTappedForRowWithIndexPath indexPath: NSIndexPath) {
@@ -105,6 +113,8 @@ class SpeakerListCell: UITableViewCell {
 
     @IBOutlet weak var speakerNameLabel: UILabel!
     @IBOutlet weak var speakerImage: UIImageView!
+    @IBOutlet weak var speakerTitle: UILabel!
+    @IBOutlet weak var speakerCompany: UILabel!
     @IBOutlet weak var aiv: UIActivityIndicatorView!
     
     var speaker: SISpeaker! {
@@ -115,6 +125,8 @@ class SpeakerListCell: UITableViewCell {
     
     func updateCell() {
         speakerNameLabel.text = speaker.name
+        speakerTitle.text = speaker.title
+        speakerCompany.text = speaker.organizationName
         speaker.getSpeakerImage() { image in
             self.aiv.stopAnimating()
             self.speakerImage.image = image
