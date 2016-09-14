@@ -405,25 +405,31 @@ extension EventMenuViewController {
             
             var keynoteSpeakers = [SISpeaker]()
             var concurrentSpeakers = [SISpeaker]()
+            var unknownSpeakers = [SISpeaker]()
             
             let speakers: [SISpeaker] = Array(event.speakers.values)
             
             for speaker in speakers {
                 
-                switch speaker.isKeynoteSpeaker {
-                case true:
+                switch speaker.speakerType {
+                case .Keynote:
                     keynoteSpeakers.append(speaker)
-                case false:
+                case .Concurrent:
                     concurrentSpeakers.append(speaker)
+                default:
+                    unknownSpeakers.append(speaker)
                 }
                 
             }
             
             sortSpeakersInPlaceByLastName(&keynoteSpeakers)
             sortSpeakersInPlaceByLastName(&concurrentSpeakers)
+            sortSpeakersInPlaceByLastName(&unknownSpeakers)
             
             destination.keyNoteSpeakers = keynoteSpeakers
             destination.concurrentSpeakers = concurrentSpeakers
+            destination.unknownSpeakers = unknownSpeakers
+            
         }
         
         if segue.identifier == "RecipientsView" {

@@ -315,15 +315,29 @@ class SIAgenda: SIObject {
 
 class SISession: SIObject {
     
+    enum SessionType: String {
+        case Break = "Break",
+        Concurrent = "Concurrent",
+        Gemba = "Gemba",
+        Keynote = "Keynote",
+        Meal = "Meal",
+        Social = "Social",
+        Tour = "Tour",
+        FullDayWorkshop = "Full Day Workshop",
+        HalfDayWorkshop = "Half Day Workshop",
+        MultiDayWorkshop = "Multi Day Workshop",
+        None = "Session"
+    }
+    
     var didLoadSpeakers : Bool
     var didLoadSessionInformation : Bool
     var speakers : [SISpeaker]
     
     var displayName : String
-    var sessionType : String
+    var sessionType : SessionType
     var sessionTrack : String
     var summary : String
-    var room : String
+    var room : SIRoom?
     var startDate : NSDate
     var endDate : NSDate
     
@@ -331,13 +345,13 @@ class SISession: SIObject {
         didLoadSpeakers = false
         didLoadSessionInformation = false
         speakers = [SISpeaker]()
-        displayName = "No Display Name"
+        displayName = ""
         startDate = NSDate.notionallyEmptyDate()
         endDate = NSDate.notionallyEmptyDate()
-        sessionType = ""
+        sessionType = .None
         sessionTrack = ""
         summary = ""
-        room = ""
+        room = nil
         super.init()
     }
     
@@ -374,10 +388,43 @@ class SISession: SIObject {
         });
     }
     
+    func parseSessionType(type: String) -> SessionType {
+        switch type {
+            case "Break":
+                return .Break
+            case "Concurrent":
+                return .Concurrent
+            case "Gemba":
+                return .Gemba
+            case "Keynote":
+                return .Keynote
+            case "Meal":
+                return .Meal
+            case "Social":
+                return .Social
+            case "Tour":
+                return .Tour
+            case "Full Day Workshop":
+                return .FullDayWorkshop
+            case "Half Day Workshop":
+                return .HalfDayWorkshop
+            case "Multi Day Workshop":
+                return .MultiDayWorkshop
+            default:
+                return .None
+        }
+    }
+    
 }
 
 
 class SISpeaker: SIObject {
+    
+    enum SpeakerType: String {
+        case Keynote = "Keynote",
+        Concurrent = "Concurrent",
+        None = ""
+    }
     
     // related object id's
     var associatedSessionIds : [String]
@@ -396,7 +443,7 @@ class SISpeaker: SIObject {
     var biography : String
     var organizationName : String
     var contactEmail : String
-    var isKeynoteSpeaker : Bool
+    var speakerType: SpeakerType
     
     override init() {
         title = ""
@@ -404,7 +451,7 @@ class SISpeaker: SIObject {
         biography = ""
         organizationName = ""
         contactEmail = ""
-        isKeynoteSpeaker = false
+        speakerType = .None
         associatedSessionIds = [String]()
         super.init()
     }
@@ -706,9 +753,18 @@ class SIRecipient: SIObject {
 class SIRoom: SIObject {
     
     var mapCoordinate : (Double, Double)
+    var floor: String
+    var associatedVenueID: String
+    
+    convenience init(name: String) {
+        self.init()
+        self.name = name
+    }
     
     override init() {
         mapCoordinate = (Double(), Double())
+        floor = ""
+        associatedVenueID = ""
         super.init()
     }
     

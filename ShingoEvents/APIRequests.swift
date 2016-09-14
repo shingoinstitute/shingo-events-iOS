@@ -332,7 +332,7 @@ extension SIRequest {
                     }
                     
                     if let type = record["Session_Type__c"].string {
-                        session.sessionType = type
+                        session.sessionType = session.parseSessionType(type)
                     }
                     
                     sessions.append(session)
@@ -405,14 +405,35 @@ extension SIRequest {
                 }
                 
                 if let type = record["Session_Type__c"].string {
-                    session.sessionType = type
+                    session.sessionType = session.parseSessionType(type)
                 }
                 
                 if let track = record["Track__c"].string {
                     session.sessionTrack = track
                 }
                 
-                if let room = record["Room__r"].string {
+                if record["Room__r"].isExists() {
+                    
+                    let room = SIRoom()
+                    
+                    if let floor = record["Room__r"]["Floor"].string {
+                        room.floor = floor
+                    }
+                    
+                    if let roomName = record["Room__r"]["Name"].string {
+                        room.name = roomName
+                    }
+                    
+                    if let id = record["Room__r"]["Id"].string {
+                        room.id = id
+                    }
+                    
+                    if let xCoord = record["Room__r"]["Map_X_Coordinate__c"].double {
+                        if let yCoord = record["Room__r"]["Map_Y_Coordinate__c"].double {
+                            room.mapCoordinate = (xCoord, yCoord)
+                        }
+                    }
+                    
                     session.room = room
                 }
                 
@@ -479,7 +500,7 @@ extension SIRequest {
                 }
                 
                 if let type = record["Session_Type__c"].string {
-                    session.sessionType = type
+                    session.sessionType = session.parseSessionType(type)
                 }
                 
                 if let track = record["Track__c"].string {
@@ -490,8 +511,8 @@ extension SIRequest {
                     session.summary = summary
                 }
                 
-                if let room = record["Room__r"].string {
-                    session.room = room
+                if let roomName = record["Room__r"]["Name"].string {
+                    session.room = SIRoom(name: roomName)
                 }
                 
             }
@@ -591,7 +612,9 @@ extension SIRequest {
                     for session in sessionAssocs {
                         if let isKeynoteSpeaker = session["Is_Keynote_Speaker__c"].bool {
                             if isKeynoteSpeaker {
-                                speaker.isKeynoteSpeaker = true
+                                speaker.speakerType = .Keynote
+                            } else {
+                                speaker.speakerType = .Concurrent
                             }
                         }
                     }

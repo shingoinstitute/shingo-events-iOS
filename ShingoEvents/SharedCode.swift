@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 protocol SICellDelegate { func updateCell() }
-
+protocol SISpeakerDelegate { func performActionOnSpeakers(data: [SISpeaker]) }
 protocol SIRequestDelegate { func cancelRequest() }
 
 // Shingo IP Colors
@@ -356,52 +356,36 @@ extension NSDate {
     }
     
     /// Returns time frame between a start date and end date.
-    class func timeFrameBetweenDates(startDate start: NSDate, endDate end: NSDate) -> String {
+    func timeFrameBetweenDates(startDate start: NSDate, endDate end: NSDate) -> String {
 
         let calendar = NSCalendar.currentCalendar()
         let startComponents = calendar.components([.Hour, .Minute], fromDate: start)
-        let endComponents = calendar.components([.Hour, .Minute], fromDate: start)
+        let endComponents = calendar.components([.Hour, .Minute], fromDate: end)
         
-        var timeFrame = ""
+        return "\(timeStringFromComponents(hour: startComponents.hour, minute: startComponents.minute)) - \(timeStringFromComponents(hour: endComponents.hour, minute: endComponents.minute))"
+    }
+    
+    func timeStringFromComponents(hour h: Int, minute: Int) -> String {
+        var hour = h
+        var am_pm = ""
         
-        for i in 0 ..< 2 {
-            
-            var hour: Int = 0
-            var minute: Int = 0
-            
-            if i == 0 {
-                hour = startComponents.hour
-                minute = startComponents.minute
-            } else {
-                hour = endComponents.hour
-                minute = endComponents.minute
-            }
-            
-            var am_pm = ""
-            
-            switch hour {
-            case 0 ..< 12:
-                hour = hour - 12
-                am_pm = " pm"
-            case 12:
-                am_pm = " pm"
-            default:
-                am_pm = " am"
-            }
-
-            timeFrame += "\(hour):"
-            
-            if minute < 10 {
-                timeFrame += "0\(minute) \(am_pm)"
-            } else {
-                timeFrame += "\(minute) \(am_pm)"
-            }
-            
-            if i == 0 { timeFrame += " - " }
-            
+        switch hour {
+        case 0 ..< 12:
+            am_pm = "am"
+        case 13 ..< 25:
+            hour = hour - 12
+            am_pm = "pm"
+        case 12:
+            am_pm = "pm"
+        default:
+            break
         }
         
-        return timeFrame
+        if minute < 10 {
+            return "\(hour):0\(minute) \(am_pm)"
+        } else {
+            return "\(hour):\(minute) \(am_pm)"
+        }
     }
     
     

@@ -1169,7 +1169,7 @@
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="139" sectionHeaderHeight="18" sectionFooterHeight="18" id="4Tz-rr-5lK">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="0.75" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.90000000000000002" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ScheduleCell" rowHeight="106" id="40e-eU-7Lv" customClass="SchedulesTableViewCell" customModule="Shingo_Events" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="114" width="600" height="106"/>
@@ -1179,21 +1179,32 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Session Time" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nkt-ZO-gHb">
-                                            <rect key="frame" x="8" y="8" width="584" height="20"/>
+                                            <rect key="frame" x="8" y="8" width="423" height="20"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qdQ-gs-Yqi">
                                             <rect key="frame" x="8" y="36" width="584" height="21"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="749" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" text="Select For More Info &gt;" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ozf-Nq-AaI">
+                                        <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="left" contentVerticalAlignment="bottom" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Zc-za-4Wa">
+                                            <rect key="frame" x="439" y="8" width="153" height="20"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="20" id="mpU-Zr-evk"/>
+                                                <constraint firstAttribute="width" constant="153" id="sw8-sv-m2E"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <state key="normal" title="Session Speakers" image="speakers icon">
+                                                <color key="titleColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                            </state>
+                                        </button>
+                                        <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="749" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" text="Select For More Info &gt;" textAlignment="center" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ozf-Nq-AaI">
                                             <rect key="frame" x="8" y="65" width="584" height="32"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <color key="textColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                            <color key="textColor" red="0.50196078431372548" green="0.50196078431372548" blue="0.50196078431372548" alpha="1" colorSpace="calibratedRGB"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                         </textView>
@@ -1202,9 +1213,11 @@
                                         <constraint firstAttribute="trailingMargin" secondItem="qdQ-gs-Yqi" secondAttribute="trailing" id="2U9-hr-lkt"/>
                                         <constraint firstItem="Ozf-Nq-AaI" firstAttribute="trailing" secondItem="9k3-pq-DYy" secondAttribute="trailingMargin" id="8tz-OL-cQP"/>
                                         <constraint firstItem="Ozf-Nq-AaI" firstAttribute="bottom" secondItem="9k3-pq-DYy" secondAttribute="bottomMargin" id="B0p-4z-psG"/>
+                                        <constraint firstItem="4Zc-za-4Wa" firstAttribute="leading" secondItem="Nkt-ZO-gHb" secondAttribute="trailing" constant="8" id="DTg-5x-O7W"/>
+                                        <constraint firstAttribute="topMargin" secondItem="4Zc-za-4Wa" secondAttribute="top" id="GL5-tW-jhn"/>
                                         <constraint firstItem="Nkt-ZO-gHb" firstAttribute="leading" secondItem="9k3-pq-DYy" secondAttribute="leadingMargin" id="KsA-Cr-YOE"/>
                                         <constraint firstItem="Ozf-Nq-AaI" firstAttribute="leading" secondItem="9k3-pq-DYy" secondAttribute="leadingMargin" id="Oqh-4x-pxM"/>
-                                        <constraint firstItem="Nkt-ZO-gHb" firstAttribute="trailing" secondItem="9k3-pq-DYy" secondAttribute="trailingMargin" id="W1O-vB-07w"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="4Zc-za-4Wa" secondAttribute="trailing" id="Svu-F8-k2y"/>
                                         <constraint firstItem="Ozf-Nq-AaI" firstAttribute="top" secondItem="qdQ-gs-Yqi" secondAttribute="bottom" constant="8" id="cnZ-iQ-apH"/>
                                         <constraint firstItem="qdQ-gs-Yqi" firstAttribute="leading" secondItem="9k3-pq-DYy" secondAttribute="leadingMargin" id="kiP-lX-4GW"/>
                                         <constraint firstItem="qdQ-gs-Yqi" firstAttribute="top" secondItem="Nkt-ZO-gHb" secondAttribute="bottom" constant="8" id="qFh-th-9dn"/>
@@ -1212,9 +1225,10 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="infoTextView" destination="9k3-pq-DYy" id="ZtC-Ty-e0d"/>
-                                    <outlet property="timeLabel" destination="9k3-pq-DYy" id="FcC-Qg-rR7"/>
-                                    <outlet property="titleLabel" destination="9k3-pq-DYy" id="FOM-v6-58l"/>
+                                    <outlet property="infoTextView" destination="Ozf-Nq-AaI" id="QSB-fY-19f"/>
+                                    <outlet property="speakersButton" destination="4Zc-za-4Wa" id="e0U-qr-L5f"/>
+                                    <outlet property="timeLabel" destination="Nkt-ZO-gHb" id="SNA-hw-4B0"/>
+                                    <outlet property="titleLabel" destination="qdQ-gs-Yqi" id="cRs-re-L9D"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -1224,6 +1238,9 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Schedule" id="8ax-Rv-lw8"/>
+                    <connections>
+                        <segue destination="9is-r1-ySf" kind="show" identifier="SpeakerListView" id="Vtm-iE-WQY"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RRo-Iz-2vy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1548,10 +1565,12 @@
     <resources>
         <image name="down-arrow" width="33" height="33"/>
         <image name="right-arrow" width="36" height="64"/>
+        <image name="speakers icon" width="33" height="33"/>
         <image name="sponsor_banner_pl" width="133" height="66"/>
         <image name="white_star" width="50" height="50"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="Vtm-iE-WQY"/>
         <segue reference="uaI-iN-5Jr"/>
     </inferredMetricsTieBreakers>
 </document>
