@@ -91,9 +91,9 @@ class SessionDetailViewController: UIViewController, UITableViewDelegate, UITabl
         
         // Get correct text for labels
         titleLabel.text = session.displayName
-        if !session.room.isEmpty {
-            roomLabel.text = "Location: " + session.room
-        }
+//        if !session.room.isEmpty {
+//            roomLabel.text = "Location: " + session.room
+//        }
         
         if session.summary.isEmpty {
             textField.text = "Details coming soon."

@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 protocol SICellDelegate { func updateCell() }
-
+protocol SISpeakerDelegate { func performActionOnSpeakers(data: [SISpeaker]) }
 protocol SIRequestDelegate { func cancelRequest() }
 
 // Shingo IP Colors
@@ -181,8 +181,55 @@ extension String {
         return self.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
     }
     
-    func split(character: Character) -> [String?]{
+    func split(character: Character) -> [String]? {
         return self.characters.split{$0 == character}.map(String.init)
+    }
+    
+    /// Is the last formation of characters
+    var last: String? {
+        get {
+            if self.isEmpty {
+                return nil
+            } else if let array = self.split(" ") {
+                if array.count == 1 {
+                    return self
+                } else {
+                    return array[array.count - 1]
+                }
+            }
+            return nil
+        }
+    }
+    
+    var first: String? {
+        get {
+            if self.isEmpty {
+                return nil
+            } else if let array = self.split(" ") {
+                if let first = array.first {
+                    return first
+                } else {
+                    return nil
+                }
+            }
+            return nil
+        }
+    }
+    
+    ///Returns the next contiguous string of characters (i.e. the next "word") as a String, separated by the given delimiter, or nil if it does not exist.
+    func next(after: String, delimiter: Character) -> String? {
+        if let array = self.split(delimiter) {
+            for i in 0 ..< array.count {
+                if array[i] == after {
+                    if array.indices.contains(i + 1) {
+                        return array[i+1]
+                    } else {
+                        return nil
+                    }
+                }
+            }
+        }
+        return nil
     }
     
 }
@@ -217,12 +264,20 @@ extension UILabel {
     }
 }
 
+extension UIFont {
+    class func helveticaOfFontSize(size: CGFloat) -> UIFont {
+        if let font = UIFont(name: "Helvetica", size: size) {
+            return font
+        } else {
+            return UIFont.systemFontOfSize(size)
+        }
+    }
+}
+
 struct Alphabet {
-    
-    func alphabet() -> [String] {
+    static func alphabet() -> [String] {
         return ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "#"]
     }
-    
 }
 
 extension Double {
@@ -252,7 +307,7 @@ extension UIImage {
         if let representation = UIImagePNGRepresentation(self) {
             return NSData(data: representation).length / 1024
         }
-        return -9999
+        return 0
     }
     
     /// Returns the filesize in KB of a UIImage in a JPEG format with a compression quality of 1.
@@ -260,7 +315,7 @@ extension UIImage {
         if let representation = UIImageJPEGRepresentation(self, 1) {
             return NSData(data: representation).length / 1024
         }
-        return -9999
+        return 0
     }
     
     /// Returns the filesize in KB of a UIImage in a JPEG format with a given compression quality.
@@ -268,7 +323,7 @@ extension UIImage {
         if let representation = UIImageJPEGRepresentation(self, quality) {
             return NSData(data: representation).length / 1024
         }
-        return -9999
+        return 0
     }
 }
 
@@ -294,17 +349,54 @@ extension NSDate {
         return (compare(dateToCompare) == NSComparisonResult.OrderedSame)
     }
     
-    func isNotionallyEmpty() -> Bool {
-        if self.isEqualToDate(NSDate().notionallyEmptyDate()) {
-            return true
-        } else {
-            return false
+    class func notionallyEmptyDate() -> NSDate {
+        return NSDate.init(timeIntervalSince1970: 0)
+    }
+    
+    var isNotionallyEmpty: Bool {
+        get {
+            if self.isEqualToDate(NSDate.notionallyEmptyDate()) {
+                return true
+            } else {
+                return false
+            }
         }
     }
     
-    func notionallyEmptyDate() -> NSDate {
-        return NSDate.init(timeIntervalSince1970: 0)
+    /// Returns time frame between a start date and end date.
+    func timeFrameBetweenDates(startDate start: NSDate, endDate end: NSDate) -> String {
+
+        let calendar = NSCalendar.currentCalendar()
+        let startComponents = calendar.components([.Hour, .Minute], fromDate: start)
+        let endComponents = calendar.components([.Hour, .Minute], fromDate: end)
+        
+        return "\(timeStringFromComponents(hour: startComponents.hour, minute: startComponents.minute)) - \(timeStringFromComponents(hour: endComponents.hour, minute: endComponents.minute))"
     }
+    
+    func timeStringFromComponents(hour h: Int, minute: Int) -> String {
+        var hour = h
+        var am_pm = ""
+        
+        switch hour {
+        case 0 ..< 12:
+            am_pm = "am"
+        case 13 ..< 25:
+            hour = hour - 12
+            am_pm = "pm"
+        case 12:
+            am_pm = "pm"
+        default:
+            break
+        }
+        
+        if minute < 10 {
+            return "\(hour):0\(minute) \(am_pm)"
+        } else {
+            return "\(hour):\(minute) \(am_pm)"
+        }
+    }
+    
+    
 }
 
 extension NSDateFormatter {

@@ -405,25 +405,31 @@ extension EventMenuViewController {
             
             var keynoteSpeakers = [SISpeaker]()
             var concurrentSpeakers = [SISpeaker]()
+            var unknownSpeakers = [SISpeaker]()
             
             let speakers: [SISpeaker] = Array(event.speakers.values)
             
             for speaker in speakers {
                 
-                switch speaker.isKeynoteSpeaker {
-                case true:
+                switch speaker.speakerType {
+                case .Keynote:
                     keynoteSpeakers.append(speaker)
-                case false:
+                case .Concurrent:
                     concurrentSpeakers.append(speaker)
+                default:
+                    unknownSpeakers.append(speaker)
                 }
                 
             }
             
             sortSpeakersInPlaceByLastName(&keynoteSpeakers)
             sortSpeakersInPlaceByLastName(&concurrentSpeakers)
+            sortSpeakersInPlaceByLastName(&unknownSpeakers)
             
             destination.keyNoteSpeakers = keynoteSpeakers
             destination.concurrentSpeakers = concurrentSpeakers
+            destination.unknownSpeakers = unknownSpeakers
+            
         }
         
         if segue.identifier == "RecipientsView" {
@@ -487,8 +493,7 @@ extension EventMenuViewController {
                     }
                 }
                 
-                for letter in Alphabet().alphabet() {
-                    print(letter)
+                for letter in Alphabet.alphabet() {
                     if let section = sections[letter] {
                         exhibitorSections.append((letter, section))
                     }
@@ -522,8 +527,7 @@ extension EventMenuViewController {
                     }
                 }
                 
-                for letter in Alphabet().alphabet() {
-
+                for letter in Alphabet.alphabet() {
                     if let section = sections[letter] {
                         affiliateSections.append((letter, section))
                     }
@@ -585,31 +589,30 @@ extension EventMenuViewController {
 
     // MARK: - Custom Class Functions
     func getCharacterForSection(name: String) -> String {
-        if name.characters.first == "M" {
-            print("")
+        
+        guard let fullname = name.split(" ") else {
+            return ""
         }
-        // Get first letter of name
-        let fullName : [String?] = name.split(" ")
-        var temp = ""
-        if let first = fullName[0] {
+        
+        var usedName = ""
+
+        // Check that the first word in the name is not "the", and if so, use the next word in name.
+        if let first = fullname.first {
             if first.lowercaseString == "the" {
-                if let second = fullName[1] {
-                    temp = second
-                }
+                usedName = name.next(first, delimiter: " ")!
             } else {
-                temp = first
+                usedName = first
             }
         }
         
-        let char : Character = temp.characters.first!
-        var value : String = String(char).uppercaseString
+        let sectionCharacter = String(usedName.characters.first!).uppercaseString
         
-        // If name begins with a number, change to the # character
-        if Int(value) != nil {
-            value = "#"
+        // If name begins with a number, change to the '#' character.
+        guard let _ = Int(sectionCharacter) else {
+            return sectionCharacter
         }
         
-        return value
+        return "#"
     }
     
     func sortAgendaDays() {
@@ -635,7 +638,7 @@ extension EventMenuViewController {
             
             for n in 0 ..< speakers.count - i - 1 {
                 
-                if speakers[n].getLastName() > speakers[n+1].getLastName() {
+                if speakers[n].name.last! > speakers[n+1].name.last! {
                     let speaker = speakers[n]
                     speakers[n] = speakers[n+1]
                     speakers[n+1] = speaker

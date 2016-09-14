@@ -139,9 +139,7 @@ class SessionTableViewCell: UITableViewCell {
         var speakerLabelText = ""
         if let speaker = session.speakers.first {
             
-            if !session.sessionType.isEmpty {
-                speakerLabelText = "\(session.sessionType)"
-            }
+            speakerLabelText = "\(session.sessionType)"
             
             if !speaker.name.isEmpty {
                 speakerLabelText += ": \(speaker.name)"
@@ -161,7 +159,7 @@ class SessionTableViewCell: UITableViewCell {
         let startDate = session.startDate
         let endDate = session.endDate
         
-        if !startDate.isNotionallyEmpty() {
+        if !startDate.isNotionallyEmpty {
             let start_date = startDate
             let end_date = endDate
             let calendar = NSCalendar.currentCalendar()

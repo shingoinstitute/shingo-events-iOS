@@ -12,6 +12,32 @@ class SpeakerListTableViewController: UITableViewController {
 
     var keyNoteSpeakers: [SISpeaker]!
     var concurrentSpeakers: [SISpeaker]!
+    var unknownSpeakers: [SISpeaker]!
+    
+    lazy var speakerList: [[SISpeaker]!] = [
+        self.keyNoteSpeakers,
+        self.concurrentSpeakers,
+        self.unknownSpeakers
+    ]
+    
+    var dataSource: [[SISpeaker]!] {
+        get {
+            var value = [[SISpeaker]!]()
+            for speakers in speakerList {
+                if speakers == nil { continue }
+                if !speakers.isEmpty { value.append(speakers) }
+            }
+            return value
+        }
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        tableView.estimatedRowHeight = 117
+        tableView.rowHeight = UITableViewAutomaticDimension
+        
+    }
     
     // MARK: - Table view data source
     
@@ -30,18 +56,11 @@ class SpeakerListTableViewController: UITableViewController {
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 2
+        return dataSource.count
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0:
-            return keyNoteSpeakers.count
-        case 1:
-            return concurrentSpeakers.count
-        default:
-            return 0
-        }
+        return dataSource[section].count
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -49,15 +68,8 @@ class SpeakerListTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier("SpeakerListCell", forIndexPath: indexPath) as! SpeakerListCell
         
         cell.aiv.hidesWhenStopped = true
-        
-        switch indexPath.section {
-        case 0:
-            cell.speaker = keyNoteSpeakers[indexPath.row]
-        case 1:
-            cell.speaker = concurrentSpeakers[indexPath.row]
-        default:
-            break
-        }
+
+        cell.speaker = dataSource[indexPath.section][indexPath.row]
         
         if cell.speakerImage.image == nil {
             cell.aiv.startAnimating()
@@ -70,19 +82,16 @@ class SpeakerListTableViewController: UITableViewController {
         
         let header = UILabel(text: "", font: UIFont(name: "Helvetica", size: 12))
         header.textColor = .whiteColor()
-        switch section {
-            case 0:
-                header.text = "  Keynote Speakers"
-            case 1:
-                header.text = "  Concurrent Speakers"
-            default:
-            break
-        }
+        
+        header.text = "  \(dataSource[section][0].speakerType.rawValue) Speakers"
         
         return header
     }
     
     override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        
+        if dataSource[section].isEmpty { return 0 }
+        
         return 32
     }
     
@@ -104,6 +113,8 @@ class SpeakerListCell: UITableViewCell {
 
     @IBOutlet weak var speakerNameLabel: UILabel!
     @IBOutlet weak var speakerImage: UIImageView!
+    @IBOutlet weak var speakerTitle: UILabel!
+    @IBOutlet weak var speakerCompany: UILabel!
     @IBOutlet weak var aiv: UIActivityIndicatorView!
     
     var speaker: SISpeaker! {
@@ -114,6 +125,8 @@ class SpeakerListCell: UITableViewCell {
     
     func updateCell() {
         speakerNameLabel.text = speaker.name
+        speakerTitle.text = speaker.title
+        speakerCompany.text = speaker.organizationName
         speaker.getSpeakerImage() { image in
             self.aiv.stopAnimating()
             self.speakerImage.image = image

@@ -1,12 +1,12 @@
 PODS:
-  - Alamofire (3.1.4)
-  - AlamofireImage (2.3.0):
-    - Alamofire (~> 3.1)
-  - Crashlytics (3.7.0):
+  - Alamofire (3.4.2)
+  - AlamofireImage (2.4.1):
+    - Alamofire (~> 3.3)
+  - Crashlytics (3.8.0):
     - Fabric (~> 1.6.3)
   - DropDown (1.0.1)
-  - Fabric (1.6.5)
-  - PureLayout (3.0.1)
+  - Fabric (1.6.8)
+  - PureLayout (3.0.2)
 
 DEPENDENCIES:
   - Alamofire (~> 3.0)
@@ -17,13 +17,13 @@ DEPENDENCIES:
   - PureLayout
 
 SPEC CHECKSUMS:
-  Alamofire: fbc829692f351fa1d8a31dd75fd7f7f56fea31fb
-  AlamofireImage: 4013fb5b99b10117bf2554a67b9bd2231d476b45
-  Crashlytics: c3a2333dea9e2733d2777f730910321fc9e25c0d
+  Alamofire: 6aa33201d20d069e1598891cf928883ff1888c7a
+  AlamofireImage: 3ccf3347d9ea24580dc11fb892770a0be6a29826
+  Crashlytics: 8601d9c74a4c4d28f3e7f408bf4c0e490c70e8b4
   DropDown: 335df9e9547e97a861a60aed8448821e239d3513
-  Fabric: 338ffd3c2afcab120638907b4251189de9ad17b3
-  PureLayout: f35f5384c9c4e4479df041dbe33ad7577b71ddfb
+  Fabric: 5755268d0171435ab167e3d0878a28a777deaf10
+  PureLayout: 4d550abe49a94f24c2808b9b95db9131685fe4cd
 
-PODFILE CHECKSUM: ab2f0705c511ec0635173623663504e49d53bb37
+PODFILE CHECKSUM: d807a4b6a2cae8c117dfdfd8bdfe9c842e3d054e
 
 COCOAPODS: 1.0.1
