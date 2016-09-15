@@ -65,16 +65,36 @@
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Swipe To View Maps" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e7C-aC-alX">
+                                                    <rect key="frame" x="62" y="326" width="158" height="37"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="37" id="gzY-yk-F67"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="right-arrow" translatesAutoresizingMaskIntoConstraints="NO" id="F1o-lh-qmW">
+                                                    <rect key="frame" x="231" y="326" width="28" height="37"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="28" id="VC3-Sb-IRU"/>
+                                                        <constraint firstAttribute="height" constant="37" id="lGe-h2-RZx"/>
+                                                    </constraints>
+                                                </imageView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <constraints>
                                             <constraint firstAttribute="leadingMargin" secondItem="Iv9-zT-ptl" secondAttribute="leading" id="402-kU-yge"/>
+                                            <constraint firstAttribute="bottomMargin" secondItem="F1o-lh-qmW" secondAttribute="bottom" id="AMZ-xD-jdb"/>
                                             <constraint firstAttribute="topMargin" secondItem="Iv9-zT-ptl" secondAttribute="top" constant="-8" id="GAr-cB-KRN"/>
                                             <constraint firstAttribute="trailingMargin" secondItem="ILH-PV-dt5" secondAttribute="trailing" id="LPa-oD-LRn"/>
+                                            <constraint firstItem="F1o-lh-qmW" firstAttribute="leading" secondItem="e7C-aC-alX" secondAttribute="trailing" constant="11" id="VQB-e3-0YW"/>
+                                            <constraint firstItem="e7C-aC-alX" firstAttribute="centerX" secondItem="DHk-IC-reB" secondAttribute="centerX" id="W40-cg-2On"/>
                                             <constraint firstAttribute="leadingMargin" secondItem="ILH-PV-dt5" secondAttribute="leading" id="YPx-KD-eiF"/>
                                             <constraint firstAttribute="trailingMargin" secondItem="Iv9-zT-ptl" secondAttribute="trailing" id="bFw-Ij-ghC"/>
                                             <constraint firstItem="ILH-PV-dt5" firstAttribute="top" secondItem="Iv9-zT-ptl" secondAttribute="bottom" constant="8" id="j38-hB-5L0"/>
+                                            <constraint firstAttribute="bottomMargin" secondItem="e7C-aC-alX" secondAttribute="bottom" id="z8O-ec-ScA"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="address" destination="ILH-PV-dt5" id="NdW-cx-xIF"/>

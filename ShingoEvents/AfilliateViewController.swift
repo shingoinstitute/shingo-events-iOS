@@ -63,23 +63,24 @@ class AfilliateViewController: UIViewController {
         }
         
         logoImage.contentMode = .ScaleAspectFit
-        
-        let attrs = [NSFontAttributeName : UIFont.systemFontOfSize(16.0),
-                     NSForegroundColorAttributeName : UIColor.whiteColor()]
-        var richText = NSMutableAttributedString()
+  
         abstractTextField.linkTextAttributes = [NSForegroundColorAttributeName : UIColor.cyanColor(),
                                                    NSUnderlineStyleAttributeName : NSUnderlineStyle.StyleSingle.rawValue]
         do {
-            let htmlString: String! = "<style>body{color:white;}</style><font size=\"5\">" + affiliate.summary + "</font></style>"
-            richText = try NSMutableAttributedString(data: htmlString.dataUsingEncoding(NSUTF8StringEncoding)!,
-                                                                         options: attrs,
-                                                                         documentAttributes: nil)
+            
+            let attrs = [NSFontAttributeName : UIFont.systemFontOfSize(16.0),
+                         NSForegroundColorAttributeName : UIColor.whiteColor()]
+            
+            let attributedText = try NSMutableAttributedString(data: affiliate.summary.dataUsingEncoding(NSUTF8StringEncoding)!,
+                                                               options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
+                                                                        NSCharacterEncodingDocumentAttribute : NSUTF8StringEncoding],
+                                                                 documentAttributes: nil)
+            attributedText.addAttributes(attrs, range: NSMakeRange(0, attributedText.string.characters.count))
+        
+            abstractTextField.attributedText = attributedText
         } catch {
             print("Error with richText in affiliateViewController")
         }
-        
-
-        abstractTextField.attributedText = richText
 
         var frame:CGRect = abstractTextField.frame
         frame.size.height = abstractTextField.contentSize.height

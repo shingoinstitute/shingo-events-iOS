@@ -272,6 +272,14 @@ extension UIFont {
             return UIFont.systemFontOfSize(size)
         }
     }
+    
+    class func boldHelveticaOfFontSize(size: CGFloat) -> UIFont {
+        if let font = UIFont(name: "Helvetica-Bold", size: size) {
+            return font
+        } else {
+            return UIFont.boldSystemFontOfSize(size)
+        }
+    }
 }
 
 struct Alphabet {

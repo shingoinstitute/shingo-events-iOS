@@ -51,7 +51,7 @@ class BugReportViewController: UIViewController {
         bugTypeButton.layer.borderColor = UIColor.lightGrayColor().CGColor
         bugTypeButton.layer.borderWidth = 1
         
-        dropDown.dataSource = ["App Crash", "Feature Request", "General Feedback", "Spelling/Grammar", "Unexpected Behavior", "User Interface", "Other"]
+        dropDown.dataSource = ["App Crash", "General Feedback", "Spelling/Grammar", "Unexpected Behavior", "User Interface", "Other"]
         
         dropDown.dismissMode = .OnTap
         dropDown.direction = .Bottom

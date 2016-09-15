@@ -31,9 +31,9 @@ class ChallengerInfoViewController: UIViewController {
         navigationItem.title = recipient.name
         automaticallyAdjustsScrollViewInsets = false
         
-        recipientSetup()
+        setSummaryText()
 
-        view.setNeedsUpdateConstraints()
+        updateViewConstraints()
         
     }
     
@@ -72,7 +72,7 @@ class ChallengerInfoViewController: UIViewController {
         super.updateViewConstraints()
     }
     
-    private func recipientSetup() {
+    private func setSummaryText() {
         
         abstractTextField.backgroundColor = SIColor.prussianBlueColor()
         abstractTextField.text = ""
@@ -85,11 +85,14 @@ class ChallengerInfoViewController: UIViewController {
         
         if !recipient.summary.isEmpty {
             do {
-                let htmlString: String! = "<style>body{color:white;}</style><font size=\"5\">" + recipient.summary + "</font></style>";
-                abstractTextField.attributedText = try NSAttributedString(data: htmlString.dataUsingEncoding(NSUTF8StringEncoding)!,
+                let attributedText = try NSMutableAttributedString(data: recipient.summary.dataUsingEncoding(NSUTF8StringEncoding)!,
                                                                           options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
-                                                                            NSCharacterEncodingDocumentAttribute : NSUTF8StringEncoding],
+                                                                            NSCharacterEncodingDocumentAttribute : NSUTF8StringEncoding,
+                                                                            NSForegroundColorAttributeName : UIColor.whiteColor()],
                                                                           documentAttributes: nil)
+                attributedText.addAttributes([NSFontAttributeName : UIFont.helveticaOfFontSize(16), NSForegroundColorAttributeName : UIColor.whiteColor()], range: NSMakeRange(0, attributedText.string.characters.count - 1))
+                
+                abstractTextField.attributedText = attributedText
             } catch {
                 let error = NSError(domain: "NSAttributedString",
                                     code: 111,

@@ -15,6 +15,9 @@ class AffiliateListTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tableView.estimatedRowHeight = 117
+        tableView.rowHeight = UITableViewAutomaticDimension
+        
         if affiliateSections.isEmpty {
             let notification = UILabel.newAutoLayoutView()
             view.addSubview(notification)

@@ -65,11 +65,12 @@ class ResearchInfoViewController: UIViewController {
         if !recipient.summary.isEmpty {
             
             do {
-                let htmlString: String! = "<style>body{color:white;}</style><font size=\"5\">" + recipient.summary + "</font></style>";
-                abstractTextField.attributedText = try NSAttributedString(data: htmlString.dataUsingEncoding(NSUTF8StringEncoding)!,
+                let attributedText = try NSMutableAttributedString(data: recipient.summary.dataUsingEncoding(NSUTF8StringEncoding)!,
                                                                       options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
                                                                                 NSCharacterEncodingDocumentAttribute : NSUTF8StringEncoding],
                                                                       documentAttributes: nil)
+                attributedText.addAttributes([NSFontAttributeName : UIFont.helveticaOfFontSize(16), NSForegroundColorAttributeName : UIColor.whiteColor()], range: NSMakeRange(0, attributedText.string.characters.count - 1))
+                abstractTextField.attributedText = attributedText
             } catch {
                 print("Error with richText in ResearchInfoViewController")
             }
