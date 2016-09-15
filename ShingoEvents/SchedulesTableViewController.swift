@@ -276,7 +276,7 @@ class SchedulesTableViewCell: UITableViewCell {
             return
         }
         
-        if info.string == "\nTap To See Less..." {
+        if info.string == "\n\nTap To See Less..." {
             
             let leftStyle = NSMutableParagraphStyle()
             leftStyle.alignment = .Left
@@ -353,7 +353,7 @@ class SchedulesTableViewCell: UITableViewCell {
                 NSFontAttributeName : UIFont.helveticaOfFontSize(14)
             ]
             
-            let swipeUpIndicator = NSMutableAttributedString(string: "\nTap To See Less...", attributes: swipeAttributes)
+            let swipeUpIndicator = NSMutableAttributedString(string: "\n\nTap To See Less...", attributes: swipeAttributes)
             
             attributedRoomName.appendAttributedString(swipeUpIndicator)
             
