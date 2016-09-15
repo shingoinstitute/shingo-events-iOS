@@ -12,9 +12,21 @@ class SchedulesTableViewController: UITableViewController, SISpeakerDelegate {
 
     var agendas: [SIAgenda]!
     var eventName: String!
-    
-    var cellExpansionDataSource = [String:[String:Bool]]()
 
+    var cellShouldExpand: [[Bool]] {
+        get {
+            var agendaSource = [[Bool]]()
+            for agenda in self.agendas {
+                var sessionSource = [Bool]()
+                for session in agenda.sessions {
+                    sessionSource.append(session.isSelected)
+                }
+                agendaSource.append(sessionSource)
+            }
+            return agendaSource
+        }
+    }
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         navigationItem.title = "Schedule"
@@ -24,6 +36,7 @@ class SchedulesTableViewController: UITableViewController, SISpeakerDelegate {
         super.viewDidLoad()
         tableView.estimatedRowHeight = 106
         tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.backgroundColor = SIColor.prussianBlueColor()
         
         for agenda in agendas {
             if !agenda.didLoadSessions {
@@ -31,10 +44,9 @@ class SchedulesTableViewController: UITableViewController, SISpeakerDelegate {
                     if let sessions = self.sortSessionsByDate(agenda.sessions) {
                         agenda.sessions = sessions
                         
-                        self.cellExpansionDataSource[agenda.id] = [String:Bool]()
-                        if var agendaData = self.cellExpansionDataSource[agenda.id] {
-                            for session in sessions {
-                                agendaData[session.id] = false
+                        for session in sessions {
+                            if !session.didLoadSessionInformation {
+                                session.requestSessionInformation({})
                             }
                         }
                         
@@ -116,18 +128,12 @@ extension SchedulesTableViewController {
         cell.session = agendas[indexPath.section].sessions[indexPath.row]
         cell.delegate = self
         
-        let agenda = agendas[indexPath.section]
-        let session = agenda.sessions[indexPath.row]
-        
-        if let keyForAgenda = cellExpansionDataSource[agenda.id] {
-            if let keyForSession = keyForAgenda[session.id] {
-                if keyForSession {
-                    cell.expandCell()
-                } else {
-                    cell.shrinkCell()
-                }
-            }
+        if cellShouldExpand[indexPath.section][indexPath.row] {
+            cell.expandCell()
+        } else {
+            cell.shrinkCell()
         }
+
         
         return cell
     }
@@ -136,13 +142,6 @@ extension SchedulesTableViewController {
         let cell = tableView.cellForRowAtIndexPath(indexPath) as! SchedulesTableViewCell
         
         cell.isExpanded = !cell.isExpanded
-        let agendaForSection = self.agendas[indexPath.section]
-        let sessionForRow = agendaForSection.sessions[indexPath.row]
-        if var sectionSource = cellExpansionDataSource[agendaForSection.id] {
-            if let _ = sectionSource[sessionForRow.id] {
-                sectionSource[sessionForRow.id] = cell.isExpanded
-            }
-        }
         
         tableView.beginUpdates()
         tableView.endUpdates()
@@ -161,7 +160,7 @@ extension SchedulesTableViewController {
         let label = UILabel()
         label.text = title
         label.font = UIFont.boldSystemFontOfSize(16)
-        label.textColor = SIColor.shingoRedColor()
+        label.textColor = UIColor.whiteColor()
         
         return label
     }
@@ -223,8 +222,10 @@ class SchedulesTableViewCell: UITableViewCell {
         didSet {
             if isExpanded {
                 self.expandCell()
+                session.isSelected = true
             } else {
                 self.shrinkCell()
+                session.isSelected = false
             }
         }
     }
@@ -244,7 +245,7 @@ class SchedulesTableViewCell: UITableViewCell {
         if let session = session {
             timeLabel.text = NSDate().timeFrameBetweenDates(startDate: session.startDate, endDate: session.endDate)
             
-            titleLabel.font = UIFont.systemFontOfSize(16)
+            titleLabel.font = UIFont.helveticaOfFontSize(16)
             titleLabel.text = "\(session.sessionType.rawValue): \(session.displayName)"
             
             if !session.didLoadSessionInformation {
@@ -319,12 +320,10 @@ class SchedulesTableViewCell: UITableViewCell {
             let attributedRoomName = try NSMutableAttributedString(data: "<font face=\"Arial, Helvetica, sans-serif\" size=\"4\">\(roomName)</font>".dataUsingEncoding(NSUTF8StringEncoding)!,
                                                                options: attributes,
                                                                documentAttributes: nil)
-//            attributedRoomName.addAttributes([NSFontAttributeName : UIFont.helveticaOfFontSize(15)], range: NSMakeRange(0, attributedRoomName.string.characters.count))
             
             let attrSummary = try NSMutableAttributedString(data: "<font face=\"Arial, Helvetica, sans-serif\" size=\"4\">\(summary)</font>".dataUsingEncoding(NSUTF8StringEncoding)!,
                                                         options: attributes,
                                                         documentAttributes: nil)
-//            attrSummary.addAttributes([NSFontAttributeName : UIFont.helveticaOfFontSize(15)], range: NSMakeRange(0, (attrSummary.string.characters.count)))
             
             attributedRoomName.appendAttributedString(attrSummary)
             

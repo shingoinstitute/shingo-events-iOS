@@ -21,8 +21,6 @@ class AfilliateViewController: UIViewController {
         super.viewDidLoad()
         
         self.navigationItem.title = affiliate.name
-        let newline = "\n"
-        let shingoBlue = UIColor(netHex: 0x002f56)
         
         view.backgroundColor = .whiteColor()
         
@@ -44,7 +42,7 @@ class AfilliateViewController: UIViewController {
         logoImage.autoPinEdge(.Top, toEdge: .Top, ofView: scrollView, withOffset: 8)
         logoImage.autoPinEdge(.Left, toEdge: .Left, ofView: view, withOffset: 8)
         
-        abstractTextField.backgroundColor = shingoBlue
+        abstractTextField.backgroundColor = SIColor.prussianBlueColor()
         abstractTextField.text = ""
         abstractTextField.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         abstractTextField.autoPinEdge(.Top, toEdge: .Bottom, ofView: logoImage, withOffset: 8)
@@ -58,11 +56,12 @@ class AfilliateViewController: UIViewController {
         backdrop.autoPinEdge(.Left, toEdge: .Left, ofView: view, withOffset: 0)
         backdrop.autoPinEdge(.Right, toEdge: .Right, ofView: view, withOffset: 0)
         backdrop.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: view, withOffset: 0)
-        backdrop.backgroundColor = shingoBlue
+        backdrop.backgroundColor = SIColor.prussianBlueColor()
         
         affiliate.getLogoImage() { image in
             self.logoImage.image = image
         }
+        
         logoImage.contentMode = .ScaleAspectFit
         
         let attrs = [NSFontAttributeName : UIFont.systemFontOfSize(16.0),
@@ -73,21 +72,13 @@ class AfilliateViewController: UIViewController {
         do {
             let htmlString: String! = "<style>body{color:white;}</style><font size=\"5\">" + affiliate.summary + "</font></style>"
             richText = try NSMutableAttributedString(data: htmlString.dataUsingEncoding(NSUTF8StringEncoding)!,
-                                                                         options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
-                                                                            NSCharacterEncodingDocumentAttribute: NSUTF8StringEncoding],
+                                                                         options: attrs,
                                                                          documentAttributes: nil)
         } catch {
             print("Error with richText in affiliateViewController")
         }
         
-        var plainText = String()
-        if !affiliate.name.isEmpty {
-            plainText = newline + newline + affiliate.name + newline
-        } else {
-            plainText = newline + newline + "Company name not available" + newline
-        }
-        
-        richText.appendAttributedString(NSAttributedString(string: plainText, attributes: attrs))
+
         abstractTextField.attributedText = richText
 
         var frame:CGRect = abstractTextField.frame

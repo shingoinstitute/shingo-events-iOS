@@ -333,6 +333,9 @@ class SISession: SIObject {
     var didLoadSessionInformation : Bool
     var speakers : [SISpeaker]
     
+    // Used for a displaying property in a UITableViewCell
+    var isSelected: Bool
+    
     var displayName : String
     var sessionType : SessionType
     var sessionTrack : String
@@ -351,6 +354,7 @@ class SISession: SIObject {
         sessionType = .None
         sessionTrack = ""
         summary = ""
+        isSelected = false
         room = nil
         super.init()
     }

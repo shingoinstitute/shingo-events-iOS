@@ -618,6 +618,8 @@ extension SIRequest {
                             }
                         }
                     }
+                } else {
+                    speaker.speakerType = .Concurrent
                 }
                 
                 if let assocs = record["Session_Speaker_Associations__r"]["records"].array {

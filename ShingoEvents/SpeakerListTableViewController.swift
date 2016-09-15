@@ -111,10 +111,22 @@ class SpeakerListTableViewController: UITableViewController {
 
 class SpeakerListCell: UITableViewCell {
 
-    @IBOutlet weak var speakerNameLabel: UILabel!
+    @IBOutlet weak var speakerNameLabel: UILabel! {
+        didSet {
+            speakerNameLabel.font = UIFont.boldSystemFontOfSize(16)
+        }
+    }
     @IBOutlet weak var speakerImage: UIImageView!
-    @IBOutlet weak var speakerTitle: UILabel!
-    @IBOutlet weak var speakerCompany: UILabel!
+    @IBOutlet weak var speakerTitle: UILabel! {
+        didSet {
+            speakerTitle.font = UIFont.helveticaOfFontSize(15)
+        }
+    }
+    @IBOutlet weak var speakerCompany: UILabel! {
+        didSet {
+            speakerCompany.font = UIFont.helveticaOfFontSize(15)
+        }
+    }
     @IBOutlet weak var aiv: UIActivityIndicatorView!
     
     var speaker: SISpeaker! {

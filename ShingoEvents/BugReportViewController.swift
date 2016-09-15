@@ -79,15 +79,17 @@ class BugReportViewController: UIViewController {
                 
                 displayAlert(title: "Oops...", message: "Your message is still empty!")
                 
-            } else if let email = emailTextField.text {
-                if !email.isEmpty {
-                    if isValidEmail(email) {
-                        displayAlert(title: "Invalid Email Address", message: "Please enter a valid email address")
+            } else  {
+                
+                if let email = emailTextField.text {
+                    if !email.isEmpty {
+                        if !isValidEmail(email) {
+                            displayAlert(title: "Invalid Email Address", message: "Please enter a valid email address")
+                            return
+                        }
                     }
                 }
                 
-                
-            } else {
             
                 let parameters: [String:String] = [
                     "device": "\(UIDevice.currentDevice().deviceType), iOS Version: \(UIDevice.currentDevice().systemVersion)",

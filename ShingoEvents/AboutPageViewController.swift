@@ -29,7 +29,7 @@ class AboutPageViewController: UIViewController {
         return label
     }()
     
-    let text = "Join with us as we enter a new era of enterprise excellence where organizational culture is founded on timeless principles that enable sustainable results. Hear from leaders who have led a culture change, network with others all striving for measurable results and gain powerful insights that wil rejuvenate and refine your quest for organizational excellence."
+    let aboutText = "<font face=\"Arial, Helvetica, sans-serif\" size=\"5\"><h3>Shingo Institute</h3><p><b>Our Purpose:</b></br>Based on timeless principles, we shape cultures that drive operational excellence.</p><p><b>Our Mission:</b></br>We conduct cutting edge research, provide relevant education, perform insightful enterprise assessment, and recognize organizations committed to achieving sustainable world-class results.</p></font>"
     
     var didSetupConstraints = false
     
@@ -40,10 +40,21 @@ class AboutPageViewController: UIViewController {
         
         view.addSubviews([shigeoImageView, shigeoNameLabel])
         view.bringSubviewToFront(aboutTextField)
-
-//        aboutTextField.scrollEnabled = false
-        aboutTextField.text = text
-        aboutTextField.font = UIFont.systemFontOfSize(16)
+        
+        do {
+            
+            let attributes: [String:AnyObject] = [
+                NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
+                NSCharacterEncodingDocumentAttribute : NSUTF8StringEncoding
+            ]
+            
+            let attributedText = try NSMutableAttributedString(data: aboutText.dataUsingEncoding(NSUTF8StringEncoding)!,
+                                                               options: attributes,
+                                                               documentAttributes: nil)
+            aboutTextField.attributedText = attributedText
+        } catch {
+            print("Error")
+        }
         
         aboutTextField.sizeToFit()
         aboutTextField.layoutIfNeeded()
@@ -68,7 +79,7 @@ class AboutPageViewController: UIViewController {
         
         if !didSetupConstraints {
             
-            aboutTextField.autoSetDimension(.Height, toSize: aboutTextField.frame.height + 60)
+            aboutTextField.autoSetDimension(.Height, toSize: aboutTextField.frame.height + 8)
             
             shigeoImageView.autoPinEdge(.Top, toEdge: .Bottom, ofView: aboutTextField, withOffset: 8)
             shigeoImageView.autoPinEdgeToSuperviewMargin(.Left)
