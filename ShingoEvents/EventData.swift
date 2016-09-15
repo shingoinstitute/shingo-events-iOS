@@ -10,7 +10,7 @@ import Foundation
 import Alamofire
 import AlamofireImage
 import MapKit
-
+import Crashlytics
 
 class SIObject : AnyObject {
     
@@ -26,11 +26,38 @@ class SIObject : AnyObject {
         didLoadImage = false
     }
     
-    private func requestImage(url : String, callback: (image : UIImage?) -> Void) {
-        Alamofire.request(.GET, url).responseImage { response in
+    private func requestImage(URLString: URLStringConvertible, callback: (image : UIImage?) -> Void) {
+        
+        /* 
+         Alomofire can potentially cause a crash if a bad URL that meets certain criteria 
+         is passed into this function as a parameter. We ran into this issue with an image
+         recieved from cloudinary.com where we get a lot of the images for this app.
+         
+         As a workaround, the next few lines of code are a near copy of the logic used in
+         Alamofire's source code where the crash can occur. The only difference is the use
+         the the guard statement on the third else statement. If it gets to that point and
+         Alamofire can still not use the given url, it will simply return from the function 
+         and not make the request.
+         */
+        if let _ = URLString as? NSMutableURLRequest {
+            // continue
+        } else if let _ = URLString as? NSURLRequest {
+            // continue
+        } else {
+            guard let _ = NSURL(string: URLString.URLString) else {
+                Crashlytics.sharedInstance().recordError(NSError(domain: "NSURLErrorDomain", code: 72283, userInfo: [
+                        NSLocalizedDescriptionKey : "Failed to init NSURL using URLStringConvertable.URLString (\(URLString)).",
+                        NSLocalizedFailureReasonErrorKey : "Failed to init an NSURL object because the URL provided could not be used for an unknown reason."
+                    ]))
+                callback(image: nil)
+                return
+            }
+        }
+        
+        Alamofire.request(.GET, URLString).responseImage { response in
             
             guard let image = response.result.value else {
-                print("Warning, image download failed. Requested from \(url), for SIObject \"\(self.name)\".")
+                print("Warning, image download failed. Requested from \(URLString), for SIObject \"\(self.name)\".")
                 callback(image: nil)
                 return
             }
@@ -447,7 +474,17 @@ class SISpeaker: SIObject {
     var biography : String
     var organizationName : String
     var contactEmail : String
-    var speakerType: SpeakerType
+    var speakerType: SpeakerType {
+        didSet {
+            /* 
+             Since the same speaker can speak in both Keynote and Concurrent sessions,
+             if the speaker speaks in any Keynote session, his/her speakerType should
+             remain as a Keynote Speaker. This is to maintain integrity of the SIObjects
+             speaker types when displaying each section of speakers in SpeakerListTBLVC.
+             */
+            if oldValue == .Keynote { self.speakerType = .Keynote }
+        }
+    }
     
     override init() {
         title = ""

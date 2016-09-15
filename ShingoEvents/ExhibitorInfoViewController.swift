@@ -98,8 +98,11 @@ class ExhibitorInfoViewController: UIViewController {
             richText.appendAttributedString(description)
             } catch {
                 let error = NSError(domain: "NSAttributedString",
-                                    code: 111,
-                                    userInfo: ["Richtext formatting error" : "Could not parse text for exhibitor summary."])
+                                    code: 72283,
+                                    userInfo: [
+                                        NSLocalizedDescriptionKey : "Could not parse text for exhibitor summary.",
+                                        NSLocalizedFailureReasonErrorKey: "Could not parse text for exhibitor summary. Most likely reason is because the text passed back from the API was not UTF-8 coding compliant."
+                                    ])
                 Crashlytics.sharedInstance().recordError(error)
             }
         } else {

@@ -10,11 +10,11 @@ import UIKit
 import Foundation
 
 
-class EventsTableViewController: UITableViewController, SICellDelegate {
+class EventsTableViewController: UITableViewController {
     
     // MARK: - Properties
     var events: [SIEvent]!
-    
+
     override func loadView() {
         super.loadView()
         
@@ -50,7 +50,7 @@ class EventsTableViewController: UITableViewController, SICellDelegate {
     }
 }
 
-extension EventsTableViewController {
+extension EventsTableViewController: SICellDelegate {
 
     // MARK: - Table view data source
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -197,10 +197,16 @@ class EventTableViewCell: UITableViewCell {
         dateRangeLabel.text = dates
         
         event.getBannerImage() { image in
+            
+            guard let image = image else {
+                return
+            }
+            
             self.eventImage.image = image
             if let delegate = self.delegate {
                 delegate.updateCell()
             }
+            
         }
         
     }

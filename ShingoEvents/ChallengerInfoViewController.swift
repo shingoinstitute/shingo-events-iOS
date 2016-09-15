@@ -95,8 +95,11 @@ class ChallengerInfoViewController: UIViewController {
                 abstractTextField.attributedText = attributedText
             } catch {
                 let error = NSError(domain: "NSAttributedString",
-                                    code: 111,
-                                    userInfo: ["Richtext formatting error" : "Could not parse text for recipient summary."])
+                                    code: 72283,
+                                    userInfo: [
+                                        NSLocalizedDescriptionKey : "Could not parse text for recipient summary.",
+                                        NSLocalizedFailureReasonErrorKey: "Could not parse text for recipient summary. Most likely reason is because the text passed back from the API was not UTF-8 coding compliant."
+                                    ])
                 Crashlytics.sharedInstance().recordError(error)
             }
         }

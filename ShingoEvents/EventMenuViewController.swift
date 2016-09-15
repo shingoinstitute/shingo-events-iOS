@@ -83,9 +83,8 @@ class EventMenuViewController: UIViewController {
     var eventHeaderImage: UIImageView = {
         let view = UIImageView.newAutoLayoutView()
         view.contentMode = .ScaleAspectFill
-        
+        view.backgroundColor = .clearColor()
         view.clipsToBounds = true
-        view.image = nil
         return view
     }()
     
@@ -135,7 +134,6 @@ class EventMenuViewController: UIViewController {
             event.requestSponsors() {self.event.didLoadSponsors = true}
         }
         
-        
         // Setup views
         contentView.backgroundColor = .clearColor()
         
@@ -154,7 +152,7 @@ class EventMenuViewController: UIViewController {
             sponsorsButton
         ]
         
-        contentView.addSubviews([backgroundImage, eventNameLabel])
+        contentView.addSubviews([backgroundImage, eventNameLabel, eventHeaderImage])
         contentView.addSubviews(buttonViews)
     }
     
@@ -162,6 +160,8 @@ class EventMenuViewController: UIViewController {
         super.viewWillAppear(animated)
         if event.didLoadImage {
             navigationItem.title = self.event.name
+        } else {
+            navigationItem.title = ""
         }
     }
     
@@ -171,11 +171,12 @@ class EventMenuViewController: UIViewController {
         event.getBannerImage() { image in
             if let image = image {
                 self.eventHeaderImage.image = image
+                self.navigationItem.title = self.event.name
             } else {
                 self.navigationItem.title = ""
             }
         }
-        
+    
         definesPresentationContext = true
         providesPresentationContextTransitionStyle = true
 
@@ -234,10 +235,11 @@ class EventMenuViewController: UIViewController {
             //Note: eventNameLabel's top, left, and right constraints are set in Main.storyboard
             eventNameLabel.autoPinEdge(.Bottom, toEdge: .Top, ofView: scheduleButton, withOffset: -12)
             
-            if eventHeaderImage.image != nil {
-                eventNameLabel.addSubview(eventHeaderImage)
-                eventHeaderImage.autoPinEdgesToSuperviewEdges()
-            }
+            // Constraints for event banner image (same as eventNameLabel.constraints)
+            eventHeaderImage.autoPinEdge(.Top, toEdge: .Top, ofView: eventNameLabel)
+            eventHeaderImage.autoPinEdge(.Left, toEdge: .Left, ofView: eventNameLabel)
+            eventHeaderImage.autoPinEdge(.Right, toEdge: .Right, ofView: eventNameLabel)
+            eventHeaderImage.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: eventNameLabel)
             
             // constraints for backgroundImage
             backgroundImage.autoPinEdge(.Top, toEdge: .Bottom, ofView: eventNameLabel)

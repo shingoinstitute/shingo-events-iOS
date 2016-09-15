@@ -255,6 +255,7 @@ class SchedulesTableViewCell: UITableViewCell {
                         self.speakersButton.hidden = false
                         self.speakersButton.userInteractionEnabled = true
                     }
+                    self.layoutIfNeeded()
                     self.activityIndicator.stopAnimating()
                 })
             } else {

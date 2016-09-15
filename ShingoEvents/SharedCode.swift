@@ -12,6 +12,7 @@ import UIKit
 protocol SICellDelegate { func updateCell() }
 protocol SISpeakerDelegate { func performActionOnSpeakers(data: [SISpeaker]) }
 protocol SIRequestDelegate { func cancelRequest() }
+protocol SIEventImageLoaderDelegate { func loadedImage(image: UIImage) }
 
 // Shingo IP Colors
 class SIColor: UIColor {
