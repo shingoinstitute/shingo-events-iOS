@@ -272,18 +272,27 @@ class SchedulesTableViewCell: UITableViewCell {
         guard let info = getAttributedStringForSession(room: session.room, summary: session.summary) else {
             infoTextView.text = "Check back later for more information."
             infoTextView.font = UIFont.helveticaOfFontSize(14)
+            infoTextView.textColor = .blackColor()
             return
         }
         
-        if info.string.isEmpty {
-            infoTextView.text = "Check back later for more information."
-            infoTextView.font = UIFont.helveticaOfFontSize(14)
+        if info.string == "\nTap To See Less..." {
+            
+            let leftStyle = NSMutableParagraphStyle()
+            leftStyle.alignment = .Left
+            
+            let notificationText = NSMutableAttributedString(string: "Check back later for more information.", attributes: [
+                NSFontAttributeName : UIFont.helveticaOfFontSize(14),
+                NSParagraphStyleAttributeName : leftStyle
+                ])
+            notificationText.appendAttributedString(info)
+            
+            infoTextView.attributedText = notificationText
+            
             return
         }
         
         infoTextView.attributedText = info
-        infoTextView.textAlignment = .Left
-        infoTextView.textColor = .blackColor()
     }
     
     private func shrinkCell() {
@@ -303,12 +312,7 @@ class SchedulesTableViewCell: UITableViewCell {
     }
     
     private func getAttributedStringForSession(room room: SIRoom?, summary: String) -> NSAttributedString? {
-        
-        let attributes: [String:AnyObject] = [
-            NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
-            NSCharacterEncodingDocumentAttribute : NSUTF8StringEncoding
-        ]
-        
+
         var roomName = ""
         
         if let room = room {
@@ -318,6 +322,16 @@ class SchedulesTableViewCell: UITableViewCell {
         }
         
         do {
+            
+            let leftStyle = NSMutableParagraphStyle()
+            leftStyle.alignment = .Left
+            
+            let attributes: [String:AnyObject] = [
+                NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
+                NSCharacterEncodingDocumentAttribute : NSUTF8StringEncoding,
+                NSParagraphStyleAttributeName : leftStyle
+            ]
+            
             let attributedRoomName = try NSMutableAttributedString(data: "<font face=\"Arial, Helvetica, sans-serif\" size=\"4\">\(roomName)</font>".dataUsingEncoding(NSUTF8StringEncoding)!,
                                                                options: attributes,
                                                                documentAttributes: nil)
@@ -327,6 +341,21 @@ class SchedulesTableViewCell: UITableViewCell {
                                                         documentAttributes: nil)
             
             attributedRoomName.appendAttributedString(attrSummary)
+            
+            
+            
+            let centeredStyle = NSMutableParagraphStyle()
+            centeredStyle.alignment = .Center
+            
+            let swipeAttributes = [
+                NSParagraphStyleAttributeName : centeredStyle,
+                NSForegroundColorAttributeName : UIColor.grayColor(),
+                NSFontAttributeName : UIFont.helveticaOfFontSize(14)
+            ]
+            
+            let swipeUpIndicator = NSMutableAttributedString(string: "\nTap To See Less...", attributes: swipeAttributes)
+            
+            attributedRoomName.appendAttributedString(swipeUpIndicator)
             
             return attributedRoomName
         } catch {
