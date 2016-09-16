@@ -29,6 +29,15 @@ class SIRequest {
     /// HTTP GET request method.
     private func getRequest(url url: String, description: String, callback: (value: JSON?) -> ()) -> Alamofire.Request? {
         
+        /*
+         Checks that the provided url is valid. 
+         See method declaration for detailed description.
+         */
+        if !SIRequest.isValidURL(url as URLStringConvertible) {
+            callback(value: nil)
+            return nil
+        }
+        
         return Alamofire.request(.GET, url).responseJSON { response in
             
             print("+-\(self.marks(description))")
@@ -78,6 +87,16 @@ class SIRequest {
     
     /// HTTP POST request method.
     private func postRequest(url url: String, description: String, parameters: [String:String], callback: (value: JSON?) -> ()) {
+        
+        /*
+         Checks that the provided url is valid.
+         See method declaration for detailed description.
+         */
+        if !SIRequest.isValidURL(url as URLStringConvertible) {
+            callback(value: nil)
+            return
+        }
+        
         Alamofire.request(.POST, url, parameters: parameters).responseJSON { response in
             
             guard response.result.isSuccess else {
@@ -1408,8 +1427,46 @@ extension SIRequest {
         }
     }
     
-    // MARK: - Other
+}
+
+import Crashlytics
+extension SIRequest {
     
+    class func isValidURL(URLString: URLStringConvertible) -> Bool {
+        /*
+         Alomofire can potentially cause a crash if a bad URL that meets certain criteria
+         is passed into this function as a parameter. We ran into this issue with an image
+         recieved from cloudinary.com where we get a lot of the images for this app.
+         
+         As a workaround, the next few lines of code are a near copy of the logic used in
+         Alamofire's source code where the crash can occur. The only difference is the use
+         the the guard statement on the third else statement. If it gets to that point and
+         Alamofire can still not use the given url, it will simply return from the function
+         and not make the request.
+         */
+        if let _ = URLString as? NSMutableURLRequest {
+            return true
+        } else if let _ = URLString as? NSURLRequest {
+            return true
+        } else {
+            guard let _ = NSURL(string: URLString.URLString) else {
+                Crashlytics.sharedInstance().recordError(NSError(domain: "NSURLErrorDomain", code: 72283, userInfo: [
+                    NSLocalizedDescriptionKey : "Failed to init NSURL using URLStringConvertable.URLString (\(URLString)).",
+                    NSLocalizedFailureReasonErrorKey : "Failed to init an NSURL object because the URL provided could not be used for an unknown reason."
+                    ]))
+                
+                #if DEBUG
+                    print("WARNING: An Error Ocurred and was logged to Crashlytics.")
+                #endif
+                
+                return false
+            }
+            
+            return true
+        }
+    }
+    
+    // MARK: - Other
     class func displayInternetAlert(forViewController vc: UIViewController, completion: ((UIAlertAction) -> Void)?) {
         
         let alert = UIAlertController(

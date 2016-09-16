@@ -28,30 +28,9 @@ class SIObject : AnyObject {
     
     private func requestImage(URLString: URLStringConvertible, callback: (image : UIImage?) -> Void) {
         
-        /* 
-         Alomofire can potentially cause a crash if a bad URL that meets certain criteria 
-         is passed into this function as a parameter. We ran into this issue with an image
-         recieved from cloudinary.com where we get a lot of the images for this app.
-         
-         As a workaround, the next few lines of code are a near copy of the logic used in
-         Alamofire's source code where the crash can occur. The only difference is the use
-         the the guard statement on the third else statement. If it gets to that point and
-         Alamofire can still not use the given url, it will simply return from the function 
-         and not make the request.
-         */
-        if let _ = URLString as? NSMutableURLRequest {
-            // continue
-        } else if let _ = URLString as? NSURLRequest {
-            // continue
-        } else {
-            guard let _ = NSURL(string: URLString.URLString) else {
-                Crashlytics.sharedInstance().recordError(NSError(domain: "NSURLErrorDomain", code: 72283, userInfo: [
-                        NSLocalizedDescriptionKey : "Failed to init NSURL using URLStringConvertable.URLString (\(URLString)).",
-                        NSLocalizedFailureReasonErrorKey : "Failed to init an NSURL object because the URL provided could not be used for an unknown reason."
-                    ]))
-                callback(image: nil)
-                return
-            }
+        if !SIRequest.isValidURL(URLString) {
+            callback(image: nil)
+            return
         }
         
         Alamofire.request(.GET, URLString).responseImage { response in
