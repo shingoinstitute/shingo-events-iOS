@@ -26,7 +26,7 @@ class VenueMapsCollectionView: UIViewController {
         super.viewDidLoad()
         
         let backgroundImage = UIImageView()
-        backgroundImage.image = SIImages().shingoIconForDevice()
+        backgroundImage.image = UIImage(named: "Shingo Icon Fullscreen")
         backgroundImage.contentMode = UIViewContentMode.ScaleAspectFill
         collectionView.backgroundView = backgroundImage
         
@@ -49,7 +49,7 @@ class VenueMapsCollectionView: UIViewController {
 
 }
 
-extension VenueMapsCollectionView: UICollectionViewDataSource {
+extension VenueMapsCollectionView: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         return 1
@@ -97,6 +97,22 @@ extension VenueMapsCollectionView: UICollectionViewDataSource {
                 self.performSegueWithIdentifier("MapView", sender: venueMap)
             }
         }
+    }
+    
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        
+        switch UIDevice.currentDevice().deviceType.rawValue {
+        case 1.0 ..< 3.0:
+            // iPhone 4s/SE
+            return CGSize(width: 200, height: 266)
+        case 3.0 ..< 5.0:
+            // iPhone 5 - iPhone 6s
+            return CGSize(width: 250, height: 333)
+        default:
+            // iPad idiom
+            return CGSize(width: 300, height: 400)
+        }
+        
     }
     
 }

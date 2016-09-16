@@ -7,21 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C2130BD81C987650009B3BB8 /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2130BD71C987650009B3BB8 /* ActivityView.swift */; };
+		7CCDA641804EC78E12D067A2 /* Pods_Shingo_Events.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D893190879C0BB6AAC6D82B /* Pods_Shingo_Events.framework */; };
+		C2130BD81C987650009B3BB8 /* ActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2130BD71C987650009B3BB8 /* ActivityViewController.swift */; };
 		C21B3ED81D1B433400C54FA4 /* ShingoEventsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21B3ED51D1B09DE00C54FA4 /* ShingoEventsTests.swift */; };
 		C21ECE281C5FB21500689FDE /* AffiliateListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21ECE271C5FB21500689FDE /* AffiliateListTableViewController.swift */; };
 		C21ECE2A1C5FB22A00689FDE /* AfilliateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21ECE291C5FB22A00689FDE /* AfilliateViewController.swift */; };
 		C224C8981C92138700F4E393 /* AboutPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C224C8971C92138700F4E393 /* AboutPageViewController.swift */; };
 		C224CDFC1CB6CA42003147F0 /* RecipientTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C224CDFB1CB6CA42003147F0 /* RecipientTableViewCell.swift */; };
 		C22AB2B21C2484E900A7F3B1 /* ShingoEventsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22AB2B11C2484E900A7F3B1 /* ShingoEventsUITests.swift */; };
-		C22CBB811D6B915200649A4F /* TestCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22CBB801D6B915200649A4F /* TestCode.swift */; };
+		C22EF40E1D6E427F00C4C5DC /* TestCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22CBB801D6B915200649A4F /* TestCode.swift */; };
 		C234BD561C5293CF002E9814 /* SpeakerListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C234BD551C5293CF002E9814 /* SpeakerListTableViewController.swift */; };
 		C234BD581C529597002E9814 /* SpeakerDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C234BD571C529597002E9814 /* SpeakerDetailsViewController.swift */; };
-		C2494E241C88BD6A00E2969D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C2494E231C88BD6A00E2969D /* LaunchScreen.storyboard */; };
-		C2494E261C88E4F600E2969D /* SIImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2494E251C88E4F600E2969D /* SIImages.swift */; };
 		C2494E281C89FBFE00E2969D /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2494E271C89FBFE00E2969D /* Reachability.swift */; };
 		C262CA8D1C3B1C29005845AF /* EventsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C262CA8C1C3B1C29005845AF /* EventsTableViewController.swift */; };
-		C262DCBA1C861BA900712D4E /* SessionDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C262DCB91C861BA900712D4E /* SessionDetailViewController.swift */; };
 		C264CCB41C57ECA7005CDB11 /* RecipientsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C264CCB31C57ECA7005CDB11 /* RecipientsTableViewController.swift */; };
 		C264CCF01C5834A5005CDB11 /* ChallengerInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C264CCEF1C5834A5005CDB11 /* ChallengerInfoViewController.swift */; };
 		C264CCF21C5834EC005CDB11 /* ResearchInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C264CCF11C5834EC005CDB11 /* ResearchInfoViewController.swift */; };
@@ -36,20 +34,18 @@
 		C2A695241C35E30F00F6E0B8 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A695231C35E30F00F6E0B8 /* SwiftyJSON.swift */; };
 		C2B155111D626BE00099330F /* ExhibitorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B155101D626BE00099330F /* ExhibitorTableViewCell.swift */; };
 		C2B7EB401C7B813100162AFB /* ContactUsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B7EB3F1C7B813100162AFB /* ContactUsViewController.swift */; };
-		C2B7EB421C7CD89900162AFB /* ReportABugViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B7EB411C7CD89900162AFB /* ReportABugViewController.swift */; };
+		C2B7EB421C7CD89900162AFB /* BugReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B7EB411C7CD89900162AFB /* BugReportViewController.swift */; };
 		C2C021231C6272D3008732DC /* SponsorsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C021221C6272D3008732DC /* SponsorsTableViewController.swift */; };
-		C2CFC3041C4576D00036E485 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CFC3031C4576D00036E485 /* SettingsTableViewController.swift */; };
-		C2CFC3101C481EAB0036E485 /* MainMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CFC30F1C481EAB0036E485 /* MainMenuViewController.swift */; };
+		C2CFC3041C4576D00036E485 /* SupportTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CFC3031C4576D00036E485 /* SupportTableViewController.swift */; };
+		C2CFC3101C481EAB0036E485 /* LaunchMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CFC30F1C481EAB0036E485 /* LaunchMenuViewController.swift */; };
 		C2CFC3141C483C1C0036E485 /* SchedulesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CFC3131C483C1C0036E485 /* SchedulesTableViewController.swift */; };
 		C2CFC3181C4954C20036E485 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C2CFC3171C4954C20036E485 /* Main.storyboard */; };
 		C2E9508D1D1C83F500178C03 /* SharedCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E9508C1D1C83F500178C03 /* SharedCode.swift */; };
 		C2E9508F1D22E8F100178C03 /* APIRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E9508E1D22E8F100178C03 /* APIRequests.swift */; };
 		C2F17FA81C6AAFCF0028062C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C2F17FA71C6AAFCF0028062C /* Assets.xcassets */; };
-		C2F358081C500B2500AE62D0 /* SessionListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2F358071C500B2500AE62D0 /* SessionListTableViewController.swift */; };
 		C2FF6B1E1CB2E2CF00331ED2 /* VenueMapsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FF6B1D1CB2E2CF00331ED2 /* VenueMapsCollectionView.swift */; };
 		C2FF6B221CB2E43200331ED2 /* VenueMapCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FF6B211CB2E43200331ED2 /* VenueMapCollectionCell.swift */; };
 		C2FF6B261CB4313200331ED2 /* VenueMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FF6B251CB4313200331ED2 /* VenueMapViewController.swift */; };
-		E39DC986E2F1148F54AF12E5 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D372B05CBBB2E7BF78EA707 /* Pods.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,9 +66,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		1478ADAA210BB3436DBA32E0 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		0D9E3C660688E2372B0D1FD4 /* Pods-Shingo Events.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shingo Events.release.xcconfig"; path = "Pods/Target Support Files/Pods-Shingo Events/Pods-Shingo Events.release.xcconfig"; sourceTree = "<group>"; };
 		2D372B05CBBB2E7BF78EA707 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C2130BD71C987650009B3BB8 /* ActivityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
+		4D893190879C0BB6AAC6D82B /* Pods_Shingo_Events.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Shingo_Events.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7EC5F842FB1C431B1896102C /* Pods-Shingo Events.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shingo Events.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Shingo Events/Pods-Shingo Events.debug.xcconfig"; sourceTree = "<group>"; };
+		C2130BD71C987650009B3BB8 /* ActivityViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityViewController.swift; sourceTree = "<group>"; };
 		C21B3ED41D1B09DD00C54FA4 /* Shingo EventsTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Shingo EventsTests-Bridging-Header.h"; sourceTree = "<group>"; };
 		C21B3ED51D1B09DE00C54FA4 /* ShingoEventsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShingoEventsTests.swift; sourceTree = "<group>"; };
 		C21ECE271C5FB21500689FDE /* AffiliateListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AffiliateListTableViewController.swift; sourceTree = "<group>"; };
@@ -87,11 +85,8 @@
 		C22CBB801D6B915200649A4F /* TestCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestCode.swift; sourceTree = "<group>"; };
 		C234BD551C5293CF002E9814 /* SpeakerListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeakerListTableViewController.swift; sourceTree = "<group>"; };
 		C234BD571C529597002E9814 /* SpeakerDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeakerDetailsViewController.swift; sourceTree = "<group>"; };
-		C2494E231C88BD6A00E2969D /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
-		C2494E251C88E4F600E2969D /* SIImages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SIImages.swift; sourceTree = "<group>"; };
 		C2494E271C89FBFE00E2969D /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		C262CA8C1C3B1C29005845AF /* EventsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsTableViewController.swift; sourceTree = "<group>"; };
-		C262DCB91C861BA900712D4E /* SessionDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionDetailViewController.swift; sourceTree = "<group>"; };
 		C264CCB31C57ECA7005CDB11 /* RecipientsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipientsTableViewController.swift; sourceTree = "<group>"; };
 		C264CCEF1C5834A5005CDB11 /* ChallengerInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChallengerInfoViewController.swift; sourceTree = "<group>"; };
 		C264CCF11C5834EC005CDB11 /* ResearchInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResearchInfoViewController.swift; sourceTree = "<group>"; };
@@ -107,21 +102,19 @@
 		C2A695231C35E30F00F6E0B8 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
 		C2B155101D626BE00099330F /* ExhibitorTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExhibitorTableViewCell.swift; sourceTree = "<group>"; };
 		C2B7EB3F1C7B813100162AFB /* ContactUsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactUsViewController.swift; sourceTree = "<group>"; };
-		C2B7EB411C7CD89900162AFB /* ReportABugViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReportABugViewController.swift; sourceTree = "<group>"; };
+		C2B7EB411C7CD89900162AFB /* BugReportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BugReportViewController.swift; sourceTree = "<group>"; };
 		C2C021221C6272D3008732DC /* SponsorsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SponsorsTableViewController.swift; sourceTree = "<group>"; };
-		C2CFC3031C4576D00036E485 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
-		C2CFC30F1C481EAB0036E485 /* MainMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainMenuViewController.swift; sourceTree = "<group>"; };
+		C2CFC3031C4576D00036E485 /* SupportTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SupportTableViewController.swift; sourceTree = "<group>"; };
+		C2CFC30F1C481EAB0036E485 /* LaunchMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchMenuViewController.swift; sourceTree = "<group>"; };
 		C2CFC3131C483C1C0036E485 /* SchedulesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchedulesTableViewController.swift; sourceTree = "<group>"; };
 		C2CFC3171C4954C20036E485 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		C2E9508C1D1C83F500178C03 /* SharedCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedCode.swift; sourceTree = "<group>"; };
 		C2E9508E1D22E8F100178C03 /* APIRequests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIRequests.swift; sourceTree = "<group>"; };
 		C2F17F661C655DAA0028062C /* Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		C2F17FA71C6AAFCF0028062C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		C2F358071C500B2500AE62D0 /* SessionListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionListTableViewController.swift; sourceTree = "<group>"; };
 		C2FF6B1D1CB2E2CF00331ED2 /* VenueMapsCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VenueMapsCollectionView.swift; sourceTree = "<group>"; };
 		C2FF6B211CB2E43200331ED2 /* VenueMapCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VenueMapCollectionCell.swift; sourceTree = "<group>"; };
 		C2FF6B251CB4313200331ED2 /* VenueMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VenueMapViewController.swift; sourceTree = "<group>"; };
-		D3318F049617AA94144DE98E /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,7 +123,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C2986DC01C640DE900ADCF40 /* MapKit.framework in Frameworks */,
-				E39DC986E2F1148F54AF12E5 /* Pods.framework in Frameworks */,
+				7CCDA641804EC78E12D067A2 /* Pods_Shingo_Events.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -151,11 +144,11 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		8D378D81D8A4A4DC1B4AA8A2 /* Pods */ = {
+		5DB25D0538898A8E281EE0AD /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				D3318F049617AA94144DE98E /* Pods.debug.xcconfig */,
-				1478ADAA210BB3436DBA32E0 /* Pods.release.xcconfig */,
+				7EC5F842FB1C431B1896102C /* Pods-Shingo Events.debug.xcconfig */,
+				0D9E3C660688E2372B0D1FD4 /* Pods-Shingo Events.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -163,8 +156,7 @@
 		C21B3ED11D1B078800C54FA4 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				C2130BD71C987650009B3BB8 /* ActivityView.swift */,
-				C2494E251C88E4F600E2969D /* SIImages.swift */,
+				C2130BD71C987650009B3BB8 /* ActivityViewController.swift */,
 				C2E9508C1D1C83F500178C03 /* SharedCode.swift */,
 				C2A695231C35E30F00F6E0B8 /* SwiftyJSON.swift */,
 				C2494E271C89FBFE00E2969D /* Reachability.swift */,
@@ -186,7 +178,7 @@
 		C224CDF71CB6C960003147F0 /* Menus */ = {
 			isa = PBXGroup;
 			children = (
-				C2CFC30F1C481EAB0036E485 /* MainMenuViewController.swift */,
+				C2CFC30F1C481EAB0036E485 /* LaunchMenuViewController.swift */,
 				C262CA8C1C3B1C29005845AF /* EventsTableViewController.swift */,
 				C28B67F21C406BDE00AC9193 /* EventMenuViewController.swift */,
 				C2986DC31C65136600ADCF40 /* ShingoModelViewController.swift */,
@@ -198,8 +190,6 @@
 			isa = PBXGroup;
 			children = (
 				C2CFC3131C483C1C0036E485 /* SchedulesTableViewController.swift */,
-				C2F358071C500B2500AE62D0 /* SessionListTableViewController.swift */,
-				C262DCB91C861BA900712D4E /* SessionDetailViewController.swift */,
 				C234BD551C5293CF002E9814 /* SpeakerListTableViewController.swift */,
 				C234BD571C529597002E9814 /* SpeakerDetailsViewController.swift */,
 			);
@@ -237,8 +227,8 @@
 				C21B3ED71D1B0A0A00C54FA4 /* ShingoEventsTests */,
 				C22AB2B01C2484E800A7F3B1 /* ShingoEventsUITests */,
 				C22AB28F1C2484E800A7F3B1 /* Products */,
-				8D378D81D8A4A4DC1B4AA8A2 /* Pods */,
 				CB0A5FDCC55BAF34E0CAECA2 /* Frameworks */,
+				5DB25D0538898A8E281EE0AD /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -257,7 +247,6 @@
 			children = (
 				C2F17F661C655DAA0028062C /* Bridging-Header.h */,
 				C2A6950C1C35AC2900F6E0B8 /* Info.plist */,
-				C2494E231C88BD6A00E2969D /* LaunchScreen.storyboard */,
 				C2F17FA71C6AAFCF0028062C /* Assets.xcassets */,
 				C2A695081C35AC2900F6E0B8 /* AppDelegate.swift */,
 				C2CFC3171C4954C20036E485 /* Main.storyboard */,
@@ -306,8 +295,8 @@
 		C2FF6B241CB2E52400331ED2 /* Settings Views */ = {
 			isa = PBXGroup;
 			children = (
-				C2CFC3031C4576D00036E485 /* SettingsTableViewController.swift */,
-				C2B7EB411C7CD89900162AFB /* ReportABugViewController.swift */,
+				C2CFC3031C4576D00036E485 /* SupportTableViewController.swift */,
+				C2B7EB411C7CD89900162AFB /* BugReportViewController.swift */,
 				C2B7EB3F1C7B813100162AFB /* ContactUsViewController.swift */,
 				C224C8971C92138700F4E393 /* AboutPageViewController.swift */,
 			);
@@ -319,6 +308,7 @@
 			children = (
 				C2986DBF1C640DE900ADCF40 /* MapKit.framework */,
 				2D372B05CBBB2E7BF78EA707 /* Pods.framework */,
+				4D893190879C0BB6AAC6D82B /* Pods_Shingo_Events.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -330,13 +320,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C22AB2B61C2484E900A7F3B1 /* Build configuration list for PBXNativeTarget "Shingo Events" */;
 			buildPhases = (
-				3C0A378285287D97ACAA38D9 /* Check Pods Manifest.lock */,
+				A98C608A068077251EA07068 /* [CP] Check Pods Manifest.lock */,
 				C22AB28A1C2484E800A7F3B1 /* Sources */,
 				C22AB28B1C2484E800A7F3B1 /* Frameworks */,
 				C22AB28C1C2484E800A7F3B1 /* Resources */,
-				907C4FFF67EF636897321E7F /* Embed Pods Frameworks */,
-				91086E1D4A4D7F313E77FF20 /* Copy Pods Resources */,
 				C2986DC51C65210C00ADCF40 /* ShellScript */,
+				12E39CD01733FCE610D4516F /* [CP] Embed Pods Frameworks */,
+				16E7CE78E15A4D2E17B8EEA0 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -390,7 +380,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0720;
+				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = "Shingo Institute";
 				TargetAttributes = {
 					C22AB28D1C2484E800A7F3B1 = {
@@ -432,7 +422,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C2494E241C88BD6A00E2969D /* LaunchScreen.storyboard in Resources */,
 				C2CFC3181C4954C20036E485 /* Main.storyboard in Resources */,
 				C2F17FA81C6AAFCF0028062C /* Assets.xcassets in Resources */,
 			);
@@ -455,49 +444,49 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		3C0A378285287D97ACAA38D9 /* Check Pods Manifest.lock */ = {
+		12E39CD01733FCE610D4516F /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Shingo Events/Pods-Shingo Events-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		16E7CE78E15A4D2E17B8EEA0 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Shingo Events/Pods-Shingo Events-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A98C608A068077251EA07068 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		907C4FFF67EF636897321E7F /* Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		91086E1D4A4D7F313E77FF20 /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		C2986DC51C65210C00ADCF40 /* ShellScript */ = {
@@ -520,9 +509,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C22EF40E1D6E427F00C4C5DC /* TestCode.swift in Sources */,
 				C26DC9041C597A8600BB4DDA /* ExhibitorInfoViewController.swift in Sources */,
 				C21ECE281C5FB21500689FDE /* AffiliateListTableViewController.swift in Sources */,
-				C2B7EB421C7CD89900162AFB /* ReportABugViewController.swift in Sources */,
+				C2B7EB421C7CD89900162AFB /* BugReportViewController.swift in Sources */,
 				C28B67F31C406BDE00AC9193 /* EventMenuViewController.swift in Sources */,
 				C2FF6B221CB2E43200331ED2 /* VenueMapCollectionCell.swift in Sources */,
 				C264CCF01C5834A5005CDB11 /* ChallengerInfoViewController.swift in Sources */,
@@ -532,29 +522,25 @@
 				C2494E281C89FBFE00E2969D /* Reachability.swift in Sources */,
 				C234BD581C529597002E9814 /* SpeakerDetailsViewController.swift in Sources */,
 				C28B67E91C3F0BD700AC9193 /* EventData.swift in Sources */,
-				C2CFC3101C481EAB0036E485 /* MainMenuViewController.swift in Sources */,
+				C2CFC3101C481EAB0036E485 /* LaunchMenuViewController.swift in Sources */,
 				C26DC9021C59785700BB4DDA /* ExhibitorTableViewController.swift in Sources */,
 				C21ECE2A1C5FB22A00689FDE /* AfilliateViewController.swift in Sources */,
-				C2494E261C88E4F600E2969D /* SIImages.swift in Sources */,
 				C2B155111D626BE00099330F /* ExhibitorTableViewCell.swift in Sources */,
 				C2986DC41C65136600ADCF40 /* ShingoModelViewController.swift in Sources */,
 				C2A695241C35E30F00F6E0B8 /* SwiftyJSON.swift in Sources */,
 				C224CDFC1CB6CA42003147F0 /* RecipientTableViewCell.swift in Sources */,
 				C264CCB41C57ECA7005CDB11 /* RecipientsTableViewController.swift in Sources */,
-				C2CFC3041C4576D00036E485 /* SettingsTableViewController.swift in Sources */,
-				C2F358081C500B2500AE62D0 /* SessionListTableViewController.swift in Sources */,
+				C2CFC3041C4576D00036E485 /* SupportTableViewController.swift in Sources */,
 				C2CFC3141C483C1C0036E485 /* SchedulesTableViewController.swift in Sources */,
-				C22CBB811D6B915200649A4F /* TestCode.swift in Sources */,
 				C2FF6B1E1CB2E2CF00331ED2 /* VenueMapsCollectionView.swift in Sources */,
 				C234BD561C5293CF002E9814 /* SpeakerListTableViewController.swift in Sources */,
 				C2B7EB401C7B813100162AFB /* ContactUsViewController.swift in Sources */,
 				C2FF6B261CB4313200331ED2 /* VenueMapViewController.swift in Sources */,
 				C224C8981C92138700F4E393 /* AboutPageViewController.swift in Sources */,
-				C2130BD81C987650009B3BB8 /* ActivityView.swift in Sources */,
+				C2130BD81C987650009B3BB8 /* ActivityViewController.swift in Sources */,
 				C2A695111C35AC2900F6E0B8 /* AppDelegate.swift in Sources */,
 				C2C021231C6272D3008732DC /* SponsorsTableViewController.swift in Sources */,
 				C2E9508D1D1C83F500178C03 /* SharedCode.swift in Sources */,
-				C262DCBA1C861BA900712D4E /* SessionDetailViewController.swift in Sources */,
 				C264CCF21C5834EC005CDB11 /* ResearchInfoViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -635,6 +621,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "arm64 armv7 armv7s i386 x86_64";
 			};
 			name = Debug;
 		};
@@ -672,17 +659,20 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "arm64 armv7 armv7s i386 x86_64";
 			};
 			name = Release;
 		};
 		C22AB2B71C2484E900A7F3B1 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D3318F049617AA94144DE98E /* Pods.debug.xcconfig */;
+			baseConfigurationReference = 7EC5F842FB1C431B1896102C /* Pods-Shingo Events.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -691,19 +681,22 @@
 				INFOPLIST_FILE = ShingoEvents/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" -DDEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.usu.shingo.prize.conference;
 				PRODUCT_NAME = "Shingo Events";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "./ShingoEvents/Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "arm64 armv7 armv7s i386 i386 x86_64";
 			};
 			name = Debug;
 		};
 		C22AB2B81C2484E900A7F3B1 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1478ADAA210BB3436DBA32E0 /* Pods.release.xcconfig */;
+			baseConfigurationReference = 0D9E3C660688E2372B0D1FD4 /* Pods-Shingo Events.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
@@ -711,11 +704,13 @@
 				INFOPLIST_FILE = ShingoEvents/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" -DDEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.usu.shingo.prize.conference;
 				PRODUCT_NAME = "Shingo Events";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "./ShingoEvents/Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "arm64 armv7 armv7s i386 i386 x86_64";
 			};
 			name = Release;
 		};

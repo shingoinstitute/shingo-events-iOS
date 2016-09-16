@@ -13,7 +13,7 @@ class SpeakerDetailsViewController: UIViewController {
 
     var speakerNameLabel: UILabel!
     var organizationLabel: UILabel!
-    var biographyView: UITextView!
+    var biographyTextView: UITextView!
     var speakerImageView: UIImageView!
     
     var speaker: SISpeaker!
@@ -35,7 +35,7 @@ class SpeakerDetailsViewController: UIViewController {
             speakerNameLabel = UILabel.newAutoLayoutView()
             speakerNameLabel.text = ""
             speakerNameLabel.textColor = .whiteColor()
-            speakerNameLabel.numberOfLines = 2
+            speakerNameLabel.numberOfLines = 0
             speakerNameLabel.lineBreakMode = .ByWordWrapping
             speakerNameLabel.text = speaker.name
             
@@ -52,7 +52,7 @@ class SpeakerDetailsViewController: UIViewController {
             organizationLabel = UILabel.newAutoLayoutView()
             
             organizationLabel.text = "From " + speaker.organizationName
-            organizationLabel.numberOfLines = 2
+            organizationLabel.numberOfLines = 0
             organizationLabel.textColor = .whiteColor()
             organizationLabel.lineBreakMode = .ByWordWrapping
             
@@ -60,7 +60,7 @@ class SpeakerDetailsViewController: UIViewController {
         }
 
         if !speaker.biography.isEmpty {
-            biographyView = UITextView.newAutoLayoutView()
+            biographyTextView = UITextView.newAutoLayoutView()
         
             var htmlString = speaker.biography
             do {
@@ -69,23 +69,25 @@ class SpeakerDetailsViewController: UIViewController {
                                                         options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
                                                             NSCharacterEncodingDocumentAttribute : NSUTF8StringEncoding],
                                                         documentAttributes: nil)
-                biographyView.attributedText = attributedText
+                biographyTextView.attributedText = attributedText
                 
             } catch {
                 print("Error in SpeakerDetailsViewController")
             }
         
-            biographyView.editable = false
-            biographyView.backgroundColor = .whiteColor()
-            biographyView.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
-            biographyView.frame = CGRect(x: 0, y: 0, width: biographyView.frame.width, height: biographyView.contentSize.height)
-            biographyView.scrollEnabled = false
+            biographyTextView.editable = false
+            biographyTextView.backgroundColor = .whiteColor()
+            biographyTextView.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+            biographyTextView.frame = CGRect(x: 0, y: 0, width: biographyTextView.frame.width, height: biographyTextView.contentSize.height)
+            biographyTextView.scrollEnabled = false
             
-            scrollView.addSubview(biographyView)
+            scrollView.addSubview(biographyTextView)
         }
         
         speakerImageView = UIImageView.newAutoLayoutView()
-        speakerImageView.image = speaker.getSpeakerImage()
+        speaker.getSpeakerImage() { image in
+            self.speakerImageView.image = image
+        }
         speakerImageView.contentMode = UIViewContentMode.ScaleAspectFit
         speakerImageView.layer.borderColor = UIColor.clearColor().CGColor
         speakerImageView.layer.cornerRadius = 5.0
@@ -102,39 +104,51 @@ class SpeakerDetailsViewController: UIViewController {
     override func updateViewConstraints() {
         if !didSetupConstraints
         {
+            
+//            if speakerNameLabel != nil {
+//                speakerNameLabel.autoSetDimensionsToSize(CGSize(width: self.view.frame.width - 10, height: 42.0))
+//                speakerNameLabel.autoPinEdge(.Top, toEdge: .Bottom, ofView: speakerImageView, withOffset: 8)
+//                speakerNameLabel.autoPinEdge(.Left, toEdge: .Left, ofView: view, withOffset: 8)
+//                speakerNameLabel.autoPinEdge(.Right, toEdge: .Right, ofView: view, withOffset: 8)
+//            }
+//            if organizationLabel != nil {
+//                organizationLabel.autoSetDimensionsToSize(CGSize(width: self.view.frame.width - 10, height: 42.0))
+//                organizationLabel.autoPinEdge(<#T##edge: ALEdge##ALEdge#>, toEdge: <#T##ALEdge#>, ofView: <#T##UIView#>, withOffset: <#T##CGFloat#>)
+//            }
+//            if biographyTextView != nil {
+//                biographyTextView.autoSetDimension(.Width, toSize: self.view.frame.width)
+//            }
+
             scrollView.autoPinEdgesToSuperviewEdges()
             
-            speakerImageView.autoSetDimensionsToSize(CGSize(width: 200.0, height: 200.0))
-            if speakerNameLabel != nil {speakerNameLabel.autoSetDimensionsToSize(CGSize(width: self.view.frame.width - 10, height: 42.0))}
-            if organizationLabel != nil {organizationLabel.autoSetDimensionsToSize(CGSize(width: self.view.frame.width - 10, height: 42.0))}
-            if biographyView != nil {biographyView.autoSetDimension(.Width, toSize: self.view.frame.width)}
-
+            speakerImageView.autoSetDimension(.Width, toSize: 200)
+            speakerImageView.autoSetDimension(.Height, toSize: 200)
             
             speakerImageView.autoPinEdgeToSuperviewEdge(.Top, withInset: 10.0)
             speakerImageView.autoPinEdgeToSuperviewEdge(.Left, withInset: 10.0)
             
-            var previousView : UIView! = nil
+            var previousView: UIView!
             previousView = speakerImageView
             
             if speakerNameLabel != nil {
                 speakerNameLabel.autoPinEdge(.Top, toEdge: .Bottom, ofView: previousView, withOffset: 8)
-                speakerNameLabel.autoPinEdgeToSuperviewEdge(.Left, withInset: 10.0)
-//                speakerNameLabel.autoPinEdgeToSuperviewEdge(.Right)
+                speakerNameLabel.autoPinEdge(.Left, toEdge: .Left, ofView: view, withOffset: 8)
+                speakerNameLabel.autoPinEdge(.Right, toEdge: .Right, ofView: view, withOffset: 8)
                 previousView = speakerNameLabel
             }
 
             if organizationLabel != nil {
-                organizationLabel.autoPinEdgeToSuperviewEdge(.Left, withInset: 10.0)
                 organizationLabel.autoPinEdge(.Top, toEdge: .Bottom, ofView: previousView, withOffset: 8)
-//                organizationLabel.autoPinEdgeToSuperviewEdge(.Right)
+                organizationLabel.autoPinEdge(.Left, toEdge: .Left, ofView: view, withOffset: 8)
+                organizationLabel.autoPinEdge(.Right, toEdge: .Right, ofView: view, withOffset: 8)
                 previousView = organizationLabel
             }
             
-            if biographyView != nil {
-                biographyView.autoPinEdge(.Top, toEdge: .Bottom, ofView: previousView)
-                biographyView.autoPinEdge(.Left, toEdge: .Left, ofView: scrollView)
-                biographyView.autoPinEdge(.Right, toEdge: .Right, ofView: scrollView)
-                biographyView.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: scrollView)
+            if biographyTextView != nil {
+                biographyTextView.autoPinEdge(.Top, toEdge: .Bottom, ofView: previousView, withOffset: 8)
+                biographyTextView.autoPinEdge(.Left, toEdge: .Left, ofView: view)
+                biographyTextView.autoPinEdge(.Right, toEdge: .Right, ofView: view)
+                biographyTextView.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: scrollView)
             }
             
             didSetupConstraints = true
@@ -157,8 +171,8 @@ class SpeakerDetailsViewController: UIViewController {
         if speakerImageView != nil {
             height += speakerImageView.frame.height
         }
-        if biographyView != nil {
-            height += biographyView.frame.height
+        if biographyTextView != nil {
+            height += biographyTextView.frame.height
         }
 
         height += insets

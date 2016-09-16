@@ -75,16 +75,16 @@ class EventMenuViewController: UIViewController {
     
     var backgroundImage: UIImageView = {
         let view = UIImageView.newAutoLayoutView()
-        view.image = UIImage(named: "shingo_icon")
+        view.image = UIImage(named: "Shingo Icon Large")
         view.contentMode = .ScaleAspectFill
+        view.clipsToBounds = true
         return view
     }()
     var eventHeaderImage: UIImageView = {
         let view = UIImageView.newAutoLayoutView()
         view.contentMode = .ScaleAspectFill
-        
+        view.backgroundColor = .clearColor()
         view.clipsToBounds = true
-        view.image = nil
         return view
     }()
     
@@ -99,25 +99,40 @@ class EventMenuViewController: UIViewController {
         super.loadView()
         
         // Load Agenda
-        event.requestAgendas() {self.event.didLoadAgendas = true} //Note: requestAgendas will request session data underneath
+        if !event.didLoadAgendas {
+            //Note: requestAgendas will request session data under the hood
+            event.requestAgendas() { self.event.didLoadAgendas = true }
+        }
         
-        // Load Speakers for entire event
-        event.requestSpeakers() {self.event.didLoadSpeakers = true}
+        if !event.didLoadSpeakers {
+            // Load Speakers for entire event
+            event.requestSpeakers() {self.event.didLoadSpeakers = true}
+        }
         
-        // Load venue photos
-        event.requestVenues() {self.event.didLoadVenues = true}
+        if !event.didLoadVenues {
+            // Load venue photos
+            event.requestVenues() {self.event.didLoadVenues = true}
+        }
         
-        // Load Recipient information
-        event.requestRecipients() {self.event.didLoadRecipients  = true}
+        if !event.didLoadRecipients {
+            // Load Recipient information
+            event.requestRecipients() {self.event.didLoadRecipients  = true}
+        }
         
-        // Load Affiliate information
-        event.requestAffiliates() {self.event.didLoadAffiliates = true}
+        if !event.didLoadAffiliates {
+            // Load Affiliate information
+            event.requestAffiliates() {self.event.didLoadAffiliates = true}
+        }
         
-        // Load Exhibitor information
-        event.requestExhibitors() {self.event.didLoadExhibitors = true}
+        if !event.didLoadExhibitors {
+            // Load Exhibitor information
+            event.requestExhibitors() {self.event.didLoadExhibitors = true}
+        }
         
-        // Load Sponsor information
-        event.requestSponsors() {self.event.didLoadSponsors = true}
+        if !event.didLoadSponsors {
+            // Load Sponsor information
+            event.requestSponsors() {self.event.didLoadSponsors = true}
+        }
         
         // Setup views
         contentView.backgroundColor = .clearColor()
@@ -137,14 +152,16 @@ class EventMenuViewController: UIViewController {
             sponsorsButton
         ]
         
-        contentView.addSubviews([backgroundImage, eventNameLabel])
+        contentView.addSubviews([backgroundImage, eventNameLabel, eventHeaderImage])
         contentView.addSubviews(buttonViews)
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        if event.didLoadBannerImage {
+        if event.didLoadImage {
             navigationItem.title = self.event.name
+        } else {
+            navigationItem.title = ""
         }
     }
     
@@ -154,11 +171,12 @@ class EventMenuViewController: UIViewController {
         event.getBannerImage() { image in
             if let image = image {
                 self.eventHeaderImage.image = image
+                self.navigationItem.title = self.event.name
             } else {
                 self.navigationItem.title = ""
             }
         }
-        
+    
         definesPresentationContext = true
         providesPresentationContextTransitionStyle = true
 
@@ -217,10 +235,11 @@ class EventMenuViewController: UIViewController {
             //Note: eventNameLabel's top, left, and right constraints are set in Main.storyboard
             eventNameLabel.autoPinEdge(.Bottom, toEdge: .Top, ofView: scheduleButton, withOffset: -12)
             
-            if eventHeaderImage.image != nil {
-                eventNameLabel.addSubview(eventHeaderImage)
-                eventHeaderImage.autoPinEdgesToSuperviewEdges()
-            }
+            // Constraints for event banner image (same as eventNameLabel.constraints)
+            eventHeaderImage.autoPinEdge(.Top, toEdge: .Top, ofView: eventNameLabel)
+            eventHeaderImage.autoPinEdge(.Left, toEdge: .Left, ofView: eventNameLabel)
+            eventHeaderImage.autoPinEdge(.Right, toEdge: .Right, ofView: eventNameLabel)
+            eventHeaderImage.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: eventNameLabel)
             
             // constraints for backgroundImage
             backgroundImage.autoPinEdge(.Top, toEdge: .Bottom, ofView: eventNameLabel)
@@ -385,7 +404,34 @@ extension EventMenuViewController {
         
         if segue.identifier == "SpeakerList" {
             let destination = segue.destinationViewController as! SpeakerListTableViewController
-            destination.speakers = self.sortSpeakersByLastName()
+            
+            var keynoteSpeakers = [SISpeaker]()
+            var concurrentSpeakers = [SISpeaker]()
+            var unknownSpeakers = [SISpeaker]()
+            
+            let speakers: [SISpeaker] = Array(event.speakers.values)
+            
+            for speaker in speakers {
+                
+                switch speaker.speakerType {
+                case .Keynote:
+                    keynoteSpeakers.append(speaker)
+                case .Concurrent:
+                    concurrentSpeakers.append(speaker)
+                default:
+                    unknownSpeakers.append(speaker)
+                }
+                
+            }
+            
+            sortSpeakersInPlaceByLastName(&keynoteSpeakers)
+            sortSpeakersInPlaceByLastName(&concurrentSpeakers)
+            sortSpeakersInPlaceByLastName(&unknownSpeakers)
+            
+            destination.keyNoteSpeakers = keynoteSpeakers
+            destination.concurrentSpeakers = concurrentSpeakers
+            destination.unknownSpeakers = unknownSpeakers
+            
         }
         
         if segue.identifier == "RecipientsView" {
@@ -449,7 +495,7 @@ extension EventMenuViewController {
                     }
                 }
                 
-                for letter in Alphabet().alphabet() {
+                for letter in Alphabet.alphabet() {
                     if let section = sections[letter] {
                         exhibitorSections.append((letter, section))
                     }
@@ -473,7 +519,7 @@ extension EventMenuViewController {
                     
                     // Get first letter of affiliate name
                     let character = getCharacterForSection(affiliate.name)
-                    
+
                     // Add to dictionary
                     if var section = sections[character] {
                         section.append(affiliate)
@@ -483,7 +529,7 @@ extension EventMenuViewController {
                     }
                 }
                 
-                for letter in Alphabet().alphabet() {
+                for letter in Alphabet.alphabet() {
                     if let section = sections[letter] {
                         affiliateSections.append((letter, section))
                     }
@@ -546,28 +592,29 @@ extension EventMenuViewController {
     // MARK: - Custom Class Functions
     func getCharacterForSection(name: String) -> String {
         
-        // Get first letter of name
-        let fullName : [String?] = name.split(" ")
-        var temp = ""
-        if let first = fullName[0] {
+        guard let fullname = name.split(" ") else {
+            return ""
+        }
+        
+        var usedName = ""
+
+        // Check that the first word in the name is not "the", and if so, use the next word in name.
+        if let first = fullname.first {
             if first.lowercaseString == "the" {
-                if let second = fullName[1] {
-                    temp = second
-                }
+                usedName = name.next(first, delimiter: " ")!
             } else {
-                temp = first
+                usedName = first
             }
         }
         
-        let char : Character = temp.characters.first!
-        var value : String = String(char).uppercaseString
+        let sectionCharacter = String(usedName.characters.first!).uppercaseString
         
-        // If name begins with a number, change to the # character
-        if Int(value) != nil {
-            value = "#"
+        // If name begins with a number, change to the '#' character.
+        guard let _ = Int(sectionCharacter) else {
+            return sectionCharacter
         }
         
-        return value
+        return "#"
     }
     
     func sortAgendaDays() {
@@ -585,14 +632,15 @@ extension EventMenuViewController {
         }
     }
     
-    func sortSpeakersByLastName() -> [SISpeaker]{
-        var speakers = Array(event.speakers.values)
-        if speakers.isEmpty { return [SISpeaker]() }
+    func sortSpeakersInPlaceByLastName(inout speakers: [SISpeaker]) {
+        
+        if speakers.isEmpty { return }
+        
         for i in 0 ..< speakers.count - 1 {
             
             for n in 0 ..< speakers.count - i - 1 {
                 
-                if speakers[n].getLastName() > speakers[n+1].getLastName() {
+                if speakers[n].name.last! > speakers[n+1].name.last! {
                     let speaker = speakers[n]
                     speakers[n] = speakers[n+1]
                     speakers[n+1] = speaker
@@ -601,8 +649,6 @@ extension EventMenuViewController {
             }
             
         }
-        
-        return speakers
     }
 
 }

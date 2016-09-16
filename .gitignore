@@ -4,6 +4,9 @@
 *.xcscmblueprint
 *.xcbkptlist
 
+#CocoaPods
+Pods
+
 #Git
 README.md
 

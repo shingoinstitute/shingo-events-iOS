@@ -8,28 +8,38 @@
 
 import UIKit
 
-class SpeakerListCell: UITableViewCell {
-    
-    var speaker: SISpeaker!
-    @IBOutlet weak var speakerNameLabel: UILabel!
-    @IBOutlet weak var speakerImage: UIImageView!
-    
-    func updateCellProperties(speaker: SISpeaker) {
-        self.speaker = speaker
-        speakerNameLabel.text = speaker.name
-        speakerImage.image = speaker.getSpeakerImage()
-    }
-    
-}
-
 class SpeakerListTableViewController: UITableViewController {
 
-    var speakers: [SISpeaker]!
+    var keyNoteSpeakers: [SISpeaker]!
+    var concurrentSpeakers: [SISpeaker]!
+    var unknownSpeakers: [SISpeaker]!
+    
+    lazy var speakerList: [[SISpeaker]!] = [
+        self.keyNoteSpeakers,
+        self.concurrentSpeakers,
+        self.unknownSpeakers
+    ]
+    
+    var dataSource: [[SISpeaker]!] {
+        get {
+            var value = [[SISpeaker]!]()
+            for speakers in speakerList {
+                if speakers == nil { continue }
+                if !speakers.isEmpty { value.append(speakers) }
+            }
+            return value
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        tableView.estimatedRowHeight = 117
+        tableView.rowHeight = UITableViewAutomaticDimension
+        
     }
+    
+    // MARK: - Table view data source
     
     override func tableView(tableView: UITableView, accessoryButtonTappedForRowWithIndexPath indexPath: NSIndexPath) {
         let cell = tableView.cellForRowAtIndexPath(indexPath) as! SpeakerListCell
@@ -45,29 +55,44 @@ class SpeakerListTableViewController: UITableViewController {
         }
     }
     
-    // MARK: - Table view data source
-    
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
+        return dataSource.count
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-        case 0:
-            return speakers.count
-        case 1:
-            return 0
-        default:
-            return 0
-        }
+        return dataSource[section].count
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCellWithIdentifier("SpeakerListCell", forIndexPath: indexPath) as! SpeakerListCell
-        let speaker = speakers[indexPath.row]
-        cell.updateCellProperties(speaker)
+        
+        cell.aiv.hidesWhenStopped = true
 
+        cell.speaker = dataSource[indexPath.section][indexPath.row]
+        
+        if cell.speakerImage.image == nil {
+            cell.aiv.startAnimating()
+        }
+        
         return cell
+    }
+    
+    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
+        let header = UILabel(text: "", font: UIFont(name: "Helvetica", size: 12))
+        header.textColor = .whiteColor()
+        
+        header.text = "  \(dataSource[section][0].speakerType.rawValue) Speakers"
+        
+        return header
+    }
+    
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        
+        if dataSource[section].isEmpty { return 0 }
+        
+        return 32
     }
     
     // MARK: - Navigation
@@ -84,6 +109,43 @@ class SpeakerListTableViewController: UITableViewController {
 }
 
 
+class SpeakerListCell: UITableViewCell {
+
+    @IBOutlet weak var speakerNameLabel: UILabel! {
+        didSet {
+            speakerNameLabel.font = UIFont.boldSystemFontOfSize(16)
+        }
+    }
+    @IBOutlet weak var speakerImage: UIImageView!
+    @IBOutlet weak var speakerTitle: UILabel! {
+        didSet {
+            speakerTitle.font = UIFont.helveticaOfFontSize(15)
+        }
+    }
+    @IBOutlet weak var speakerCompany: UILabel! {
+        didSet {
+            speakerCompany.font = UIFont.helveticaOfFontSize(15)
+        }
+    }
+    @IBOutlet weak var aiv: UIActivityIndicatorView!
+    
+    var speaker: SISpeaker! {
+        didSet {
+            updateCell()
+        }
+    }
+    
+    func updateCell() {
+        speakerNameLabel.text = speaker.name
+        speakerTitle.text = speaker.title
+        speakerCompany.text = speaker.organizationName
+        speaker.getSpeakerImage() { image in
+            self.aiv.stopAnimating()
+            self.speakerImage.image = image
+        }
+    }
+    
+}
 
 
 

@@ -9,6 +9,11 @@
 import Foundation
 import UIKit
 
+protocol SICellDelegate { func updateCell() }
+protocol SISpeakerDelegate { func performActionOnSpeakers(data: [SISpeaker]) }
+protocol SIRequestDelegate { func cancelRequest() }
+protocol SIEventImageLoaderDelegate { func loadedImage(image: UIImage) }
+
 // Shingo IP Colors
 class SIColor: UIColor {
     
@@ -64,13 +69,168 @@ extension UIColor {
     }
 }
 
+enum DeviceType: Double {
+    case NotAvailable = -1.0
+    
+    case IPhone2G     = 1.0
+    case IPhone3G     = 1.1
+    case IPhone3GS    = 1.2
+    case IPhone4      = 2.0
+    case IPhone4S     = 2.1
+    case IPhone5      = 3.0
+    case IPhone5C     = 3.1
+    case IPhone5S     = 3.2
+    case IPhone6Plus  = 5.0
+    case IPhone6      = 4.0
+    case IPhone6S     = 4.1
+    case IPhone6SPlus = 5.1
+    case IPhoneSE     = 3.3
+    
+    case IPodTouch1G = 1.3
+    case IPodTouch2G = 1.4
+    case IPodTouch3G = 1.5
+    case IPodTouch4G = 2.2
+    case IPodTouch5G = 3.4
+    case IPodTouch6  = 3.5
+    
+    case IPad           = 6.0
+    case IPad2          = 6.1
+    case IPad3          = 6.2
+    case IPad4          = 6.3
+    case IPadMini       = 6.4
+    case IPadMiniRetina = 7.0
+    case IPadMini3      = 7.1
+    case IPadMini4      = 7.2
+    case IPadAir        = 7.3
+    case IPadAir2       = 7.4
+    case IPadPro        = 8.0
+    
+    case Simulator = 0
+}
+
+
+
+extension UIDevice {
+    
+    var modelName: String {
+        var systemInfo = utsname()
+        uname(&systemInfo)
+        
+        let machine = systemInfo.machine
+        let mirror = Mirror(reflecting: machine)
+        var identifier = ""
+        
+        for child in mirror.children {
+            if let value = child.value as? Int8 where value != 0 {
+                identifier.append(UnicodeScalar(UInt8(value)))
+            }
+        }
+        return identifier
+    }
+    
+    var deviceType: DeviceType {
+        return parseDeviceType(modelName)
+    }
+    
+    func parseDeviceType(identifier: String) -> DeviceType {
+        
+        if identifier == "i386" || identifier == "x86_64" {
+            return .Simulator
+        }
+        
+        switch identifier {
+        case "iPhone1,1": return .IPhone2G
+        case "iPhone1,2": return .IPhone3G
+        case "iPhone2,1": return .IPhone3GS
+        case "iPhone3,1", "iPhone3,2", "iPhone3,3": return .IPhone4
+        case "iPhone4,1": return .IPhone4S
+        case "iPhone5,1", "iPhone5,2": return .IPhone5
+        case "iPhone5,3", "iPhone5,4": return .IPhone5C
+        case "iPhone6,1", "iPhone6,2": return .IPhone5S
+        case "iPhone7,1": return .IPhone6Plus
+        case "iPhone7,2": return .IPhone6
+        case "iPhone8,2": return .IPhone6SPlus
+        case "iPhone8,1": return .IPhone6S
+        case "iPhone8,4": return .IPhoneSE
+            
+        case "iPod1,1": return .IPodTouch1G
+        case "iPod2,1": return .IPodTouch2G
+        case "iPod3,1": return .IPodTouch3G
+        case "iPod4,1": return .IPodTouch4G
+        case "iPod5,1": return .IPodTouch5G
+        case "iPod7,1": return .IPodTouch6
+            
+        case "iPad1,1", "iPad1,2": return .IPad
+        case "iPad2,1", "iPad2,2", "iPad2,3", "iPad2,4": return .IPad2
+        case "iPad2,5", "iPad2,6", "iPad2,7": return .IPadMini
+        case "iPad3,1", "iPad3,2", "iPad3,3": return .IPad3
+        case "iPad3,4", "iPad3,5", "iPad3,6": return .IPad4
+        case "iPad4,1", "iPad4,2", "iPad4,3": return .IPadAir
+        case "iPad4,4", "iPad4,5", "iPad4,6": return .IPadMiniRetina
+        case "iPad4,7", "iPad4,8": return .IPadMini3
+        case "iPad5,1", "iPad5,2": return .IPadMini4
+        case "iPad5,3", "iPad5,4": return .IPadAir2
+        case "iPad6,3", "iPad6,4", "iPad6,7", "iPad6,8": return .IPadPro
+            
+        default: return .NotAvailable
+        }
+    }
+}
+
 extension String {
     func trim() -> String {
         return self.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
     }
     
-    func split(character: Character) -> [String?]{
+    func split(character: Character) -> [String]? {
         return self.characters.split{$0 == character}.map(String.init)
+    }
+    
+    /// Is the last formation of characters
+    var last: String? {
+        get {
+            if self.isEmpty {
+                return nil
+            } else if let array = self.split(" ") {
+                if array.count == 1 {
+                    return self
+                } else {
+                    return array[array.count - 1]
+                }
+            }
+            return nil
+        }
+    }
+    
+    var first: String? {
+        get {
+            if self.isEmpty {
+                return nil
+            } else if let array = self.split(" ") {
+                if let first = array.first {
+                    return first
+                } else {
+                    return nil
+                }
+            }
+            return nil
+        }
+    }
+    
+    ///Returns the next contiguous string of characters (i.e. the next "word") as a String, separated by the given delimiter, or nil if it does not exist.
+    func next(after: String, delimiter: Character) -> String? {
+        if let array = self.split(delimiter) {
+            for i in 0 ..< array.count {
+                if array[i] == after {
+                    if array.indices.contains(i + 1) {
+                        return array[i+1]
+                    } else {
+                        return nil
+                    }
+                }
+            }
+        }
+        return nil
     }
     
 }
@@ -97,16 +257,36 @@ extension UIView {
     }
 }
 
-struct Alphabet {
-    
-    func alphabet() -> [String] {
-        var alphabet = [String]()
-        for char in Array("ABCDEFGHIJKLM‌​NOPQRSTUVWXYZ#".characters) {
-            alphabet.append(String(char))
+extension UILabel {
+    public convenience init(text: String, font: UIFont!) {
+        self.init()
+        self.text = text
+        self.font = font
+    }
+}
+
+extension UIFont {
+    class func helveticaOfFontSize(size: CGFloat) -> UIFont {
+        if let font = UIFont(name: "Helvetica", size: size) {
+            return font
+        } else {
+            return UIFont.systemFontOfSize(size)
         }
-        return alphabet
     }
     
+    class func boldHelveticaOfFontSize(size: CGFloat) -> UIFont {
+        if let font = UIFont(name: "Helvetica-Bold", size: size) {
+            return font
+        } else {
+            return UIFont.boldSystemFontOfSize(size)
+        }
+    }
+}
+
+struct Alphabet {
+    static func alphabet() -> [String] {
+        return ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "#"]
+    }
 }
 
 extension Double {
@@ -136,7 +316,7 @@ extension UIImage {
         if let representation = UIImagePNGRepresentation(self) {
             return NSData(data: representation).length / 1024
         }
-        return -9999
+        return 0
     }
     
     /// Returns the filesize in KB of a UIImage in a JPEG format with a compression quality of 1.
@@ -144,7 +324,7 @@ extension UIImage {
         if let representation = UIImageJPEGRepresentation(self, 1) {
             return NSData(data: representation).length / 1024
         }
-        return -9999
+        return 0
     }
     
     /// Returns the filesize in KB of a UIImage in a JPEG format with a given compression quality.
@@ -152,7 +332,7 @@ extension UIImage {
         if let representation = UIImageJPEGRepresentation(self, quality) {
             return NSData(data: representation).length / 1024
         }
-        return -9999
+        return 0
     }
 }
 
@@ -178,26 +358,63 @@ extension NSDate {
         return (compare(dateToCompare) == NSComparisonResult.OrderedSame)
     }
     
-    func isNotionallyEmpty() -> Bool {
-        if self.isEqualToDate(NSDate().notionallyEmptyDate()) {
-            return true
-        } else {
-            return false
+    class func notionallyEmptyDate() -> NSDate {
+        return NSDate.init(timeIntervalSince1970: 0)
+    }
+    
+    var isNotionallyEmpty: Bool {
+        get {
+            if self.isEqualToDate(NSDate.notionallyEmptyDate()) {
+                return true
+            } else {
+                return false
+            }
         }
     }
     
-    func notionallyEmptyDate() -> NSDate {
-        return NSDate.init(timeIntervalSince1970: 0)
+    /// Returns time frame between a start date and end date.
+    func timeFrameBetweenDates(startDate start: NSDate, endDate end: NSDate) -> String {
+
+        let calendar = NSCalendar.currentCalendar()
+        let startComponents = calendar.components([.Hour, .Minute], fromDate: start)
+        let endComponents = calendar.components([.Hour, .Minute], fromDate: end)
+        
+        return "\(timeStringFromComponents(hour: startComponents.hour, minute: startComponents.minute)) - \(timeStringFromComponents(hour: endComponents.hour, minute: endComponents.minute))"
     }
+    
+    func timeStringFromComponents(hour h: Int, minute: Int) -> String {
+        var hour = h
+        var am_pm = ""
+        
+        switch hour {
+        case 0 ..< 12:
+            am_pm = "am"
+        case 13 ..< 25:
+            hour = hour - 12
+            am_pm = "pm"
+        case 12:
+            am_pm = "pm"
+        default:
+            break
+        }
+        
+        if minute < 10 {
+            return "\(hour):0\(minute) \(am_pm)"
+        } else {
+            return "\(hour):\(minute) \(am_pm)"
+        }
+    }
+    
+    
 }
 
 extension NSDateFormatter {
     /// Returns an object initialized with a set locale, date format, and time zone.
-    convenience init(locale: String, dateFormat: String, timeZone: String) {
+    convenience init(locale: String, dateFormat: String) {
         self.init()
         self.locale = NSLocale(localeIdentifier: locale)
         self.dateFormat = dateFormat
-        self.timeZone = NSTimeZone(abbreviation: timeZone)
+        self.timeZone = NSTimeZone(abbreviation: "GMT")
     }
     
 }
@@ -258,8 +475,13 @@ extension Array where Element:NSLayoutConstraint {
     }
 }
 
-
-
+func isValidEmail(testStr:String) -> Bool {
+    print("validate emilId: \(testStr)")
+    let emailRegEx = "^(?:(?:(?:(?: )*(?:(?:(?:\\t| )*\\r\\n)?(?:\\t| )+))+(?: )*)|(?: )+)?(?:(?:(?:[-A-Za-z0-9!#$%&’*+/=?^_'{|}~]+(?:\\.[-A-Za-z0-9!#$%&’*+/=?^_'{|}~]+)*)|(?:\"(?:(?:(?:(?: )*(?:(?:[!#-Z^-~]|\\[|\\])|(?:\\\\(?:\\t|[ -~]))))+(?: )*)|(?: )+)\"))(?:@)(?:(?:(?:[A-Za-z0-9](?:[-A-Za-z0-9]{0,61}[A-Za-z0-9])?)(?:\\.[A-Za-z0-9](?:[-A-Za-z0-9]{0,61}[A-Za-z0-9])?)*)|(?:\\[(?:(?:(?:(?:(?:[0-9]|(?:[1-9][0-9])|(?:1[0-9][0-9])|(?:2[0-4][0-9])|(?:25[0-5]))\\.){3}(?:[0-9]|(?:[1-9][0-9])|(?:1[0-9][0-9])|(?:2[0-4][0-9])|(?:25[0-5]))))|(?:(?:(?: )*[!-Z^-~])*(?: )*)|(?:[Vv][0-9A-Fa-f]+\\.[-A-Za-z0-9._~!$&'()*+,;=:]+))\\])))(?:(?:(?:(?: )*(?:(?:(?:\\t| )*\\r\\n)?(?:\\t| )+))+(?: )*)|(?: )+)?$"
+    let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+    let result = emailTest.evaluateWithObject(testStr)
+    return result
+}
 
 
 

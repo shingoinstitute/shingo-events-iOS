@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "BBBFB5F3CCA2E5785A0B2D0E6C42A946"
+               BlueprintIdentifier = "715FACB1F991739008719FA3DF328EC3"
                BuildableName = "Pods_Shingo_Events.framework"
                BlueprintName = "Pods-Shingo Events"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -45,7 +45,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "BBBFB5F3CCA2E5785A0B2D0E6C42A946"
+            BlueprintIdentifier = "715FACB1F991739008719FA3DF328EC3"
             BuildableName = "Pods_Shingo_Events.framework"
             BlueprintName = "Pods-Shingo Events"
             ReferencedContainer = "container:Pods.xcodeproj">

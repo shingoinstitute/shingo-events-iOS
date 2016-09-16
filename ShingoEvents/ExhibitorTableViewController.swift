@@ -31,7 +31,7 @@ class ExhibitorTableViewController: UITableViewController {
     private func displayNoContentNotification() {
         let label: UILabel = {
             let view = UILabel.newAutoLayoutView()
-            view.text = "No Content Available"
+            view.text = "This event does not have any exhibitors."
             view.textColor = .whiteColor()
             view.sizeToFit()
             return view

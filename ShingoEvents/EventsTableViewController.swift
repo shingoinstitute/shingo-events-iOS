@@ -13,20 +13,16 @@ import Foundation
 class EventsTableViewController: UITableViewController {
     
     // MARK: - Properties
-    var events: [SIEvent] = [SIEvent]()
+    var events: [SIEvent]!
 
-    var activityView : ActivityViewController = {
-        let view = ActivityViewController()
-        view.modalPresentationStyle = .OverCurrentContext
-        return view
-    }()
-    
     override func loadView() {
         super.loadView()
         
         //Begin requests for each event.
         for event in events {
-            event.requestEvent(nil)
+            if !event.didLoadEventData {
+                event.requestEvent(nil)
+            }
         }
     }
     
@@ -54,7 +50,7 @@ class EventsTableViewController: UITableViewController {
     }
 }
 
-extension EventsTableViewController {
+extension EventsTableViewController: SICellDelegate {
 
     // MARK: - Table view data source
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -72,23 +68,24 @@ extension EventsTableViewController {
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("EventsCell", forIndexPath: indexPath) as! EventTableViewCell
-        cell.backgroundColor = .clearColor()
-        cell.selectionStyle = .None
-        cell.updateCell(event: events[indexPath.row])
+        
+        cell.delegate = self
+        cell.event = events[indexPath.row]
+        
         return cell
     }
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
-        if !events[indexPath.row].didLoadBannerImage {
-            return 75.0
+        if !events[indexPath.row].didLoadImage {
+            return 75
         }
         
         if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
             return 240
         }
         
-        return 155.0 as CGFloat
+        return 155
     }
     
     override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -121,7 +118,6 @@ extension EventsTableViewController {
         cell.backgroundColor = SIColor.lightBlueColor()
         
         let activityView = ActivityViewController()
-        activityView.modalPresentationStyle = .OverCurrentContext
         activityView.message = "Loading Event Data..."
 
         let event = events[indexPath.row]
@@ -131,10 +127,15 @@ extension EventsTableViewController {
             presentViewController(activityView, animated: false, completion: { 
                 event.requestEvent() {
                     self.dismissViewControllerAnimated(true, completion: {
-                        self.performSegueWithIdentifier("EventMenu", sender: self.events[indexPath.row])
-                    });
+                        if event.didLoadEventData {
+                            self.performSegueWithIdentifier("EventMenu", sender: self.events[indexPath.row])
+                        } else {
+                            self.displayBadRequestNotification()
+                        }
+                        
+                    })
                 }
-            });
+            })
         }
     }
     
@@ -150,6 +151,11 @@ extension EventsTableViewController {
         }
     }
     
+    func updateCell() {
+        tableView.beginUpdates()
+        tableView.endUpdates()
+    }
+    
 }
 
 
@@ -160,10 +166,23 @@ class EventTableViewCell: UITableViewCell {
     @IBOutlet weak var dateRangeLabel: UILabel!
     @IBOutlet weak var eventImage: UIImageView!
     
-    var event: SIEvent!
+    var event: SIEvent! {
+        didSet {
+            updateCell()
+        }
+    }
     
-    func updateCell(event event: SIEvent) {
-        self.event = event
+    var delegate: SICellDelegate?
+    
+    func updateCell() {
+        
+        backgroundColor = .clearColor()
+        selectionStyle = .None
+        
+        guard let event = event else {
+            return
+        }
+
         nameLabel.text = event.name
         
         eventImage.contentMode = .ScaleAspectFill
@@ -171,14 +190,25 @@ class EventTableViewCell: UITableViewCell {
         eventImage.layer.cornerRadius = 3.0
         
         let dateFormatter = NSDateFormatter()
+        dateFormatter.timeZone = NSTimeZone(abbreviation: "GMT")
         dateFormatter.dateFormat = "yyyy-MM-dd"
         dateFormatter.dateStyle = .MediumStyle
         let dates = "\(dateFormatter.stringFromDate(event.startDate)) - \(dateFormatter.stringFromDate(event.endDate))"
         dateRangeLabel.text = dates
         
         event.getBannerImage() { image in
+            
+            guard let image = image else {
+                return
+            }
+            
             self.eventImage.image = image
+            if let delegate = self.delegate {
+                delegate.updateCell()
+            }
+            
         }
+        
     }
     
 }

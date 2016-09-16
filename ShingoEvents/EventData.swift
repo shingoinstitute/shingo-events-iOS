@@ -10,25 +10,33 @@ import Foundation
 import Alamofire
 import AlamofireImage
 import MapKit
-
+import Crashlytics
 
 class SIObject : AnyObject {
     
     var name : String
     var id : String
     private var image : UIImage?
+    var didLoadImage: Bool
     
     init() {
         name = ""
         id = ""
         image = nil
+        didLoadImage = false
     }
     
-    private func requestImage(url : String, callback: (image : UIImage?) -> Void) {
-        Alamofire.request(.GET, url).responseImage { response in
+    private func requestImage(URLString: URLStringConvertible, callback: (image : UIImage?) -> Void) {
+        
+        if !SIRequest.isValidURL(URLString) {
+            callback(image: nil)
+            return
+        }
+        
+        Alamofire.request(.GET, URLString).responseImage { response in
             
             guard let image = response.result.value else {
-                print("Warning, image download failed. Requested from \(url), for SIObject \"\(self.name)\".")
+                print("Warning, image download failed. Requested from \(URLString), for SIObject \"\(self.name)\".")
                 callback(image: nil)
                 return
             }
@@ -51,7 +59,6 @@ class SIEvent: SIObject {
     var didLoadAffiliates : Bool
     var didLoadExhibitors : Bool
     var didLoadSponsors : Bool
-    var didLoadBannerImage : Bool
     
     // related objects
     var speakers : [String:SISpeaker] // Speakers are stored in a dictionary to prevent duplicate speakers from appearing that may be recieved from the API response
@@ -83,7 +90,6 @@ class SIEvent: SIObject {
         didLoadAffiliates = false
         didLoadExhibitors = false
         didLoadSponsors = false
-        didLoadBannerImage = false
         speakers = [String:SISpeaker]() // key = speaker's name, value = SISpeaker object
         agendaItems = [SIAgenda]()
         venues = [SIVenue]()
@@ -91,8 +97,8 @@ class SIEvent: SIObject {
         affiliates = [SIAffiliate]()
         exhibitors = [SIExhibitor]()
         sponsors = [SISponsor]()
-        startDate = NSDate().notionallyEmptyDate()
-        endDate = NSDate().notionallyEmptyDate()
+        startDate = NSDate.notionallyEmptyDate()
+        endDate = NSDate.notionallyEmptyDate()
         salesText = ""
         eventType = ""
         bannerURL = ""
@@ -245,7 +251,7 @@ class SIEvent: SIObject {
         requestImage(bannerURL) { image in
             if let image = image as UIImage? {
                 self.image = image
-                self.didLoadBannerImage = true
+                self.didLoadImage = true
             }
             if let cb = callback {
                 cb()
@@ -287,7 +293,7 @@ class SIAgenda: SIObject {
         didLoadSessions = false
         sessions = [SISession]()
         displayName = ""
-        date = NSDate().notionallyEmptyDate()
+        date = NSDate.notionallyEmptyDate()
         super.init()
     }
     
@@ -315,15 +321,32 @@ class SIAgenda: SIObject {
 
 class SISession: SIObject {
     
+    enum SessionType: String {
+        case Break = "Break",
+        Concurrent = "Concurrent",
+        Gemba = "Gemba",
+        Keynote = "Keynote",
+        Meal = "Meal",
+        Social = "Social",
+        Tour = "Tour",
+        FullDayWorkshop = "Full Day Workshop",
+        HalfDayWorkshop = "Half Day Workshop",
+        MultiDayWorkshop = "Multi Day Workshop",
+        None = "Session"
+    }
+    
     var didLoadSpeakers : Bool
     var didLoadSessionInformation : Bool
     var speakers : [SISpeaker]
     
+    // Used for a displaying property in a UITableViewCell
+    var isSelected: Bool
+    
     var displayName : String
-    var sessionType : String
+    var sessionType : SessionType
     var sessionTrack : String
     var summary : String
-    var room : String
+    var room : SIRoom?
     var startDate : NSDate
     var endDate : NSDate
     
@@ -331,13 +354,14 @@ class SISession: SIObject {
         didLoadSpeakers = false
         didLoadSessionInformation = false
         speakers = [SISpeaker]()
-        displayName = "No Display Name"
-        startDate = NSDate().notionallyEmptyDate()
-        endDate = NSDate().notionallyEmptyDate()
-        sessionType = ""
+        displayName = ""
+        startDate = NSDate.notionallyEmptyDate()
+        endDate = NSDate.notionallyEmptyDate()
+        sessionType = .None
         sessionTrack = ""
         summary = ""
-        room = ""
+        isSelected = false
+        room = nil
         super.init()
     }
     
@@ -374,26 +398,72 @@ class SISession: SIObject {
         });
     }
     
+    func parseSessionType(type: String) -> SessionType {
+        switch type {
+            case "Break":
+                return .Break
+            case "Concurrent":
+                return .Concurrent
+            case "Gemba":
+                return .Gemba
+            case "Keynote":
+                return .Keynote
+            case "Meal":
+                return .Meal
+            case "Social":
+                return .Social
+            case "Tour":
+                return .Tour
+            case "Full Day Workshop":
+                return .FullDayWorkshop
+            case "Half Day Workshop":
+                return .HalfDayWorkshop
+            case "Multi Day Workshop":
+                return .MultiDayWorkshop
+            default:
+                return .None
+        }
+    }
+    
 }
 
 
 class SISpeaker: SIObject {
+    
+    enum SpeakerType: String {
+        case Keynote = "Keynote",
+        Concurrent = "Concurrent",
+        None = ""
+    }
     
     // related object id's
     var associatedSessionIds : [String]
     
     // speaker specific properties
     var title : String
-    var pictureURL : String {
+    var pictureURL : String /*{
         didSet {
             if !pictureURL.isEmpty {
-                requestSpeakerImage()
+                dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), {
+                    self.requestSpeakerImage(nil)
+                })
             }
         }
-    }
+    }*/
     var biography : String
     var organizationName : String
     var contactEmail : String
+    var speakerType: SpeakerType {
+        didSet {
+            /* 
+             Since the same speaker can speak in both Keynote and Concurrent sessions,
+             if the speaker speaks in any Keynote session, his/her speakerType should
+             remain as a Keynote Speaker. This is to maintain integrity of the SIObjects
+             speaker types when displaying each section of speakers in SpeakerListTBLVC.
+             */
+            if oldValue == .Keynote { self.speakerType = .Keynote }
+        }
+    }
     
     override init() {
         title = ""
@@ -401,6 +471,7 @@ class SISpeaker: SIObject {
         biography = ""
         organizationName = ""
         contactEmail = ""
+        speakerType = .None
         associatedSessionIds = [String]()
         super.init()
     }
@@ -409,86 +480,85 @@ class SISpeaker: SIObject {
     private func requestSpeakerInformation(callback: () -> ()) {
         SIRequest().requestSpeaker(speakerId: id) { (speaker) in
             if let speaker = speaker {
-                self.title = speaker.title
                 
+                self.name = speaker.name
+                self.id = speaker.id
+                
+                self.title = speaker.title
                 if self.pictureURL.isEmpty {
                     self.pictureURL = speaker.pictureURL
                 }
-                
                 self.biography = speaker.biography
                 self.organizationName = speaker.organizationName
+                self.contactEmail = speaker.contactEmail
+//                self.isKeynoteSpeaker = speaker.isKeynoteSpeaker
                 self.associatedSessionIds = speaker.associatedSessionIds
-                self.name = speaker.name
-                self.id = speaker.id
             }
         }
     }
     
-    private func requestSpeakerImage() {
-        if !pictureURL.isEmpty {
-            requestImage(pictureURL) { image in
-                if let image = image as UIImage? {
-                    self.image = image
+    private func requestSpeakerImage(callback: (() -> Void)?) {
+        
+        if image != nil || pictureURL.isEmpty{
+            if let cb = callback { cb() }
+            return
+        }
+        
+        requestImage(pictureURL, callback: { image in
+            if let image = image as UIImage? {
+                self.image = image
+                self.didLoadImage = true
+            }
+            
+            if let cb = callback { cb() }
+        });
+    }
+    
+    func getSpeakerImage(callback: (UIImage) -> Void) {
+        
+        guard let image = self.image else {
+            requestSpeakerImage() {
+                if let image = self.image {
+                    callback(image)
+                } else if let image = UIImage(named: "silhouette") {
+                    callback(image)
+                } else {
+                    callback(UIImage())
                 }
             }
-        }
-    }
-    
-    func getSpeakerImage() -> UIImage {
-        
-        if let image = self.image {
-            return image
+            return
         }
         
-        if let image = UIImage(named: "silhouette") {
-            return image
-        }
+        callback(image)
         
-        return UIImage()
-    }
-    
-    func getLastName() -> String {
-        let fullName = name.split(" ")
-        return fullName[fullName.count - 1]!
-    }
-    
-    private func getFirstName() -> String {
-        let fullName = name.split(" ")
-        
-        if let firstName = fullName.first {
-            return firstName!
-        }
-        
-        return ""
     }
     
     private func getMiddleInitial() -> [String] {
-        let fullName = name.split(" ")
-        
-        var middleInitial = [String]()
-        
-        if fullName.count > 2 {
-            for name in fullName {
-                if name != fullName[0] && name != fullName[fullName.count - 1] {
-                    let char = name!.characters.first!
-                    let initial = String(char).uppercaseString
-                    middleInitial.append("\(initial).")
+        if let fullname = name.split(" ") {
+            
+            var middle = [String]()
+            
+                for n in fullname {
+                    if n != name.first! || n != name.last! {
+                        middle.append(String(n.characters.first!).uppercaseString)
+                    }
                 }
-            }
+            
+            return middle
+        } else {
+            return [""]
         }
-        
-        return middleInitial
     }
     
     /// Returns name in format of: "lastname, firstname M.I."
     func getFormattedName() -> String {
         
-        var fullName = getLastName() + ", " + getFirstName()
+        var formattedName = name.first! + ", " + name.last!
         for mi in getMiddleInitial() {
-            fullName += " \(mi) "
+            formattedName += " \(mi) "
         }
         
-        return fullName
+        return formattedName
     }
     
 }
@@ -509,6 +579,7 @@ class SIExhibitor: SIObject {
             requestExhibitorBannerImage(nil)
         }
     }
+    var didLoadBannerImage: Bool
     var mapCoordinate : (Double, Double)
     private var bannerImage : UIImage?
     
@@ -520,6 +591,7 @@ class SIExhibitor: SIObject {
         bannerURL = ""
         mapCoordinate = (0, 0)
         bannerImage = nil
+        didLoadBannerImage = false
         super.init()
     }
     
@@ -533,6 +605,7 @@ class SIExhibitor: SIObject {
         requestImage(logoURL, callback: { image in
             if let image = image as UIImage? {
                 self.image = image
+                self.didLoadImage = true
             }
             
             if let cb = callback { cb() }
@@ -551,6 +624,7 @@ class SIExhibitor: SIObject {
         requestImage(bannerURL, callback: { image in
             if let image = image {
                 self.bannerImage = image
+                self.didLoadBannerImage = true
             }
             
             if let cb = callback {
@@ -624,16 +698,15 @@ class SIHotel: SIObject {
 
 class SIRecipient: SIObject {
     
-    enum AwardType {
-        case ShingoPrize,
-        Silver,
-        Bronze,
-        Research,
-        Publication,
-        None
+    enum AwardType: String {
+        case ShingoPrize = "Shingo Prize",
+        Silver = "Silver Medallion",
+        Bronze = "Bronze Medallion",
+        Research = "Research Award",
+        Publication = "Publication Award",
+        None = "N/A"
     }
 
-    var didLoadImage : Bool
     var awardType : AwardType
     var organization : String
     var photoList : String //Comma separated list of URLs to photos
@@ -648,7 +721,6 @@ class SIRecipient: SIObject {
     }
 
     override init() {
-        didLoadImage = false
         awardType = AwardType.None
         organization = ""
         logoURL = ""
@@ -669,20 +741,20 @@ class SIRecipient: SIObject {
         
         if image != nil || logoURL.isEmpty {
             if let cb = callback { cb() }
-        } else {
-            requestImage(logoURL) { image in
-                if let image = image {
-                    self.image = image
-                    self.didLoadImage = true
-                }
-                if let cb = callback { cb() }
-            }
+            return
         }
         
+        requestImage(logoURL) { image in
+            if let image = image {
+                self.image = image
+                self.didLoadImage = true
+            }
+            if let cb = callback { cb() }
+        }
         
     }
     
-    func getRecipientImage(callback: (UIImage?) -> Void) {
+    func getRecipientImage(callback: (UIImage) -> Void) {
         
         if let image = self.image {
             callback(image)
@@ -690,10 +762,8 @@ class SIRecipient: SIObject {
             requestRecipientImage() {
                 if let image = self.image {
                     callback(image)
-                } else if let image = UIImage(named: "logoComingSoon500x500") {
-                    callback(image)
                 } else {
-                    callback(nil)
+                    callback(UIImage(named: "logoComingSoon")!)
                 }
             }
         }
@@ -703,9 +773,18 @@ class SIRecipient: SIObject {
 class SIRoom: SIObject {
     
     var mapCoordinate : (Double, Double)
+    var floor: String
+    var associatedVenueID: String
+    
+    convenience init(name: String) {
+        self.init()
+        self.name = name
+    }
     
     override init() {
         mapCoordinate = (Double(), Double())
+        floor = ""
+        associatedVenueID = ""
         super.init()
     }
     
@@ -742,6 +821,8 @@ class SISponsor: SIObject {
     }
     private var bannerImage : UIImage?
     private var splashScreenImage : UIImage?
+    var didLoadBannerImage: Bool
+    var didLoadSplashScreen: Bool
     
     convenience init(name: String, id: String, sponsorType: SponsorType, summary: String, logoURL: String, bannerURL: String) {
         self.init()
@@ -761,6 +842,8 @@ class SISponsor: SIObject {
         splashScreenURL = ""
         bannerImage = nil
         splashScreenImage = nil
+        didLoadBannerImage = false
+        didLoadSplashScreen = false
         super.init()
     }
     
@@ -780,6 +863,7 @@ class SISponsor: SIObject {
         self.requestImage(logoURL) { image in
             if let image = image {
                 self.image = image
+                self.didLoadImage = true
             }
             if let cb = callback { cb() }
         }
@@ -795,6 +879,7 @@ class SISponsor: SIObject {
         requestImage(bannerURL) { image in
             if let image = image as UIImage? {
                 self.bannerImage = image
+                self.didLoadBannerImage = true
             }
             if let cb = callback {
                 cb()
@@ -812,6 +897,7 @@ class SISponsor: SIObject {
         requestImage(splashScreenURL, callback: { image in
             if let image = image {
                 self.splashScreenImage = image
+                self.didLoadSplashScreen = true
             }
             if let cb = callback {
                 cb()
@@ -829,7 +915,7 @@ class SISponsor: SIObject {
         requestBannerImage() {
             if let image = self.image {
                 callback(image: image)
-            } else if let image = UIImage(named: "shingo_icon") {
+            } else if let image = UIImage(named: "Shingo Icon Small") {
                 callback(image: image)
             } else {
                 callback(image: UIImage())
@@ -966,6 +1052,7 @@ class SIVenueMap: SIObject {
             self.requestImage(mapURL) { (image) in
                 if let image = image {
                     self.image = image
+                    self.didLoadImage = true
                 }
                 if let cb = callback { cb() }
             }
@@ -1004,6 +1091,7 @@ class SIAffiliate: SIObject {
         requestImage(logoURL) { (image) in
             if let image = image {
                 self.image = image
+                self.didLoadImage = true
             }
             
             if let cb = callback { cb() }
@@ -1016,7 +1104,7 @@ class SIAffiliate: SIObject {
             requestAffiliateLogoImage() {
                 if let image = self.image {
                     callback(image)
-                } else if let image = UIImage(named: "shingo_icon") {
+                } else if let image = UIImage(named: "Shingo Icon Small") {
                     callback(image)
                 } else {
                     callback(UIImage())
