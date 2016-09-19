@@ -22,8 +22,8 @@ class RecipientTableViewCell: UITableViewCell {
     @IBOutlet weak var recipientImage: UIImageView!
 
     var logoImage : UIImageView = {
-        let view = UIImageView.newAutoLayoutView()
-        view.contentMode = .ScaleAspectFit
+        let view = UIImageView.newAutoLayout()
+        view.contentMode = .scaleAspectFit
         view.layer.cornerRadius = 3
         view.clipsToBounds = true
         return view
@@ -32,7 +32,7 @@ class RecipientTableViewCell: UITableViewCell {
     var nameLabel: UILabel = {
         let view = UILabel()
         view.numberOfLines = 0
-        view.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        view.lineBreakMode = NSLineBreakMode.byWordWrapping
         return view
     }()
     
@@ -45,21 +45,21 @@ class RecipientTableViewCell: UITableViewCell {
             contentView.addSubview(logoImage)
             contentView.addSubview(nameLabel)
             
-            logoImage.autoSetDimensionsToSize(CGSizeMake(115, 115))
-            logoImage.autoPinEdge(.Top, toEdge: .Top, ofView: contentView, withOffset: 8)
-            logoImage.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 8)
+            logoImage.autoSetDimensions(to: CGSize(width: 115, height: 115))
+            logoImage.autoPinEdge(.top, to: .top, of: contentView, withOffset: 8)
+            logoImage.autoPinEdge(.left, to: .left, of: contentView, withOffset: 8)
             
-            nameLabel.autoPinEdge(.Top, toEdge: .Top, ofView: contentView)
-            nameLabel.autoPinEdge(.Left, toEdge: .Right, ofView: logoImage, withOffset: 5)
-            nameLabel.autoPinEdge(.Right, toEdge: .Right, ofView: contentView)
-            nameLabel.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: contentView)
+            nameLabel.autoPinEdge(.top, to: .top, of: contentView)
+            nameLabel.autoPinEdge(.left, to: .right, of: logoImage, withOffset: 5)
+            nameLabel.autoPinEdge(.right, to: .right, of: contentView)
+            nameLabel.autoPinEdge(.bottom, to: .bottom, of: contentView)
             
             didSetupConstraints = true
         }
         super.updateConstraints()
     }
     
-    private func updateCell() {
+    fileprivate func updateCell() {
         if let recipient = recipient {
             
             nameLabel.text = recipient.name

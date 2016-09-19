@@ -45,10 +45,10 @@ class RecipientsTableViewController: UITableViewController {
     }
     
     // MARK: - Navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "ChallengerInfoView" {
-            let destination = segue.destinationViewController as! ChallengerInfoViewController
+            let destination = segue.destination as! ChallengerInfoViewController
             if let recipient = sender as? SIRecipient {
                 destination.navigationController?.topViewController?.title = recipient.name
                 destination.recipient = recipient
@@ -57,7 +57,7 @@ class RecipientsTableViewController: UITableViewController {
         }
         
         if segue.identifier == "ResearchInfoView" {
-            let destination = segue.destinationViewController as! ResearchInfoViewController
+            let destination = segue.destination as! ResearchInfoViewController
             
             if let recipient = sender as? SIRecipient {
                 destination.navigationController?.topViewController?.title = recipient.name
@@ -74,62 +74,62 @@ class RecipientsTableViewController: UITableViewController {
 extension RecipientsTableViewController {
     
     // MARK: - Table view data source
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return dataSource.count
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return dataSource[section].count
     }
 
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("RecipientCell", forIndexPath: indexPath) as! RecipientTableViewCell
-        cell.recipient = dataSource[indexPath.section][indexPath.row]
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "RecipientCell", for: indexPath) as! RecipientTableViewCell
+        cell.recipient = dataSource[(indexPath as NSIndexPath).section][(indexPath as NSIndexPath).row]
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let cell = tableView.cellForRowAtIndexPath(indexPath) as! RecipientTableViewCell
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as! RecipientTableViewCell
         
         if let recipient = cell.recipient {
             switch recipient.awardType {
                 case .ShingoPrize,
                      .Silver,
                      .Bronze:
-                    self.performSegueWithIdentifier("ChallengerInfoView", sender: recipient)
+                    self.performSegue(withIdentifier: "ChallengerInfoView", sender: recipient)
                 case .Research:
-                    self.performSegueWithIdentifier("ResearchInfoView", sender: recipient)
+                    self.performSegue(withIdentifier: "ResearchInfoView", sender: recipient)
                 case .Publication:
                     // Might change segue later to be a screen customized to publication recipients
-                    self.performSegueWithIdentifier("ResearchInfoView", sender: recipient)
+                    self.performSegue(withIdentifier: "ResearchInfoView", sender: recipient)
                 default:
                     return
             }
         }
     }
     
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 42
     }
 
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 132
     }
     
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
         view.backgroundColor = SIColor.shingoGoldColor()
         
         let header = UILabel()
-        header.font = UIFont.boldSystemFontOfSize(18)
-        header.textColor = .whiteColor()
+        header.font = UIFont.boldSystemFont(ofSize: 18)
+        header.textColor = .white
         
         header.text = "\(dataSource[section][0].awardType.rawValue) Recipients"
         
         view.addSubview(header)
         
-        header.autoPinEdgesToSuperviewEdgesWithInsets(UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8))
+        header.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8))
         
         return view
     }

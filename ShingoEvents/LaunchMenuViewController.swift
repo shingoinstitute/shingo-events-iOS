@@ -33,27 +33,27 @@ class MainMenuViewController: UIViewController, SIRequestDelegate {
     
     // Shingo Logo background image
     var menuBackgroundImage: UIImageView = {
-        let view = UIImageView.newAutoLayoutView()
-        view.backgroundColor = .whiteColor()
-        view.contentMode = .ScaleAspectFill
+        let view = UIImageView.newAutoLayout()
+        view.backgroundColor = .white
+        view.contentMode = .scaleAspectFill
         view.image = UIImage(named: "Shingo Icon Fullscreen")
         return view
     }()
     
     // Shingo Institute Title
     var shingoLogoImageView : UIImageView = {
-        let view = UIImageView.newAutoLayoutView()
+        let view = UIImageView.newAutoLayout()
         if let image = UIImage(named: "Shingo Title") {
             view.image = image
         }
-        view.contentMode = .ScaleAspectFit
+        view.contentMode = .scaleAspectFit
         return view
     }()
     
     // Container for menu items
     var contentView: UIView = {
-        let view = UIView.newAutoLayoutView()
-        view.backgroundColor = .clearColor()
+        let view = UIView.newAutoLayout()
+        view.backgroundColor = .clear
         return view
     }()
     
@@ -74,24 +74,24 @@ class MainMenuViewController: UIViewController, SIRequestDelegate {
         navigationItem.title = ""
         
         if let nav = navigationController?.navigationBar {
-            nav.barStyle = UIBarStyle.Black
-            nav.tintColor = UIColor.yellowColor()
+            nav.barStyle = UIBarStyle.black
+            nav.tintColor = UIColor.yellow
         }
         
         updateViewConstraints()
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBarHidden = true
+        navigationController?.isNavigationBarHidden = true
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        navigationController?.navigationBarHidden = false
+        navigationController?.isNavigationBarHidden = false
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.animateLayout()
     }
@@ -103,59 +103,59 @@ class MainMenuViewController: UIViewController, SIRequestDelegate {
 
             view.addSubviews([menuBackgroundImage, contentView, shingoLogoImageView])
             
-            view.bringSubviewToFront(copyRightLabel)
+            view.bringSubview(toFront: copyRightLabel)
             
-            menuBackgroundImage.autoPinEdgeToSuperviewEdge(.Top)
-            menuBackgroundImage.autoPinEdge(.Left, toEdge: .Left, ofView: view)
-            menuBackgroundImage.autoPinEdge(.Right, toEdge: .Right, ofView: view)
-            menuBackgroundImage.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: view)
+            menuBackgroundImage.autoPinEdge(toSuperviewEdge: .top)
+            menuBackgroundImage.autoPinEdge(.left, to: .left, of: view)
+            menuBackgroundImage.autoPinEdge(.right, to: .right, of: view)
+            menuBackgroundImage.autoPinEdge(.bottom, to: .bottom, of: view)
             
-            contentView.autoSetDimension(.Height, toSize: 265)
-            contentViewHeightConstraint = contentView.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: view, withOffset: -view.frame.height)
-            if UIDevice.currentDevice().deviceType.rawValue >= 6.0 {
-                contentView.autoPinEdge(.Left, toEdge: .Left, ofView: view, withOffset: 175.0)
-                contentView.autoPinEdge(.Right, toEdge: .Right, ofView: view, withOffset: -175.0)
+            contentView.autoSetDimension(.height, toSize: 265)
+            contentViewHeightConstraint = contentView.autoPinEdge(.bottom, to: .bottom, of: view, withOffset: -view.frame.height)
+            if UIDevice.current.deviceType.rawValue >= 6.0 {
+                contentView.autoPinEdge(.left, to: .left, of: view, withOffset: 175.0)
+                contentView.autoPinEdge(.right, to: .right, of: view, withOffset: -175.0)
             } else {
-                contentView.autoPinEdge(.Left, toEdge: .Left, ofView: view, withOffset: 10.0)
-                contentView.autoPinEdge(.Right, toEdge: .Right, ofView: view, withOffset: -10.0)
+                contentView.autoPinEdge(.left, to: .left, of: view, withOffset: 10.0)
+                contentView.autoPinEdge(.right, to: .right, of: view, withOffset: -10.0)
             }
         
-            eventsBtn.autoSetDimension(.Height, toSize: 60)
-            eventsBtn.autoPinEdge(.Top, toEdge: .Top, ofView: contentView, withOffset: 5)
-            eventsBtn.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 5)
-            eventsBtn.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -5)
+            eventsBtn.autoSetDimension(.height, toSize: 60)
+            eventsBtn.autoPinEdge(.top, to: .top, of: contentView, withOffset: 5)
+            eventsBtn.autoPinEdge(.left, to: .left, of: contentView, withOffset: 5)
+            eventsBtn.autoPinEdge(.right, to: .right, of: contentView, withOffset: -5)
             
-            shingoModelBtn.autoSetDimension(.Height, toSize: 60)
-            shingoModelBtn.autoPinEdge(.Top, toEdge: .Bottom, ofView: eventsBtn, withOffset: 8)
-            shingoModelBtn.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 5)
-            shingoModelBtn.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -5)
+            shingoModelBtn.autoSetDimension(.height, toSize: 60)
+            shingoModelBtn.autoPinEdge(.top, to: .bottom, of: eventsBtn, withOffset: 8)
+            shingoModelBtn.autoPinEdge(.left, to: .left, of: contentView, withOffset: 5)
+            shingoModelBtn.autoPinEdge(.right, to: .right, of: contentView, withOffset: -5)
             
-            settingsBtn.autoSetDimension(.Height, toSize: 60)
-            settingsBtn.autoPinEdge(.Top, toEdge: .Bottom, ofView: shingoModelBtn, withOffset: 8)
-            settingsBtn.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 5)
-            settingsBtn.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -5)
+            settingsBtn.autoSetDimension(.height, toSize: 60)
+            settingsBtn.autoPinEdge(.top, to: .bottom, of: shingoModelBtn, withOffset: 8)
+            settingsBtn.autoPinEdge(.left, to: .left, of: contentView, withOffset: 5)
+            settingsBtn.autoPinEdge(.right, to: .right, of: contentView, withOffset: -5)
             
-            shingoLogoImageView.autoSetDimension(.Height, toSize: 125)
-            shingoLogoImageView.autoPinToTopLayoutGuideOfViewController(self, withInset: 8)
-            shingoLogoImageView.autoPinEdgeToSuperviewEdge(.Left, withInset: 8)
-            shingoLogoImageView.autoPinEdgeToSuperviewEdge(.Right, withInset: 8)
+            shingoLogoImageView.autoSetDimension(.height, toSize: 125)
+            shingoLogoImageView.autoPin(toTopLayoutGuideOf: self, withInset: 8)
+            shingoLogoImageView.autoPinEdge(toSuperviewEdge: .left, withInset: 8)
+            shingoLogoImageView.autoPinEdge(toSuperviewEdge: .right, withInset: 8)
             
             let buttons:NSArray = [eventsBtn, shingoModelBtn, settingsBtn]
             for button in buttons as! [UIButton] {
-                contentView.bringSubviewToFront(button)
-                button.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.75)
+                contentView.bringSubview(toFront: button)
+                button.backgroundColor = UIColor.black.withAlphaComponent(0.75)
                 button.layer.cornerRadius = 5
-                button.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+                button.setTitleColor(UIColor.white, for: UIControlState())
                 
                 let arrow = UIImageView()
                 arrow.image = UIImage(named: "right-arrow")
-                arrow.contentMode = .ScaleAspectFit
+                arrow.contentMode = .scaleAspectFit
 
                 button.addSubview(arrow)
                 
-                arrow.autoSetDimensionsToSize(CGSizeMake(30, 30))
-                arrow.autoPinEdge(.Right, toEdge: .Right, ofView: button, withOffset: -8)
-                arrow.autoAlignAxis(.Horizontal, toSameAxisOfView: button)
+                arrow.autoSetDimensions(to: CGSize(width: 30, height: 30))
+                arrow.autoPinEdge(.right, to: .right, of: button, withOffset: -8)
+                arrow.autoAlignAxis(.horizontal, toSameAxisOf: button)
             }
             
             didSetupConstraints = true
@@ -164,15 +164,15 @@ class MainMenuViewController: UIViewController, SIRequestDelegate {
     }
     
     func cancelRequest() {
-        dismissViewControllerAnimated(false, completion: {
+        dismiss(animated: false, completion: {
             if let request = self.request {
                 request.cancel()
             }
         })
     }
     
-    private func requestEvents() {
-        SIRequest().requestEvents({ events in
+    fileprivate func requestEvents() {
+        let _ = SIRequest().requestEvents({ events in
             if let events = events {
                 self.events = events
                 self.eventsDidLoad = true
@@ -186,16 +186,16 @@ extension MainMenuViewController {
     
     // MARK: - Button Listeners
     
-    @IBAction func didTapEvents(sender: AnyObject) {
+    @IBAction func didTapEvents(_ sender: AnyObject) {
         shouldPerformSegueToEvents()
     }
     
-    @IBAction func didTapShingoModel(sender: AnyObject) {
-        performSegueWithIdentifier("ShingoModel", sender: self)
+    @IBAction func didTapShingoModel(_ sender: AnyObject) {
+        performSegue(withIdentifier: "ShingoModel", sender: self)
     }
     
-    @IBAction func didTapSupport(sender: AnyObject) {
-        performSegueWithIdentifier("Support", sender: self)
+    @IBAction func didTapSupport(_ sender: AnyObject) {
+        performSegue(withIdentifier: "Support", sender: self)
     }
     
 }
@@ -204,42 +204,49 @@ extension MainMenuViewController: UnwindToMainVCProtocol {
     
     // Mark: - Navigation
     
-    private func shouldPerformSegueToEvents() {
-        if !Reach().checkForInternetConnection() {
+    func shouldPerformSegueToEvents() {
+        
+        let reach = Reachability()!
+        
+        if reach.isReachable {
+            if eventsDidLoad {
+                performSegue(withIdentifier: "EventsView", sender: self.events)
+            } else {
+                present(activityView, animated: true, completion: {
+                    self.request = SIRequest().requestEvents({ events in
+                        self.dismiss(animated: false, completion: {
+                            if let events = events {
+                                self.events = events
+                                self.eventsDidLoad = true
+                                self.performSegue(withIdentifier: "EventsView", sender: self.events)
+                            } else {
+                                self.displayServerError()
+                            }
+                        })
+                    })
+                })
+            }
+        } else {
             SIRequest.displayInternetAlert(forViewController: self, completion: { _ in
                 self.animateLayout()
             })
-        } else if eventsDidLoad {
-            performSegueWithIdentifier("EventsView", sender: self.events)
-        } else {
-            presentViewController(activityView, animated: true, completion: {
-                self.request = SIRequest().requestEvents({ events in
-                    self.dismissViewControllerAnimated(false, completion: {
-                        if let events = events {
-                            self.events = events
-                            self.eventsDidLoad = true
-                            self.performSegueWithIdentifier("EventsView", sender: self.events)
-                        } else {
-                            self.displayServerError()
-                        }
-                    })
-                })
-            })
         }
+        
+        
     }
     
-    @IBAction func unwindToLaunchMenu(segue: UIStoryboardSegue) {}
+    @IBAction func unwindToLaunchMenu(_ segue: UIStoryboardSegue) {}
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "EventsView" {
-            let destination = segue.destinationViewController as! EventsTableViewController
+            let destination = segue.destination as! EventsTableViewController
             if let events = sender as? [SIEvent] {
                 destination.events = events
             }
         }
         
         if segue.identifier == "Support" {
-            let destination = segue.destinationViewController as! SettingsTableViewController
+            let destination = segue.destination as! SettingsTableViewController
             destination.delegate = self
         }
         
@@ -247,7 +254,7 @@ extension MainMenuViewController: UnwindToMainVCProtocol {
     
     // Protocal for passing data back from the Support
     // page when the 'reload data' button is pressed
-    func updateEvents(events: [SIEvent]?) {
+    func updateEvents(_ events: [SIEvent]?) {
         if let events = events {
             self.events = events
         }
@@ -258,20 +265,20 @@ extension MainMenuViewController: UnwindToMainVCProtocol {
 extension MainMenuViewController {
     
     //MARK: - Other
-    private func displayServerError() {
-        let alert = UIAlertController(title: "Server Error", message: "We're currently experiencing a problem with our server and are working on a solution to fix it as quickly as possible. We're sorry for any inconvenience this has caused.", preferredStyle: .Alert)
-        let action = UIAlertAction(title: "Dismiss", style: .Cancel, handler: { _ in
+    fileprivate func displayServerError() {
+        let alert = UIAlertController(title: "Server Error", message: "We're currently experiencing a problem with our server and are working on a solution to fix it as quickly as possible. We're sorry for any inconvenience this has caused.", preferredStyle: .alert)
+        let action = UIAlertAction(title: "Dismiss", style: .cancel, handler: { _ in
             self.animateLayout()
         })
         alert.addAction(action)
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
     }
     
-    private func animateLayout() {
+    fileprivate func animateLayout() {
         if !didAnimateLayout {
             
             // Sets new constraint constant to make the menu appear onscreen in an appropriate position depending on screen size.
-            switch UIDevice.currentDevice().deviceType.rawValue {
+            switch UIDevice.current.deviceType.rawValue {
             case 1.0 ..< 3.0:
                 //iPhone 2 - iPhone 4/SE
                 contentViewHeightConstraint.constant = 15
@@ -290,18 +297,18 @@ extension MainMenuViewController {
             
             // @deployment
             // Uncomment lines below to animate constraints
-            UIView.animateWithDuration(1.5,
-                                       delay: 0.5,
-                                       usingSpringWithDamping: 0.5,
-                                       initialSpringVelocity: 0,
-                                       options: UIViewAnimationOptions(),
-                                       animations: { self.view.layoutIfNeeded() },
-                                       completion: nil)
+//            UIView.animate(withDuration: 1.5,
+//                                       delay: 0.5,
+//                                       usingSpringWithDamping: 0.5,
+//                                       initialSpringVelocity: 0,
+//                                       options: UIViewAnimationOptions(),
+//                                       animations: { self.view.layoutIfNeeded() },
+//                                       completion: nil)
  
  
             // @production
             // Uncomment line below for non-animated constraints
-//            view.layoutIfNeeded()
+            view.layoutIfNeeded()
             
             didAnimateLayout = true
         }

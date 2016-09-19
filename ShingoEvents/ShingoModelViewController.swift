@@ -12,39 +12,39 @@ import UIKit
 class ShingoModelViewController: UIViewController {
 
     var scrollView:UIScrollView = {
-        let view = UIScrollView.newAutoLayoutView()
+        let view = UIScrollView.newAutoLayout()
         view.translatesAutoresizingMaskIntoConstraints = true
-        view.backgroundColor = .whiteColor()
-        view.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
+        view.backgroundColor = .white
+        view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         return view
     }()
     
-    var contentView:UIView = UIView.newAutoLayoutView()
+    var contentView:UIView = UIView.newAutoLayout()
     
     var shingoModel:UIImageView = {
-        let view = UIImageView.newAutoLayoutView()
-        view.backgroundColor = .clearColor()
+        let view = UIImageView.newAutoLayout()
+        view.backgroundColor = .clear
         view.image = UIImage(named: "Shingo Model")
-        view.contentMode = .ScaleAspectFit
+        view.contentMode = .scaleAspectFit
         return view
     }()
     
     var guidingPrinciples:UIImageView = {
-        let view = UIImageView.newAutoLayoutView()
-        view.backgroundColor = .clearColor()
+        let view = UIImageView.newAutoLayout()
+        view.backgroundColor = .clear
         view.image = UIImage(named: "Guiding Principles Portrait")
-        view.contentMode = .ScaleAspectFit
+        view.contentMode = .scaleAspectFit
         return view
     }()
     
-    let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    let delegate = UIApplication.shared.delegate as! AppDelegate
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         delegate.shouldSupportAllOrientation = true
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         delegate.shouldSupportAllOrientation = false
     }
@@ -73,33 +73,33 @@ class ShingoModelViewController: UIViewController {
         guidingPrinciplesDimensionConstraints.active = false
         
         //Resizes images height/width constraints after screen rotation
-        shingoModelDimensionConstraints = shingoModel.autoSetDimensionsToSize(shingoModel.sizeThatViewFits(view: view))
-        guidingPrinciplesDimensionConstraints = guidingPrinciples.autoSetDimensionsToSize(guidingPrinciples.sizeThatViewFits(view: view))
+        shingoModelDimensionConstraints = shingoModel.autoSetDimensions(to: shingoModel.sizeThatViewFits(view: view))
+        guidingPrinciplesDimensionConstraints = guidingPrinciples.autoSetDimensions(to: guidingPrinciples.sizeThatViewFits(view: view))
         
     }
     
     override func updateViewConstraints() {
         if !didUpdateConstraints {
             
-            shingoModelDimensionConstraints = shingoModel.autoSetDimensionsToSize(shingoModel.sizeThatViewFits(view: view))
-            guidingPrinciplesDimensionConstraints = guidingPrinciples.autoSetDimensionsToSize(guidingPrinciples.sizeThatViewFits(view: view))
+            shingoModelDimensionConstraints = shingoModel.autoSetDimensions(to: shingoModel.sizeThatViewFits(view: view))
+            guidingPrinciplesDimensionConstraints = guidingPrinciples.autoSetDimensions(to: guidingPrinciples.sizeThatViewFits(view: view))
             
-            scrollView.autoPinEdge(.Top, toEdge: .Top, ofView: view)
-            scrollView.autoPinEdge(.Left, toEdge: .Left, ofView: view)
-            scrollView.autoPinEdge(.Right, toEdge: .Right, ofView: view)
-            scrollView.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: view)
+            scrollView.autoPinEdge(.top, to: .top, of: view)
+            scrollView.autoPinEdge(.left, to: .left, of: view)
+            scrollView.autoPinEdge(.right, to: .right, of: view)
+            scrollView.autoPinEdge(.bottom, to: .bottom, of: view)
             
-            contentView.autoPinEdge(.Top, toEdge: .Top, ofView: scrollView)
-            contentView.autoPinEdge(.Left, toEdge: .Left, ofView: scrollView)
-            contentView.autoPinEdge(.Right, toEdge: .Right, ofView: scrollView)
-            contentView.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: scrollView)
+            contentView.autoPinEdge(.top, to: .top, of: scrollView)
+            contentView.autoPinEdge(.left, to: .left, of: scrollView)
+            contentView.autoPinEdge(.right, to: .right, of: scrollView)
+            contentView.autoPinEdge(.bottom, to: .bottom, of: scrollView)
             
-            shingoModel.autoPinEdge(.Top, toEdge: .Top, ofView: contentView)
-            shingoModel.autoAlignAxis(.Vertical, toSameAxisOfView: view)
+            shingoModel.autoPinEdge(.top, to: .top, of: contentView)
+            shingoModel.autoAlignAxis(.vertical, toSameAxisOf: view)
             
-            guidingPrinciples.autoPinEdge(.Top, toEdge: .Bottom, ofView: shingoModel)
-            guidingPrinciples.autoAlignAxis(.Vertical, toSameAxisOfView: view)
-            guidingPrinciples.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: contentView)
+            guidingPrinciples.autoPinEdge(.top, to: .bottom, of: shingoModel)
+            guidingPrinciples.autoAlignAxis(.vertical, toSameAxisOf: view)
+            guidingPrinciples.autoPinEdge(.bottom, to: .bottom, of: contentView)
             
             didUpdateConstraints = true
         }

@@ -18,18 +18,18 @@ class ExhibitorTableViewCell: UITableViewCell {
     }
     
     var logoImage : UIImageView = {
-        let view = UIImageView.newAutoLayoutView()
-        view.contentMode = .ScaleAspectFit
+        let view = UIImageView.newAutoLayout()
+        view.contentMode = .scaleAspectFit
         view.layer.cornerRadius = 3
         view.clipsToBounds = true
         return view
     }()
     
     var nameLabel:UILabel = {
-        let view = UILabel.newAutoLayoutView()
+        let view = UILabel.newAutoLayout()
         view.numberOfLines = 4
-        view.lineBreakMode = .ByWordWrapping
-        view.font = UIFont.boldSystemFontOfSize(14.0)
+        view.lineBreakMode = .byWordWrapping
+        view.font = UIFont.boldSystemFont(ofSize: 14.0)
         return view
     }()
     
@@ -38,35 +38,35 @@ class ExhibitorTableViewCell: UITableViewCell {
     override func updateConstraints() {
         if !didSetupConstraints {
             
-            self.accessoryType = .DisclosureIndicator
+            self.accessoryType = .disclosureIndicator
             
             contentView.addSubview(logoImage)
             contentView.addSubview(nameLabel)
             
             NSLayoutConstraint.autoSetPriority(UILayoutPriorityRequired) {
-                self.logoImage.autoSetContentCompressionResistancePriorityForAxis(.Vertical)
+                self.logoImage.autoSetContentCompressionResistancePriority(for: .vertical)
             }
             
-            if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
-                logoImage.autoSetDimensionsToSize(CGSizeMake(300 - 16, 200 - 16))
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                logoImage.autoSetDimensions(to: CGSize(width: 300 - 16, height: 200 - 16))
             } else {
-                logoImage.autoSetDimensionsToSize(CGSizeMake(150 - 16, 150 - 16))
+                logoImage.autoSetDimensions(to: CGSize(width: 150 - 16, height: 150 - 16))
             }
             
-            logoImage.autoAlignAxis(.Horizontal, toSameAxisOfView: contentView)
-            logoImage.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 8)
+            logoImage.autoAlignAxis(.horizontal, toSameAxisOf: contentView)
+            logoImage.autoPinEdge(.left, to: .left, of: contentView, withOffset: 8)
             
-            nameLabel.autoPinEdgeToSuperviewEdge(.Top)
-            nameLabel.autoPinEdge(.Left, toEdge: .Right, ofView: logoImage, withOffset: 8)
-            nameLabel.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -10)
-            nameLabel.autoPinEdgeToSuperviewEdge(.Bottom)
+            nameLabel.autoPinEdge(toSuperviewEdge: .top)
+            nameLabel.autoPinEdge(.left, to: .right, of: logoImage, withOffset: 8)
+            nameLabel.autoPinEdge(.right, to: .right, of: contentView, withOffset: -10)
+            nameLabel.autoPinEdge(toSuperviewEdge: .bottom)
             
             didSetupConstraints = true
         }
         super.updateConstraints()
     }
     
-    private func updateCell() {
+    fileprivate func updateCell() {
         if let exhibitor = exhibitor {
             nameLabel.text = exhibitor.name
             exhibitor.getLogoImage() { image in

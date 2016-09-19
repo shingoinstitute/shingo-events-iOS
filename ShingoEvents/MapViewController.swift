@@ -25,10 +25,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         if location == nil {
             location = CLLocationCoordinate2D(latitude: 0, longitude: 0)
             
-            let warning = UIAlertController(title: "Oops!", message: "Sorry, your conference location is currently unavailable.", preferredStyle: UIAlertControllerStyle.Alert)
-            let cancelAction = UIAlertAction(title: "Ok", style: .Cancel, handler: nil)
+            let warning = UIAlertController(title: "Oops!", message: "Sorry, your conference location is currently unavailable.", preferredStyle: UIAlertControllerStyle.alert)
+            let cancelAction = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
             warning.addAction(cancelAction)
-            self.presentViewController(warning, animated: true, completion: nil)
+            self.present(warning, animated: true, completion: nil)
             
         } else {
             let region:MKCoordinateRegion = MKCoordinateRegionMake(location!, initial_zoom_region)
@@ -45,13 +45,13 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     }
 
 
-    @IBAction func getDirectionsButton(sender: AnyObject) {
+    @IBAction func getDirectionsButton(_ sender: AnyObject) {
         mapItem = MKMapItem(placemark: MKPlacemark(coordinate: location!, addressDictionary: nil))
         mapItem.name = "Shingo Conference Location"
         let regionSpan = MKCoordinateRegionMakeWithDistance(location!, 0.5, 0.5)
-        mapItem.openInMapsWithLaunchOptions([
-            MKLaunchOptionsMapCenterKey : NSValue(MKCoordinate: self.location!),
-            MKLaunchOptionsMapSpanKey : NSValue(MKCoordinateSpan: regionSpan.span)
+        mapItem.openInMaps(launchOptions: [
+            MKLaunchOptionsMapCenterKey : NSValue(mkCoordinate: self.location!),
+            MKLaunchOptionsMapSpanKey : NSValue(mkCoordinateSpan: regionSpan.span)
         ])
 
     }

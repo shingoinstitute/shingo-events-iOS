@@ -20,35 +20,35 @@ class ActivityViewController: UIViewController {
         }
     }
     var activityView:UIView = {
-        let view = UIView.newAutoLayoutView()
+        let view = UIView.newAutoLayout()
         view.backgroundColor = UIColor(white: 0.0, alpha: 0.5)
         view.layer.cornerRadius = 12
         return view
     }()
     var messageLabel : UILabel = {
-        let view = UILabel.newAutoLayoutView()
-        view.font = UIFont.boldSystemFontOfSize(UIFont.labelFontSize())
-        view.textColor = UIColor.whiteColor()
-        view.textAlignment = .Center
+        let view = UILabel.newAutoLayout()
+        view.font = UIFont.boldSystemFont(ofSize: UIFont.labelFontSize)
+        view.textColor = UIColor.white
+        view.textAlignment = .center
         view.numberOfLines = 0
         return view
     }()
     var cancelRequestButton: UIButton = {
-        let button = UIButton.newAutoLayoutView()
-        button.setTitle("Cancel", forState: .Normal)
-        button.setTitleColor(UIView().tintColor, forState: .Normal)
+        let button = UIButton.newAutoLayout()
+        button.setTitle("Cancel", for: UIControlState())
+        button.setTitleColor(UIView().tintColor, for: UIControlState())
         
-        button.layer.shadowColor = UIColor.grayColor().CGColor
-        button.layer.shadowOffset = CGSizeMake(0, 1.0)
+        button.layer.shadowColor = UIColor.gray.cgColor
+        button.layer.shadowOffset = CGSize(width: 0, height: 1.0)
         button.layer.shadowOpacity = 1
         button.layer.shadowRadius = 2
         button.layer.masksToBounds = false
         button.layer.cornerRadius = 5
         
-        button.backgroundColor = .whiteColor()
+        button.backgroundColor = .white
         return button
     }()
-    var activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+    var activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
     var didAddActivityIndicatorConstraints = false
     
     convenience init() {
@@ -62,13 +62,13 @@ class ActivityViewController: UIViewController {
         setup()
     }
     
-    private func setup() {
-        modalTransitionStyle = .CrossDissolve
-        modalPresentationStyle = .OverCurrentContext
-        view.backgroundColor = UIColor.clearColor()
+    fileprivate func setup() {
+        modalTransitionStyle = .crossDissolve
+        modalPresentationStyle = .overCurrentContext
+        view.backgroundColor = UIColor.clear
         view.addSubviews([activityView, cancelRequestButton])
         activityView.addSubviews([activityIndicatorView, messageLabel])
-        cancelRequestButton.addTarget(self, action: #selector(ActivityViewController.didTapCancel(_:)), forControlEvents: .TouchUpInside)
+        cancelRequestButton.addTarget(self, action: #selector(ActivityViewController.didTapCancel(_:)), for: .touchUpInside)
     }
     
     override func viewDidLoad() {
@@ -80,31 +80,31 @@ class ActivityViewController: UIViewController {
     override func updateViewConstraints() {
         
         if !didAddActivityIndicatorConstraints {
-            activityView.autoAlignAxis(.Horizontal, toSameAxisOfView: view)
-            activityView.autoAlignAxis(.Vertical, toSameAxisOfView: view)
+            activityView.autoAlignAxis(.horizontal, toSameAxisOf: view)
+            activityView.autoAlignAxis(.vertical, toSameAxisOf: view)
             
             messageLabel.sizeToFit()
             
             activityIndicatorView.startAnimating()
 
-            activityView.autoSetDimensionsToSize(CGSize(width: 160.0, height: 160.0))
-            activityView.autoAlignAxis(.Horizontal, toSameAxisOfView: view)
-            activityView.autoAlignAxis(.Vertical, toSameAxisOfView: view)
+            activityView.autoSetDimensions(to: CGSize(width: 160.0, height: 160.0))
+            activityView.autoAlignAxis(.horizontal, toSameAxisOf: view)
+            activityView.autoAlignAxis(.vertical, toSameAxisOf: view)
             
-            messageLabel.autoPinEdge(.Left, toEdge: .Left, ofView: activityView, withOffset: 5)
-            messageLabel.autoPinEdge(.Right, toEdge: .Right, ofView: activityView, withOffset: -5)
-            messageLabel.autoPinEdge(.Top, toEdge: .Top, ofView: activityView, withOffset: 24)
+            messageLabel.autoPinEdge(.left, to: .left, of: activityView, withOffset: 5)
+            messageLabel.autoPinEdge(.right, to: .right, of: activityView, withOffset: -5)
+            messageLabel.autoPinEdge(.top, to: .top, of: activityView, withOffset: 24)
             
-            activityIndicatorView.autoAlignAxis(.Vertical, toSameAxisOfView: activityView)
-            activityIndicatorView.autoAlignAxis(.Horizontal, toSameAxisOfView: activityView, withOffset: 8)
+            activityIndicatorView.autoAlignAxis(.vertical, toSameAxisOf: activityView)
+            activityIndicatorView.autoAlignAxis(.horizontal, toSameAxisOf: activityView, withOffset: 8)
             
             if delegate != nil {
-                cancelRequestButton.autoPinEdge(.Top, toEdge: .Bottom, ofView: activityView, withOffset: 8)
-                cancelRequestButton.autoPinEdge(.Left, toEdge: .Left, ofView: activityView)
-                cancelRequestButton.autoPinEdge(.Right, toEdge: .Right, ofView: activityView)
-                cancelRequestButton.autoSetDimension(.Height, toSize: 42)
+                cancelRequestButton.autoPinEdge(.top, to: .bottom, of: activityView, withOffset: 8)
+                cancelRequestButton.autoPinEdge(.left, to: .left, of: activityView)
+                cancelRequestButton.autoPinEdge(.right, to: .right, of: activityView)
+                cancelRequestButton.autoSetDimension(.height, toSize: 42)
             } else {
-                cancelRequestButton.hidden = true
+                cancelRequestButton.isHidden = true
             }
             
             didAddActivityIndicatorConstraints = true
@@ -112,7 +112,7 @@ class ActivityViewController: UIViewController {
         super.updateViewConstraints()
     }
 
-    func didTapCancel(sender: AnyObject) {
+    func didTapCancel(_ sender: AnyObject) {
         if let delegate = self.delegate {
             delegate.cancelRequest()
         }

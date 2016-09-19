@@ -16,7 +16,7 @@ class SIObject : AnyObject {
     
     var name : String
     var id : String
-    private var image : UIImage?
+    fileprivate var image : UIImage?
     var didLoadImage: Bool
     
     init() {
@@ -26,44 +26,19 @@ class SIObject : AnyObject {
         didLoadImage = false
     }
     
-    private func requestImage(URLString: URLStringConvertible, callback: (image : UIImage?) -> Void) {
+    fileprivate func requestImage(URLString: String, callback: @escaping (
+        UIImage?) -> Void) {
         
-        /* 
-         Alomofire can potentially cause a crash if a bad URL that meets certain criteria 
-         is passed into this function as a parameter. We ran into this issue with an image
-         recieved from cloudinary.com where we get a lot of the images for this app.
-         
-         As a workaround, the next few lines of code are a near copy of the logic used in
-         Alamofire's source code where the crash can occur. The only difference is the use
-         the the guard statement on the third else statement. If it gets to that point and
-         Alamofire can still not use the given url, it will simply return from the function 
-         and not make the request.
-         */
-        if let _ = URLString as? NSMutableURLRequest {
-            // continue
-        } else if let _ = URLString as? NSURLRequest {
-            // continue
-        } else {
-            guard let _ = NSURL(string: URLString.URLString) else {
-                Crashlytics.sharedInstance().recordError(NSError(domain: "NSURLErrorDomain", code: 72283, userInfo: [
-                        NSLocalizedDescriptionKey : "Failed to init NSURL using URLStringConvertable.URLString (\(URLString)).",
-                        NSLocalizedFailureReasonErrorKey : "Failed to init an NSURL object because the URL provided could not be used for an unknown reason."
-                    ]))
-                callback(image: nil)
-                return
-            }
-        }
-        
-        Alamofire.request(.GET, URLString).responseImage { response in
+        Alamofire.request(URLString).responseImage { response in
             
             guard let image = response.result.value else {
                 print("Warning, image download failed. Requested from \(URLString), for SIObject \"\(self.name)\".")
-                callback(image: nil)
+                callback(nil)
                 return
             }
         
             print("Image Downloaded; \(image.fileSizeOfPNG())kb recieved; width: \(Int(image.size.width)), height: \(Int(image.size.height)); Type: \(Mirror(reflecting: self).subjectType).")
-            callback(image: image)
+            callback(image)
         }
     }
 }
@@ -91,8 +66,8 @@ class SIEvent: SIObject {
     var sponsors : [SISponsor]
     
     // event specific properties
-    var startDate : NSDate
-    var endDate : NSDate
+    var startDate : Date
+    var endDate : Date
     var eventType : String
     var salesText : String
     var bannerURL : String {
@@ -118,8 +93,8 @@ class SIEvent: SIObject {
         affiliates = [SIAffiliate]()
         exhibitors = [SIExhibitor]()
         sponsors = [SISponsor]()
-        startDate = NSDate.notionallyEmptyDate()
-        endDate = NSDate.notionallyEmptyDate()
+        startDate = Date.notionallyEmptyDate()
+        endDate = Date.notionallyEmptyDate()
         salesText = ""
         eventType = ""
         bannerURL = ""
@@ -127,7 +102,7 @@ class SIEvent: SIObject {
     }
     
     // Requests for information on event objects.
-    func requestEvent(callback: (() -> Void)?) {
+    func requestEvent(_ callback: (() -> Void)?) {
         didLoadEventData = false
         SIRequest().requestEvent(eventId: id) { (event) in
             if let event = event {
@@ -152,7 +127,7 @@ class SIEvent: SIObject {
         }
     }
     
-    func requestSpeakers(callback:() -> ()) {
+    func requestSpeakers(_ callback:@escaping () -> ()) {
         SIRequest().requestSpeakers(eventId: id) { (speakers) in
             if let speakers = speakers {
                 for speaker in speakers {
@@ -164,7 +139,7 @@ class SIEvent: SIObject {
         }
     }
     
-    func requestAgendas(callback: () -> ()) {
+    func requestAgendas(_ callback: @escaping () -> ()) {
         SIRequest().requestAgendaDays(eventId: self.id, callback: { agendas in
             
             guard let agendas = agendas else {
@@ -179,7 +154,7 @@ class SIEvent: SIObject {
         });
     }
     
-    func requestVenues(callback: () -> ()) {
+    func requestVenues(_ callback: @escaping () -> ()) {
         SIRequest().requestVenues(eventId: self.id, callback: { (venues) in
             guard let venues = venues else {
                 callback()
@@ -197,7 +172,7 @@ class SIEvent: SIObject {
         });
     }
     
-    func requestRecipients(callback: () -> ()) {
+    func requestRecipients(_ callback: @escaping () -> ()) {
         SIRequest().requestRecipients(eventId: self.id) { (recipients) in
             guard let recipients = recipients else {
                 callback()
@@ -211,7 +186,7 @@ class SIEvent: SIObject {
         }
     }
     
-    func requestAffiliates(callback: () -> ()) {
+    func requestAffiliates(_ callback: @escaping () -> ()) {
         SIRequest().requestAffiliates { (affiliates) in
             guard let affiliates = affiliates else {
                 callback()
@@ -225,7 +200,7 @@ class SIEvent: SIObject {
         }
     }
     
-    func requestExhibitors(callback: () -> ()) {
+    func requestExhibitors(_ callback: @escaping () -> ()) {
         SIRequest().requestExhibitors(eventId: self.id) { (exhibitors) in
             guard let exhibitors = exhibitors else {
                 callback()
@@ -239,7 +214,7 @@ class SIEvent: SIObject {
         }
     }
     
-    func requestSponsors(callback: () -> ()) {
+    func requestSponsors(_ callback: @escaping () -> ()) {
         SIRequest().requestSponsors(eventId: self.id) { (sponsors) in
             guard let sponsors = sponsors else {
                 callback()
@@ -253,7 +228,7 @@ class SIEvent: SIObject {
         }
     }
     
-    private func requestBannerImage(callback: (() -> Void)?) {
+    fileprivate func requestBannerImage(_ callback: (() -> Void)?) {
         
         if self.image != nil {
             if let cb = callback {
@@ -269,7 +244,7 @@ class SIEvent: SIObject {
             return
         }
         
-        requestImage(bannerURL) { image in
+        self.requestImage(URLString: bannerURL) { image in
             if let image = image as UIImage? {
                 self.image = image
                 self.didLoadImage = true
@@ -280,17 +255,17 @@ class SIEvent: SIObject {
         }
     }
     
-    func getBannerImage(callback: (image: UIImage?) -> Void) {
+    func getBannerImage(_ callback: @escaping (_ image: UIImage?) -> Void) {
         if let image = self.image {
-            callback(image: image)
+            callback(image)
             return
         }
         
         requestBannerImage() {
             if let image = self.image {
-                callback(image: image)
+                callback(image)
             } else {
-                callback(image: nil)
+                callback(nil)
             }
         }
     }
@@ -308,18 +283,18 @@ class SIAgenda: SIObject {
     
     // agenda specific properties
     var displayName : String
-    var date : NSDate
+    var date : Date
     
     override init() {
         didLoadSessions = false
         sessions = [SISession]()
         displayName = ""
-        date = NSDate.notionallyEmptyDate()
+        date = Date.notionallyEmptyDate()
         super.init()
     }
     
     /// Gets session information for SIAgenda object using an agenda ID.
-    func requestAgendaSessions(callback: () -> ()) {
+    func requestAgendaSessions(_ callback: @escaping () -> ()) {
         
         switch id.isEmpty {
         case true:
@@ -368,16 +343,16 @@ class SISession: SIObject {
     var sessionTrack : String
     var summary : String
     var room : SIRoom?
-    var startDate : NSDate
-    var endDate : NSDate
+    var startDate : Date
+    var endDate : Date
     
     override init() {
         didLoadSpeakers = false
         didLoadSessionInformation = false
         speakers = [SISpeaker]()
         displayName = ""
-        startDate = NSDate.notionallyEmptyDate()
-        endDate = NSDate.notionallyEmptyDate()
+        startDate = Date.notionallyEmptyDate()
+        endDate = Date.notionallyEmptyDate()
         sessionType = .None
         sessionTrack = ""
         summary = ""
@@ -387,7 +362,7 @@ class SISession: SIObject {
     }
     
     /// Gets additional information about the session object.
-    func requestSessionInformation(callback:() -> ()) {
+    func requestSessionInformation(_ callback:@escaping () -> ()) {
         SIRequest().requestSession(id, callback: { session in
             if let session = session {
                 self.displayName = session.displayName
@@ -409,7 +384,7 @@ class SISession: SIObject {
     }
     
     /// Gets all speakers associated with the session object.
-    private func requestSpeakers(callback: () -> ()) {
+    fileprivate func requestSpeakers(_ callback: @escaping () -> ()) {
         SIRequest().requestSpeakers(sessionId: id, callback: { speakers in
             if let speakers = speakers {
                 self.speakers = speakers
@@ -419,7 +394,7 @@ class SISession: SIObject {
         });
     }
     
-    func parseSessionType(type: String) -> SessionType {
+    func parseSessionType(_ type: String) -> SessionType {
         switch type {
             case "Break":
                 return .Break
@@ -498,7 +473,7 @@ class SISpeaker: SIObject {
     }
     
     /// Gets additional information about the speaker object.
-    private func requestSpeakerInformation(callback: () -> ()) {
+    fileprivate func requestSpeakerInformation(_ callback: () -> ()) {
         SIRequest().requestSpeaker(speakerId: id) { (speaker) in
             if let speaker = speaker {
                 
@@ -518,14 +493,14 @@ class SISpeaker: SIObject {
         }
     }
     
-    private func requestSpeakerImage(callback: (() -> Void)?) {
+    fileprivate func requestSpeakerImage(_ callback: (() -> Void)?) {
         
         if image != nil || pictureURL.isEmpty{
             if let cb = callback { cb() }
             return
         }
         
-        requestImage(pictureURL, callback: { image in
+        requestImage(URLString: pictureURL, callback: { image in
             if let image = image as UIImage? {
                 self.image = image
                 self.didLoadImage = true
@@ -535,7 +510,7 @@ class SISpeaker: SIObject {
         });
     }
     
-    func getSpeakerImage(callback: (UIImage) -> Void) {
+    func getSpeakerImage(_ callback: @escaping (UIImage) -> Void) {
         
         guard let image = self.image else {
             requestSpeakerImage() {
@@ -554,14 +529,14 @@ class SISpeaker: SIObject {
         
     }
     
-    private func getMiddleInitial() -> [String] {
+    fileprivate func getMiddleInitial() -> [String] {
         if let fullname = name.split(" ") {
             
             var middle = [String]()
             
                 for n in fullname {
                     if n != name.first! || n != name.last! {
-                        middle.append(String(n.characters.first!).uppercaseString)
+                        middle.append(String(n.characters.first!).uppercased())
                     }
                 }
             
@@ -602,7 +577,7 @@ class SIExhibitor: SIObject {
     }
     var didLoadBannerImage: Bool
     var mapCoordinate : (Double, Double)
-    private var bannerImage : UIImage?
+    fileprivate var bannerImage : UIImage?
     
     override init() {
         summary = ""
@@ -616,14 +591,14 @@ class SIExhibitor: SIObject {
         super.init()
     }
     
-    private func requestExhibitorLogoImage(callback: (() -> Void)?) {
+    fileprivate func requestExhibitorLogoImage(_ callback: (() -> Void)?) {
         
         if image != nil || logoURL.isEmpty{
             if let cb = callback { cb() }
             return
         }
         
-        requestImage(logoURL, callback: { image in
+        requestImage(URLString: logoURL, callback: { image in
             if let image = image as UIImage? {
                 self.image = image
                 self.didLoadImage = true
@@ -633,7 +608,7 @@ class SIExhibitor: SIObject {
         });
     }
     
-    private func requestExhibitorBannerImage(callback: (() -> Void)?) {
+    fileprivate func requestExhibitorBannerImage(_ callback: (() -> Void)?) {
         
         if bannerImage != nil || bannerURL.isEmpty {
             if let cb = callback {
@@ -642,7 +617,7 @@ class SIExhibitor: SIObject {
             return
         }
         
-        requestImage(bannerURL, callback: { image in
+        requestImage(URLString: bannerURL, callback: { image in
             if let image = image {
                 self.bannerImage = image
                 self.didLoadBannerImage = true
@@ -654,40 +629,40 @@ class SIExhibitor: SIObject {
         });
     }
     
-    func getLogoImage(callback: (image: UIImage) -> ()) {
+    func getLogoImage(_ callback: @escaping (_ image: UIImage) -> ()) {
         
         guard let image = self.image else {
             requestExhibitorLogoImage() {
                 if let image = self.image {
-                    callback(image: image)
+                    callback(image)
                 } else if let image = UIImage(named: "logoComingSoon") {
-                    callback(image: image)
+                    callback(image)
                 } else {
-                    callback(image: UIImage())
+                    callback(UIImage())
                 }
             }
             return
         }
         
-        callback(image: image)
+        callback(image)
     }
     
-    func getBannerImage(callback: (image: UIImage) -> ()) {
+    func getBannerImage(_ callback: @escaping (_ image: UIImage) -> ()) {
         
         guard let image = self.bannerImage else {
             requestExhibitorBannerImage() {
                 if let image = self.image {
-                    callback(image: image)
+                    callback(image)
                 } else if let image = UIImage(named: "logoComingSoon") {
-                    callback(image: image)
+                    callback(image)
                 } else {
-                    callback(image: UIImage())
+                    callback(UIImage())
                 }
             }
             return
         }
         
-        callback(image: image)
+        callback(image)
         
     }
 }
@@ -758,14 +733,14 @@ class SIRecipient: SIObject {
         self.name = name
     }
     
-    private func requestRecipientImage(callback: (() -> Void)?) {
+    fileprivate func requestRecipientImage(_ callback: (() -> Void)?) {
         
         if image != nil || logoURL.isEmpty {
             if let cb = callback { cb() }
             return
         }
         
-        requestImage(logoURL) { image in
+        requestImage(URLString: logoURL) { image in
             if let image = image {
                 self.image = image
                 self.didLoadImage = true
@@ -775,7 +750,7 @@ class SIRecipient: SIObject {
         
     }
     
-    func getRecipientImage(callback: (UIImage) -> Void) {
+    func getRecipientImage(_ callback: @escaping (UIImage) -> Void) {
         
         if let image = self.image {
             callback(image)
@@ -815,12 +790,12 @@ class SIRoom: SIObject {
 class SISponsor: SIObject {
     
     enum SponsorType : Int {
-        case None = 0,
-        Friend = 1,
-        Supporter = 2,
-        Benefactor = 3,
-        Champion = 4,
-        President = 5
+        case none = 0,
+        friend = 1,
+        supporter = 2,
+        benefactor = 3,
+        champion = 4,
+        president = 5
     }
     
     var summary : String
@@ -840,8 +815,8 @@ class SISponsor: SIObject {
             requestSplashScreenImage(nil)
         }
     }
-    private var bannerImage : UIImage?
-    private var splashScreenImage : UIImage?
+    fileprivate var bannerImage : UIImage?
+    fileprivate var splashScreenImage : UIImage?
     var didLoadBannerImage: Bool
     var didLoadSplashScreen: Bool
     
@@ -856,7 +831,7 @@ class SISponsor: SIObject {
     }
     
     override init() {
-        sponsorType = .None
+        sponsorType = .none
         summary = ""
         logoURL = ""
         bannerURL = ""
@@ -874,14 +849,14 @@ class SISponsor: SIObject {
         self.sponsorType = type
     }
     
-    private func requestLogoImage(callback: (() -> Void)?) {
+    fileprivate func requestLogoImage(_ callback: (() -> Void)?) {
         
         if image != nil || logoURL.isEmpty {
             if let cb = callback { cb() }
             return
         }
         
-        self.requestImage(logoURL) { image in
+        self.requestImage(URLString: logoURL) { image in
             if let image = image {
                 self.image = image
                 self.didLoadImage = true
@@ -890,14 +865,14 @@ class SISponsor: SIObject {
         }
     }
     
-    private func requestBannerImage(callback: (() -> Void)?) {
+    fileprivate func requestBannerImage(_ callback: (() -> Void)?) {
         
         if bannerImage != nil || bannerURL.isEmpty {
             if let cb = callback { cb() }
             return
         }
         
-        requestImage(bannerURL) { image in
+        requestImage(URLString: bannerURL) { image in
             if let image = image as UIImage? {
                 self.bannerImage = image
                 self.didLoadBannerImage = true
@@ -908,14 +883,14 @@ class SISponsor: SIObject {
         }
     }
     
-    private func requestSplashScreenImage(callback: (() -> Void)?) {
+    fileprivate func requestSplashScreenImage(_ callback: (() -> Void)?) {
         
         if splashScreenImage != nil || splashScreenURL.isEmpty {
             if let cb = callback { cb() }
             return
         }
         
-        requestImage(splashScreenURL, callback: { image in
+        requestImage(URLString: splashScreenURL, callback: { image in
             if let image = image {
                 self.splashScreenImage = image
                 self.didLoadSplashScreen = true
@@ -926,56 +901,56 @@ class SISponsor: SIObject {
         });
     }
     
-    func getBannerImage(callback: (image: UIImage) -> ()) {
+    func getBannerImage(_ callback: @escaping (_ image: UIImage) -> ()) {
         
         if let image = self.bannerImage {
-            callback(image: image)
+            callback(image)
             return
         }
         
         requestBannerImage() {
             if let image = self.image {
-                callback(image: image)
+                callback(image)
             } else if let image = UIImage(named: "Shingo Icon Small") {
-                callback(image: image)
+                callback(image)
             } else {
-                callback(image: UIImage())
+                callback(UIImage())
             }
         }
     }
     
-    func getLogoImage(callback: (image: UIImage) -> ()) {
+    func getLogoImage(_ callback: @escaping (_ image: UIImage) -> ()) {
         
         if let image = self.image {
-            callback(image: image)
+            callback(image)
             return
         }
         
         requestLogoImage {
             if let image = self.image {
-                callback(image: image)
+                callback(image)
             } else if let image = UIImage(named: "sponsor_banner_pl") {
-                callback(image: image)
+                callback(image)
             } else {
-                callback(image: UIImage())
+                callback(UIImage())
             }
         }
     }
     
-    func getSplashScreenImage(callback: (image: UIImage) -> ()) {
+    func getSplashScreenImage(_ callback: @escaping (_ image: UIImage) -> ()) {
         
         if let image = self.splashScreenImage {
-            callback(image: image)
+            callback(image)
             return
         }
         
         requestSplashScreenImage { 
             if let image = self.image {
-                callback(image: image)
+                callback(image)
             } else if let image = UIImage(named: "Sponsor_Splash_Screen_pl") {
-                callback(image: image)
+                callback(image)
             } else {
-                callback(image: UIImage())
+                callback(UIImage())
             }
         }
     }
@@ -983,12 +958,12 @@ class SISponsor: SIObject {
 
 class SIVenue: SIObject {
     enum VenueType : Int {
-        case None = 0,
-        ConventionCenter = 1,
-        Hotel = 2,
-        Museum = 3,
-        Restaurant = 4,
-        Other = 5
+        case none = 0,
+        conventionCenter = 1,
+        hotel = 2,
+        museum = 3,
+        restaurant = 4,
+        other = 5
     }
     
     var didLoadVenue : Bool
@@ -1002,7 +977,7 @@ class SIVenue: SIObject {
         address = ""
         venueMaps = [SIVenueMap]()
         location = nil
-        venueType = .None
+        venueType = .none
         super.init()
     }
     
@@ -1047,7 +1022,7 @@ class SIVenueMap: SIObject {
         super.init()
     }
     
-    func getVenueMapImage(callback: (UIImage) -> Void) {
+    func getVenueMapImage(_ callback: @escaping (UIImage) -> Void) {
         
         guard let image = self.image else {
             requestVenueMapImage() {
@@ -1065,12 +1040,12 @@ class SIVenueMap: SIObject {
         callback(image)
     }
     
-    private func requestVenueMapImage(callback: (() -> Void)?) {
+    fileprivate func requestVenueMapImage(_ callback: (() -> Void)?) {
         
         if image != nil || mapURL.isEmpty {
             if let cb = callback { cb() }
         } else {
-            self.requestImage(mapURL) { (image) in
+            self.requestImage(URLString: mapURL) { (image) in
                 if let image = image {
                     self.image = image
                     self.didLoadImage = true
@@ -1103,13 +1078,13 @@ class SIAffiliate: SIObject {
         super.init()
     }
     
-    private func requestAffiliateLogoImage(callback: (() -> Void)?) {
+    fileprivate func requestAffiliateLogoImage(_ callback: (() -> Void)?) {
         
         if logoURL.isEmpty || image != nil {
             if let cb = callback { cb() }
         }
         
-        requestImage(logoURL) { (image) in
+        requestImage(URLString: logoURL) { (image) in
             if let image = image {
                 self.image = image
                 self.didLoadImage = true
@@ -1119,7 +1094,7 @@ class SIAffiliate: SIObject {
         }
     }
     
-    func getLogoImage(callback: (UIImage) -> ()) {
+    func getLogoImage(_ callback: @escaping (UIImage) -> ()) {
         
         guard let image = self.image else {
             requestAffiliateLogoImage() {

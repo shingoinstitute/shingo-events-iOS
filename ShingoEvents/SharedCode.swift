@@ -10,9 +10,9 @@ import Foundation
 import UIKit
 
 protocol SICellDelegate { func updateCell() }
-protocol SISpeakerDelegate { func performActionOnSpeakers(data: [SISpeaker]) }
+protocol SISpeakerDelegate { func performActionOnSpeakers(_ data: [SISpeaker]) }
 protocol SIRequestDelegate { func cancelRequest() }
-protocol SIEventImageLoaderDelegate { func loadedImage(image: UIImage) }
+protocol SIEventImageLoaderDelegate { func loadedImage(_ image: UIImage) }
 
 // Shingo IP Colors
 class SIColor: UIColor {
@@ -70,42 +70,42 @@ extension UIColor {
 }
 
 enum DeviceType: Double {
-    case NotAvailable = -1.0
+    case notAvailable = -1.0
     
-    case IPhone2G     = 1.0
-    case IPhone3G     = 1.1
-    case IPhone3GS    = 1.2
-    case IPhone4      = 2.0
-    case IPhone4S     = 2.1
-    case IPhone5      = 3.0
-    case IPhone5C     = 3.1
-    case IPhone5S     = 3.2
-    case IPhone6Plus  = 5.0
-    case IPhone6      = 4.0
-    case IPhone6S     = 4.1
-    case IPhone6SPlus = 5.1
-    case IPhoneSE     = 3.3
+    case iPhone2G     = 1.0
+    case iPhone3G     = 1.1
+    case iPhone3GS    = 1.2
+    case iPhone4      = 2.0
+    case iPhone4S     = 2.1
+    case iPhone5      = 3.0
+    case iPhone5C     = 3.1
+    case iPhone5S     = 3.2
+    case iPhone6Plus  = 5.0
+    case iPhone6      = 4.0
+    case iPhone6S     = 4.1
+    case iPhone6SPlus = 5.1
+    case iPhoneSE     = 3.3
     
-    case IPodTouch1G = 1.3
-    case IPodTouch2G = 1.4
-    case IPodTouch3G = 1.5
-    case IPodTouch4G = 2.2
-    case IPodTouch5G = 3.4
-    case IPodTouch6  = 3.5
+    case iPodTouch1G = 1.3
+    case iPodTouch2G = 1.4
+    case iPodTouch3G = 1.5
+    case iPodTouch4G = 2.2
+    case iPodTouch5G = 3.4
+    case iPodTouch6  = 3.5
     
-    case IPad           = 6.0
-    case IPad2          = 6.1
-    case IPad3          = 6.2
-    case IPad4          = 6.3
-    case IPadMini       = 6.4
-    case IPadMiniRetina = 7.0
-    case IPadMini3      = 7.1
-    case IPadMini4      = 7.2
-    case IPadAir        = 7.3
-    case IPadAir2       = 7.4
-    case IPadPro        = 8.0
+    case iPad           = 6.0
+    case iPad2          = 6.1
+    case iPad3          = 6.2
+    case iPad4          = 6.3
+    case iPadMini       = 6.4
+    case iPadMiniRetina = 7.0
+    case iPadMini3      = 7.1
+    case iPadMini4      = 7.2
+    case iPadAir        = 7.3
+    case iPadAir2       = 7.4
+    case iPadPro        = 8.0
     
-    case Simulator = 0
+    case simulator = 0
 }
 
 
@@ -121,8 +121,8 @@ extension UIDevice {
         var identifier = ""
         
         for child in mirror.children {
-            if let value = child.value as? Int8 where value != 0 {
-                identifier.append(UnicodeScalar(UInt8(value)))
+            if let value = child.value as? Int8 , value != 0 {
+                identifier.append(String(UnicodeScalar(UInt8(value))))
             }
         }
         return identifier
@@ -132,57 +132,57 @@ extension UIDevice {
         return parseDeviceType(modelName)
     }
     
-    func parseDeviceType(identifier: String) -> DeviceType {
+    func parseDeviceType(_ identifier: String) -> DeviceType {
         
         if identifier == "i386" || identifier == "x86_64" {
-            return .Simulator
+            return .simulator
         }
         
         switch identifier {
-        case "iPhone1,1": return .IPhone2G
-        case "iPhone1,2": return .IPhone3G
-        case "iPhone2,1": return .IPhone3GS
-        case "iPhone3,1", "iPhone3,2", "iPhone3,3": return .IPhone4
-        case "iPhone4,1": return .IPhone4S
-        case "iPhone5,1", "iPhone5,2": return .IPhone5
-        case "iPhone5,3", "iPhone5,4": return .IPhone5C
-        case "iPhone6,1", "iPhone6,2": return .IPhone5S
-        case "iPhone7,1": return .IPhone6Plus
-        case "iPhone7,2": return .IPhone6
-        case "iPhone8,2": return .IPhone6SPlus
-        case "iPhone8,1": return .IPhone6S
-        case "iPhone8,4": return .IPhoneSE
+        case "iPhone1,1": return .iPhone2G
+        case "iPhone1,2": return .iPhone3G
+        case "iPhone2,1": return .iPhone3GS
+        case "iPhone3,1", "iPhone3,2", "iPhone3,3": return .iPhone4
+        case "iPhone4,1": return .iPhone4S
+        case "iPhone5,1", "iPhone5,2": return .iPhone5
+        case "iPhone5,3", "iPhone5,4": return .iPhone5C
+        case "iPhone6,1", "iPhone6,2": return .iPhone5S
+        case "iPhone7,1": return .iPhone6Plus
+        case "iPhone7,2": return .iPhone6
+        case "iPhone8,2": return .iPhone6SPlus
+        case "iPhone8,1": return .iPhone6S
+        case "iPhone8,4": return .iPhoneSE
             
-        case "iPod1,1": return .IPodTouch1G
-        case "iPod2,1": return .IPodTouch2G
-        case "iPod3,1": return .IPodTouch3G
-        case "iPod4,1": return .IPodTouch4G
-        case "iPod5,1": return .IPodTouch5G
-        case "iPod7,1": return .IPodTouch6
+        case "iPod1,1": return .iPodTouch1G
+        case "iPod2,1": return .iPodTouch2G
+        case "iPod3,1": return .iPodTouch3G
+        case "iPod4,1": return .iPodTouch4G
+        case "iPod5,1": return .iPodTouch5G
+        case "iPod7,1": return .iPodTouch6
             
-        case "iPad1,1", "iPad1,2": return .IPad
-        case "iPad2,1", "iPad2,2", "iPad2,3", "iPad2,4": return .IPad2
-        case "iPad2,5", "iPad2,6", "iPad2,7": return .IPadMini
-        case "iPad3,1", "iPad3,2", "iPad3,3": return .IPad3
-        case "iPad3,4", "iPad3,5", "iPad3,6": return .IPad4
-        case "iPad4,1", "iPad4,2", "iPad4,3": return .IPadAir
-        case "iPad4,4", "iPad4,5", "iPad4,6": return .IPadMiniRetina
-        case "iPad4,7", "iPad4,8": return .IPadMini3
-        case "iPad5,1", "iPad5,2": return .IPadMini4
-        case "iPad5,3", "iPad5,4": return .IPadAir2
-        case "iPad6,3", "iPad6,4", "iPad6,7", "iPad6,8": return .IPadPro
+        case "iPad1,1", "iPad1,2": return .iPad
+        case "iPad2,1", "iPad2,2", "iPad2,3", "iPad2,4": return .iPad2
+        case "iPad2,5", "iPad2,6", "iPad2,7": return .iPadMini
+        case "iPad3,1", "iPad3,2", "iPad3,3": return .iPad3
+        case "iPad3,4", "iPad3,5", "iPad3,6": return .iPad4
+        case "iPad4,1", "iPad4,2", "iPad4,3": return .iPadAir
+        case "iPad4,4", "iPad4,5", "iPad4,6": return .iPadMiniRetina
+        case "iPad4,7", "iPad4,8": return .iPadMini3
+        case "iPad5,1", "iPad5,2": return .iPadMini4
+        case "iPad5,3", "iPad5,4": return .iPadAir2
+        case "iPad6,3", "iPad6,4", "iPad6,7", "iPad6,8": return .iPadPro
             
-        default: return .NotAvailable
+        default: return .notAvailable
         }
     }
 }
 
 extension String {
     func trim() -> String {
-        return self.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        return self.trimmingCharacters(in: CharacterSet.whitespaces)
     }
     
-    func split(character: Character) -> [String]? {
+    func split(_ character: Character) -> [String]? {
         return self.characters.split{$0 == character}.map(String.init)
     }
     
@@ -218,7 +218,7 @@ extension String {
     }
     
     ///Returns the next contiguous string of characters (i.e. the next "word") as a String, separated by the given delimiter, or nil if it does not exist.
-    func next(after: String, delimiter: Character) -> String? {
+    func next(_ after: String, delimiter: Character) -> String? {
         if let array = self.split(delimiter) {
             for i in 0 ..< array.count {
                 if array[i] == after {
@@ -243,17 +243,17 @@ extension UIBarButtonItem {
 }
 
 extension UIView {
-    public func addSubviews(views: [UIView]) {
+    public func addSubviews(_ views: [UIView]) {
         for view in views {
             self.addSubview(view)
         }
     }
     
-    public func autoPinEdgesToSuperviewEdgesWithNavbar(viewController: UIViewController, withTopInset: CGFloat) {
-        self.autoPinToTopLayoutGuideOfViewController(viewController, withInset: withTopInset)
-        self.autoPinEdgeToSuperviewEdge(.Left)
-        self.autoPinEdgeToSuperviewEdge(.Right)
-        self.autoPinEdgeToSuperviewEdge(.Bottom)
+    public func autoPinEdgesToSuperviewEdgesWithNavbar(_ viewController: UIViewController, withTopInset: CGFloat) {
+        self.autoPin(toTopLayoutGuideOf: viewController, withInset: withTopInset)
+        self.autoPinEdge(toSuperviewEdge: .left)
+        self.autoPinEdge(toSuperviewEdge: .right)
+        self.autoPinEdge(toSuperviewEdge: .bottom)
     }
 }
 
@@ -266,19 +266,19 @@ extension UILabel {
 }
 
 extension UIFont {
-    class func helveticaOfFontSize(size: CGFloat) -> UIFont {
+    class func helveticaOfFontSize(_ size: CGFloat) -> UIFont {
         if let font = UIFont(name: "Helvetica", size: size) {
             return font
         } else {
-            return UIFont.systemFontOfSize(size)
+            return UIFont.systemFont(ofSize: size)
         }
     }
     
-    class func boldHelveticaOfFontSize(size: CGFloat) -> UIFont {
+    class func boldHelveticaOfFontSize(_ size: CGFloat) -> UIFont {
         if let font = UIFont(name: "Helvetica-Bold", size: size) {
             return font
         } else {
-            return UIFont.boldSystemFontOfSize(size)
+            return UIFont.boldSystemFont(ofSize: size)
         }
     }
 }
@@ -291,30 +291,30 @@ struct Alphabet {
 
 extension Double {
     mutating func increment() -> Double {
-        return self.advancedBy(1.0)
+        return self.advanced(by: 1.0)
     }
 }
 
 extension UIImageView {
     /// Returns a CGSize that fits inside the given view while maintaining the UIImageView aspect ratio.
-    func sizeThatViewFits(view view: UIView) -> CGSize {
+    func sizeThatViewFits(view: UIView) -> CGSize {
         if let image = self.image {
-            return CGSizeMake(view.frame.width, image.size.height * (view.frame.width / image.size.width))
+            return CGSize(width: view.frame.width, height: image.size.height * (view.frame.width / image.size.width))
         }
         
-        return CGSizeZero
+        return CGSize.zero
     }
 }
 
 extension UIImage {
     func isEmpty() -> Bool {
-        return CGImage == nil && CIImage == nil
+        return cgImage == nil && ciImage == nil
     }
     
     /// Returns the filezise in KB of a UIImage in a PNG format.
     func fileSizeOfPNG() -> Int {
         if let representation = UIImagePNGRepresentation(self) {
-            return NSData(data: representation).length / 1024
+            return (NSData(data: representation) as Data).count / 1024
         }
         return 0
     }
@@ -322,7 +322,7 @@ extension UIImage {
     /// Returns the filesize in KB of a UIImage in a JPEG format with a compression quality of 1.
     func fileSizeOfJPEG() -> Int {
         if let representation = UIImageJPEGRepresentation(self, 1) {
-            return NSData(data: representation).length / 1024
+            return (NSData(data: representation) as Data).count / 1024
         }
         return 0
     }
@@ -330,14 +330,14 @@ extension UIImage {
     /// Returns the filesize in KB of a UIImage in a JPEG format with a given compression quality.
     func fileSizeOfJPEG(compressionQuality quality: CGFloat) -> Int {
         if let representation = UIImageJPEGRepresentation(self, quality) {
-            return NSData(data: representation).length / 1024
+            return (NSData(data: representation) as Data).count / 1024
         }
         return 0
     }
 }
 
 // NSDate comparison operator
-func > (left: NSDate, right: NSDate) -> Bool {
+func > (left: Date, right: Date) -> Bool {
     if left.isGreaterThanDate(right) {
         return true
     } else {
@@ -345,26 +345,26 @@ func > (left: NSDate, right: NSDate) -> Bool {
     }
 }
 
-extension NSDate {
-    func isGreaterThanDate(dateToCompare: NSDate) -> Bool {
-        return (compare(dateToCompare) == NSComparisonResult.OrderedDescending)
+extension Date {
+    func isGreaterThanDate(_ dateToCompare: Date) -> Bool {
+        return (compare(dateToCompare) == ComparisonResult.orderedDescending)
     }
     
-    func isLessThanDate(dateToCompare: NSDate) -> Bool {
-        return (compare(dateToCompare) == NSComparisonResult.OrderedAscending)
+    func isLessThanDate(_ dateToCompare: Date) -> Bool {
+        return (compare(dateToCompare) == ComparisonResult.orderedAscending)
     }
     
-    func equalToDate(dateToCompare: NSDate) -> Bool {
-        return (compare(dateToCompare) == NSComparisonResult.OrderedSame)
+    func equalToDate(_ dateToCompare: Date) -> Bool {
+        return (compare(dateToCompare) == ComparisonResult.orderedSame)
     }
     
-    class func notionallyEmptyDate() -> NSDate {
-        return NSDate.init(timeIntervalSince1970: 0)
+    static func notionallyEmptyDate() -> Date {
+        return Date.init(timeIntervalSince1970: 0)
     }
     
     var isNotionallyEmpty: Bool {
         get {
-            if self.isEqualToDate(NSDate.notionallyEmptyDate()) {
+            if self == Date.notionallyEmptyDate() {
                 return true
             } else {
                 return false
@@ -373,13 +373,13 @@ extension NSDate {
     }
     
     /// Returns time frame between a start date and end date.
-    func timeFrameBetweenDates(startDate start: NSDate, endDate end: NSDate) -> String {
+    func timeFrameBetweenDates(startDate start: Date, endDate end: Date) -> String {
 
-        let calendar = NSCalendar.currentCalendar()
-        let startComponents = calendar.components([.Hour, .Minute], fromDate: start)
-        let endComponents = calendar.components([.Hour, .Minute], fromDate: end)
+        let calendar = Calendar.current
+        let startComponents = (calendar as NSCalendar).components([.hour, .minute], from: start)
+        let endComponents = (calendar as NSCalendar).components([.hour, .minute], from: end)
         
-        return "\(timeStringFromComponents(hour: startComponents.hour, minute: startComponents.minute)) - \(timeStringFromComponents(hour: endComponents.hour, minute: endComponents.minute))"
+        return "\(timeStringFromComponents(hour: startComponents.hour!, minute: startComponents.minute!)) - \(timeStringFromComponents(hour: endComponents.hour!, minute: endComponents.minute!))"
     }
     
     func timeStringFromComponents(hour h: Int, minute: Int) -> String {
@@ -408,13 +408,13 @@ extension NSDate {
     
 }
 
-extension NSDateFormatter {
+extension DateFormatter {
     /// Returns an object initialized with a set locale, date format, and time zone.
     convenience init(locale: String, dateFormat: String) {
         self.init()
-        self.locale = NSLocale(localeIdentifier: locale)
+        self.locale = Locale(identifier: locale)
         self.dateFormat = dateFormat
-        self.timeZone = NSTimeZone(abbreviation: "GMT")
+        self.timeZone = TimeZone(abbreviation: "GMT")
     }
     
 }
@@ -423,7 +423,7 @@ extension Array where Element:NSLayoutConstraint {
     var active: Bool {
         get {
             for i in self {
-                if !i.active {
+                if !i.isActive {
                     return false
                 }
             }
@@ -431,7 +431,7 @@ extension Array where Element:NSLayoutConstraint {
         }
         set {
             for i in self {
-                i.active = newValue
+                i.isActive = newValue
             }
         }
     }
@@ -440,7 +440,7 @@ extension Array where Element:NSLayoutConstraint {
         get {
             var height: CGFloat = 0
             for i in self {
-                if i.firstAttribute == .Height {
+                if i.firstAttribute == .height {
                     height += i.constant
                 }
             }
@@ -448,7 +448,7 @@ extension Array where Element:NSLayoutConstraint {
         }
         set {
             for i in self {
-                if i.firstAttribute == .Height {
+                if i.firstAttribute == .height {
                     i.constant = newValue
                 }
             }
@@ -459,7 +459,7 @@ extension Array where Element:NSLayoutConstraint {
         get {
             var width: CGFloat = 0
             for i in self {
-                if i.firstAttribute == .Width {
+                if i.firstAttribute == .width {
                     width += i.constant
                 }
             }
@@ -467,7 +467,7 @@ extension Array where Element:NSLayoutConstraint {
         }
         set {
             for i in self {
-                if i.firstAttribute == .Width {
+                if i.firstAttribute == .width {
                     i.constant = newValue
                 }
             }
@@ -475,11 +475,11 @@ extension Array where Element:NSLayoutConstraint {
     }
 }
 
-func isValidEmail(testStr:String) -> Bool {
+func isValidEmail(_ testStr:String) -> Bool {
     print("validate emilId: \(testStr)")
     let emailRegEx = "^(?:(?:(?:(?: )*(?:(?:(?:\\t| )*\\r\\n)?(?:\\t| )+))+(?: )*)|(?: )+)?(?:(?:(?:[-A-Za-z0-9!#$%&’*+/=?^_'{|}~]+(?:\\.[-A-Za-z0-9!#$%&’*+/=?^_'{|}~]+)*)|(?:\"(?:(?:(?:(?: )*(?:(?:[!#-Z^-~]|\\[|\\])|(?:\\\\(?:\\t|[ -~]))))+(?: )*)|(?: )+)\"))(?:@)(?:(?:(?:[A-Za-z0-9](?:[-A-Za-z0-9]{0,61}[A-Za-z0-9])?)(?:\\.[A-Za-z0-9](?:[-A-Za-z0-9]{0,61}[A-Za-z0-9])?)*)|(?:\\[(?:(?:(?:(?:(?:[0-9]|(?:[1-9][0-9])|(?:1[0-9][0-9])|(?:2[0-4][0-9])|(?:25[0-5]))\\.){3}(?:[0-9]|(?:[1-9][0-9])|(?:1[0-9][0-9])|(?:2[0-4][0-9])|(?:25[0-5]))))|(?:(?:(?: )*[!-Z^-~])*(?: )*)|(?:[Vv][0-9A-Fa-f]+\\.[-A-Za-z0-9._~!$&'()*+,;=:]+))\\])))(?:(?:(?:(?: )*(?:(?:(?:\\t| )*\\r\\n)?(?:\\t| )+))+(?: )*)|(?: )+)?$"
     let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
-    let result = emailTest.evaluateWithObject(testStr)
+    let result = emailTest.evaluate(with: testStr)
     return result
 }
 

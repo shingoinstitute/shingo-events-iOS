@@ -14,9 +14,9 @@ class ChallengerInfoViewController: UIViewController {
     @IBOutlet weak var logoImage: UIImageView!
     @IBOutlet weak var abstractTextField: UITextView!
     
-    var scrollView: UIScrollView = UIScrollView.newAutoLayoutView()
+    var scrollView: UIScrollView = UIScrollView.newAutoLayout()
     var backgroundView: UIView = {
-        let view = UIView.newAutoLayoutView()
+        let view = UIView.newAutoLayout()
         view.backgroundColor = SIColor.prussianBlueColor()
         return view
     }()
@@ -46,37 +46,37 @@ class ChallengerInfoViewController: UIViewController {
             view.addSubviews([backgroundView, scrollView])
             scrollView.addSubviews([logoImage, abstractTextField])
             
-            scrollView.autoPinToTopLayoutGuideOfViewController(self, withInset: 8)
-            scrollView.autoPinEdgeToSuperviewEdge(.Left)
-            scrollView.autoPinEdgeToSuperviewEdge(.Right)
-            scrollView.autoPinEdgeToSuperviewEdge(.Bottom)
+            scrollView.autoPin(toTopLayoutGuideOf: self, withInset: 8)
+            scrollView.autoPinEdge(toSuperviewEdge: .left)
+            scrollView.autoPinEdge(toSuperviewEdge: .right)
+            scrollView.autoPinEdge(toSuperviewEdge: .bottom)
             
-            logoImage.autoPinEdgeToSuperviewEdge(.Top)
-            logoImage.autoPinEdge(.Left, toEdge: .Left, ofView: view, withOffset: 8)
-            logoImage.autoPinEdge(.Right, toEdge: .Right, ofView: view, withOffset: 8)
-            logoImage.contentMode = .ScaleAspectFit
+            logoImage.autoPinEdge(toSuperviewEdge: .top)
+            logoImage.autoPinEdge(.left, to: .left, of: view, withOffset: 8)
+            logoImage.autoPinEdge(.right, to: .right, of: view, withOffset: 8)
+            logoImage.contentMode = .scaleAspectFit
             
-            abstractTextField.autoPinEdge(.Top, toEdge: .Bottom, ofView: logoImage, withOffset: 8)
-            abstractTextField.autoPinEdge(.Left, toEdge: .Left, ofView: view, withOffset: 0)
-            abstractTextField.autoPinEdge(.Right, toEdge: .Right, ofView: view, withOffset: 0)
-            abstractTextField.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: scrollView, withOffset: 0)
-            abstractTextField.scrollEnabled = false
+            abstractTextField.autoPinEdge(.top, to: .bottom, of: logoImage, withOffset: 8)
+            abstractTextField.autoPinEdge(.left, to: .left, of: view, withOffset: 0)
+            abstractTextField.autoPinEdge(.right, to: .right, of: view, withOffset: 0)
+            abstractTextField.autoPinEdge(.bottom, to: .bottom, of: scrollView, withOffset: 0)
+            abstractTextField.isScrollEnabled = false
             
-            backgroundView.autoPinEdge(.Top, toEdge: .Bottom, ofView: logoImage, withOffset: 8)
-            backgroundView.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: view)
-            backgroundView.autoPinEdge(.Left, toEdge: .Left, ofView: view)
-            backgroundView.autoPinEdge(.Right, toEdge: .Right, ofView: view)
+            backgroundView.autoPinEdge(.top, to: .bottom, of: logoImage, withOffset: 8)
+            backgroundView.autoPinEdge(.bottom, to: .bottom, of: view)
+            backgroundView.autoPinEdge(.left, to: .left, of: view)
+            backgroundView.autoPinEdge(.right, to: .right, of: view)
             
             didUpdateConstraints = true
         }
         super.updateViewConstraints()
     }
     
-    private func setSummaryText() {
+    fileprivate func setSummaryText() {
         
         abstractTextField.backgroundColor = SIColor.prussianBlueColor()
         abstractTextField.text = ""
-        abstractTextField.textColor = .whiteColor()
+        abstractTextField.textColor = .white
         abstractTextField.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         
         recipient.getRecipientImage() { image in
@@ -85,12 +85,12 @@ class ChallengerInfoViewController: UIViewController {
         
         if !recipient.summary.isEmpty {
             do {
-                let attributedText = try NSMutableAttributedString(data: recipient.summary.dataUsingEncoding(NSUTF8StringEncoding)!,
+                let attributedText = try NSMutableAttributedString(data: recipient.summary.data(using: String.Encoding.utf8)!,
                                                                           options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
-                                                                            NSCharacterEncodingDocumentAttribute : NSUTF8StringEncoding,
-                                                                            NSForegroundColorAttributeName : UIColor.whiteColor()],
+                                                                            NSCharacterEncodingDocumentAttribute : String.Encoding.utf8,
+                                                                            NSForegroundColorAttributeName : UIColor.white],
                                                                           documentAttributes: nil)
-                attributedText.addAttributes([NSFontAttributeName : UIFont.helveticaOfFontSize(16), NSForegroundColorAttributeName : UIColor.whiteColor()], range: NSMakeRange(0, attributedText.string.characters.count - 1))
+                attributedText.addAttributes([NSFontAttributeName : UIFont.helveticaOfFontSize(16), NSForegroundColorAttributeName : UIColor.white], range: NSMakeRange(0, attributedText.string.characters.count - 1))
                 
                 abstractTextField.attributedText = attributedText
             } catch {

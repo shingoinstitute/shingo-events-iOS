@@ -12,8 +12,8 @@ class AfilliateViewController: UIViewController {
 
     @IBOutlet weak var logoImage: UIImageView!
     @IBOutlet weak var abstractTextField: UITextView!
-    var scrollView = UIScrollView.newAutoLayoutView()
-    var backdrop = UIView.newAutoLayoutView()
+    var scrollView = UIScrollView.newAutoLayout()
+    var backdrop = UIView.newAutoLayout()
     
     var affiliate: SIAffiliate!
     
@@ -22,58 +22,58 @@ class AfilliateViewController: UIViewController {
         
         self.navigationItem.title = affiliate.name
         
-        view.backgroundColor = .whiteColor()
+        view.backgroundColor = .white
         
         logoImage.removeFromSuperview()
         abstractTextField.removeFromSuperview()
         view.addSubview(scrollView)
         view.addSubview(backdrop)
-        view.bringSubviewToFront(scrollView)
+        view.bringSubview(toFront: scrollView)
         scrollView.addSubview(logoImage)
         scrollView.addSubview(abstractTextField)
         
-        scrollView.autoPinToTopLayoutGuideOfViewController(self, withInset: 0)
-        scrollView.autoPinEdgeToSuperviewEdge(.Left)
-        scrollView.autoPinEdgeToSuperviewEdge(.Right)
-        scrollView.autoPinEdgeToSuperviewEdge(.Bottom)
+        scrollView.autoPin(toTopLayoutGuideOf: self, withInset: 0)
+        scrollView.autoPinEdge(toSuperviewEdge: .left)
+        scrollView.autoPinEdge(toSuperviewEdge: .right)
+        scrollView.autoPinEdge(toSuperviewEdge: .bottom)
         
-        logoImage.contentMode = .ScaleAspectFit
-        logoImage.autoSetDimension(.Width, toSize: view.frame.width - 16)
-        logoImage.autoPinEdge(.Top, toEdge: .Top, ofView: scrollView, withOffset: 8)
-        logoImage.autoPinEdge(.Left, toEdge: .Left, ofView: view, withOffset: 8)
+        logoImage.contentMode = .scaleAspectFit
+        logoImage.autoSetDimension(.width, toSize: view.frame.width - 16)
+        logoImage.autoPinEdge(.top, to: .top, of: scrollView, withOffset: 8)
+        logoImage.autoPinEdge(.left, to: .left, of: view, withOffset: 8)
         
         abstractTextField.backgroundColor = SIColor.prussianBlueColor()
         abstractTextField.text = ""
         abstractTextField.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
-        abstractTextField.autoPinEdge(.Top, toEdge: .Bottom, ofView: logoImage, withOffset: 8)
-        abstractTextField.autoPinEdge(.Left, toEdge: .Left, ofView: view)
-        abstractTextField.autoPinEdge(.Right, toEdge: .Right, ofView: view)
-        abstractTextField.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: scrollView)
-        abstractTextField.editable = false
-        abstractTextField.dataDetectorTypes = [UIDataDetectorTypes.Link, UIDataDetectorTypes.PhoneNumber]
+        abstractTextField.autoPinEdge(.top, to: .bottom, of: logoImage, withOffset: 8)
+        abstractTextField.autoPinEdge(.left, to: .left, of: view)
+        abstractTextField.autoPinEdge(.right, to: .right, of: view)
+        abstractTextField.autoPinEdge(.bottom, to: .bottom, of: scrollView)
+        abstractTextField.isEditable = false
+        abstractTextField.dataDetectorTypes = [UIDataDetectorTypes.link, UIDataDetectorTypes.phoneNumber]
         
-        backdrop.autoPinEdge(.Top, toEdge: .Bottom, ofView: logoImage, withOffset: 8)
-        backdrop.autoPinEdge(.Left, toEdge: .Left, ofView: view, withOffset: 0)
-        backdrop.autoPinEdge(.Right, toEdge: .Right, ofView: view, withOffset: 0)
-        backdrop.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: view, withOffset: 0)
+        backdrop.autoPinEdge(.top, to: .bottom, of: logoImage, withOffset: 8)
+        backdrop.autoPinEdge(.left, to: .left, of: view, withOffset: 0)
+        backdrop.autoPinEdge(.right, to: .right, of: view, withOffset: 0)
+        backdrop.autoPinEdge(.bottom, to: .bottom, of: view, withOffset: 0)
         backdrop.backgroundColor = SIColor.prussianBlueColor()
         
         affiliate.getLogoImage() { image in
             self.logoImage.image = image
         }
         
-        logoImage.contentMode = .ScaleAspectFit
+        logoImage.contentMode = .scaleAspectFit
   
-        abstractTextField.linkTextAttributes = [NSForegroundColorAttributeName : UIColor.cyanColor(),
-                                                   NSUnderlineStyleAttributeName : NSUnderlineStyle.StyleSingle.rawValue]
+        abstractTextField.linkTextAttributes = [NSForegroundColorAttributeName : UIColor.cyan,
+                                                   NSUnderlineStyleAttributeName : NSUnderlineStyle.styleSingle.rawValue]
         do {
             
-            let attrs = [NSFontAttributeName : UIFont.systemFontOfSize(16.0),
-                         NSForegroundColorAttributeName : UIColor.whiteColor()]
+            let attrs = [NSFontAttributeName : UIFont.systemFont(ofSize: 16.0),
+                         NSForegroundColorAttributeName : UIColor.white]
             
-            let attributedText = try NSMutableAttributedString(data: affiliate.summary.dataUsingEncoding(NSUTF8StringEncoding)!,
+            let attributedText = try NSMutableAttributedString(data: affiliate.summary.data(using: String.Encoding.utf8)!,
                                                                options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
-                                                                        NSCharacterEncodingDocumentAttribute : NSUTF8StringEncoding],
+                                                                        NSCharacterEncodingDocumentAttribute : String.Encoding.utf8],
                                                                  documentAttributes: nil)
             attributedText.addAttributes(attrs, range: NSMakeRange(0, attributedText.string.characters.count))
         
@@ -85,7 +85,7 @@ class AfilliateViewController: UIViewController {
         var frame:CGRect = abstractTextField.frame
         frame.size.height = abstractTextField.contentSize.height
         abstractTextField.frame = frame
-        abstractTextField.scrollEnabled = false
+        abstractTextField.isScrollEnabled = false
     }
 
 

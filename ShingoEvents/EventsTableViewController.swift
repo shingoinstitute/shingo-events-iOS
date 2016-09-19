@@ -26,7 +26,7 @@ class EventsTableViewController: UITableViewController {
         }
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationItem.title = "Upcoming Events"
     }
@@ -43,21 +43,21 @@ class EventsTableViewController: UITableViewController {
     func displayBadRequestNotification() {
         let alert = UIAlertController(title: "Oops!",
                                       message: "We were unable to fetch any data for you. Please make sure you have an internet connection.",
-                                      preferredStyle: UIAlertControllerStyle.Alert)
-        let action = UIAlertAction(title: "OK", style: .Default, handler: nil)
+                                      preferredStyle: UIAlertControllerStyle.alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(action)
-        presentViewController(alert, animated: true, completion: nil)
+        present(alert, animated: true, completion: nil)
     }
 }
 
 extension EventsTableViewController: SICellDelegate {
 
     // MARK: - Table view data source
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
             case 0:
                 return events.count
@@ -66,29 +66,29 @@ extension EventsTableViewController: SICellDelegate {
         }
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("EventsCell", forIndexPath: indexPath) as! EventTableViewCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "EventsCell", for: indexPath) as! EventTableViewCell
         
         cell.delegate = self
-        cell.event = events[indexPath.row]
+        cell.event = events[(indexPath as NSIndexPath).row]
         
         return cell
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
-        if !events[indexPath.row].didLoadImage {
+        if !events[(indexPath as NSIndexPath).row].didLoadImage {
             return 75
         }
         
-        if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+        if UIDevice.current.userInterfaceIdiom == .pad {
             return 240
         }
         
         return 155
     }
     
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UILabel()
         
         switch events.count {
@@ -98,37 +98,37 @@ extension EventsTableViewController: SICellDelegate {
             view.text = "   \(events.count) Events Found"
         }
         
-        view.textColor = .whiteColor()
+        view.textColor = .white
         view.font = UIFont(name: "Helvetica", size: 12)
         return view
     }
     
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 32
     }
     
-    override func tableView(tableView: UITableView, didHighlightRowAtIndexPath indexPath: NSIndexPath) {
-        let cell = tableView.cellForRowAtIndexPath(indexPath) as! EventTableViewCell
+    override func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as! EventTableViewCell
         cell.backgroundColor = SIColor.lightBlueColor()
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let cell = tableView.cellForRowAtIndexPath(indexPath) as! EventTableViewCell
+        let cell = tableView.cellForRow(at: indexPath) as! EventTableViewCell
         cell.backgroundColor = SIColor.lightBlueColor()
         
         let activityView = ActivityViewController()
         activityView.message = "Loading Event Data..."
 
-        let event = events[indexPath.row]
+        let event = events[(indexPath as NSIndexPath).row]
         if event.didLoadEventData {
-            self.performSegueWithIdentifier("EventMenu", sender: event)
+            self.performSegue(withIdentifier: "EventMenu", sender: event)
         } else {
-            presentViewController(activityView, animated: false, completion: { 
+            present(activityView, animated: false, completion: { 
                 event.requestEvent() {
-                    self.dismissViewControllerAnimated(true, completion: {
+                    self.dismiss(animated: true, completion: {
                         if event.didLoadEventData {
-                            self.performSegueWithIdentifier("EventMenu", sender: self.events[indexPath.row])
+                            self.performSegue(withIdentifier: "EventMenu", sender: self.events[(indexPath as NSIndexPath).row])
                         } else {
                             self.displayBadRequestNotification()
                         }
@@ -140,10 +140,10 @@ extension EventsTableViewController: SICellDelegate {
     }
     
     // MARK: - Navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "EventMenu" {
-            let destination = segue.destinationViewController as! EventMenuViewController
+            let destination = segue.destination as! EventMenuViewController
             if let event = sender as? SIEvent {
                 destination.event = event
             }
@@ -176,8 +176,8 @@ class EventTableViewCell: UITableViewCell {
     
     func updateCell() {
         
-        backgroundColor = .clearColor()
-        selectionStyle = .None
+        backgroundColor = .clear
+        selectionStyle = .none
         
         guard let event = event else {
             return
@@ -185,15 +185,15 @@ class EventTableViewCell: UITableViewCell {
 
         nameLabel.text = event.name
         
-        eventImage.contentMode = .ScaleAspectFill
+        eventImage.contentMode = .scaleAspectFill
         eventImage.clipsToBounds = true
         eventImage.layer.cornerRadius = 3.0
         
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.timeZone = NSTimeZone(abbreviation: "GMT")
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = TimeZone(abbreviation: "GMT")
         dateFormatter.dateFormat = "yyyy-MM-dd"
-        dateFormatter.dateStyle = .MediumStyle
-        let dates = "\(dateFormatter.stringFromDate(event.startDate)) - \(dateFormatter.stringFromDate(event.endDate))"
+        dateFormatter.dateStyle = .medium
+        let dates = "\(dateFormatter.string(from: event.startDate as Date)) - \(dateFormatter.string(from: event.endDate as Date))"
         dateRangeLabel.text = dates
         
         event.getBannerImage() { image in

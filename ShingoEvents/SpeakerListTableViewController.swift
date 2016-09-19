@@ -14,18 +14,18 @@ class SpeakerListTableViewController: UITableViewController {
     var concurrentSpeakers: [SISpeaker]!
     var unknownSpeakers: [SISpeaker]!
     
-    lazy var speakerList: [[SISpeaker]!] = [
+    lazy var speakerList: [[SISpeaker]?] = [
         self.keyNoteSpeakers,
         self.concurrentSpeakers,
         self.unknownSpeakers
     ]
     
-    var dataSource: [[SISpeaker]!] {
+    var dataSource: [[SISpeaker]?] {
         get {
             var value = [[SISpeaker]!]()
             for speakers in speakerList {
                 if speakers == nil { continue }
-                if !speakers.isEmpty { value.append(speakers) }
+                if !(speakers?.isEmpty)! { value.append(speakers) }
             }
             return value
         }
@@ -41,35 +41,35 @@ class SpeakerListTableViewController: UITableViewController {
     
     // MARK: - Table view data source
     
-    override func tableView(tableView: UITableView, accessoryButtonTappedForRowWithIndexPath indexPath: NSIndexPath) {
-        let cell = tableView.cellForRowAtIndexPath(indexPath) as! SpeakerListCell
+    override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as! SpeakerListCell
         if let speaker = cell.speaker {
-            performSegueWithIdentifier("SpeakerDetails", sender: speaker)
+            performSegue(withIdentifier: "SpeakerDetails", sender: speaker)
         }
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let cell = tableView.cellForRowAtIndexPath(indexPath) as! SpeakerListCell
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as! SpeakerListCell
         if let speaker = cell.speaker {
-            performSegueWithIdentifier("SpeakerDetails", sender: speaker)
+            performSegue(withIdentifier: "SpeakerDetails", sender: speaker)
         }
     }
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return dataSource.count
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataSource[section].count
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return dataSource[section]!.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("SpeakerListCell", forIndexPath: indexPath) as! SpeakerListCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SpeakerListCell", for: indexPath) as! SpeakerListCell
         
         cell.aiv.hidesWhenStopped = true
 
-        cell.speaker = dataSource[indexPath.section][indexPath.row]
+        cell.speaker = dataSource[(indexPath as NSIndexPath).section]?[(indexPath as NSIndexPath).row]
         
         if cell.speakerImage.image == nil {
             cell.aiv.startAnimating()
@@ -78,28 +78,28 @@ class SpeakerListTableViewController: UITableViewController {
         return cell
     }
     
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         let header = UILabel(text: "", font: UIFont(name: "Helvetica", size: 12))
-        header.textColor = .whiteColor()
+        header.textColor = .white
         
-        header.text = "  \(dataSource[section][0].speakerType.rawValue) Speakers"
+        header.text = "  \(dataSource[section]?[0].speakerType.rawValue) Speakers"
         
         return header
     }
     
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
-        if dataSource[section].isEmpty { return 0 }
+        if (dataSource[section]?.isEmpty)! { return 0 }
         
         return 32
     }
     
     // MARK: - Navigation
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "SpeakerDetails" {
-            let destination = segue.destinationViewController as! SpeakerDetailsViewController
+            let destination = segue.destination as! SpeakerDetailsViewController
             if let speaker = sender as? SISpeaker {
                 destination.speaker = speaker
             }
@@ -113,7 +113,7 @@ class SpeakerListCell: UITableViewCell {
 
     @IBOutlet weak var speakerNameLabel: UILabel! {
         didSet {
-            speakerNameLabel.font = UIFont.boldSystemFontOfSize(16)
+            speakerNameLabel.font = UIFont.boldSystemFont(ofSize: 16)
         }
     }
     @IBOutlet weak var speakerImage: UIImageView!

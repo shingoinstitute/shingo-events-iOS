@@ -1,29 +1,39 @@
 PODS:
-  - Alamofire (3.4.2)
-  - AlamofireImage (2.4.1):
-    - Alamofire (~> 3.3)
-  - Crashlytics (3.8.0):
+  - Alamofire (4.0.0)
+  - AlamofireImage (3.0.0):
+    - Alamofire (~> 4.0)
+  - Crashlytics (3.8.1):
     - Fabric (~> 1.6.3)
-  - DropDown (1.0.1)
   - Fabric (1.6.8)
   - PureLayout (3.0.2)
+  - SwiftyJSON (2.3.2)
 
 DEPENDENCIES:
-  - Alamofire (~> 3.0)
-  - AlamofireImage (~> 2.0)
+  - Alamofire (~> 4.0)
+  - AlamofireImage (~> 3.0)
   - Crashlytics
-  - DropDown
   - Fabric
   - PureLayout
+  - SwiftyJSON (from `https://github.com/BaiduHiDeviOS/SwiftyJSON.git`, branch `swift3`)
+
+EXTERNAL SOURCES:
+  SwiftyJSON:
+    :branch: swift3
+    :git: https://github.com/BaiduHiDeviOS/SwiftyJSON.git
+
+CHECKOUT OPTIONS:
+  SwiftyJSON:
+    :commit: de5dc3b1b421805769590d331178551bbb0e5733
+    :git: https://github.com/BaiduHiDeviOS/SwiftyJSON.git
 
 SPEC CHECKSUMS:
-  Alamofire: 6aa33201d20d069e1598891cf928883ff1888c7a
-  AlamofireImage: 3ccf3347d9ea24580dc11fb892770a0be6a29826
-  Crashlytics: 8601d9c74a4c4d28f3e7f408bf4c0e490c70e8b4
-  DropDown: 335df9e9547e97a861a60aed8448821e239d3513
+  Alamofire: fef59f00388f267e52d9b432aa5d93dc97190f14
+  AlamofireImage: 6594aa1139a67dcd36cde6da79ea4e5b318e60fb
+  Crashlytics: 4391d8df0b125345e9f209c5db6e7f40a6a8435d
   Fabric: 5755268d0171435ab167e3d0878a28a777deaf10
   PureLayout: 4d550abe49a94f24c2808b9b95db9131685fe4cd
+  SwiftyJSON: 6118fb49d7519c4d31a0c1f3d5af936e9047b556
 
-PODFILE CHECKSUM: d807a4b6a2cae8c117dfdfd8bdfe9c842e3d054e
+PODFILE CHECKSUM: 06663d5b836f6aaeadfbee65fab4e9cd830fbe09
 
 COCOAPODS: 1.0.1

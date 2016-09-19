@@ -20,7 +20,7 @@ class VenueMapCollectionCell: UICollectionViewCell {
     @IBOutlet weak var mapNameLabel: UILabel!
     
     func updateCell() {
-        layer.borderColor = UIColor.grayColor().CGColor
+        layer.borderColor = UIColor.gray.cgColor
         layer.borderWidth = 1.0
         layer.cornerRadius = 3
         
@@ -30,7 +30,7 @@ class VenueMapCollectionCell: UICollectionViewCell {
             venueMap.getVenueMapImage() { image in
                 self.venueImage.image = image
             }
-            venueImage.contentMode = .ScaleAspectFit
+            venueImage.contentMode = .scaleAspectFit
         }
         
         
@@ -51,14 +51,14 @@ class VenueMapInformationCell: UICollectionViewCell {
     
     func updateCell() {
         
-        contentView.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.9)
+        contentView.backgroundColor = UIColor.black.withAlphaComponent(0.9)
         contentView.layer.cornerRadius = 3.0
         
-        title.textColor = UIColor.yellowColor()
+        title.textColor = UIColor.yellow
         title.text = venue.name
         title.font = UIFont(name: "Helvetica", size: 18.0)
         
-        address.textColor = UIColor.yellowColor()
+        address.textColor = UIColor.yellow
         address.font = UIFont(name: "Helvetica", size: 18.0)
         address.text = venue.address
         

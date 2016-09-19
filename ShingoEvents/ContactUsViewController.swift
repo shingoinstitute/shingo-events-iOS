@@ -37,25 +37,25 @@ class ContactUsViewController: UIViewController, UITextFieldDelegate, UITextView
         let starButtons: [SIButton] = [star1, star2, star3, star4, star5]
         
         for star in starButtons {
-            star.contentMode = .ScaleAspectFit
+            star.contentMode = .scaleAspectFit
         }
         
         emailTextField.delegate = self
         descriptionTextField.delegate = self
         
         descriptionTextField.text = "Enter message here."
-        descriptionTextField.textColor = UIColor.lightGrayColor()
-        descriptionTextField.layer.borderColor = UIColor.lightGrayColor().CGColor
+        descriptionTextField.textColor = UIColor.lightGray
+        descriptionTextField.layer.borderColor = UIColor.lightGray.cgColor
         descriptionTextField.layer.borderWidth = 1
         descriptionTextField.layer.cornerRadius = 5
         
         submitButton.layer.cornerRadius = 5
         submitButton.layer.borderWidth = 1
-        submitButton.layer.borderColor = UIColor.lightGrayColor().CGColor
+        submitButton.layer.borderColor = UIColor.lightGray.cgColor
         
     }
     
-    @IBAction func sendMessage(sender: AnyObject) {
+    @IBAction func sendMessage(_ sender: AnyObject) {
 
         if !messageSent {
             
@@ -71,35 +71,35 @@ class ContactUsViewController: UIViewController, UITextFieldDelegate, UITextView
                 
                 let parameters: [String:String] = [
                     "description": descriptionTextField.text!,
-                    "device": "\(UIDevice.currentDevice().deviceType)",
-                    "details": "iOS Version: \(UIDevice.currentDevice().systemVersion)",
+                    "device": "\(UIDevice.current.deviceType)",
+                    "details": "iOS Version: \(UIDevice.current.systemVersion)",
                     "rating": "\(rating)",
                     "email": emailTextField.text!
                 ]
                 
                 let activity = ActivityViewController(message: "Sending Feedback...")
-                presentViewController(activity, animated: true, completion: { 
-                    SIRequest().postFeedback(parameters, callback: { (success) in
-                        self.dismissViewControllerAnimated(false, completion: { 
+                present(activity, animated: true, completion: { 
+                    SIRequest().postFeedback(parameters: parameters, callback: { (success) in
+                        self.dismiss(animated: false, completion: { 
                             switch success {
                             case true:
                                 
                                 self.messageSent = true
                                 
-                                let message = UIAlertController(title: "Message Sent", message: "Thank you for contacting us, your feedback is greatly appreciated!", preferredStyle: .Alert)
-                                let action = UIAlertAction(title: "Okay", style: .Default, handler: { (_) in
-                                    self.performSegueWithIdentifier("UnwindToSupport", sender: self)
+                                let message = UIAlertController(title: "Message Sent", message: "Thank you for contacting us, your feedback is greatly appreciated!", preferredStyle: .alert)
+                                let action = UIAlertAction(title: "Okay", style: .default, handler: { (_) in
+                                    self.performSegue(withIdentifier: "UnwindToSupport", sender: self)
                                 })
                                 message.addAction(action)
                                 
-                                self.presentViewController(message, animated: true, completion: nil)
+                                self.present(message, animated: true, completion: nil)
                                 
                             case false:
                                 
-                                let message = UIAlertController(title: "Error", message: "Your message could not be sent, please try again later. If you have a secure internet connection and this problem persists, you may email us at shingo.events@usu.edu", preferredStyle: .Alert)
-                                let action = UIAlertAction(title: "Okay", style: .Default, handler: nil)
+                                let message = UIAlertController(title: "Error", message: "Your message could not be sent, please try again later. If you have a secure internet connection and this problem persists, you may email us at shingo.events@usu.edu", preferredStyle: .alert)
+                                let action = UIAlertAction(title: "Okay", style: .default, handler: nil)
                                 message.addAction(action)
-                                self.presentViewController(message, animated: true, completion: nil)
+                                self.present(message, animated: true, completion: nil)
                                 
                             }
                         })
@@ -110,12 +110,12 @@ class ContactUsViewController: UIViewController, UITextFieldDelegate, UITextView
         
     }
     
-    private func displayAlert(title title: String, message: String) {
-        let alert = UIAlertController(title: "Empty Message", message: message, preferredStyle: .Alert)
-        let action = UIAlertAction(title: "Okay", style: .Default, handler: nil)
+    fileprivate func displayAlert(title: String, message: String) {
+        let alert = UIAlertController(title: "Empty Message", message: message, preferredStyle: .alert)
+        let action = UIAlertAction(title: "Okay", style: .default, handler: nil)
         alert.addAction(action)
         
-        presentViewController(alert, animated: true, completion: nil)
+        present(alert, animated: true, completion: nil)
     }
     
 }
@@ -126,20 +126,20 @@ extension ContactUsViewController {
     
     // MARK: - Rating buttons
     
-    @IBAction func didTapStar(sender: AnyObject) {
+    @IBAction func didTapStar(_ sender: AnyObject) {
         if let button = sender as? SIButton {
             changeStars(button)
         }
     }
 
-    private func changeStars(sender: SIButton) {
+    fileprivate func changeStars(_ sender: SIButton) {
         for i in 1 ..< 6 {
             if let button = view.viewWithTag(i) as? SIButton {
                 if i <= sender.tag {
-                    button.setImage(UIImage(named: "gold_star"), forState: .Normal)
+                    button.setImage(UIImage(named: "gold_star"), for: UIControlState())
                     rating = i
                 } else {
-                    button.setImage(UIImage(named: "white_star"), forState: .Normal)
+                    button.setImage(UIImage(named: "white_star"), for: UIControlState())
                 }
             }
         }
@@ -151,22 +151,22 @@ extension ContactUsViewController {
 
     // MARK: - UITextFieldDelegate
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         emailTextField.resignFirstResponder()
         return true
     }
     
     // MARK: - UITextViewDeleagte
     
-    func textViewDidBeginEditing(textView: UITextView) {
+    func textViewDidBeginEditing(_ textView: UITextView) {
         if !didMakeEdit {
             textView.text = ""
-            textView.textColor = .blackColor()
+            textView.textColor = .black
             didMakeEdit = true
         }
     }
     
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+    @objc(textView:shouldChangeTextInRange:replacementText:) func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if text == "\n" {
             textView.resignFirstResponder()
             return false
