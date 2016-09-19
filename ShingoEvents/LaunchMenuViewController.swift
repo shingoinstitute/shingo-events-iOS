@@ -290,18 +290,18 @@ extension MainMenuViewController {
             
             // @deployment
             // Uncomment lines below to animate constraints
-            UIView.animateWithDuration(1.5,
-                                       delay: 0.5,
-                                       usingSpringWithDamping: 0.5,
-                                       initialSpringVelocity: 0,
-                                       options: UIViewAnimationOptions(),
-                                       animations: { self.view.layoutIfNeeded() },
-                                       completion: nil)
+//            UIView.animateWithDuration(1.5,
+//                                       delay: 0.5,
+//                                       usingSpringWithDamping: 0.5,
+//                                       initialSpringVelocity: 0,
+//                                       options: UIViewAnimationOptions(),
+//                                       animations: { self.view.layoutIfNeeded() },
+//                                       completion: nil)
  
  
             // @production
             // Uncomment line below for non-animated constraints
-//            view.layoutIfNeeded()
+            view.layoutIfNeeded()
             
             didAnimateLayout = true
         }

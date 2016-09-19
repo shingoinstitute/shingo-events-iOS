@@ -112,7 +112,7 @@ struct TestCode {
             "Sponsor_Level__c": "Supporter"
         ]
         
-        let s6 = [
+    let s6 = [
             "attributes": [
                 "type": "Shingo_Sponsor__c",
                 "url": "/services/data/v36.0/sobjects/Shingo_Sponsor__c/a1N120000020vxnEAA"
@@ -120,9 +120,9 @@ struct TestCode {
             "Id": "a1N120000020vxnEAA",
             "Organization__r": [
                 "attributes": [
-                "type": "Shingo_Sponsor__c",
-                "url": "/services/data/v36.0/sobjects/Shingo_Sponsor__c/a1N120000020vxnEAA"
-            ],
+                    "type": "Shingo_Sponsor__c",
+                    "url": "/services/data/v36.0/sobjects/Shingo_Sponsor__c/a1N120000020vxnEAA"
+                ],
                 "Name": "Sarah",
                 "Logo__c": "https://pbs.twimg.com/profile_images/446566229210181632/2IeTff-V.jpeg",
                 "App_Abstract__c": "Arches Leadership, LLC is dedicated to the development of leaders and organizations based on the principles of enterprise excellence. President and Principal Consultant, Robert Miller, has successfully coached and advised leadership teams in many industries and countries, helping them to understand how principles inform the ideal behaviors that lead to ideal organizational results. In ancient Greek philosophy the word \"arche\" meant \"first principle\" or \"something that was in the beginning.\" The arch is a curved structure that creates a powerful support for everything that sits above it, just as a principle is the surest foundation upon which an organizational culture can be built. Arches Leadership is dedicated to helping leaders gain a deep understanding of the principles embodied in the <em>Shingo Model</em> and discovering the personal and organizational implications for ideal behavior required in a culture that consistently delivers ideal organizational results.\r\n<br><br>\r\nCertified Facilitator:<br>\r\nRobert Miller - President & Principal Consultant"
@@ -142,7 +142,7 @@ struct TestCode {
                 s5,
                 s6
             ],
-            "total_size":13,
+            "total_size":6,
             "done": true,
             "timestamp":"2016-06-23T20:59:57.671Z"
         ]
@@ -150,7 +150,39 @@ struct TestCode {
         return JSON(dict)
     }
     
+    static func generateTestJSONForSessionRequest() -> JSON {
+
+        let session1 = [
+            "Id": "a1L1200000212KyEAI",
+            "Name": "Intermission",
+            "Summary__c": "Session 1 summary",
+            "Session_Display_Name__c": "Intermission",
+            "Start_Date_Time__c": "2016-09-20 2140",
+            "End_Date_Time__c": "2016-09-20 2150",
+        ]
+
+        let session2 = [
+            "Id": "a1L12000003FzT3EAK",
+            "Name": "ES16 Conc_Financial Fri 8:00",
+            "Summary__c": "Session 2 summary",
+            "Session_Display_Name__c": "Concurrent: Financial",
+            "Start_Date_Time__c": "2016-12-02 1500",
+            "End_Date_Time__c": "2016-12-02 1550",
+        ]
     
+        let dict = [
+            "success": true,
+            "sessions": [
+                session1,
+                session2
+            ],
+            "total_size": 2,
+            "done": true,
+            "timestamp": "2016-06-23T20:59:57.671Z"
+        ]
+        
+        return JSON(dict)
+    }
     
 }
 

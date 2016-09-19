@@ -153,7 +153,7 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
-		C21B3ED11D1B078800C54FA4 /* Supporting Files */ = {
+		C21B3ED11D1B078800C54FA4 /* helpers */ = {
 			isa = PBXGroup;
 			children = (
 				C2130BD71C987650009B3BB8 /* ActivityViewController.swift */,
@@ -161,7 +161,7 @@
 				C2A695231C35E30F00F6E0B8 /* SwiftyJSON.swift */,
 				C2494E271C89FBFE00E2969D /* Reachability.swift */,
 			);
-			name = "Supporting Files";
+			name = helpers;
 			sourceTree = "<group>";
 		};
 		C21B3ED71D1B0A0A00C54FA4 /* ShingoEventsTests */ = {
@@ -175,7 +175,7 @@
 			path = ShingoEvents;
 			sourceTree = "<group>";
 		};
-		C224CDF71CB6C960003147F0 /* Menus */ = {
+		C224CDF71CB6C960003147F0 /* menus */ = {
 			isa = PBXGroup;
 			children = (
 				C2CFC30F1C481EAB0036E485 /* LaunchMenuViewController.swift */,
@@ -183,7 +183,7 @@
 				C28B67F21C406BDE00AC9193 /* EventMenuViewController.swift */,
 				C2986DC31C65136600ADCF40 /* ShingoModelViewController.swift */,
 			);
-			name = Menus;
+			name = menus;
 			sourceTree = "<group>";
 		};
 		C224CDF81CB6C9C8003147F0 /* Session Information */ = {
@@ -250,9 +250,10 @@
 				C2F17FA71C6AAFCF0028062C /* Assets.xcassets */,
 				C2A695081C35AC2900F6E0B8 /* AppDelegate.swift */,
 				C2CFC3171C4954C20036E485 /* Main.storyboard */,
-				C224CDF71CB6C960003147F0 /* Menus */,
-				C2FF6B231CB2E50900331ED2 /* Classes */,
-				C21B3ED11D1B078800C54FA4 /* Supporting Files */,
+				C2E1662B1D9069B9001F2508 /* structure */,
+				C224CDF71CB6C960003147F0 /* menus */,
+				C2FF6B231CB2E50900331ED2 /* requests */,
+				C21B3ED11D1B078800C54FA4 /* helpers */,
 				C2FF6B201CB2E3E700331ED2 /* Maps */,
 				C2FF6B241CB2E52400331ED2 /* Settings Views */,
 				C224CDF81CB6C9C8003147F0 /* Session Information */,
@@ -272,6 +273,14 @@
 			path = SimpleBrowserUITests;
 			sourceTree = "<group>";
 		};
+		C2E1662B1D9069B9001F2508 /* structure */ = {
+			isa = PBXGroup;
+			children = (
+				C28B67E81C3F0BD700AC9193 /* EventData.swift */,
+			);
+			name = structure;
+			sourceTree = "<group>";
+		};
 		C2FF6B201CB2E3E700331ED2 /* Maps */ = {
 			isa = PBXGroup;
 			children = (
@@ -283,13 +292,12 @@
 			name = Maps;
 			sourceTree = "<group>";
 		};
-		C2FF6B231CB2E50900331ED2 /* Classes */ = {
+		C2FF6B231CB2E50900331ED2 /* requests */ = {
 			isa = PBXGroup;
 			children = (
-				C28B67E81C3F0BD700AC9193 /* EventData.swift */,
 				C2E9508E1D22E8F100178C03 /* APIRequests.swift */,
 			);
-			name = Classes;
+			name = requests;
 			sourceTree = "<group>";
 		};
 		C2FF6B241CB2E52400331ED2 /* Settings Views */ = {
