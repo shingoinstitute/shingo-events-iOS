@@ -22,6 +22,7 @@
 		C234BD561C5293CF002E9814 /* SpeakerListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C234BD551C5293CF002E9814 /* SpeakerListTableViewController.swift */; };
 		C234BD581C529597002E9814 /* SpeakerDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C234BD571C529597002E9814 /* SpeakerDetailsViewController.swift */; };
 		C2494E281C89FBFE00E2969D /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2494E271C89FBFE00E2969D /* Reachability.swift */; };
+		C24FF48C1D9195750061B3E2 /* ShingoEventsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24FF48B1D9195750061B3E2 /* ShingoEventsTests.swift */; };
 		C262CA8D1C3B1C29005845AF /* EventsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C262CA8C1C3B1C29005845AF /* EventsTableViewController.swift */; };
 		C264CCB41C57ECA7005CDB11 /* RecipientsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C264CCB31C57ECA7005CDB11 /* RecipientsTableViewController.swift */; };
 		C264CCF01C5834A5005CDB11 /* ChallengerInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C264CCEF1C5834A5005CDB11 /* ChallengerInfoViewController.swift */; };
@@ -51,19 +52,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		C22AB2A31C2484E800A7F3B1 /* PBXContainerItemProxy */ = {
+		C24FF48E1D9195750061B3E2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C22AB2861C2484E800A7F3B1 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = C22AB28D1C2484E800A7F3B1;
-			remoteInfo = SimpleBrowser;
-		};
-		C22AB2AE1C2484E800A7F3B1 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C22AB2861C2484E800A7F3B1 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = C22AB28D1C2484E800A7F3B1;
-			remoteInfo = SimpleBrowser;
+			remoteInfo = "Shingo Events";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -83,11 +77,14 @@
 		C224C8971C92138700F4E393 /* AboutPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutPageViewController.swift; sourceTree = "<group>"; };
 		C224CDFB1CB6CA42003147F0 /* RecipientTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipientTableViewCell.swift; sourceTree = "<group>"; };
 		C22AB28E1C2484E800A7F3B1 /* Shingo Events.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Shingo Events.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		C22AB2A21C2484E800A7F3B1 /* Shingo Events.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Shingo Events.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		C22AB2AD1C2484E800A7F3B1 /* Shingo Events.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Shingo Events.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C234BD551C5293CF002E9814 /* SpeakerListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeakerListTableViewController.swift; sourceTree = "<group>"; };
 		C234BD571C529597002E9814 /* SpeakerDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeakerDetailsViewController.swift; sourceTree = "<group>"; };
 		C2494E271C89FBFE00E2969D /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		C24FF47A1D91901E0061B3E2 /* ShingoEventsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShingoEventsTests.swift; sourceTree = "<group>"; };
+		C24FF47C1D91901E0061B3E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C24FF4891D9195740061B3E2 /* ShingoEventsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShingoEventsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C24FF48B1D9195750061B3E2 /* ShingoEventsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShingoEventsTests.swift; sourceTree = "<group>"; };
+		C24FF48D1D9195750061B3E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C262CA8C1C3B1C29005845AF /* EventsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsTableViewController.swift; sourceTree = "<group>"; };
 		C264CCB31C57ECA7005CDB11 /* RecipientsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipientsTableViewController.swift; sourceTree = "<group>"; };
 		C264CCEF1C5834A5005CDB11 /* ChallengerInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChallengerInfoViewController.swift; sourceTree = "<group>"; };
@@ -127,14 +124,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C22AB29F1C2484E800A7F3B1 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C22AB2AA1C2484E800A7F3B1 /* Frameworks */ = {
+		C24FF4861D9195740061B3E2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -208,8 +198,6 @@
 			isa = PBXGroup;
 			children = (
 				C2CFC3131C483C1C0036E485 /* SchedulesTableViewController.swift */,
-				C234BD551C5293CF002E9814 /* SpeakerListTableViewController.swift */,
-				C234BD571C529597002E9814 /* SpeakerDetailsViewController.swift */,
 			);
 			name = schedule;
 			sourceTree = "<group>";
@@ -229,6 +217,8 @@
 			isa = PBXGroup;
 			children = (
 				C22AB2901C2484E800A7F3B1 /* ShingoEvents */,
+				C24FF4791D91901E0061B3E2 /* ShingoEventsTests */,
+				C24FF48A1D9195750061B3E2 /* ShingoEventsTests */,
 				C22AB28F1C2484E800A7F3B1 /* Products */,
 				CB0A5FDCC55BAF34E0CAECA2 /* Frameworks */,
 				5DB25D0538898A8E281EE0AD /* Pods */,
@@ -239,8 +229,7 @@
 			isa = PBXGroup;
 			children = (
 				C22AB28E1C2484E800A7F3B1 /* Shingo Events.app */,
-				C22AB2A21C2484E800A7F3B1 /* Shingo Events.xctest */,
-				C22AB2AD1C2484E800A7F3B1 /* Shingo Events.xctest */,
+				C24FF4891D9195740061B3E2 /* ShingoEventsTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -261,11 +250,12 @@
 				C2CFC30F1C481EAB0036E485 /* LaunchMenuViewController.swift */,
 				C262CA8C1C3B1C29005845AF /* EventsTableViewController.swift */,
 				C28B67F21C406BDE00AC9193 /* EventMenuViewController.swift */,
+				C224CDF81CB6C9C8003147F0 /* schedule */,
+				C24FF4BF1D91D66D0061B3E2 /* speakers */,
 				C24FF4711D918DA00061B3E2 /* sponsors */,
 				C24FF4701D918D950061B3E2 /* affiliates */,
 				C24FF46F1D918D870061B3E2 /* exhibitors */,
 				C224CDF91CB6C9DF003147F0 /* recipients */,
-				C224CDF81CB6C9C8003147F0 /* schedule */,
 				C2FF6B241CB2E52400331ED2 /* support */,
 				C2FF6B201CB2E3E700331ED2 /* venue maps */,
 			);
@@ -302,9 +292,9 @@
 		C24FF4721D918DE10061B3E2 /* helpers */ = {
 			isa = PBXGroup;
 			children = (
+				44222B8D1D8F8F4100595843 /* DropDown */,
 				C2130BD71C987650009B3BB8 /* ActivityView.swift */,
 				C2494E271C89FBFE00E2969D /* Reachability.swift */,
-				44222B8D1D8F8F4100595843 /* DropDown */,
 			);
 			name = helpers;
 			sourceTree = "<group>";
@@ -317,6 +307,33 @@
 				C2CFC3171C4954C20036E485 /* Main.storyboard */,
 			);
 			name = resources;
+			sourceTree = "<group>";
+		};
+		C24FF4791D91901E0061B3E2 /* ShingoEventsTests */ = {
+			isa = PBXGroup;
+			children = (
+				C24FF47A1D91901E0061B3E2 /* ShingoEventsTests.swift */,
+				C24FF47C1D91901E0061B3E2 /* Info.plist */,
+			);
+			path = ShingoEventsTests;
+			sourceTree = "<group>";
+		};
+		C24FF48A1D9195750061B3E2 /* ShingoEventsTests */ = {
+			isa = PBXGroup;
+			children = (
+				C24FF48B1D9195750061B3E2 /* ShingoEventsTests.swift */,
+				C24FF48D1D9195750061B3E2 /* Info.plist */,
+			);
+			path = ShingoEventsTests;
+			sourceTree = "<group>";
+		};
+		C24FF4BF1D91D66D0061B3E2 /* speakers */ = {
+			isa = PBXGroup;
+			children = (
+				C234BD551C5293CF002E9814 /* SpeakerListTableViewController.swift */,
+				C234BD571C529597002E9814 /* SpeakerDetailsViewController.swift */,
+			);
+			name = speakers;
 			sourceTree = "<group>";
 		};
 		C2FF6B201CB2E3E700331ED2 /* venue maps */ = {
@@ -374,41 +391,23 @@
 			productReference = C22AB28E1C2484E800A7F3B1 /* Shingo Events.app */;
 			productType = "com.apple.product-type.application";
 		};
-		C22AB2A11C2484E800A7F3B1 /* Shingo EventsTests */ = {
+		C24FF4881D9195740061B3E2 /* ShingoEventsTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C22AB2B91C2484E900A7F3B1 /* Build configuration list for PBXNativeTarget "Shingo EventsTests" */;
+			buildConfigurationList = C24FF4901D9195750061B3E2 /* Build configuration list for PBXNativeTarget "ShingoEventsTests" */;
 			buildPhases = (
-				C22AB29E1C2484E800A7F3B1 /* Sources */,
-				C22AB29F1C2484E800A7F3B1 /* Frameworks */,
-				C22AB2A01C2484E800A7F3B1 /* Resources */,
+				C24FF4851D9195740061B3E2 /* Sources */,
+				C24FF4861D9195740061B3E2 /* Frameworks */,
+				C24FF4871D9195740061B3E2 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				C22AB2A41C2484E800A7F3B1 /* PBXTargetDependency */,
+				C24FF48F1D9195750061B3E2 /* PBXTargetDependency */,
 			);
-			name = "Shingo EventsTests";
-			productName = SimpleBrowserTests;
-			productReference = C22AB2A21C2484E800A7F3B1 /* Shingo Events.xctest */;
+			name = ShingoEventsTests;
+			productName = ShingoEventsTests;
+			productReference = C24FF4891D9195740061B3E2 /* ShingoEventsTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		C22AB2AC1C2484E800A7F3B1 /* Shingo EventsUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = C22AB2BC1C2484E900A7F3B1 /* Build configuration list for PBXNativeTarget "Shingo EventsUITests" */;
-			buildPhases = (
-				C22AB2A91C2484E800A7F3B1 /* Sources */,
-				C22AB2AA1C2484E800A7F3B1 /* Frameworks */,
-				C22AB2AB1C2484E800A7F3B1 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				C22AB2AF1C2484E800A7F3B1 /* PBXTargetDependency */,
-			);
-			name = "Shingo EventsUITests";
-			productName = SimpleBrowserUITests;
-			productReference = C22AB2AD1C2484E800A7F3B1 /* Shingo Events.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
@@ -416,7 +415,7 @@
 		C22AB2861C2484E800A7F3B1 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0730;
+				LastSwiftUpdateCheck = 0800;
 				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "Shingo Institute";
 				TargetAttributes = {
@@ -425,14 +424,10 @@
 						DevelopmentTeam = XQL9FCF56P;
 						LastSwiftMigration = 0800;
 					};
-					C22AB2A11C2484E800A7F3B1 = {
-						CreatedOnToolsVersion = 7.2;
-						LastSwiftMigration = 0800;
-						TestTargetID = C22AB28D1C2484E800A7F3B1;
-					};
-					C22AB2AC1C2484E800A7F3B1 = {
-						CreatedOnToolsVersion = 7.2;
-						LastSwiftMigration = 0800;
+					C24FF4881D9195740061B3E2 = {
+						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = XQL9FCF56P;
+						ProvisioningStyle = Automatic;
 						TestTargetID = C22AB28D1C2484E800A7F3B1;
 					};
 				};
@@ -451,8 +446,7 @@
 			projectRoot = "";
 			targets = (
 				C22AB28D1C2484E800A7F3B1 /* Shingo Events */,
-				C22AB2A11C2484E800A7F3B1 /* Shingo EventsTests */,
-				C22AB2AC1C2484E800A7F3B1 /* Shingo EventsUITests */,
+				C24FF4881D9195740061B3E2 /* ShingoEventsTests */,
 			);
 		};
 /* End PBXProject section */
@@ -468,14 +462,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C22AB2A01C2484E800A7F3B1 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C22AB2AB1C2484E800A7F3B1 /* Resources */ = {
+		C24FF4871D9195740061B3E2 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -590,32 +577,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C22AB29E1C2484E800A7F3B1 /* Sources */ = {
+		C24FF4851D9195740061B3E2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C22AB2A91C2484E800A7F3B1 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				C24FF48C1D9195750061B3E2 /* ShingoEventsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		C22AB2A41C2484E800A7F3B1 /* PBXTargetDependency */ = {
+		C24FF48F1D9195750061B3E2 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = C22AB28D1C2484E800A7F3B1 /* Shingo Events */;
-			targetProxy = C22AB2A31C2484E800A7F3B1 /* PBXContainerItemProxy */;
-		};
-		C22AB2AF1C2484E800A7F3B1 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = C22AB28D1C2484E800A7F3B1 /* Shingo Events */;
-			targetProxy = C22AB2AE1C2484E800A7F3B1 /* PBXContainerItemProxy */;
+			targetProxy = C24FF48E1D9195750061B3E2 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -764,60 +740,40 @@
 			};
 			name = Release;
 		};
-		C22AB2BA1C2484E900A7F3B1 /* Debug */ = {
+		C24FF4911D9195750061B3E2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ENABLE_MODULES = YES;
-				INFOPLIST_FILE = ShingoEvents/Info.plist;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				DEVELOPMENT_TEAM = XQL9FCF56P;
+				INFOPLIST_FILE = ShingoEventsTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "";
-				PRODUCT_NAME = "Shingo Events";
-				SWIFT_OBJC_BRIDGING_HEADER = "ShingoEvents/Shingo EventsTests-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				PRODUCT_BUNDLE_IDENTIFIER = com.usu.shingo.prize.conference.ShingoEventsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Shingo Events.app/Shingo Events";
 			};
 			name = Debug;
 		};
-		C22AB2BB1C2484E900A7F3B1 /* Release */ = {
+		C24FF4921D9195750061B3E2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ENABLE_MODULES = YES;
-				INFOPLIST_FILE = ShingoEvents/Info.plist;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				DEVELOPMENT_TEAM = XQL9FCF56P;
+				INFOPLIST_FILE = ShingoEventsTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "";
-				PRODUCT_NAME = "Shingo Events";
-				SWIFT_OBJC_BRIDGING_HEADER = "ShingoEvents/Shingo EventsTests-Bridging-Header.h";
+				PRODUCT_BUNDLE_IDENTIFIER = com.usu.shingo.prize.conference.ShingoEventsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Shingo Events.app/Shingo Events";
-			};
-			name = Release;
-		};
-		C22AB2BD1C2484E900A7F3B1 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				INFOPLIST_FILE = SimpleBrowserUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = shingo.org.SimpleBrowserUITests;
-				PRODUCT_NAME = "Shingo Events";
-				SWIFT_VERSION = 3.0;
-				TEST_TARGET_NAME = SimpleBrowser;
-				USES_XCTRUNNER = YES;
-			};
-			name = Debug;
-		};
-		C22AB2BE1C2484E900A7F3B1 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				INFOPLIST_FILE = SimpleBrowserUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = shingo.org.SimpleBrowserUITests;
-				PRODUCT_NAME = "Shingo Events";
-				SWIFT_VERSION = 3.0;
-				TEST_TARGET_NAME = SimpleBrowser;
-				USES_XCTRUNNER = YES;
 			};
 			name = Release;
 		};
@@ -842,20 +798,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C22AB2B91C2484E900A7F3B1 /* Build configuration list for PBXNativeTarget "Shingo EventsTests" */ = {
+		C24FF4901D9195750061B3E2 /* Build configuration list for PBXNativeTarget "ShingoEventsTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				C22AB2BA1C2484E900A7F3B1 /* Debug */,
-				C22AB2BB1C2484E900A7F3B1 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		C22AB2BC1C2484E900A7F3B1 /* Build configuration list for PBXNativeTarget "Shingo EventsUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				C22AB2BD1C2484E900A7F3B1 /* Debug */,
-				C22AB2BE1C2484E900A7F3B1 /* Release */,
+				C24FF4911D9195750061B3E2 /* Debug */,
+				C24FF4921D9195750061B3E2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

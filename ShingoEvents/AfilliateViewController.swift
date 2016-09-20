@@ -42,7 +42,7 @@ class AfilliateViewController: UIViewController {
         logoImage.autoPinEdge(.top, to: .top, of: scrollView, withOffset: 8)
         logoImage.autoPinEdge(.left, to: .left, of: view, withOffset: 8)
         
-        abstractTextField.backgroundColor = SIColor.prussianBlueColor()
+        abstractTextField.backgroundColor = SIColor.prussianBlue()
         abstractTextField.text = ""
         abstractTextField.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         abstractTextField.autoPinEdge(.top, to: .bottom, of: logoImage, withOffset: 8)
@@ -56,7 +56,7 @@ class AfilliateViewController: UIViewController {
         backdrop.autoPinEdge(.left, to: .left, of: view, withOffset: 0)
         backdrop.autoPinEdge(.right, to: .right, of: view, withOffset: 0)
         backdrop.autoPinEdge(.bottom, to: .bottom, of: view, withOffset: 0)
-        backdrop.backgroundColor = SIColor.prussianBlueColor()
+        backdrop.backgroundColor = SIColor.prussianBlue()
         
         affiliate.getLogoImage() { image in
             self.logoImage.image = image
@@ -73,7 +73,7 @@ class AfilliateViewController: UIViewController {
             
             let attributedText = try NSMutableAttributedString(data: affiliate.summary.data(using: String.Encoding.utf8)!,
                                                                options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
-                                                                        NSCharacterEncodingDocumentAttribute : String.Encoding.utf8],
+                                                                        NSCharacterEncodingDocumentAttribute : String.Encoding.utf8.rawValue],
                                                                  documentAttributes: nil)
             attributedText.addAttributes(attrs, range: NSMakeRange(0, attributedText.string.characters.count))
         

@@ -13,7 +13,16 @@ class SchedulesTableViewController: UITableViewController, SISpeakerDelegate {
     var agendas: [SIAgenda]!
     var eventName: String!
 
-    var cellShouldExpand: [[Bool]] {
+    /*
+     When a cell is tapped, it will expand to show additional
+     information, or shrink to show less information if it was
+     already expanded.
+     
+     cellExpansionTracker keeps track of which cells have been
+     expanded so that cells maintain their expanded or shrunk
+     style as they get recylced on the view controller.
+     */
+    var cellExpansionTracker: [[Bool]] {
         get {
             var agendaSource = [[Bool]]()
             for agenda in self.agendas {
@@ -36,7 +45,7 @@ class SchedulesTableViewController: UITableViewController, SISpeakerDelegate {
         super.viewDidLoad()
         tableView.estimatedRowHeight = 106
         tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.backgroundColor = SIColor.prussianBlueColor()
+        tableView.backgroundColor = SIColor.prussianBlue()
         
         for agenda in agendas {
             if !agenda.didLoadSessions {
@@ -122,13 +131,19 @@ extension SchedulesTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ScheduleCell", for: indexPath) as! SchedulesTableViewCell
         
-        cell.speakersButton.isHidden = true
-        cell.speakersButton.isUserInteractionEnabled = false
-        
         cell.session = agendas[(indexPath as NSIndexPath).section].sessions[(indexPath as NSIndexPath).row]
         cell.delegate = self
         
-        if cellShouldExpand[(indexPath as NSIndexPath).section][(indexPath as NSIndexPath).row] {
+        if !cell.session.didLoadSpeakers || cell.session.speakers.isEmpty {
+            cell.speakersButton.isHidden = true
+            cell.speakersButton.isUserInteractionEnabled = false
+        } else if !cell.session.speakers.isEmpty {
+            cell.speakersButton.isHidden = false
+            cell.speakersButton.isUserInteractionEnabled = true
+        }
+        
+        
+        if cellExpansionTracker[(indexPath as NSIndexPath).section][(indexPath as NSIndexPath).row] {
             cell.expandCell()
         } else {
             cell.shrinkCell()
@@ -258,17 +273,12 @@ class SchedulesTableViewCell: UITableViewCell {
                     self.layoutIfNeeded()
                     self.activityIndicator.stopAnimating()
                 })
-            } else {
-                if !session.speakers.isEmpty {
-                    self.speakersButton.isHidden = false
-                    self.speakersButton.isUserInteractionEnabled = true
-                }
             }
             
         }
     }
     
-    fileprivate func expandCell() {
+    func expandCell() {
         guard let info = getAttributedStringForSession(room: session.room, summary: session.summary) else {
             infoTextView.text = "Check back later for more information."
             infoTextView.font = UIFont.helveticaOfFontSize(14)
@@ -295,7 +305,7 @@ class SchedulesTableViewCell: UITableViewCell {
         infoTextView.attributedText = info
     }
     
-    fileprivate func shrinkCell() {
+    func shrinkCell() {
         infoTextView.text = "Select For More Info >"
         infoTextView.textAlignment = .center
         infoTextView.textColor = .gray
@@ -326,9 +336,9 @@ class SchedulesTableViewCell: UITableViewCell {
             let leftStyle = NSMutableParagraphStyle()
             leftStyle.alignment = .left
             
-            let attributes: [String:AnyObject] = [
-                NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType as AnyObject,
-                NSCharacterEncodingDocumentAttribute : String.Encoding.utf8 as AnyObject,
+            let attributes: [String:Any] = [
+                NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
+                NSCharacterEncodingDocumentAttribute : String.Encoding.utf8.rawValue,
                 NSParagraphStyleAttributeName : leftStyle
             ]
             

@@ -17,7 +17,7 @@ class ChallengerInfoViewController: UIViewController {
     var scrollView: UIScrollView = UIScrollView.newAutoLayout()
     var backgroundView: UIView = {
         let view = UIView.newAutoLayout()
-        view.backgroundColor = SIColor.prussianBlueColor()
+        view.backgroundColor = SIColor.prussianBlue()
         return view
     }()
     
@@ -74,7 +74,7 @@ class ChallengerInfoViewController: UIViewController {
     
     fileprivate func setSummaryText() {
         
-        abstractTextField.backgroundColor = SIColor.prussianBlueColor()
+        abstractTextField.backgroundColor = SIColor.prussianBlue()
         abstractTextField.text = ""
         abstractTextField.textColor = .white
         abstractTextField.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
@@ -87,7 +87,7 @@ class ChallengerInfoViewController: UIViewController {
             do {
                 let attributedText = try NSMutableAttributedString(data: recipient.summary.data(using: String.Encoding.utf8)!,
                                                                           options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
-                                                                            NSCharacterEncodingDocumentAttribute : String.Encoding.utf8,
+                                                                            NSCharacterEncodingDocumentAttribute : String.Encoding.utf8.rawValue,
                                                                             NSForegroundColorAttributeName : UIColor.white],
                                                                           documentAttributes: nil)
                 attributedText.addAttributes([NSFontAttributeName : UIFont.helveticaOfFontSize(16), NSForegroundColorAttributeName : UIColor.white], range: NSMakeRange(0, attributedText.string.characters.count - 1))

@@ -45,14 +45,14 @@ class ResearchInfoViewController: UIViewController {
         abstractTextField.autoPinEdge(.bottom, to: .bottom, of: scrollView, withOffset: 0)
         abstractTextField.isScrollEnabled = false
         abstractTextField.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
-        abstractTextField.backgroundColor = SIColor.shingoBlueColor()
+        abstractTextField.backgroundColor = SIColor.shingoBlue()
         
         view.bringSubview(toFront: scrollView)
         backdrop.autoPinEdge(.top, to: .bottom, of: bookImage, withOffset: 8)
         backdrop.autoPinEdge(toSuperviewEdge: .left)
         backdrop.autoPinEdge(toSuperviewEdge: .right)
         backdrop.autoPinEdge(toSuperviewEdge: .bottom)
-        backdrop.backgroundColor = SIColor.shingoBlueColor()
+        backdrop.backgroundColor = SIColor.shingoBlue()
         
         automaticallyAdjustsScrollViewInsets = false
 
@@ -67,7 +67,7 @@ class ResearchInfoViewController: UIViewController {
             do {
                 let attributedText = try NSMutableAttributedString(data: recipient.summary.data(using: String.Encoding.utf8)!,
                                                                       options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
-                                                                                NSCharacterEncodingDocumentAttribute : String.Encoding.utf8],
+                                                                                NSCharacterEncodingDocumentAttribute : String.Encoding.utf8.rawValue],
                                                                       documentAttributes: nil)
                 attributedText.addAttributes([NSFontAttributeName : UIFont.helveticaOfFontSize(16), NSForegroundColorAttributeName : UIColor.white], range: NSMakeRange(0, attributedText.string.characters.count - 1))
                 abstractTextField.attributedText = attributedText

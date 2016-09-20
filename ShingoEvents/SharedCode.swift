@@ -29,27 +29,27 @@ class SIColor: UIColor {
         self.init(red: CGFloat(red) / 255.0, green: CGFloat(green) / 255.0, blue: CGFloat(blue) / 255.0, alpha: 1.0)
     }
     
-    class func lightBlueColor() -> SIColor {
+    class func lightBlue() -> SIColor {
         return SIColor(netHex: 0x155c97)
     }
     
-    class func shingoBlueColor() -> SIColor {
+    class func shingoBlue() -> SIColor {
         return SIColor(netHex: 0x002f56)
     }
     
-    class func prussianBlueColor() -> SIColor {
+    class func prussianBlue() -> SIColor {
         return SIColor(netHex: 0x002F56)
     }
     
-    class func shingoRedColor() -> SIColor {
+    class func shingoRed() -> SIColor {
         return SIColor(netHex: 0x650820)
     }
     
-    class func darkShingoBlueColor() -> SIColor {
+    class func darkShingoBlue() -> SIColor {
         return SIColor(netHex: 0x0e2145)
     }
     
-    class func shingoGoldColor() -> SIColor {
+    class func shingoGold() -> SIColor {
         return SIColor(netHex: 0xcd8931)
     }
     

@@ -24,10 +24,10 @@ class SpeakerDetailsViewController: UIViewController {
         view = UIView()
         scrollView = UIScrollView.newAutoLayout()
         
-        view.backgroundColor = SIColor.shingoBlueColor()
+        view.backgroundColor = SIColor.shingoBlue()
         view.addSubview(scrollView)
         
-        scrollView.backgroundColor = SIColor.shingoBlueColor()
+        scrollView.backgroundColor = SIColor.shingoBlue()
         
         // Set correct text for speaker label
         if !speaker.name.isEmpty {
@@ -65,11 +65,18 @@ class SpeakerDetailsViewController: UIViewController {
             var htmlString = speaker.biography
             do {
                 htmlString = "<font size=\"5\">" + htmlString + "</font>"
-                let attributedText = try NSMutableAttributedString(data: htmlString.data(using: String.Encoding.utf8)!,
-                                                        options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
-                                                            NSCharacterEncodingDocumentAttribute : String.Encoding.utf8],
-                                                        documentAttributes: nil)
-                biographyTextView.attributedText = attributedText
+                if let data = htmlString.data(using: String.Encoding.utf8) {
+                    
+                    let attributes:[String:Any] = [
+                        NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
+                        NSCharacterEncodingDocumentAttribute : String.Encoding.utf8.rawValue,
+                    ]
+                    
+                    let attrText = try NSAttributedString(data: data, options: attributes, documentAttributes: nil)
+                    
+                    biographyTextView.attributedText = attrText
+                    
+                }
                 
             } catch {
                 print("Error in SpeakerDetailsViewController")

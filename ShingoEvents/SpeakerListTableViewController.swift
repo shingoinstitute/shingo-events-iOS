@@ -66,14 +66,8 @@ class SpeakerListTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "SpeakerListCell", for: indexPath) as! SpeakerListCell
-        
-        cell.aiv.hidesWhenStopped = true
 
         cell.speaker = dataSource[(indexPath as NSIndexPath).section]?[(indexPath as NSIndexPath).row]
-        
-        if cell.speakerImage.image == nil {
-            cell.aiv.startAnimating()
-        }
         
         return cell
     }
@@ -83,16 +77,27 @@ class SpeakerListTableViewController: UITableViewController {
         let header = UILabel(text: "", font: UIFont(name: "Helvetica", size: 12))
         header.textColor = .white
         
-        header.text = "  \(dataSource[section]?[0].speakerType.rawValue) Speakers"
+        guard let speakers = dataSource[section] else {
+            header.text = "   Speakers"
+            return header
+        }
+        
+        header.text = "  \(speakers[0].speakerType) Speakers"
         
         return header
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
-        if (dataSource[section]?.isEmpty)! { return 0 }
+        guard let section = dataSource[section] else {
+            return 0
+        }
         
-        return 32
+        if section.isEmpty {
+            return 0
+        } else {
+            return 32
+        }
     }
     
     // MARK: - Navigation
@@ -116,7 +121,11 @@ class SpeakerListCell: UITableViewCell {
             speakerNameLabel.font = UIFont.boldSystemFont(ofSize: 16)
         }
     }
-    @IBOutlet weak var speakerImage: UIImageView!
+    @IBOutlet weak var speakerImage: UIImageView! {
+        didSet {
+            speakerImage.backgroundColor = .clear
+        }
+    }
     @IBOutlet weak var speakerTitle: UILabel! {
         didSet {
             speakerTitle.font = UIFont.helveticaOfFontSize(15)
@@ -127,10 +136,18 @@ class SpeakerListCell: UITableViewCell {
             speakerCompany.font = UIFont.helveticaOfFontSize(15)
         }
     }
-    @IBOutlet weak var aiv: UIActivityIndicatorView!
+    @IBOutlet weak var aiv: UIActivityIndicatorView! {
+        didSet {
+            aiv.hidesWhenStopped = true
+        }
+    }
     
     var speaker: SISpeaker! {
         didSet {
+            if !speaker.didLoadImage {
+                speakerImage.image = nil
+                aiv.startAnimating()
+            }
             updateCell()
         }
     }

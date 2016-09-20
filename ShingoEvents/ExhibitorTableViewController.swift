@@ -66,7 +66,7 @@ extension ExhibitorTableViewController {
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
-        view.backgroundColor = SIColor.shingoGoldColor()
+        view.backgroundColor = SIColor.shingoRed()
         let header = UILabel()
         header.text = sectionInformation[section].0
         header.textColor = .white

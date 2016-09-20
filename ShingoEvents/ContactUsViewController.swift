@@ -32,7 +32,7 @@ class ContactUsViewController: UIViewController, UITextFieldDelegate, UITextView
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = SIColor.shingoGoldColor()
+        view.backgroundColor = SIColor.shingoRed()
         
         let starButtons: [SIButton] = [star1, star2, star3, star4, star5]
         

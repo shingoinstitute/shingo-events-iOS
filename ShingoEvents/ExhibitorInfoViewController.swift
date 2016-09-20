@@ -29,7 +29,7 @@ class ExhibitorInfoViewController: UIViewController {
         let view = UITextView.newAutoLayout()
         view.text = ""
         view.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
-        view.backgroundColor = SIColor.shingoBlueColor()
+        view.backgroundColor = SIColor.shingoBlue()
         view.isEditable = false
         view.isScrollEnabled = false
         view.dataDetectorTypes = [UIDataDetectorTypes.link, UIDataDetectorTypes.phoneNumber]
@@ -43,7 +43,7 @@ class ExhibitorInfoViewController: UIViewController {
         super.viewDidLoad()
 
         navigationItem.title = exhibitor.name
-        view.backgroundColor = SIColor.shingoBlueColor()
+        view.backgroundColor = SIColor.shingoBlue()
         
         exhibitor.getLogoImage { (image) in
             self.exhibitorImageView.image = image
@@ -93,7 +93,7 @@ class ExhibitorInfoViewController: UIViewController {
             do {
             let description = try NSAttributedString(data: htmlString.data(using: String.Encoding.utf8)!,
                                                         options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
-                                                            NSCharacterEncodingDocumentAttribute : String.Encoding.utf8],
+                                                            NSCharacterEncodingDocumentAttribute : String.Encoding.utf8.rawValue],
                                                         documentAttributes: nil)
             richText.append(description)
             } catch {
