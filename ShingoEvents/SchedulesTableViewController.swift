@@ -47,26 +47,60 @@ class SchedulesTableViewController: UITableViewController, SISpeakerDelegate {
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.backgroundColor = SIColor.prussianBlue()
         
-        for agenda in agendas {
-            if !agenda.didLoadSessions {
-                agenda.requestAgendaSessions({
-                    if let sessions = self.sortSessionsByDate(agenda.sessions) {
-                        agenda.sessions = sessions
-                        
-                        for session in sessions {
-                            if !session.didLoadSessionInformation {
-                                session.requestSessionInformation({})
+        if agendas == nil {
+            addNoContentLabel()
+            agendas = [SIAgenda]()
+        } else if agendas.isEmpty {
+            addNoContentLabel()
+        } else {
+            for agenda in agendas {
+                if !agenda.didLoadSessions {
+                    agenda.requestAgendaSessions({
+                        if let sessions = self.sortSessionsByDate(agenda.sessions) {
+                            agenda.sessions = sessions
+                            
+                            for session in sessions {
+                                if !session.didLoadSessionInformation {
+                                    session.requestSessionInformation({})
+                                }
                             }
+                            
+                            self.tableView.reloadData()
                         }
-                        
-                        self.tableView.reloadData()
-                    }
-                })
+                    })
+                }
             }
         }
     }
     
-    func performActionOnSpeakers(_ data: [SISpeaker]) {
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        NotificationCenter.default.addObserver(forName: .UIContentSizeCategoryDidChange, object: .none, queue: OperationQueue.main) { _ in
+            self.tableView.reloadData()
+        }
+        
+    }
+    
+    func addNoContentLabel() {
+        
+        let infoLabel = UILabel.newAutoLayout()
+        infoLabel.font = UIFont.helveticaOfFontSize(16)
+        infoLabel.textColor = .white
+        infoLabel.numberOfLines = 0
+        infoLabel.textAlignment = .center
+        infoLabel.text = "Content is currently unavailable, please check back later."
+        infoLabel.lineBreakMode = .byWordWrapping
+        
+        tableView.addSubview(infoLabel)
+        infoLabel.autoAlignAxis(.vertical, toSameAxisOf: tableView)
+        infoLabel.autoAlignAxis(.horizontal, toSameAxisOf: tableView)
+        infoLabel.autoPinEdge(.left, to: .left, of: tableView, withOffset: 16)
+        infoLabel.autoPinEdge(.right, to: .right, of: tableView, withOffset: -16)
+        
+    }
+    
+    func performActionOnSpeakers(data: [SISpeaker]) {
         performSegue(withIdentifier: "SpeakerListView", sender: data)
     }
     
@@ -174,7 +208,8 @@ extension SchedulesTableViewController {
         
         let label = UILabel()
         label.text = title
-        label.font = UIFont.boldSystemFont(ofSize: 16)
+//        label.font = UIFont.boldSystemFont(ofSize: 16)
+        label.font = UIFont.preferredFont(forTextStyle: .headline)
         label.textColor = UIColor.white
         
         return label
@@ -258,9 +293,13 @@ class SchedulesTableViewCell: UITableViewCell {
         speakersButton.addTarget(self, action: #selector(SchedulesTableViewCell.didTapSpeakersButton), for: .touchUpInside)
         
         if let session = session {
-            timeLabel.text = Date().timeFrameBetweenDates(startDate: session.startDate, endDate: session.endDate)
+            if let timeFrame = Date.timeFrameBetweenDates(startDate: session.startDate, endDate: session.endDate) {
+                timeLabel.text = timeFrame
+            } else {
+                timeLabel.text = "Session time is currently unavailable"
+            }
             
-            titleLabel.font = UIFont.helveticaOfFontSize(16)
+            titleLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
             titleLabel.text = "\(session.sessionType.rawValue): \(session.displayName)"
             
             if !session.didLoadSessionInformation {
@@ -281,7 +320,7 @@ class SchedulesTableViewCell: UITableViewCell {
     func expandCell() {
         guard let info = getAttributedStringForSession(room: session.room, summary: session.summary) else {
             infoTextView.text = "Check back later for more information."
-            infoTextView.font = UIFont.helveticaOfFontSize(14)
+            infoTextView.font = UIFont.preferredFont(forTextStyle: .body)
             infoTextView.textColor = .black
             return
         }
@@ -291,10 +330,11 @@ class SchedulesTableViewCell: UITableViewCell {
             let leftStyle = NSMutableParagraphStyle()
             leftStyle.alignment = .left
             
-            let notificationText = NSMutableAttributedString(string: "Check back later for more information.", attributes: [
-                NSFontAttributeName : UIFont.helveticaOfFontSize(14),
-                NSParagraphStyleAttributeName : leftStyle
-                ])
+            let notificationText = NSMutableAttributedString(string: "Check back later for more information.",
+                                                             attributes: [
+                                                                NSFontAttributeName : UIFont.preferredFont(forTextStyle: .body),
+                                                                NSParagraphStyleAttributeName : leftStyle
+                                                            ])
             notificationText.append(info)
             
             infoTextView.attributedText = notificationText
@@ -309,14 +349,14 @@ class SchedulesTableViewCell: UITableViewCell {
         infoTextView.text = "Select For More Info >"
         infoTextView.textAlignment = .center
         infoTextView.textColor = .gray
-        infoTextView.font = UIFont.helveticaOfFontSize(14)
+        infoTextView.font = UIFont.preferredFont(forTextStyle: .footnote)
         infoTextView.layer.borderWidth = 0
     }
     
     @IBAction func didTapSpeakersButton() {
         if !session.speakers.isEmpty {
             if let delegate = delegate {
-                delegate.performActionOnSpeakers(session.speakers)
+                delegate.performActionOnSpeakers(data: session.speakers)
             }
         }
     }
@@ -327,7 +367,7 @@ class SchedulesTableViewCell: UITableViewCell {
         
         if let room = room {
             if !room.name.isEmpty {
-                roomName += "<p><b>Room: \(room.name)</b></p>"
+                roomName += "<p>Room: \(room.name)</p>"
             }
         }
         
@@ -339,35 +379,47 @@ class SchedulesTableViewCell: UITableViewCell {
             let attributes: [String:Any] = [
                 NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
                 NSCharacterEncodingDocumentAttribute : String.Encoding.utf8.rawValue,
-                NSParagraphStyleAttributeName : leftStyle
+                NSParagraphStyleAttributeName : leftStyle,
             ]
             
-            let attributedRoomName = try NSMutableAttributedString(data: "<font face=\"Arial, Helvetica, sans-serif\" size=\"4\">\(roomName)</font>".data(using: String.Encoding.utf8)!,
+            let attrRoomName = try NSMutableAttributedString(data: roomName.data(using: String.Encoding.utf8)!,
                                                                options: attributes,
                                                                documentAttributes: nil)
             
-            let attrSummary = try NSMutableAttributedString(data: "<font face=\"Arial, Helvetica, sans-serif\" size=\"4\">\(summary)</font>".data(using: String.Encoding.utf8)!,
-                                                        options: attributes,
-                                                        documentAttributes: nil)
             
-            attributedRoomName.append(attrSummary)
+            attrRoomName.addAttribute(NSFontAttributeName, value: UIFont.preferredFont(forTextStyle: .headline), range: attrRoomName.fullRange)
             
+
+//            let attrSummary = try NSMutableAttributedString(data: summary.data(using: String.Encoding.utf8)!,
+//                                                        options: attributes,
+//                                                        documentAttributes: nil)
+
+            let testText = "This is un-attributed, <i>this is italicized</i>, <b>this is bolded</b>, <u>this is underlined</u>, <b><i>this is bolded and italicized</i></b>, <b><i><u>and this is bolded, italicized, and underlined</u></i></b>."
             
+            let attrSummary = try NSMutableAttributedString(data: testText.data(using: String.Encoding.utf8)!,
+                                                            options: attributes,
+                                                            documentAttributes: nil)
             
-            let centeredStyle = NSMutableParagraphStyle()
-            centeredStyle.alignment = .center
+            let preferredFontSizeForContent = UIFont.preferredFont(forTextStyle: .headline).fontDescriptor.pointSize
             
-            let swipeAttributes = [
-                NSParagraphStyleAttributeName : centeredStyle,
+            attrSummary.changeFont(toSize: preferredFontSizeForContent)
+            attrSummary.usePreferredFontWhileMaintainingAttributes(forTextStyle: .subheadline)
+            
+//            let _ = attrSummary.allAttributes
+            
+            attrRoomName.append(attrSummary)
+            
+            let swipeAttributes:[String:Any] = [
+                NSParagraphStyleAttributeName : SIParagraphStyle.center,
                 NSForegroundColorAttributeName : UIColor.gray,
-                NSFontAttributeName : UIFont.helveticaOfFontSize(14)
+                NSFontAttributeName : UIFont.preferredFont(forTextStyle: .footnote)
             ]
             
             let swipeUpIndicator = NSMutableAttributedString(string: "\n\nTap To See Less...", attributes: swipeAttributes)
             
-            attributedRoomName.append(swipeUpIndicator)
+            attrRoomName.append(swipeUpIndicator)
             
-            return attributedRoomName
+            return attrRoomName
         } catch {
             return nil
         }
@@ -376,7 +428,147 @@ class SchedulesTableViewCell: UITableViewCell {
     
 }
 
+extension String {
+    var length: Int {
+        get {
+            return self.characters.count
+        }
+    }
+}
 
+extension NSMutableAttributedString {
+    var fullRange: NSRange {
+        get {
+            return NSMakeRange(0, self.string.length)
+        }
+    }
+    
+    func changeFont(toSize: CGFloat) {
+        self.enumerateAttribute(NSFontAttributeName, in: self.fullRange, options: NSAttributedString.EnumerationOptions.longestEffectiveRangeNotRequired) { (attribute: Any?, range: NSRange, stop: UnsafeMutablePointer<ObjCBool>) in
+            if let fontAttribute = attribute as? UIFont {
+                let updatedFont = UIFont(descriptor: fontAttribute.fontDescriptor, size: toSize)
+                self.addAttribute(NSFontAttributeName, value: updatedFont, range: range)
+            }
+        }
+    }
+    
+    func usePreferredFontWhileMaintainingAttributes(forTextStyle: UIFontTextStyle) {
+        self.enumerateAttribute(NSFontAttributeName, in: self.fullRange, options: NSAttributedString.EnumerationOptions.longestEffectiveRangeNotRequired) {
+            (attribute: Any?, range: NSRange, stop: UnsafeMutablePointer<ObjCBool>) in
+            
+            let stringInRange = self.attributedSubstring(from: range)
+            if let fontInRange = stringInRange.attribute(NSFontAttributeName, at: 0, effectiveRange: nil) {
+//                if let font = fontInRange as? UIFont {
+                
+                    var descriptor: UIFontDescriptor!
+                    
+                    let textInRange: NSMutableAttributedString = self.attributedSubstring(from: range) as! NSMutableAttributedString
+                    
+                    if textInRange.isBold {
+                        descriptor = UIFont.boldSystemFont(ofSize: 0).fontDescriptor
+                    } else if textInRange.isItalic {
+                        descriptor = UIFont.italicSystemFont(ofSize: 0).fontDescriptor
+                    } else {
+                        descriptor = UIFont.systemFont(ofSize: 0).fontDescriptor
+                    }
+                    
+                    let fontSize = UIFont.preferredFont(forTextStyle: forTextStyle).pointSize
+                    let updatedFont = UIFont(descriptor: descriptor, size: fontSize)
+                    self.addAttribute(NSFontAttributeName, value: updatedFont, range: range)
+                }
+//            }
+        }
+    }
+    
+    var isBold: Bool {
+        get {
+            var isBold = false
+            self.enumerateAttribute(NSFontAttributeName, in: self.fullRange, options: NSAttributedString.EnumerationOptions.longestEffectiveRangeNotRequired) { (attribute: Any?, range: NSRange, stop: UnsafeMutablePointer<ObjCBool>) in
+                if let font = attribute as? UIFont {
+                    if font.fontName.lowercased().contains("bold") {
+                        isBold = true
+                    }
+                }
+            }
+            return isBold
+        }
+    }
+    
+    var isItalic: Bool {
+        get {
+            var isItalic = false
+            self.enumerateAttribute(NSFontAttributeName, in: self.fullRange, options: NSAttributedString.EnumerationOptions.longestEffectiveRangeNotRequired) { (attribute: Any?, range: NSRange, stop: UnsafeMutablePointer<ObjCBool>) in
+                if let font = attribute as? UIFont {
+                    if font.fontName.lowercased().contains("italic") {
+                        isItalic = true
+                    }
+                }
+            }
+            return isItalic
+        }
+    }
+    
+    var allAttributes: [String:Any] {
+        get {
+            var attributes: [String:Any] = [:]
+            self.enumerateAttribute(NSFontAttributeName, in: self.fullRange, options: NSAttributedString.EnumerationOptions.longestEffectiveRangeNotRequired) { (attribute: Any?, range: NSRange, stop: UnsafeMutablePointer<ObjCBool>) in
+                
+                if let font = attribute as? UIFont {
+                    let descriptor = font.fontDescriptor
+                    let fontAttributes = descriptor.fontAttributes
+                    print(font.fontName)
+                    for (key, value) in fontAttributes {
+                        attributes[key] = value
+                    }
+                }
+            }
+            
+            return attributes
+        }
+    }
+    
+}
+
+struct SIParagraphStyle {
+    
+    private static var style: NSMutableParagraphStyle { get { return NSMutableParagraphStyle() } }
+    
+    public static var center: NSParagraphStyle {
+        get {
+            style.alignment = .center
+            return style
+        }
+    }
+    
+    public static var justified: NSParagraphStyle {
+        get {
+            style.alignment = .justified
+            return style
+        }
+    }
+    
+    public static var left: NSParagraphStyle {
+        get {
+            style.alignment = .left
+            return style
+        }
+    }
+    
+    public static var natural: NSParagraphStyle {
+        get {
+            style.alignment = .natural
+            return style
+        }
+    }
+    
+    public static var right: NSParagraphStyle {
+        get {
+            style.alignment = .right
+            return style
+        }
+    }
+
+}
 
 
 

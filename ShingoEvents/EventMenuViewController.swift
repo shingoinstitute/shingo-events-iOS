@@ -393,6 +393,7 @@ extension EventMenuViewController {
     
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
         navigationItem.title = ""
         
         if segue.identifier == "SchedulesView" {

@@ -58,33 +58,27 @@ class AboutPageViewController: UIViewController {
         
         view.backgroundColor = UIColor.white
         
-        let centeredStyle = NSMutableParagraphStyle()
-        centeredStyle.alignment = .center
-        
-        let justifiedStyle = NSMutableParagraphStyle()
-        justifiedStyle.alignment = .justified
-        
         let attributesCentered = [
-            NSFontAttributeName : UIFont.helveticaOfFontSize(15),
-            NSParagraphStyleAttributeName : centeredStyle,
+            NSFontAttributeName : UIFont.preferredFont(forTextStyle: .body),
+            NSParagraphStyleAttributeName : SIParagraphStyle.center,
             NSForegroundColorAttributeName : UIColor.white
         ]
         
         let boldAttributesCentered = [
-            NSFontAttributeName : UIFont.boldHelveticaOfFontSize(15),
-            NSParagraphStyleAttributeName : centeredStyle,
+            NSFontAttributeName : UIFont.preferredFont(forTextStyle: .headline),
+            NSParagraphStyleAttributeName : SIParagraphStyle.center,
             NSForegroundColorAttributeName : UIColor.white
         ]
         
         let attributesJustified = [
-            NSFontAttributeName : UIFont.helveticaOfFontSize(15),
-            NSParagraphStyleAttributeName : justifiedStyle,
+            NSFontAttributeName : UIFont.preferredFont(forTextStyle: .body),
+            NSParagraphStyleAttributeName : SIParagraphStyle.justified,
             NSForegroundColorAttributeName : UIColor.white
         ]
         
         let boldAttributesJustified = [
-            NSFontAttributeName : UIFont.boldHelveticaOfFontSize(15),
-            NSParagraphStyleAttributeName : justifiedStyle,
+            NSFontAttributeName : UIFont.preferredFont(forTextStyle: .headline),
+            NSParagraphStyleAttributeName : SIParagraphStyle.justified,
             NSForegroundColorAttributeName : UIColor.white
         ]
         

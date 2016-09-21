@@ -10,9 +10,9 @@ import Foundation
 import UIKit
 
 protocol SICellDelegate { func updateCell() }
-protocol SISpeakerDelegate { func performActionOnSpeakers(_ data: [SISpeaker]) }
+protocol SISpeakerDelegate { func performActionOnSpeakers(data: [SISpeaker]) }
 protocol SIRequestDelegate { func cancelRequest() }
-protocol SIEventImageLoaderDelegate { func loadedImage(_ image: UIImage) }
+//protocol SIEventImageLoaderDelegate { func loadedImage(image: UIImage) }
 
 // Shingo IP Colors
 class SIColor: UIColor {
@@ -373,18 +373,38 @@ extension Date {
     }
     
     /// Returns time frame between a start date and end date.
-    func timeFrameBetweenDates(startDate start: Date, endDate end: Date) -> String {
+    static func timeFrameBetweenDates(startDate: Date, endDate: Date) -> String? {
 
         let calendar = Calendar.current
-        let startComponents = (calendar as NSCalendar).components([.hour, .minute], from: start)
-        let endComponents = (calendar as NSCalendar).components([.hour, .minute], from: end)
+        let startComponents = calendar.dateComponents([.hour, .minute], from: startDate)
+        let endComponents = calendar.dateComponents([.hour, .minute], from: endDate)
         
-        return "\(timeStringFromComponents(hour: startComponents.hour!, minute: startComponents.minute!)) - \(timeStringFromComponents(hour: endComponents.hour!, minute: endComponents.minute!))"
+        guard let startHour = startComponents.hour else {
+            return nil
+        }
+        
+        guard let startMinute = startComponents.minute else {
+            return nil
+        }
+        
+        guard let endHour = endComponents.hour else {
+            return nil
+        }
+        
+        guard let endMinute = endComponents.minute else {
+            return nil
+        }
+        
+        return "\(Date.timeStringFromComponents(hour: startHour, minute: startMinute)) - \(Date.timeStringFromComponents(hour: endHour, minute: endMinute))"
     }
     
-    func timeStringFromComponents(hour h: Int, minute: Int) -> String {
+    static func timeStringFromComponents(hour h: Int, minute: Int) -> String {
         var hour = h
         var am_pm = ""
+        
+        if hour < 0 || hour > 24 || minute < 0 || minute > 60 {
+            return "00:00"
+        }
         
         switch hour {
         case 0 ..< 12:
