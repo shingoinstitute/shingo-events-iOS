@@ -7,13 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		44222B811D8F8F1F00595843 /* DropDown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44222B7E1D8F8F1F00595843 /* DropDown.swift */; };
-		44222B821D8F8F1F00595843 /* DropDown+Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44222B7F1D8F8F1F00595843 /* DropDown+Appearance.swift */; };
-		44222B831D8F8F1F00595843 /* DropDownCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44222B801D8F8F1F00595843 /* DropDownCell.swift */; };
-		44222B851D8F8F2700595843 /* DropDownCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 44222B841D8F8F2700595843 /* DropDownCell.xib */; };
-		44222B891D8F8F2F00595843 /* DPDConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44222B861D8F8F2F00595843 /* DPDConstants.swift */; };
-		44222B8A1D8F8F2F00595843 /* DPDKeyboardListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44222B871D8F8F2F00595843 /* DPDKeyboardListener.swift */; };
-		44222B8B1D8F8F2F00595843 /* DPDUIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44222B881D8F8F2F00595843 /* DPDUIView+Extension.swift */; };
 		C2130BD81C987650009B3BB8 /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2130BD71C987650009B3BB8 /* ActivityView.swift */; };
 		C21ECE281C5FB21500689FDE /* AffiliateListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21ECE271C5FB21500689FDE /* AffiliateListTableViewController.swift */; };
 		C21ECE2A1C5FB22A00689FDE /* AfilliateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21ECE291C5FB22A00689FDE /* AfilliateViewController.swift */; };
@@ -49,6 +42,7 @@
 		C2FF6B1E1CB2E2CF00331ED2 /* VenueMapsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FF6B1D1CB2E2CF00331ED2 /* VenueMapsCollectionView.swift */; };
 		C2FF6B221CB2E43200331ED2 /* VenueMapCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FF6B211CB2E43200331ED2 /* VenueMapCollectionCell.swift */; };
 		C2FF6B261CB4313200331ED2 /* VenueMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FF6B251CB4313200331ED2 /* VenueMapViewController.swift */; };
+		E2AA68D48C33D2B3AEF48AE9 /* Pods_Shingo_Events.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E99765DC375460FA1542A948 /* Pods_Shingo_Events.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,13 +57,6 @@
 
 /* Begin PBXFileReference section */
 		0D9E3C660688E2372B0D1FD4 /* Pods-Shingo Events.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shingo Events.release.xcconfig"; path = "Pods/Target Support Files/Pods-Shingo Events/Pods-Shingo Events.release.xcconfig"; sourceTree = "<group>"; };
-		44222B7E1D8F8F1F00595843 /* DropDown.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DropDown.swift; sourceTree = "<group>"; };
-		44222B7F1D8F8F1F00595843 /* DropDown+Appearance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DropDown+Appearance.swift"; sourceTree = "<group>"; };
-		44222B801D8F8F1F00595843 /* DropDownCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DropDownCell.swift; sourceTree = "<group>"; };
-		44222B841D8F8F2700595843 /* DropDownCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DropDownCell.xib; sourceTree = "<group>"; };
-		44222B861D8F8F2F00595843 /* DPDConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DPDConstants.swift; sourceTree = "<group>"; };
-		44222B871D8F8F2F00595843 /* DPDKeyboardListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DPDKeyboardListener.swift; sourceTree = "<group>"; };
-		44222B881D8F8F2F00595843 /* DPDUIView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DPDUIView+Extension.swift"; sourceTree = "<group>"; };
 		7EC5F842FB1C431B1896102C /* Pods-Shingo Events.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shingo Events.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Shingo Events/Pods-Shingo Events.debug.xcconfig"; sourceTree = "<group>"; };
 		C2130BD71C987650009B3BB8 /* ActivityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
 		C21ECE271C5FB21500689FDE /* AffiliateListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AffiliateListTableViewController.swift; sourceTree = "<group>"; };
@@ -113,6 +100,7 @@
 		C2FF6B1D1CB2E2CF00331ED2 /* VenueMapsCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VenueMapsCollectionView.swift; sourceTree = "<group>"; };
 		C2FF6B211CB2E43200331ED2 /* VenueMapCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VenueMapCollectionCell.swift; sourceTree = "<group>"; };
 		C2FF6B251CB4313200331ED2 /* VenueMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VenueMapViewController.swift; sourceTree = "<group>"; };
+		E99765DC375460FA1542A948 /* Pods_Shingo_Events.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Shingo_Events.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,6 +109,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C2986DC01C640DE900ADCF40 /* MapKit.framework in Frameworks */,
+				E2AA68D48C33D2B3AEF48AE9 /* Pods_Shingo_Events.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -134,44 +123,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		44222B8D1D8F8F4100595843 /* DropDown */ = {
-			isa = PBXGroup;
-			children = (
-				44222B901D8F8F7100595843 /* helpers */,
-				44222B8F1D8F8F6200595843 /* resources */,
-				44222B8E1D8F8F5700595843 /* src */,
-			);
-			name = DropDown;
-			sourceTree = "<group>";
-		};
-		44222B8E1D8F8F5700595843 /* src */ = {
-			isa = PBXGroup;
-			children = (
-				44222B7E1D8F8F1F00595843 /* DropDown.swift */,
-				44222B7F1D8F8F1F00595843 /* DropDown+Appearance.swift */,
-				44222B801D8F8F1F00595843 /* DropDownCell.swift */,
-			);
-			name = src;
-			sourceTree = "<group>";
-		};
-		44222B8F1D8F8F6200595843 /* resources */ = {
-			isa = PBXGroup;
-			children = (
-				44222B841D8F8F2700595843 /* DropDownCell.xib */,
-			);
-			name = resources;
-			sourceTree = "<group>";
-		};
-		44222B901D8F8F7100595843 /* helpers */ = {
-			isa = PBXGroup;
-			children = (
-				44222B861D8F8F2F00595843 /* DPDConstants.swift */,
-				44222B871D8F8F2F00595843 /* DPDKeyboardListener.swift */,
-				44222B881D8F8F2F00595843 /* DPDUIView+Extension.swift */,
-			);
-			name = helpers;
-			sourceTree = "<group>";
-		};
 		5DB25D0538898A8E281EE0AD /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -250,12 +201,12 @@
 				C2CFC30F1C481EAB0036E485 /* FirstViewController.swift */,
 				C262CA8C1C3B1C29005845AF /* EventsTableViewController.swift */,
 				C28B67F21C406BDE00AC9193 /* EventMenuViewController.swift */,
-				C224CDF81CB6C9C8003147F0 /* schedule */,
-				C24FF4BF1D91D66D0061B3E2 /* speakers */,
-				C24FF4711D918DA00061B3E2 /* sponsors */,
 				C24FF4701D918D950061B3E2 /* affiliates */,
 				C24FF46F1D918D870061B3E2 /* exhibitors */,
 				C224CDF91CB6C9DF003147F0 /* recipients */,
+				C224CDF81CB6C9C8003147F0 /* schedule */,
+				C24FF4BF1D91D66D0061B3E2 /* speakers */,
+				C24FF4711D918DA00061B3E2 /* sponsors */,
 				C2FF6B241CB2E52400331ED2 /* support */,
 				C2FF6B201CB2E3E700331ED2 /* venue maps */,
 			);
@@ -292,7 +243,6 @@
 		C24FF4721D918DE10061B3E2 /* helpers */ = {
 			isa = PBXGroup;
 			children = (
-				44222B8D1D8F8F4100595843 /* DropDown */,
 				C2130BD71C987650009B3BB8 /* ActivityView.swift */,
 				C2494E271C89FBFE00E2969D /* Reachability.swift */,
 			);
@@ -363,6 +313,7 @@
 			isa = PBXGroup;
 			children = (
 				C2986DBF1C640DE900ADCF40 /* MapKit.framework */,
+				E99765DC375460FA1542A948 /* Pods_Shingo_Events.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -456,7 +407,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				44222B851D8F8F2700595843 /* DropDownCell.xib in Resources */,
 				C2CFC3181C4954C20036E485 /* Main.storyboard in Resources */,
 				C2F17FA81C6AAFCF0028062C /* Assets.xcassets in Resources */,
 			);
@@ -543,13 +493,10 @@
 				C28B67F31C406BDE00AC9193 /* EventMenuViewController.swift in Sources */,
 				C2FF6B221CB2E43200331ED2 /* VenueMapCollectionCell.swift in Sources */,
 				C264CCF01C5834A5005CDB11 /* ChallengerInfoViewController.swift in Sources */,
-				44222B8A1D8F8F2F00595843 /* DPDKeyboardListener.swift in Sources */,
-				44222B891D8F8F2F00595843 /* DPDConstants.swift in Sources */,
 				C26DC9061C59841700BB4DDA /* MapViewController.swift in Sources */,
 				C2E9508F1D22E8F100178C03 /* APIRequests.swift in Sources */,
 				C262CA8D1C3B1C29005845AF /* EventsTableViewController.swift in Sources */,
 				C2494E281C89FBFE00E2969D /* Reachability.swift in Sources */,
-				44222B831D8F8F1F00595843 /* DropDownCell.swift in Sources */,
 				C234BD581C529597002E9814 /* SpeakerDetailsViewController.swift in Sources */,
 				C28B67E91C3F0BD700AC9193 /* EventData.swift in Sources */,
 				C2CFC3101C481EAB0036E485 /* FirstViewController.swift in Sources */,
@@ -557,16 +504,13 @@
 				C21ECE2A1C5FB22A00689FDE /* AfilliateViewController.swift in Sources */,
 				C2B155111D626BE00099330F /* ExhibitorTableViewCell.swift in Sources */,
 				C2986DC41C65136600ADCF40 /* ShingoModelViewController.swift in Sources */,
-				44222B8B1D8F8F2F00595843 /* DPDUIView+Extension.swift in Sources */,
 				C224CDFC1CB6CA42003147F0 /* RecipientTableViewCell.swift in Sources */,
 				C264CCB41C57ECA7005CDB11 /* RecipientsTableViewController.swift in Sources */,
-				44222B811D8F8F1F00595843 /* DropDown.swift in Sources */,
 				C2CFC3041C4576D00036E485 /* SupportTableViewController.swift in Sources */,
 				C2CFC3141C483C1C0036E485 /* SchedulesTableViewController.swift in Sources */,
 				C2FF6B1E1CB2E2CF00331ED2 /* VenueMapsCollectionView.swift in Sources */,
 				C234BD561C5293CF002E9814 /* SpeakerListTableViewController.swift in Sources */,
 				C2B7EB401C7B813100162AFB /* ContactUsViewController.swift in Sources */,
-				44222B821D8F8F1F00595843 /* DropDown+Appearance.swift in Sources */,
 				C2FF6B261CB4313200331ED2 /* VenueMapViewController.swift in Sources */,
 				C224C8981C92138700F4E393 /* AboutPageViewController.swift in Sources */,
 				C2130BD81C987650009B3BB8 /* ActivityView.swift in Sources */,

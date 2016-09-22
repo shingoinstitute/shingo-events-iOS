@@ -390,22 +390,17 @@ class SchedulesTableViewCell: UITableViewCell {
             attrRoomName.addAttribute(NSFontAttributeName, value: UIFont.preferredFont(forTextStyle: .headline), range: attrRoomName.fullRange)
             
 
-//            let attrSummary = try NSMutableAttributedString(data: summary.data(using: String.Encoding.utf8)!,
-//                                                        options: attributes,
-//                                                        documentAttributes: nil)
+            let attrSummary = try NSMutableAttributedString(data: summary.data(using: String.Encoding.utf8)!,
+                                                        options: attributes,
+                                                        documentAttributes: nil)
 
-            let testText = "This is un-attributed, <i>this is italicized</i>, <b>this is bolded</b>, <u>this is underlined</u>, <b><i>this is bolded and italicized</i></b>, <b><i><u>and this is bolded, italicized, and underlined</u></i></b>."
+//            let testText = "This is un-attributed, <i>this is italicized</i>, <b>this is bolded</b>, <u>this is underlined</u>, <b><i>this is bolded and italicized</i></b>, <b><i><u>and this is bolded, italicized, and underlined</u></i></b>."
             
-            let attrSummary = try NSMutableAttributedString(data: testText.data(using: String.Encoding.utf8)!,
-                                                            options: attributes,
-                                                            documentAttributes: nil)
+//            let attrSummary = try NSMutableAttributedString(data: testText.data(using: String.Encoding.utf8)!,
+//                                                            options: attributes,
+//                                                            documentAttributes: nil)
             
-            let preferredFontSizeForContent = UIFont.preferredFont(forTextStyle: .headline).fontDescriptor.pointSize
-            
-            attrSummary.changeFont(toSize: preferredFontSizeForContent)
             attrSummary.usePreferredFontWhileMaintainingAttributes(forTextStyle: .subheadline)
-            
-//            let _ = attrSummary.allAttributes
             
             attrRoomName.append(attrSummary)
             
@@ -429,56 +424,37 @@ class SchedulesTableViewCell: UITableViewCell {
 }
 
 extension String {
-    var length: Int {
-        get {
-            return self.characters.count
-        }
-    }
+    var length: Int { get { return self.characters.count } }
 }
 
 extension NSMutableAttributedString {
-    var fullRange: NSRange {
-        get {
-            return NSMakeRange(0, self.string.length)
-        }
-    }
-    
-    func changeFont(toSize: CGFloat) {
-        self.enumerateAttribute(NSFontAttributeName, in: self.fullRange, options: NSAttributedString.EnumerationOptions.longestEffectiveRangeNotRequired) { (attribute: Any?, range: NSRange, stop: UnsafeMutablePointer<ObjCBool>) in
-            if let fontAttribute = attribute as? UIFont {
-                let updatedFont = UIFont(descriptor: fontAttribute.fontDescriptor, size: toSize)
-                self.addAttribute(NSFontAttributeName, value: updatedFont, range: range)
-            }
-        }
-    }
-    
+    ///Maintains bold and italic traits while using dynamic font.
     func usePreferredFontWhileMaintainingAttributes(forTextStyle: UIFontTextStyle) {
-        self.enumerateAttribute(NSFontAttributeName, in: self.fullRange, options: NSAttributedString.EnumerationOptions.longestEffectiveRangeNotRequired) {
+        self.enumerateAttribute(NSFontAttributeName, in: fullRange, options: NSAttributedString.EnumerationOptions.longestEffectiveRangeNotRequired) {
             (attribute: Any?, range: NSRange, stop: UnsafeMutablePointer<ObjCBool>) in
             
             let stringInRange = self.attributedSubstring(from: range)
-            if let fontInRange = stringInRange.attribute(NSFontAttributeName, at: 0, effectiveRange: nil) {
-//                if let font = fontInRange as? UIFont {
-                
-                    var descriptor: UIFontDescriptor!
-                    
-                    let textInRange: NSMutableAttributedString = self.attributedSubstring(from: range) as! NSMutableAttributedString
-                    
-                    if textInRange.isBold {
-                        descriptor = UIFont.boldSystemFont(ofSize: 0).fontDescriptor
-                    } else if textInRange.isItalic {
-                        descriptor = UIFont.italicSystemFont(ofSize: 0).fontDescriptor
-                    } else {
-                        descriptor = UIFont.systemFont(ofSize: 0).fontDescriptor
-                    }
-                    
-                    let fontSize = UIFont.preferredFont(forTextStyle: forTextStyle).pointSize
-                    let updatedFont = UIFont(descriptor: descriptor, size: fontSize)
-                    self.addAttribute(NSFontAttributeName, value: updatedFont, range: range)
-                }
-//            }
+            
+            let pointSize = UIFont.preferredFont(forTextStyle: forTextStyle).pointSize
+            var updatedFont: UIFont!
+            if stringInRange.isBold {
+                updatedFont = UIFont.boldSystemFont(ofSize: pointSize)
+            } else if stringInRange.isItalic {
+                updatedFont = UIFont.italicSystemFont(ofSize: pointSize)
+            } else {
+                updatedFont = UIFont.systemFont(ofSize: pointSize)
+            }
+            print(updatedFont.familyName)
+            print(updatedFont.familyName)
+            self.addAttribute(NSFontAttributeName, value: updatedFont, range: range)
+            
         }
     }
+
+}
+
+extension NSAttributedString {
+    var fullRange: NSRange { get { return NSMakeRange(0, self.string.length) } }
     
     var isBold: Bool {
         get {
@@ -507,26 +483,6 @@ extension NSMutableAttributedString {
             return isItalic
         }
     }
-    
-    var allAttributes: [String:Any] {
-        get {
-            var attributes: [String:Any] = [:]
-            self.enumerateAttribute(NSFontAttributeName, in: self.fullRange, options: NSAttributedString.EnumerationOptions.longestEffectiveRangeNotRequired) { (attribute: Any?, range: NSRange, stop: UnsafeMutablePointer<ObjCBool>) in
-                
-                if let font = attribute as? UIFont {
-                    let descriptor = font.fontDescriptor
-                    let fontAttributes = descriptor.fontAttributes
-                    print(font.fontName)
-                    for (key, value) in fontAttributes {
-                        attributes[key] = value
-                    }
-                }
-            }
-            
-            return attributes
-        }
-    }
-    
 }
 
 struct SIParagraphStyle {

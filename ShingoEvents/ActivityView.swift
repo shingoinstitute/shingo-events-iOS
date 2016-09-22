@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-import Alamofire
+//import Alamofire
 
 class ActivityViewController: UIViewController {
     

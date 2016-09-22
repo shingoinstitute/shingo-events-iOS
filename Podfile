@@ -9,6 +9,7 @@ target 'Shingo Events' do
         pod 'Crashlytics'
         pod 'PureLayout'
         pod 'SwiftyJSON', git: 'https://github.com/BaiduHiDeviOS/SwiftyJSON.git', branch: 'swift3'
+	pod 'DropDown', git: 'https://github.com/AssistoLab/DropDown.git', branch: 'master'
 end
 
 

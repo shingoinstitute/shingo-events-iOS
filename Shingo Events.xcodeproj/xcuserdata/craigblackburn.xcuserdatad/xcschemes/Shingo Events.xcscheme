@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0730"
+   LastUpgradeVersion = "0800"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -32,7 +32,7 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C24FF4771D91901E0061B3E2"
+               BlueprintIdentifier = "C24FF4881D9195740061B3E2"
                BuildableName = "ShingoEventsTests.xctest"
                BlueprintName = "ShingoEventsTests"
                ReferencedContainer = "container:Shingo Events.xcodeproj">
