@@ -94,13 +94,13 @@ extension RecipientsTableViewController {
         
         if let recipient = cell.recipient {
             switch recipient.awardType {
-                case .ShingoPrize,
-                     .Silver,
-                     .Bronze:
+                case .shingoPrize,
+                     .silver,
+                     .bronze:
                     self.performSegue(withIdentifier: "ChallengerInfoView", sender: recipient)
-                case .Research:
+                case .research:
                     self.performSegue(withIdentifier: "ResearchInfoView", sender: recipient)
-                case .Publication:
+                case .publication:
                     // Might change segue later to be a screen customized to publication recipients
                     self.performSegue(withIdentifier: "ResearchInfoView", sender: recipient)
                 default:
@@ -119,7 +119,7 @@ extension RecipientsTableViewController {
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
-        view.backgroundColor = SIColor.shingoRed()
+        view.backgroundColor = SIColor.shingoRed
         
         let header = UILabel()
         header.font = UIFont.boldSystemFont(ofSize: 18)

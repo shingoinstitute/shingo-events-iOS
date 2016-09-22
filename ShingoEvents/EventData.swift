@@ -318,25 +318,22 @@ class SIAgenda: SIObject {
 class SISession: SIObject {
     
     enum SessionType: String {
-        case Break = "Break",
-        Concurrent = "Concurrent",
-        Gemba = "Gemba",
-        Keynote = "Keynote",
-        Meal = "Meal",
-        Social = "Social",
-        Tour = "Tour",
-        FullDayWorkshop = "Full Day Workshop",
-        HalfDayWorkshop = "Half Day Workshop",
-        MultiDayWorkshop = "Multi Day Workshop",
-        None = "Session"
+        case recess = "Break",
+        concurrent = "Concurrent",
+        gemba = "Gemba",
+        keynote = "Keynote",
+        meal = "Meal",
+        social = "Social",
+        tour = "Tour",
+        fullDayWorkshop = "Full Day Workshop",
+        halfDayWorkshop = "Half Day Workshop",
+        multiDayWorkshop = "Multi Day Workshop",
+        none = "Session"
     }
     
     var didLoadSpeakers : Bool
     var didLoadSessionInformation : Bool
     var speakers : [SISpeaker]
-    
-    // Used for a displaying property in a UITableViewCell
-    var isSelected: Bool
     
     var displayName : String
     var sessionType : SessionType
@@ -353,10 +350,9 @@ class SISession: SIObject {
         displayName = ""
         startDate = Date.notionallyEmptyDate()
         endDate = Date.notionallyEmptyDate()
-        sessionType = .None
+        sessionType = .none
         sessionTrack = ""
         summary = ""
-        isSelected = false
         room = nil
         super.init()
     }
@@ -397,27 +393,27 @@ class SISession: SIObject {
     func parseSessionType(_ type: String) -> SessionType {
         switch type {
             case "Break":
-                return .Break
+                return .recess
             case "Concurrent":
-                return .Concurrent
+                return .concurrent
             case "Gemba":
-                return .Gemba
+                return .gemba
             case "Keynote":
-                return .Keynote
+                return .keynote
             case "Meal":
-                return .Meal
+                return .meal
             case "Social":
-                return .Social
+                return .social
             case "Tour":
-                return .Tour
+                return .tour
             case "Full Day Workshop":
-                return .FullDayWorkshop
+                return .fullDayWorkshop
             case "Half Day Workshop":
-                return .HalfDayWorkshop
+                return .halfDayWorkshop
             case "Multi Day Workshop":
-                return .MultiDayWorkshop
+                return .multiDayWorkshop
             default:
-                return .None
+                return .none
         }
     }
     
@@ -427,9 +423,9 @@ class SISession: SIObject {
 class SISpeaker: SIObject {
     
     enum SpeakerType: String {
-        case Keynote = "Keynote",
-        Concurrent = "Concurrent",
-        None = ""
+        case keynote = "Keynote",
+        concurrent = "Concurrent",
+        none = ""
     }
     
     // related object id's
@@ -457,7 +453,7 @@ class SISpeaker: SIObject {
              remain as a Keynote Speaker. This is to maintain integrity of the SIObjects
              speaker types when displaying each section of speakers in SpeakerListTBLVC.
              */
-            if oldValue == .Keynote { self.speakerType = .Keynote }
+            if oldValue == .keynote { self.speakerType = .keynote }
         }
     }
     
@@ -467,7 +463,7 @@ class SISpeaker: SIObject {
         biography = ""
         organizationName = ""
         contactEmail = ""
-        speakerType = .None
+        speakerType = .none
         associatedSessionIds = [String]()
         super.init()
     }
@@ -487,7 +483,6 @@ class SISpeaker: SIObject {
                 self.biography = speaker.biography
                 self.organizationName = speaker.organizationName
                 self.contactEmail = speaker.contactEmail
-//                self.isKeynoteSpeaker = speaker.isKeynoteSpeaker
                 self.associatedSessionIds = speaker.associatedSessionIds
             }
         }
@@ -695,12 +690,12 @@ class SIHotel: SIObject {
 class SIRecipient: SIObject {
     
     enum AwardType: String {
-        case ShingoPrize = "Shingo Prize",
-        Silver = "Silver Medallion",
-        Bronze = "Bronze Medallion",
-        Research = "Research Award",
-        Publication = "Publication Award",
-        None = "N/A"
+        case shingoPrize = "Shingo Prize",
+        silver = "Silver Medallion",
+        bronze = "Bronze Medallion",
+        research = "Research Award",
+        publication = "Publication Award",
+        none = "N/A"
     }
 
     var awardType : AwardType
@@ -717,7 +712,7 @@ class SIRecipient: SIObject {
     }
 
     override init() {
-        awardType = AwardType.None
+        awardType = AwardType.none
         organization = ""
         logoURL = ""
         photoList = ""
@@ -789,7 +784,7 @@ class SIRoom: SIObject {
 
 class SISponsor: SIObject {
     
-    enum SponsorType : Int {
+    enum SponsorType: Int {
         case none = 0,
         friend = 1,
         supporter = 2,
@@ -994,16 +989,6 @@ class SIVenue: SIObject {
             self.didLoadVenue = true
         }
     }
-    
-//    func getVenueMapImages() -> [UIImage] {
-//        var maps = [UIImage]()
-//        for map in self.venueMaps {
-//            map.getVenueMapImage() { image in
-//                maps.append(image)
-//            }
-//        }
-//        return maps
-//    }
     
 }
 

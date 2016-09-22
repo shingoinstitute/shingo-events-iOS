@@ -135,11 +135,11 @@
 		C224CDF71CB6C960003147F0 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				C24FF4721D918DE10061B3E2 /* helpers */,
 				C2F17F661C655DAA0028062C /* Bridging-Header.h */,
 				C2A695081C35AC2900F6E0B8 /* AppDelegate.swift */,
-				C28B67E81C3F0BD700AC9193 /* EventData.swift */,
 				C2E9508E1D22E8F100178C03 /* APIRequests.swift */,
-				C2E9508C1D1C83F500178C03 /* SharedCode.swift */,
+				C28B67E81C3F0BD700AC9193 /* EventData.swift */,
 				C24FF46E1D918D1A0061B3E2 /* view controllers */,
 			);
 			name = src;
@@ -189,7 +189,6 @@
 			isa = PBXGroup;
 			children = (
 				C24FF4731D918E200061B3E2 /* resources */,
-				C24FF4721D918DE10061B3E2 /* helpers */,
 				C224CDF71CB6C960003147F0 /* src */,
 			);
 			path = ShingoEvents;
@@ -243,6 +242,7 @@
 		C24FF4721D918DE10061B3E2 /* helpers */ = {
 			isa = PBXGroup;
 			children = (
+				C2E9508C1D1C83F500178C03 /* SharedCode.swift */,
 				C2130BD71C987650009B3BB8 /* ActivityView.swift */,
 				C2494E271C89FBFE00E2969D /* Reachability.swift */,
 			);

@@ -45,14 +45,14 @@ class ResearchInfoViewController: UIViewController {
         abstractTextField.autoPinEdge(.bottom, to: .bottom, of: scrollView, withOffset: 0)
         abstractTextField.isScrollEnabled = false
         abstractTextField.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
-        abstractTextField.backgroundColor = SIColor.shingoBlue()
+        abstractTextField.backgroundColor = SIColor.shingoBlue
         
         view.bringSubview(toFront: scrollView)
         backdrop.autoPinEdge(.top, to: .bottom, of: bookImage, withOffset: 8)
         backdrop.autoPinEdge(toSuperviewEdge: .left)
         backdrop.autoPinEdge(toSuperviewEdge: .right)
         backdrop.autoPinEdge(toSuperviewEdge: .bottom)
-        backdrop.backgroundColor = SIColor.shingoBlue()
+        backdrop.backgroundColor = SIColor.shingoBlue
         
         automaticallyAdjustsScrollViewInsets = false
 

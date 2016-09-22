@@ -12,10 +12,67 @@ import UIKit
 protocol SICellDelegate { func updateCell() }
 protocol SISpeakerDelegate { func performActionOnSpeakers(data: [SISpeaker]) }
 protocol SIRequestDelegate { func cancelRequest() }
-//protocol SIEventImageLoaderDelegate { func loadedImage(image: UIImage) }
+
+struct Alphabet {
+    static func alphabet() -> [String] {
+        return ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "#"]
+    }
+}
+
+struct SIParagraphStyle {
+    private static var style: NSMutableParagraphStyle { get { return NSMutableParagraphStyle() } }
+    public static var center: NSParagraphStyle {
+        get {
+            style.alignment = .center
+            return style
+        }
+    }
+    
+    public static var justified: NSParagraphStyle {
+        get {
+            style.alignment = .justified
+            return style
+        }
+    }
+    
+    public static var left: NSParagraphStyle {
+        get {
+            style.alignment = .left
+            return style
+        }
+    }
+    
+    public static var natural: NSParagraphStyle {
+        get {
+            style.alignment = .natural
+            return style
+        }
+    }
+    
+    public static var right: NSParagraphStyle {
+        get {
+            style.alignment = .right
+            return style
+        }
+    }
+}
 
 // Shingo IP Colors
-class SIColor: UIColor {
+struct SIColor {
+    
+    ///Red: 21, Green: 92, Blue: 151.
+    static var lightShingoBlue: UIColor { get { return UIColor(netHex: 0x155c97) } }
+    ///Red: 0, Green: 47, Blue: 86.
+    static var shingoBlue: UIColor { get { return UIColor(netHex: 0x002f56) } }
+    ///Red: 101, Green: 8, Blue: 32.
+    static var shingoRed: UIColor { get { return UIColor(netHex: 0x650820) } }
+    ///Red: 14, Green: 33, Blue: 69.
+    static var darkShingoBlue: UIColor { get { return UIColor(netHex: 0x0e2145) } }
+    ///Red: 205, Green: 137, Blue: 49.
+    static var shingoGold: UIColor { get { return UIColor(netHex: 0xcd8931) } }
+}
+
+extension UIColor {
     
     convenience init(netHex: Int) {
         let red = (netHex >> 16) & 0xff
@@ -29,33 +86,6 @@ class SIColor: UIColor {
         self.init(red: CGFloat(red) / 255.0, green: CGFloat(green) / 255.0, blue: CGFloat(blue) / 255.0, alpha: 1.0)
     }
     
-    class func lightBlue() -> SIColor {
-        return SIColor(netHex: 0x155c97)
-    }
-    
-    class func shingoBlue() -> SIColor {
-        return SIColor(netHex: 0x002f56)
-    }
-    
-    class func prussianBlue() -> SIColor {
-        return SIColor(netHex: 0x002F56)
-    }
-    
-    class func shingoRed() -> SIColor {
-        return SIColor(netHex: 0x650820)
-    }
-    
-    class func darkShingoBlue() -> SIColor {
-        return SIColor(netHex: 0x0e2145)
-    }
-    
-    class func shingoGold() -> SIColor {
-        return SIColor(netHex: 0xcd8931)
-    }
-    
-}
-
-extension UIColor {
     convenience init(red: Int, green: Int, blue: Int) {
         assert(red >= 0 && red <= 255, "Invalid red component")
         assert(green >= 0 && green <= 255, "Invalid green component")
@@ -64,9 +94,9 @@ extension UIColor {
         self.init(red: CGFloat(red) / 255.0, green: CGFloat(green) / 255.0, blue: CGFloat(blue) / 255.0, alpha: 1.0)
     }
     
-    convenience init(netHex:Int) {
-        self.init(red:(netHex >> 16) & 0xff, green:(netHex >> 8) & 0xff, blue:netHex & 0xff)
-    }
+//    convenience init(netHex:Int) {
+//        self.init(red:(netHex >> 16) & 0xff, green:(netHex >> 8) & 0xff, blue:netHex & 0xff)
+//    }
 }
 
 enum DeviceType: Double {
@@ -107,7 +137,6 @@ enum DeviceType: Double {
     
     case simulator = 0
 }
-
 
 
 extension UIDevice {
@@ -178,6 +207,9 @@ extension UIDevice {
 }
 
 extension String {
+    
+    var length: Int { get { return self.characters.count } }
+    
     func trim() -> String {
         return self.trimmingCharacters(in: CharacterSet.whitespaces)
     }
@@ -283,12 +315,6 @@ extension UIFont {
     }
 }
 
-struct Alphabet {
-    static func alphabet() -> [String] {
-        return ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "#"]
-    }
-}
-
 extension Double {
     mutating func increment() -> Double {
         return self.advanced(by: 1.0)
@@ -373,7 +399,7 @@ extension Date {
     }
     
     /// Returns time frame between a start date and end date.
-    static func timeFrameBetweenDates(startDate: Date, endDate: Date) -> String? {
+    static func timeFrameBetweenDates(startDate: Date, endDate: Date) -> NSAttributedString? {
 
         let calendar = Calendar.current
         let startComponents = calendar.dateComponents([.hour, .minute], from: startDate)
@@ -395,34 +421,64 @@ extension Date {
             return nil
         }
         
-        return "\(Date.timeStringFromComponents(hour: startHour, minute: startMinute)) - \(Date.timeStringFromComponents(hour: endHour, minute: endMinute))"
+        guard let startTime = Date.timeStringFromComponents(hour: startHour, minute: startMinute) else {
+            return nil
+        }
+        
+        guard let endTime = Date.timeStringFromComponents(hour: endHour, minute: endMinute) else {
+            return nil
+        }
+        
+        startTime.append(NSAttributedString(string: " - "))
+        startTime.append(endTime)
+        
+        return startTime
     }
     
-    static func timeStringFromComponents(hour h: Int, minute: Int) -> String {
+    static func timeStringFromComponents(hour h: Int, minute: Int) -> NSMutableAttributedString? {
         var hour = h
         var am_pm = ""
         
         if hour < 0 || hour > 24 || minute < 0 || minute > 60 {
-            return "00:00"
+            return nil
         }
         
         switch hour {
         case 0 ..< 12:
-            am_pm = "am"
+            am_pm = "AM"
         case 13 ..< 25:
             hour = hour - 12
-            am_pm = "pm"
+            am_pm = "PM"
         case 12:
-            am_pm = "pm"
+            am_pm = "PM"
         default:
             break
         }
         
+        var attributedText: NSMutableAttributedString!
         if minute < 10 {
-            return "\(hour):0\(minute) \(am_pm)"
+            attributedText = NSMutableAttributedString(string: "\(hour):0\(minute)", attributes: [NSFontAttributeName : UIFont.preferredFont(forTextStyle: .headline)])
         } else {
-            return "\(hour):\(minute) \(am_pm)"
+            attributedText = NSMutableAttributedString(string: "\(hour):0\(minute)", attributes: [NSFontAttributeName : UIFont.preferredFont(forTextStyle: .headline)])
         }
+        
+        let pointSize = UIFont.preferredFont(forTextStyle: .headline).pointSize
+        let systemFontDesc = UIFont.systemFont(ofSize: pointSize, weight: UIFontWeightSemibold).fontDescriptor
+        let smallCapsFontDesc = systemFontDesc.addingAttributes(
+            [
+                UIFontDescriptorFeatureSettingsAttribute: [
+                    [
+                        UIFontFeatureTypeIdentifierKey: kUpperCaseType,
+                        UIFontFeatureSelectorIdentifierKey: kUpperCaseSmallCapsSelector,
+                        ],
+                ]
+            ]
+        )
+        let smallCapsFont = UIFont(descriptor: smallCapsFontDesc, size: pointSize)
+        
+        attributedText.append(NSAttributedString(string: am_pm, attributes: [NSFontAttributeName: smallCapsFont]))
+        
+        return attributedText
     }
     
     
@@ -504,6 +560,58 @@ func isValidEmail(_ testStr:String) -> Bool {
 }
 
 
+extension NSMutableAttributedString {
+    ///Maintains bold and italic traits while using dynamic font.
+    func usePreferredFontWhileMaintainingAttributes(forTextStyle: UIFontTextStyle) {
+        self.enumerateAttribute(NSFontAttributeName, in: fullRange, options: NSAttributedString.EnumerationOptions.longestEffectiveRangeNotRequired) {
+            (_, range: NSRange, stop: UnsafeMutablePointer<ObjCBool>) in
+            let stringInRange = self.attributedSubstring(from: range)
+            let pointSize = UIFont.preferredFont(forTextStyle: forTextStyle).pointSize
+            var updatedFont: UIFont!
+            if stringInRange.isBold {
+                updatedFont = UIFont.boldSystemFont(ofSize: pointSize)
+            } else if stringInRange.isItalic {
+                updatedFont = UIFont.italicSystemFont(ofSize: pointSize)
+            } else {
+                updatedFont = UIFont.systemFont(ofSize: pointSize)
+            }
+            self.addAttribute(NSFontAttributeName, value: updatedFont, range: range)
+        }
+    }
+    
+}
+
+extension NSAttributedString {
+    var fullRange: NSRange { get { return NSMakeRange(0, self.string.length) } }
+    
+    var isBold: Bool {
+        get {
+            var isBold = false
+            self.enumerateAttribute(NSFontAttributeName, in: self.fullRange, options: NSAttributedString.EnumerationOptions.longestEffectiveRangeNotRequired) { (attribute: Any?, range: NSRange, stop: UnsafeMutablePointer<ObjCBool>) in
+                if let font = attribute as? UIFont {
+                    if font.fontName.lowercased().contains("bold") {
+                        isBold = true
+                    }
+                }
+            }
+            return isBold
+        }
+    }
+    
+    var isItalic: Bool {
+        get {
+            var isItalic = false
+            self.enumerateAttribute(NSFontAttributeName, in: self.fullRange, options: NSAttributedString.EnumerationOptions.longestEffectiveRangeNotRequired) { (attribute: Any?, range: NSRange, stop: UnsafeMutablePointer<ObjCBool>) in
+                if let font = attribute as? UIFont {
+                    if font.fontName.lowercased().contains("italic") {
+                        isItalic = true
+                    }
+                }
+            }
+            return isItalic
+        }
+    }
+}
 
 
 

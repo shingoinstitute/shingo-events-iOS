@@ -613,14 +613,14 @@ extension SIRequest {
                     for session in sessionAssocs {
                         if let isKeynoteSpeaker = session["Is_Keynote_Speaker__c"].bool {
                             if isKeynoteSpeaker {
-                                speaker.speakerType = .Keynote
+                                speaker.speakerType = .keynote
                             } else {
-                                speaker.speakerType = .Concurrent
+                                speaker.speakerType = .concurrent
                             }
                         }
                     }
                 } else {
-                    speaker.speakerType = .Concurrent
+                    speaker.speakerType = .concurrent
                 }
                 
                 if let assocs = record["Session_Speaker_Associations__r"]["records"].array {
@@ -1003,17 +1003,17 @@ extension SIRequest {
     fileprivate func parseRecipientAwardType(_ awardType: String) -> SIRecipient.AwardType {
         switch awardType {
             case "Shingo Prize":
-                return .ShingoPrize
+                return .shingoPrize
             case "Silver Medallion":
-                return .Silver
+                return .silver
             case "Bronze Medallion":
-                return .Bronze
+                return .bronze
             case "Research":
-                return .Research
+                return .research
             case "Publication":
-                return .Publication
+                return .publication
             default:
-                return .None
+                return .none
         }
     }
     

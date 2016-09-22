@@ -37,7 +37,7 @@ class EventsTableViewController: UITableViewController {
         definesPresentationContext = true
         providesPresentationContextTransitionStyle = true
         
-        view.backgroundColor = SIColor.prussianBlue()
+        view.backgroundColor = SIColor.shingoBlue
     }
     
     func displayBadRequestNotification() {
@@ -109,13 +109,13 @@ extension EventsTableViewController: SICellDelegate {
     
     override func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as! EventTableViewCell
-        cell.backgroundColor = SIColor.lightBlue()
+        cell.backgroundColor = SIColor.lightShingoBlue
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let cell = tableView.cellForRow(at: indexPath) as! EventTableViewCell
-        cell.backgroundColor = SIColor.lightBlue()
+        cell.backgroundColor = SIColor.lightShingoBlue
         
         let activityView = ActivityViewController()
         activityView.message = "Loading Event Data..."

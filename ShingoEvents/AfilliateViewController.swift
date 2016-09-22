@@ -42,7 +42,7 @@ class AfilliateViewController: UIViewController {
         logoImage.autoPinEdge(.top, to: .top, of: scrollView, withOffset: 8)
         logoImage.autoPinEdge(.left, to: .left, of: view, withOffset: 8)
         
-        abstractTextField.backgroundColor = SIColor.prussianBlue()
+        abstractTextField.backgroundColor = SIColor.shingoBlue
         abstractTextField.text = ""
         abstractTextField.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         abstractTextField.autoPinEdge(.top, to: .bottom, of: logoImage, withOffset: 8)
@@ -56,7 +56,7 @@ class AfilliateViewController: UIViewController {
         backdrop.autoPinEdge(.left, to: .left, of: view, withOffset: 0)
         backdrop.autoPinEdge(.right, to: .right, of: view, withOffset: 0)
         backdrop.autoPinEdge(.bottom, to: .bottom, of: view, withOffset: 0)
-        backdrop.backgroundColor = SIColor.prussianBlue()
+        backdrop.backgroundColor = SIColor.shingoBlue
         
         affiliate.getLogoImage() { image in
             self.logoImage.image = image

@@ -138,7 +138,7 @@ class EventMenuViewController: UIViewController {
         contentView.backgroundColor = .clear
         
         eventNameLabel.text = event.name
-        eventNameLabel.backgroundColor = SIColor.prussianBlue().withAlphaComponent(0.5)
+        eventNameLabel.backgroundColor = SIColor.shingoBlue.withAlphaComponent(0.5)
         eventNameLabel.textColor = UIColor.white
         
         buttonViews = [
@@ -415,9 +415,9 @@ extension EventMenuViewController {
             for speaker in speakers {
                 
                 switch speaker.speakerType {
-                case .Keynote:
+                case .keynote:
                     keynoteSpeakers.append(speaker)
-                case .Concurrent:
+                case .concurrent:
                     concurrentSpeakers.append(speaker)
                 default:
                     unknownSpeakers.append(speaker)
@@ -446,15 +446,15 @@ extension EventMenuViewController {
                 var publicationRecipients = [SIRecipient]()
                 
                 for r in recipients {
-                    if r.awardType == .ShingoPrize {
+                    if r.awardType == .shingoPrize {
                         spRecipients.append(r)
-                    } else if r.awardType == .Silver {
+                    } else if r.awardType == .silver {
                         silverRecipients.append(r)
-                    } else if r.awardType == .Bronze {
+                    } else if r.awardType == .bronze {
                         bronzeRecipients.append(r)
-                    } else if r.awardType == .Research {
+                    } else if r.awardType == .research {
                         researchRecipients.append(r)
-                    } else if r.awardType == .Publication {
+                    } else if r.awardType == .publication {
                         publicationRecipients.append(r)
                     }
                 }

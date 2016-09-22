@@ -22,17 +22,27 @@ class SchedulesTableViewController: UITableViewController, SISpeakerDelegate {
      expanded so that cells maintain their expanded or shrunk
      style as they get recylced on the view controller.
      */
-    var cellExpansionTracker: [[Bool]] {
-        get {
-            var agendaSource = [[Bool]]()
-            for agenda in self.agendas {
-                var sessionSource = [Bool]()
-                for session in agenda.sessions {
-                    sessionSource.append(session.isSelected)
+    var cellExpansionTracker: [[Bool]]!
+    
+    /*
+     agendasCompletionHandlerListener will set the value of cellExpansiontracker 
+     after every agenda has finished it's API request. This is to prevent the need
+     to recalculate the values in cellExpansionTracker each time cellForRowAtIndexPath
+     is called, since there is no way for the variable to know how many values to
+     track at any given time and it can't be initialized when the view controller 
+     is presented since self.agendas might not have completed it's API requests.
+     */
+    var agendasCompletionHandlerListener: Int = 0 {
+        didSet {
+            if self.agendasCompletionHandlerListener == agendas.count {
+                var trackerSource = [[Bool]]()
+                for agenda in self.agendas {
+                    var tracker = [Bool]()
+                    for _ in agenda.sessions { tracker.append(false) }
+                    trackerSource.append(tracker)
                 }
-                agendaSource.append(sessionSource)
+                self.cellExpansionTracker = trackerSource
             }
-            return agendaSource
         }
     }
     
@@ -43,9 +53,15 @@ class SchedulesTableViewController: UITableViewController, SISpeakerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(SchedulesTableViewController.adjustFontForCategorySizeChange), name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
+        
+        tableView.sectionHeaderHeight = UITableViewAutomaticDimension
+        tableView.estimatedSectionHeaderHeight = 50
+        
         tableView.estimatedRowHeight = 106
         tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.backgroundColor = SIColor.prussianBlue()
+        tableView.backgroundColor = SIColor.shingoBlue
         
         if agendas == nil {
             addNoContentLabel()
@@ -61,25 +77,24 @@ class SchedulesTableViewController: UITableViewController, SISpeakerDelegate {
                             
                             for session in sessions {
                                 if !session.didLoadSessionInformation {
-                                    session.requestSessionInformation({})
+                                    session.requestSessionInformation({
+                                        self.agendasCompletionHandlerListener += 1
+                                    })
                                 }
                             }
                             
                             self.tableView.reloadData()
                         }
                     })
+                } else {
+                    self.agendasCompletionHandlerListener += 1
                 }
             }
         }
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        NotificationCenter.default.addObserver(forName: .UIContentSizeCategoryDidChange, object: .none, queue: OperationQueue.main) { _ in
-            self.tableView.reloadData()
-        }
-        
+    func adjustFontForCategorySizeChange() {
+        tableView.reloadData()
     }
     
     func addNoContentLabel() {
@@ -119,27 +134,18 @@ class SchedulesTableViewController: UITableViewController, SISpeakerDelegate {
                 var uSpeakers = [SISpeaker]()
                 
                 for speaker in speakers {
-                    if speaker.speakerType == .Keynote {
+                    if speaker.speakerType == .keynote {
                         kSpeakers.append(speaker)
-                    } else if speaker.speakerType == .Concurrent {
+                    } else if speaker.speakerType == .concurrent {
                         cSpeakers.append(speaker)
                     } else {
                         uSpeakers.append(speaker)
                     }
                 }
                 
-                if !kSpeakers.isEmpty {
-                    destination.keyNoteSpeakers = kSpeakers
-                }
-                
-                if !cSpeakers.isEmpty {
-                    destination.concurrentSpeakers = cSpeakers
-                }
-                
-                if !uSpeakers.isEmpty {
-                    destination.unknownSpeakers = uSpeakers
-                }
-                
+                if !kSpeakers.isEmpty { destination.keyNoteSpeakers = kSpeakers }
+                if !cSpeakers.isEmpty { destination.concurrentSpeakers = cSpeakers }
+                if !uSpeakers.isEmpty { destination.unknownSpeakers = uSpeakers }
             }
             
         default:
@@ -165,7 +171,7 @@ extension SchedulesTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ScheduleCell", for: indexPath) as! SchedulesTableViewCell
         
-        cell.session = agendas[(indexPath as NSIndexPath).section].sessions[(indexPath as NSIndexPath).row]
+        cell.session = agendas[indexPath.section].sessions[indexPath.row]
         cell.delegate = self
         
         if !cell.session.didLoadSpeakers || cell.session.speakers.isEmpty {
@@ -176,14 +182,8 @@ extension SchedulesTableViewController {
             cell.speakersButton.isUserInteractionEnabled = true
         }
         
-        
-        if cellExpansionTracker[(indexPath as NSIndexPath).section][(indexPath as NSIndexPath).row] {
-            cell.expandCell()
-        } else {
-            cell.shrinkCell()
-        }
+        if let tracker = cellExpansionTracker { cell.isExpanded = tracker[indexPath.section][indexPath.row] }
 
-        
         return cell
     }
     
@@ -191,6 +191,7 @@ extension SchedulesTableViewController {
         let cell = tableView.cellForRow(at: indexPath) as! SchedulesTableViewCell
         
         cell.isExpanded = !cell.isExpanded
+        if let _ = cellExpansionTracker { cellExpansionTracker[indexPath.section][indexPath.row] = cell.isExpanded }
         
         tableView.beginUpdates()
         tableView.endUpdates()
@@ -204,19 +205,10 @@ extension SchedulesTableViewController {
         
         let dateText = dateFormatter.string(from: agendas[section].date as Date)
         
-        let title = "  \(agendas[section].displayName), \(dateText)"
-        
-        let label = UILabel()
-        label.text = title
-//        label.font = UIFont.boldSystemFont(ofSize: 16)
-        label.font = UIFont.preferredFont(forTextStyle: .headline)
+        let label = UILabel(text: "  \(agendas[section].displayName), \(dateText)", font: UIFont.preferredFont(forTextStyle: .headline))
         label.textColor = UIColor.white
         
         return label
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 32
     }
     
 }
@@ -242,6 +234,15 @@ extension SchedulesTableViewController {
 }
 
 class SchedulesTableViewCell: UITableViewCell {
+    
+    init() {
+        super.init(style: UITableViewCellStyle.default, reuseIdentifier: "ScheduleCell")
+        NotificationCenter.default.addObserver(self, selector: #selector(SchedulesTableViewCell.updateCell), name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
     
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var titleLabel: UILabel!
@@ -272,10 +273,8 @@ class SchedulesTableViewCell: UITableViewCell {
         didSet {
             if isExpanded {
                 self.expandCell()
-                session.isSelected = true
             } else {
                 self.shrinkCell()
-                session.isSelected = false
             }
         }
     }
@@ -289,17 +288,17 @@ class SchedulesTableViewCell: UITableViewCell {
     func updateCell() {
         
         selectionStyle = .none
-        
+        timeLabel.font = UIFont.preferredFont(forTextStyle: .headline)
+        titleLabel.font = UIFont.preferredFont(forTextStyle: .body)
         speakersButton.addTarget(self, action: #selector(SchedulesTableViewCell.didTapSpeakersButton), for: .touchUpInside)
         
         if let session = session {
             if let timeFrame = Date.timeFrameBetweenDates(startDate: session.startDate, endDate: session.endDate) {
-                timeLabel.text = timeFrame
+                timeLabel.attributedText = timeFrame
             } else {
                 timeLabel.text = "Session time is currently unavailable"
             }
             
-            titleLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
             titleLabel.text = "\(session.sessionType.rawValue): \(session.displayName)"
             
             if !session.didLoadSessionInformation {
@@ -317,7 +316,7 @@ class SchedulesTableViewCell: UITableViewCell {
         }
     }
     
-    func expandCell() {
+    private func expandCell() {
         guard let info = getAttributedStringForSession(room: session.room, summary: session.summary) else {
             infoTextView.text = "Check back later for more information."
             infoTextView.font = UIFont.preferredFont(forTextStyle: .body)
@@ -331,10 +330,8 @@ class SchedulesTableViewCell: UITableViewCell {
             leftStyle.alignment = .left
             
             let notificationText = NSMutableAttributedString(string: "Check back later for more information.",
-                                                             attributes: [
-                                                                NSFontAttributeName : UIFont.preferredFont(forTextStyle: .body),
-                                                                NSParagraphStyleAttributeName : leftStyle
-                                                            ])
+                                                             attributes: [NSParagraphStyleAttributeName : leftStyle])
+            notificationText.addAttribute(NSFontAttributeName, value: UIFont.preferredFont(forTextStyle: .body), range: notificationText.fullRange)
             notificationText.append(info)
             
             infoTextView.attributedText = notificationText
@@ -345,7 +342,7 @@ class SchedulesTableViewCell: UITableViewCell {
         infoTextView.attributedText = info
     }
     
-    func shrinkCell() {
+    private func shrinkCell() {
         infoTextView.text = "Select For More Info >"
         infoTextView.textAlignment = .center
         infoTextView.textColor = .gray
@@ -393,14 +390,8 @@ class SchedulesTableViewCell: UITableViewCell {
             let attrSummary = try NSMutableAttributedString(data: summary.data(using: String.Encoding.utf8)!,
                                                         options: attributes,
                                                         documentAttributes: nil)
-
-//            let testText = "This is un-attributed, <i>this is italicized</i>, <b>this is bolded</b>, <u>this is underlined</u>, <b><i>this is bolded and italicized</i></b>, <b><i><u>and this is bolded, italicized, and underlined</u></i></b>."
             
-//            let attrSummary = try NSMutableAttributedString(data: testText.data(using: String.Encoding.utf8)!,
-//                                                            options: attributes,
-//                                                            documentAttributes: nil)
-            
-            attrSummary.usePreferredFontWhileMaintainingAttributes(forTextStyle: .subheadline)
+            attrSummary.usePreferredFontWhileMaintainingAttributes(forTextStyle: .body)
             
             attrRoomName.append(attrSummary)
             
@@ -423,108 +414,7 @@ class SchedulesTableViewCell: UITableViewCell {
     
 }
 
-extension String {
-    var length: Int { get { return self.characters.count } }
-}
 
-extension NSMutableAttributedString {
-    ///Maintains bold and italic traits while using dynamic font.
-    func usePreferredFontWhileMaintainingAttributes(forTextStyle: UIFontTextStyle) {
-        self.enumerateAttribute(NSFontAttributeName, in: fullRange, options: NSAttributedString.EnumerationOptions.longestEffectiveRangeNotRequired) {
-            (attribute: Any?, range: NSRange, stop: UnsafeMutablePointer<ObjCBool>) in
-            
-            let stringInRange = self.attributedSubstring(from: range)
-            
-            let pointSize = UIFont.preferredFont(forTextStyle: forTextStyle).pointSize
-            var updatedFont: UIFont!
-            if stringInRange.isBold {
-                updatedFont = UIFont.boldSystemFont(ofSize: pointSize)
-            } else if stringInRange.isItalic {
-                updatedFont = UIFont.italicSystemFont(ofSize: pointSize)
-            } else {
-                updatedFont = UIFont.systemFont(ofSize: pointSize)
-            }
-            print(updatedFont.familyName)
-            print(updatedFont.familyName)
-            self.addAttribute(NSFontAttributeName, value: updatedFont, range: range)
-            
-        }
-    }
-
-}
-
-extension NSAttributedString {
-    var fullRange: NSRange { get { return NSMakeRange(0, self.string.length) } }
-    
-    var isBold: Bool {
-        get {
-            var isBold = false
-            self.enumerateAttribute(NSFontAttributeName, in: self.fullRange, options: NSAttributedString.EnumerationOptions.longestEffectiveRangeNotRequired) { (attribute: Any?, range: NSRange, stop: UnsafeMutablePointer<ObjCBool>) in
-                if let font = attribute as? UIFont {
-                    if font.fontName.lowercased().contains("bold") {
-                        isBold = true
-                    }
-                }
-            }
-            return isBold
-        }
-    }
-    
-    var isItalic: Bool {
-        get {
-            var isItalic = false
-            self.enumerateAttribute(NSFontAttributeName, in: self.fullRange, options: NSAttributedString.EnumerationOptions.longestEffectiveRangeNotRequired) { (attribute: Any?, range: NSRange, stop: UnsafeMutablePointer<ObjCBool>) in
-                if let font = attribute as? UIFont {
-                    if font.fontName.lowercased().contains("italic") {
-                        isItalic = true
-                    }
-                }
-            }
-            return isItalic
-        }
-    }
-}
-
-struct SIParagraphStyle {
-    
-    private static var style: NSMutableParagraphStyle { get { return NSMutableParagraphStyle() } }
-    
-    public static var center: NSParagraphStyle {
-        get {
-            style.alignment = .center
-            return style
-        }
-    }
-    
-    public static var justified: NSParagraphStyle {
-        get {
-            style.alignment = .justified
-            return style
-        }
-    }
-    
-    public static var left: NSParagraphStyle {
-        get {
-            style.alignment = .left
-            return style
-        }
-    }
-    
-    public static var natural: NSParagraphStyle {
-        get {
-            style.alignment = .natural
-            return style
-        }
-    }
-    
-    public static var right: NSParagraphStyle {
-        get {
-            style.alignment = .right
-            return style
-        }
-    }
-
-}
 
 
 

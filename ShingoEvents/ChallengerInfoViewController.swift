@@ -17,7 +17,7 @@ class ChallengerInfoViewController: UIViewController {
     var scrollView: UIScrollView = UIScrollView.newAutoLayout()
     var backgroundView: UIView = {
         let view = UIView.newAutoLayout()
-        view.backgroundColor = SIColor.prussianBlue()
+        view.backgroundColor = SIColor.shingoBlue
         return view
     }()
     
@@ -74,7 +74,7 @@ class ChallengerInfoViewController: UIViewController {
     
     fileprivate func setSummaryText() {
         
-        abstractTextField.backgroundColor = SIColor.prussianBlue()
+        abstractTextField.backgroundColor = SIColor.shingoBlue
         abstractTextField.text = ""
         abstractTextField.textColor = .white
         abstractTextField.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
