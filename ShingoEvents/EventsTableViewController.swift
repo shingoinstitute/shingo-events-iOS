@@ -33,11 +33,19 @@ class EventsTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        definesPresentationContext = true
-        providesPresentationContextTransitionStyle = true
         
-        view.backgroundColor = SIColor.shingoBlue
+        for event in events {
+            tableView.register(UINib(nibName: "EventTableViewCellNib", bundle: nil), forCellReuseIdentifier: event.id)
+        }
+        
+        tableView.estimatedRowHeight = 100;
+        tableView.rowHeight = UITableViewAutomaticDimension;
+        
+        tableView.estimatedSectionHeaderHeight = 32;
+        tableView.sectionHeaderHeight = UITableViewAutomaticDimension;
+        
+//        view.backgroundColor = SIColor.shingoBlue;
+        view.backgroundColor = .white
     }
     
     func displayBadRequestNotification() {
@@ -58,34 +66,19 @@ extension EventsTableViewController: SICellDelegate {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-            case 0:
-                return events.count
-            default:
-                return 0
-        }
+        return events.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "EventsCell", for: indexPath) as! EventTableViewCell
         
-        cell.delegate = self
-        cell.event = events[(indexPath as NSIndexPath).row]
+        let event = events[indexPath.row];
         
-        return cell
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let cell = tableView.dequeueReusableCell(withIdentifier: event.id, for: indexPath) as! EventTableViewCell;
+
+        cell.delegate = self;
+        cell.event = event;
         
-        if !events[(indexPath as NSIndexPath).row].didLoadImage {
-            return 75
-        }
-        
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            return 240
-        }
-        
-        return 155
+        return cell;
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -99,17 +92,9 @@ extension EventsTableViewController: SICellDelegate {
         }
         
         view.textColor = .white
-        view.font = UIFont(name: "Helvetica", size: 12)
+        view.textAlignment = .center
+        view.font = UIFont.preferredFont(forTextStyle: .subheadline)
         return view
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 32
-    }
-    
-    override func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath) as! EventTableViewCell
-        cell.backgroundColor = SIColor.lightShingoBlue
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -138,6 +123,7 @@ extension EventsTableViewController: SICellDelegate {
             })
         }
     }
+
     
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -151,7 +137,7 @@ extension EventsTableViewController: SICellDelegate {
         }
     }
     
-    func updateCell() {
+    func cellDidUpdate() {
         tableView.beginUpdates()
         tableView.endUpdates()
     }
@@ -159,57 +145,6 @@ extension EventsTableViewController: SICellDelegate {
 }
 
 
-class EventTableViewCell: UITableViewCell {
-    
-    // MARK: - Properties
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var dateRangeLabel: UILabel!
-    @IBOutlet weak var eventImage: UIImageView!
-    
-    var event: SIEvent! {
-        didSet {
-            updateCell()
-        }
-    }
-    
-    var delegate: SICellDelegate?
-    
-    func updateCell() {
-        
-        backgroundColor = .clear
-        selectionStyle = .none
-        
-        guard let event = event else {
-            return
-        }
 
-        nameLabel.text = event.name
-        
-        eventImage.contentMode = .scaleAspectFill
-        eventImage.clipsToBounds = true
-        eventImage.layer.cornerRadius = 3.0
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.timeZone = TimeZone(abbreviation: "GMT")
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        dateFormatter.dateStyle = .medium
-        let dates = "\(dateFormatter.string(from: event.startDate as Date)) - \(dateFormatter.string(from: event.endDate as Date))"
-        dateRangeLabel.text = dates
-        
-        event.getBannerImage() { image in
-            
-            guard let image = image else {
-                return
-            }
-            
-            self.eventImage.image = image
-            if let delegate = self.delegate {
-                delegate.updateCell()
-            }
-            
-        }
-        
-    }
-    
-}
+
 

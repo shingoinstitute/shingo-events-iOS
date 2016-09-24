@@ -16,6 +16,8 @@
 		C234BD581C529597002E9814 /* SpeakerDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C234BD571C529597002E9814 /* SpeakerDetailsViewController.swift */; };
 		C2494E281C89FBFE00E2969D /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2494E271C89FBFE00E2969D /* Reachability.swift */; };
 		C24FF48C1D9195750061B3E2 /* ShingoEventsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24FF48B1D9195750061B3E2 /* ShingoEventsTests.swift */; };
+		C25F4F7E1D95E80F009A9830 /* EventTableViewCellNib.xib in Resources */ = {isa = PBXBuildFile; fileRef = C25F4F7D1D95E80F009A9830 /* EventTableViewCellNib.xib */; };
+		C25F4F801D95E9E8009A9830 /* EventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25F4F7F1D95E9E8009A9830 /* EventTableViewCell.swift */; };
 		C262CA8D1C3B1C29005845AF /* EventsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C262CA8C1C3B1C29005845AF /* EventsTableViewController.swift */; };
 		C264CCB41C57ECA7005CDB11 /* RecipientsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C264CCB31C57ECA7005CDB11 /* RecipientsTableViewController.swift */; };
 		C264CCF01C5834A5005CDB11 /* ChallengerInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C264CCEF1C5834A5005CDB11 /* ChallengerInfoViewController.swift */; };
@@ -72,6 +74,8 @@
 		C24FF4891D9195740061B3E2 /* ShingoEventsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShingoEventsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C24FF48B1D9195750061B3E2 /* ShingoEventsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShingoEventsTests.swift; sourceTree = "<group>"; };
 		C24FF48D1D9195750061B3E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C25F4F7D1D95E80F009A9830 /* EventTableViewCellNib.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventTableViewCellNib.xib; sourceTree = "<group>"; };
+		C25F4F7F1D95E9E8009A9830 /* EventTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTableViewCell.swift; sourceTree = "<group>"; };
 		C262CA8C1C3B1C29005845AF /* EventsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsTableViewController.swift; sourceTree = "<group>"; };
 		C264CCB31C57ECA7005CDB11 /* RecipientsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipientsTableViewController.swift; sourceTree = "<group>"; };
 		C264CCEF1C5834A5005CDB11 /* ChallengerInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChallengerInfoViewController.swift; sourceTree = "<group>"; };
@@ -199,6 +203,7 @@
 			children = (
 				C2CFC30F1C481EAB0036E485 /* FirstViewController.swift */,
 				C262CA8C1C3B1C29005845AF /* EventsTableViewController.swift */,
+				C25F4F7F1D95E9E8009A9830 /* EventTableViewCell.swift */,
 				C28B67F21C406BDE00AC9193 /* EventMenuViewController.swift */,
 				C24FF4701D918D950061B3E2 /* affiliates */,
 				C24FF46F1D918D870061B3E2 /* exhibitors */,
@@ -255,6 +260,7 @@
 				C2A6950C1C35AC2900F6E0B8 /* Info.plist */,
 				C2F17FA71C6AAFCF0028062C /* Assets.xcassets */,
 				C2CFC3171C4954C20036E485 /* Main.storyboard */,
+				C25F4F7D1D95E80F009A9830 /* EventTableViewCellNib.xib */,
 			);
 			name = resources;
 			sourceTree = "<group>";
@@ -408,6 +414,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C2CFC3181C4954C20036E485 /* Main.storyboard in Resources */,
+				C25F4F7E1D95E80F009A9830 /* EventTableViewCellNib.xib in Resources */,
 				C2F17FA81C6AAFCF0028062C /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -511,6 +518,7 @@
 				C2FF6B1E1CB2E2CF00331ED2 /* VenueMapsCollectionView.swift in Sources */,
 				C234BD561C5293CF002E9814 /* SpeakerListTableViewController.swift in Sources */,
 				C2B7EB401C7B813100162AFB /* ContactUsViewController.swift in Sources */,
+				C25F4F801D95E9E8009A9830 /* EventTableViewCell.swift in Sources */,
 				C2FF6B261CB4313200331ED2 /* VenueMapViewController.swift in Sources */,
 				C224C8981C92138700F4E393 /* AboutPageViewController.swift in Sources */,
 				C2130BD81C987650009B3BB8 /* ActivityView.swift in Sources */,

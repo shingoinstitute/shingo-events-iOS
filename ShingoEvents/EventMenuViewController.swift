@@ -16,57 +16,57 @@ class EventMenuViewController: UIViewController {
 
     var eventSpeakers = [String : SISpeaker]()
     
-    var activityVC : ActivityViewController = ActivityViewController()
+    var activityVC: ActivityViewController = ActivityViewController()
     
     @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var eventNameLabel: UILabel!
     @IBOutlet weak var scrollView: UIScrollView!
     
-    let speakerButton:UIButton = {
+    let speakerButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "Speaker_Button"), for: UIControlState())
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
 
-    let scheduleButton:UIButton = {
+    let scheduleButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "Schedule_Button"), for: UIControlState())
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
 
-    let affiliatesButton:UIButton = {
+    let affiliatesButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "Affiliates_Button"), for: UIControlState())
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    let exhibitorsButton:UIButton = {
+    let exhibitorsButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "Exhibitors_Button"), for: UIControlState())
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    let recipientsButton:UIButton = {
+    let recipientsButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "Recipients_Button"), for: UIControlState())
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    let directionsButton:UIButton = {
+    let directionsButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "Directions_Button"), for: UIControlState())
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    let sponsorsButton:UIButton = {
+    let sponsorsButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "Sponsors_Button"), for: UIControlState())
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-    let venuePhotosButton:UIButton = {
+    let venuePhotosButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "Venue_Pictures_Button"), for: UIControlState())
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -80,7 +80,7 @@ class EventMenuViewController: UIViewController {
         view.clipsToBounds = true
         return view
     }()
-    var eventHeaderImage: UIImageView = {
+    var eventHeaderImageView: UIImageView = {
         let view = UIImageView.newAutoLayout()
         view.contentMode = .scaleAspectFill
         view.backgroundColor = .clear
@@ -88,7 +88,16 @@ class EventMenuViewController: UIViewController {
         return view
     }()
     
-    var buttonViews = [UIView]()
+    lazy var buttonViews: [UIView] = [
+        self.scheduleButton,
+        self.venuePhotosButton,
+        self.recipientsButton,
+        self.exhibitorsButton,
+        self.speakerButton,
+        self.directionsButton,
+        self.affiliatesButton,
+        self.sponsorsButton
+    ]
     
     let BUTTON_WIDTH: CGFloat = 110.0
     let BUTTON_HEIGHT: CGFloat = 110.0
@@ -141,18 +150,7 @@ class EventMenuViewController: UIViewController {
         eventNameLabel.backgroundColor = SIColor.shingoBlue.withAlphaComponent(0.5)
         eventNameLabel.textColor = UIColor.white
         
-        buttonViews = [
-            scheduleButton,
-            venuePhotosButton,
-            recipientsButton,
-            exhibitorsButton,
-            speakerButton,
-            directionsButton,
-            affiliatesButton,
-            sponsorsButton
-        ]
-        
-        contentView.addSubviews([backgroundImage, eventNameLabel, eventHeaderImage])
+        contentView.addSubviews([backgroundImage, eventNameLabel, eventHeaderImageView])
         contentView.addSubviews(buttonViews)
     }
     
@@ -170,7 +168,7 @@ class EventMenuViewController: UIViewController {
 
         event.getBannerImage() { image in
             if let image = image {
-                self.eventHeaderImage.image = image
+                self.eventHeaderImageView.image = image
                 self.navigationItem.title = self.event.name
             } else {
                 self.navigationItem.title = ""
@@ -236,10 +234,10 @@ class EventMenuViewController: UIViewController {
             eventNameLabel.autoPinEdge(.bottom, to: .top, of: scheduleButton, withOffset: -12)
             
             // Constraints for event banner image (same as eventNameLabel.constraints)
-            eventHeaderImage.autoPinEdge(.top, to: .top, of: eventNameLabel)
-            eventHeaderImage.autoPinEdge(.left, to: .left, of: eventNameLabel)
-            eventHeaderImage.autoPinEdge(.right, to: .right, of: eventNameLabel)
-            eventHeaderImage.autoPinEdge(.bottom, to: .bottom, of: eventNameLabel)
+            eventHeaderImageView.autoPinEdge(.top, to: .top, of: eventNameLabel)
+            eventHeaderImageView.autoPinEdge(.left, to: .left, of: eventNameLabel)
+            eventHeaderImageView.autoPinEdge(.right, to: .right, of: eventNameLabel)
+            eventHeaderImageView.autoPinEdge(.bottom, to: .bottom, of: eventNameLabel)
             
             // constraints for backgroundImage
             backgroundImage.autoPinEdge(.top, to: .bottom, of: eventNameLabel)

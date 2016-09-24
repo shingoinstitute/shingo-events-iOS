@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-protocol SICellDelegate { func updateCell() }
+protocol SICellDelegate { func cellDidUpdate() }
 protocol SISpeakerDelegate { func performActionOnSpeakers(data: [SISpeaker]) }
 protocol SIRequestDelegate { func cancelRequest() }
 
@@ -329,6 +329,25 @@ extension UIImageView {
         }
         
         return CGSize.zero
+    }    
+
+    func scaleImageIntrinsicContentSize(toFitWidth width: CGFloat) {
+        guard let image = self.image else { return }
+        
+        var isOpaque: Bool!
+        if let view = self.superview {
+            isOpaque = view.isOpaque
+        } else {
+            isOpaque = false
+        }
+        
+        let height = (width * image.size.height) / image.size.width;
+        let size = CGSize(width: width, height: height);
+        
+        UIGraphicsBeginImageContextWithOptions(size, isOpaque, 0.0);
+        image.draw(in: CGRect(x: 0, y: 0, width: size.width, height: size.height));
+        self.image = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
     }
 }
 
