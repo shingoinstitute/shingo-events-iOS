@@ -331,7 +331,7 @@ extension UIImageView {
         return CGSize.zero
     }    
 
-    func scaleImageIntrinsicContentSize(toFitWidth width: CGFloat) {
+    func resizeImageIntrinsicContentSize(toFitWidth width: CGFloat) {
         guard let image = self.image else { return }
         
         var isOpaque: Bool!

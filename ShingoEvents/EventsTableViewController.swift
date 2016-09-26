@@ -14,17 +14,6 @@ class EventsTableViewController: UITableViewController {
     
     // MARK: - Properties
     var events: [SIEvent]!
-
-    override func loadView() {
-        super.loadView()
-        
-        //Begin requests for each event.
-        for event in events {
-            if !event.didLoadEventData {
-                event.requestEvent(nil)
-            }
-        }
-    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -34,18 +23,18 @@ class EventsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        for event in events {
-            tableView.register(UINib(nibName: "EventTableViewCellNib", bundle: nil), forCellReuseIdentifier: event.id)
-        }
+        view.backgroundColor = SIColor.shingoBlue
         
-        tableView.estimatedRowHeight = 100;
+        tableView.estimatedRowHeight = 200;
         tableView.rowHeight = UITableViewAutomaticDimension;
         
-        tableView.estimatedSectionHeaderHeight = 32;
-        tableView.sectionHeaderHeight = UITableViewAutomaticDimension;
-        
-//        view.backgroundColor = SIColor.shingoBlue;
-        view.backgroundColor = .white
+        // Begins API requests for each event.
+        for event in events {
+            if !event.didLoadEventData {
+                event.requestEvent(nil)
+                tableView.reloadData()
+            }
+        }
     }
     
     func displayBadRequestNotification() {
@@ -61,6 +50,7 @@ class EventsTableViewController: UITableViewController {
 extension EventsTableViewController: SICellDelegate {
 
     // MARK: - Table view data source
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -71,12 +61,11 @@ extension EventsTableViewController: SICellDelegate {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let event = events[indexPath.row];
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: event.id, for: indexPath) as! EventTableViewCell;
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Event Cell", for: indexPath) as! EventTableViewCell;
 
+        cell.event = events[indexPath.row];
+        
         cell.delegate = self;
-        cell.event = event;
         
         return cell;
     }
@@ -95,6 +84,10 @@ extension EventsTableViewController: SICellDelegate {
         view.textAlignment = .center
         view.font = UIFont.preferredFont(forTextStyle: .subheadline)
         return view
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 21
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

@@ -33,21 +33,7 @@ class ActivityViewController: UIViewController {
         view.numberOfLines = 0
         return view
     }()
-    var cancelRequestButton: UIButton = {
-        let button = UIButton.newAutoLayout()
-        button.setTitle("Cancel", for: UIControlState())
-        button.setTitleColor(UIView().tintColor, for: UIControlState())
-        
-        button.layer.shadowColor = UIColor.gray.cgColor
-        button.layer.shadowOffset = CGSize(width: 0, height: 1.0)
-        button.layer.shadowOpacity = 1
-        button.layer.shadowRadius = 2
-        button.layer.masksToBounds = false
-        button.layer.cornerRadius = 5
-        
-        button.backgroundColor = .white
-        return button
-    }()
+
     var activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
     var didAddActivityIndicatorConstraints = false
     
@@ -66,9 +52,8 @@ class ActivityViewController: UIViewController {
         modalTransitionStyle = .crossDissolve
         modalPresentationStyle = .overCurrentContext
         view.backgroundColor = UIColor.clear
-        view.addSubviews([activityView, cancelRequestButton])
+        view.addSubview(activityView)
         activityView.addSubviews([activityIndicatorView, messageLabel])
-        cancelRequestButton.addTarget(self, action: #selector(ActivityViewController.didTapCancel(_:)), for: .touchUpInside)
     }
     
     override func viewDidLoad() {
@@ -97,15 +82,6 @@ class ActivityViewController: UIViewController {
             
             activityIndicatorView.autoAlignAxis(.vertical, toSameAxisOf: activityView)
             activityIndicatorView.autoAlignAxis(.horizontal, toSameAxisOf: activityView, withOffset: 8)
-            
-            if delegate != nil {
-                cancelRequestButton.autoPinEdge(.top, to: .bottom, of: activityView, withOffset: 8)
-                cancelRequestButton.autoPinEdge(.left, to: .left, of: activityView)
-                cancelRequestButton.autoPinEdge(.right, to: .right, of: activityView)
-                cancelRequestButton.autoSetDimension(.height, toSize: 42)
-            } else {
-                cancelRequestButton.isHidden = true
-            }
             
             didAddActivityIndicatorConstraints = true
         }

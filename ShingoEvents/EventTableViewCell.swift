@@ -10,56 +10,48 @@ import UIKit
 
 class EventTableViewCell: UITableViewCell {
     
-    @IBOutlet weak var eventNameLabel: UILabel!
-    @IBOutlet weak var eventDateRangeLabel: UILabel!
-    @IBOutlet weak var eventImageView: UIImageView!
-    @IBOutlet weak var cardView: UIView!
-    @IBOutlet weak var imageViewWidthConstraint: NSLayoutConstraint!
+    @IBOutlet weak var eventNameLabel: UILabel! {
+        didSet {
+            eventNameLabel.font = UIFont.preferredFont(forTextStyle: .headline)
+        }
+    }
+    @IBOutlet weak var eventDateRangeLabel: UILabel! {
+        didSet {
+            eventDateRangeLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        }
+    }
+    @IBOutlet weak var eventImageView: UIImageView! {
+        didSet {
+            eventImageView.backgroundColor = .clear
+            eventImageView.clipsToBounds = true
+        }
+    }
+    @IBOutlet weak var cardView: UIView! {
+        didSet {
+            cardView.backgroundColor = SIColor.lightShingoBlue
+            
+            cardView.layer.cornerRadius = 3
+            cardView.layer.shadowColor = SIColor.darkShingoBlue.cgColor
+            cardView.layer.shadowOffset = CGSize(width: 0, height: 2.0)
+            cardView.layer.shadowOpacity = 1
+            cardView.layer.shadowRadius = 3
+            cardView.layer.masksToBounds = false
+        }
+    }
+    
+    @IBOutlet weak var leadingEventImageViewConstraint: NSLayoutConstraint!
+    @IBOutlet weak var trailingEventImageViewConstraint: NSLayoutConstraint!
+    private let rightArrowImageViewWidthConstraintConstant: CGFloat = 30
+    private let totalCardViewMarginConstants: CGFloat = (2 * 8)
     
     var event: SIEvent! { didSet { updateCell() } }
     
     var delegate: SICellDelegate?
-
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        backgroundColor = .clear
-        
-        cardView = UIView.newAutoLayout()
-        cardView.layer.cornerRadius = 10
-        
-        eventNameLabel = UILabel.newAutoLayout()
-        eventNameLabel.font = UIFont.preferredFont(forTextStyle: .headline)
-        
-        eventDateRangeLabel = UILabel.newAutoLayout()
-        eventDateRangeLabel.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        
-        eventImageView = UIImageView.newAutoLayout()
-        eventImageView.contentMode = .scaleAspectFit
-        eventImageView.layer.cornerRadius = 3
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-    }
-
     
     func updateCell() {
         
         backgroundColor = .clear
         selectionStyle = .none
-        
-        guard let event = event else {
-            return
-        }
         
         eventNameLabel.text = event.name
         
@@ -77,7 +69,10 @@ class EventTableViewCell: UITableViewCell {
             }
             
             self.eventImageView.image = image;
-            self.eventImageView.scaleImageIntrinsicContentSize(toFitWidth: self.imageViewWidthConstraint.constant);
+            
+            let imageWidth: CGFloat = self.contentView.frame.width - (self.leadingEventImageViewConstraint.constant + self.trailingEventImageViewConstraint.constant + self.rightArrowImageViewWidthConstraintConstant + self.totalCardViewMarginConstants)
+            
+            self.eventImageView.resizeImageIntrinsicContentSize(toFitWidth: imageWidth)
             
             if let delegate = self.delegate {
                 delegate.cellDidUpdate()

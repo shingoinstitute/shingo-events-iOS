@@ -31,6 +31,18 @@ class SchedulesTableViewController: UITableViewController, SISpeakerDelegate {
         return false
     }
     
+    override func loadView() {
+        super.loadView()
+        
+        if agendas == nil {
+            addNoContentLabelNotification()
+        } else if agendas.isEmpty {
+            addNoContentLabelNotification()
+        } else {
+            populateDataForTable()
+        }
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationItem.title = "Schedule"
@@ -46,13 +58,7 @@ class SchedulesTableViewController: UITableViewController, SISpeakerDelegate {
         
         tableView.backgroundColor = SIColor.shingoBlue
         
-        if agendas == nil {
-            addNoContentLabelNotification()
-        } else if agendas.isEmpty {
-            addNoContentLabelNotification()
-        } else {
-            populateDataForTable()
-        }
+        
         
     }
     
