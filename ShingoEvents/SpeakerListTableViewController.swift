@@ -116,29 +116,25 @@ class SpeakerListTableViewController: UITableViewController {
 
 class SpeakerListCell: UITableViewCell {
 
-    @IBOutlet weak var speakerNameLabel: UILabel! {
-        didSet {
-            speakerNameLabel.font = UIFont.boldSystemFont(ofSize: 16)
-        }
-    }
+    @IBOutlet weak var speakerNameLabel: UILabel!
     @IBOutlet weak var speakerImage: UIImageView! {
         didSet {
             speakerImage.backgroundColor = .clear
         }
     }
-    @IBOutlet weak var speakerTitle: UILabel! {
-        didSet {
-            speakerTitle.font = UIFont.helveticaOfFontSize(15)
-        }
-    }
-    @IBOutlet weak var speakerCompany: UILabel! {
-        didSet {
-            speakerCompany.font = UIFont.helveticaOfFontSize(15)
-        }
-    }
     @IBOutlet weak var aiv: UIActivityIndicatorView! {
         didSet {
             aiv.hidesWhenStopped = true
+        }
+    }
+    @IBOutlet weak var summaryTextView: UITextView! {
+        didSet {
+            summaryTextView.layer.shadowColor = UIColor.gray.cgColor
+            summaryTextView.layer.shadowOffset = CGSize(width: 0, height: 2.0)
+            summaryTextView.layer.shadowOpacity = 1
+            summaryTextView.layer.shadowRadius = 3
+            summaryTextView.layer.masksToBounds = false
+            summaryTextView.layer.cornerRadius = 3
         }
     }
     
@@ -153,9 +149,7 @@ class SpeakerListCell: UITableViewCell {
     }
     
     func updateCell() {
-        speakerNameLabel.text = speaker.name
-        speakerTitle.text = speaker.title
-        speakerCompany.text = speaker.organizationName
+        speakerNameLabel.text = speaker.name + "\n" + speaker.title
         speaker.getSpeakerImage() { image in
             self.aiv.stopAnimating()
             self.speakerImage.image = image
