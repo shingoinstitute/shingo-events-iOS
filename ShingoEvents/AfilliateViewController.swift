@@ -66,26 +66,27 @@ class AfilliateViewController: UIViewController {
   
         abstractTextField.linkTextAttributes = [NSForegroundColorAttributeName : UIColor.cyan,
                                                    NSUnderlineStyleAttributeName : NSUnderlineStyle.styleSingle.rawValue]
-        do {
-            
-            let attrs = [NSFontAttributeName : UIFont.systemFont(ofSize: 16.0),
-                         NSForegroundColorAttributeName : UIColor.white]
-            
-            let attributedText = try NSMutableAttributedString(data: affiliate.summary.data(using: String.Encoding.utf8)!,
-                                                               options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
-                                                                        NSCharacterEncodingDocumentAttribute : String.Encoding.utf8.rawValue],
-                                                                 documentAttributes: nil)
-            attributedText.addAttributes(attrs, range: NSMakeRange(0, attributedText.string.characters.count))
-        
-            abstractTextField.attributedText = attributedText
-        } catch {
-            print("Error with richText in affiliateViewController")
-        }
+        abstractTextField.attributedText = affiliate.attributedSummary
+//        do {
+//            
+//            let attrs = [NSFontAttributeName : UIFont.systemFont(ofSize: 16.0),
+//                         NSForegroundColorAttributeName : UIColor.white]
+//            
+//            let attributedText = try NSMutableAttributedString(data: affiliate.summary.data(using: String.Encoding.utf8)!,
+//                                                               options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
+//                                                                        NSCharacterEncodingDocumentAttribute : String.Encoding.utf8.rawValue],
+//                                                                 documentAttributes: nil)
+//            attributedText.addAttributes(attrs, range: NSMakeRange(0, attributedText.string.characters.count))
+//        
+//            abstractTextField.attributedText = attributedText
+//        } catch {
+//            print("Error with richText in affiliateViewController")
+//        }
 
-        var frame:CGRect = abstractTextField.frame
-        frame.size.height = abstractTextField.contentSize.height
-        abstractTextField.frame = frame
-        abstractTextField.isScrollEnabled = false
+//        var frame:CGRect = abstractTextField.frame
+//        frame.size.height = abstractTextField.contentSize.height
+//        abstractTextField.frame = frame
+//        abstractTextField.isScrollEnabled = false
     }
 
 

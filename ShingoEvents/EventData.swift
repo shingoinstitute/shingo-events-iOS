@@ -18,12 +18,14 @@ class SIObject : AnyObject {
     var id : String
     fileprivate var image : UIImage?
     var didLoadImage: Bool
+    var isSelected: Bool
     
     init() {
         name = ""
         id = ""
         image = nil
         didLoadImage = false
+        isSelected = false
     }
     
     fileprivate func requestImage(URLString: String, callback: @escaping (
@@ -46,31 +48,31 @@ class SIObject : AnyObject {
 
 class SIEvent: SIObject {
     
-    var didLoadSpeakers : Bool
-    var didLoadEventData : Bool
-    var didLoadSessions : Bool
-    var didLoadAgendas : Bool
-    var didLoadVenues : Bool
-    var didLoadRecipients : Bool
-    var didLoadAffiliates : Bool
-    var didLoadExhibitors : Bool
-    var didLoadSponsors : Bool
+    var didLoadSpeakers: Bool
+    var didLoadEventData: Bool
+    var didLoadSessions: Bool
+    var didLoadAgendas: Bool
+    var didLoadVenues: Bool
+    var didLoadRecipients: Bool
+    var didLoadAffiliates: Bool
+    var didLoadExhibitors: Bool
+    var didLoadSponsors: Bool
     
-    // related objects
-    var speakers : [String:SISpeaker] // Speakers are stored in a dictionary to prevent duplicate speakers from appearing that may be recieved from the API response
-    var agendaItems : [SIAgenda]
-    var venues : [SIVenue]
-    var recipients : [SIRecipient]
-    var affiliates : [SIAffiliate]
-    var exhibitors : [SIExhibitor]
-    var sponsors : [SISponsor]
+    // Related objects
+    var speakers: [String:SISpeaker] // Speakers are stored in a dictionary to prevent duplicate speakers from appearing that may be recieved from the API response
+    var agendaItems: [SIAgenda]
+    var venues: [SIVenue]
+    var recipients: [SIRecipient]
+    var affiliates: [SIAffiliate]
+    var exhibitors: [SIExhibitor]
+    var sponsors: [SISponsor]
     
-    // event specific properties
-    var startDate : Date
-    var endDate : Date
-    var eventType : String
-    var salesText : String
-    var bannerURL : String {
+    // Event specific properties
+    var startDate: Date
+    var endDate: Date
+    var eventType: String
+    var salesText: String
+    var bannerURL: String {
         didSet {
             requestBannerImage() {}
         }
@@ -338,7 +340,8 @@ class SISession: SIObject {
     var displayName : String
     var sessionType : SessionType
     var sessionTrack : String
-    var summary : String
+//    var summary : String
+    var attributedSummary: NSAttributedString
     var room : SIRoom?
     var startDate : Date
     var endDate : Date
@@ -352,7 +355,8 @@ class SISession: SIObject {
         endDate = Date.notionallyEmptyDate()
         sessionType = .none
         sessionTrack = ""
-        summary = ""
+//        summary = ""
+        attributedSummary = NSAttributedString()
         room = nil
         super.init()
     }
@@ -366,10 +370,11 @@ class SISession: SIObject {
                 self.endDate = session.endDate
                 self.sessionType = session.sessionType
                 self.sessionTrack = session.sessionTrack
-                self.summary = session.summary
+//                self.summary = session.summary
                 self.room = session.room
                 self.name = session.name
                 self.id = session.id
+                self.attributedSummary = session.attributedSummary
                 
                 self.requestSpeakers() {
                     self.didLoadSessionInformation = true
@@ -442,7 +447,8 @@ class SISpeaker: SIObject {
             }
         }
     }*/
-    var biography : String
+//    var biography : String
+    var attributedBiography: NSAttributedString
     var organizationName : String
     var contactEmail : String
     var speakerType: SpeakerType {
@@ -460,7 +466,8 @@ class SISpeaker: SIObject {
     override init() {
         title = ""
         pictureURL = ""
-        biography = ""
+//        biography = ""
+        attributedBiography = NSAttributedString()
         organizationName = ""
         contactEmail = ""
         speakerType = .none
@@ -480,7 +487,8 @@ class SISpeaker: SIObject {
                 if self.pictureURL.isEmpty {
                     self.pictureURL = speaker.pictureURL
                 }
-                self.biography = speaker.biography
+//                self.biography = speaker.biography
+                self.attributedBiography = speaker.attributedBiography
                 self.organizationName = speaker.organizationName
                 self.contactEmail = speaker.contactEmail
                 self.associatedSessionIds = speaker.associatedSessionIds
@@ -557,25 +565,27 @@ class SISpeaker: SIObject {
 
 class SIExhibitor: SIObject {
     
-    var summary : String
-    var contactEmail : String
-    var website : String
-    var logoURL : String {
+//    var summary: String
+    var attributedSummary: NSAttributedString
+    var contactEmail: String
+    var website: String
+    var logoURL: String {
         didSet {
             requestExhibitorLogoImage(nil)
         }
     }
-    var bannerURL : String {
+    var bannerURL: String {
         didSet {
             requestExhibitorBannerImage(nil)
         }
     }
     var didLoadBannerImage: Bool
-    var mapCoordinate : (Double, Double)
-    fileprivate var bannerImage : UIImage?
+    var mapCoordinate: (Double, Double)
+    fileprivate var bannerImage: UIImage?
     
     override init() {
-        summary = ""
+//        summary = ""
+        attributedSummary = NSAttributedString()
         contactEmail = ""
         website = ""
         logoURL = ""
@@ -704,7 +714,8 @@ class SIRecipient: SIObject {
     var videoList : String //Comma separated list of URLs to videos
     var pressRelease : String
     var profile : String
-    var summary : String
+//    var summary : String
+    var attributedSummary: NSAttributedString
     var logoURL : String {
         didSet {
             requestRecipientImage(nil)
@@ -719,7 +730,8 @@ class SIRecipient: SIObject {
         videoList = ""
         pressRelease = ""
         profile = ""
-        summary = ""
+//        summary = ""
+        attributedSummary = NSAttributedString()
         super.init()
     }
 
@@ -793,7 +805,8 @@ class SISponsor: SIObject {
         president = 5
     }
     
-    var summary : String
+//    var summary : String
+    var attributedSummary: NSAttributedString
     var sponsorType : SponsorType
     var logoURL : String {
         didSet {
@@ -815,19 +828,21 @@ class SISponsor: SIObject {
     var didLoadBannerImage: Bool
     var didLoadSplashScreen: Bool
     
-    convenience init(name: String, id: String, sponsorType: SponsorType, summary: String, logoURL: String, bannerURL: String) {
-        self.init()
-        self.name = name
-        self.id = id
-        self.sponsorType = sponsorType
-        self.summary = summary
-        self.logoURL = logoURL
-        self.bannerURL = bannerURL
-    }
+//    convenience init(name: String, id: String, sponsorType: SponsorType, summary: String, logoURL: String, bannerURL: String) {
+//        self.init()
+//        self.name = name
+//        self.id = id
+//        self.sponsorType = sponsorType
+////        self.summary = summary
+//        self.attributedSummary = NSAttributedString()
+//        self.logoURL = logoURL
+//        self.bannerURL = bannerURL
+//    }
     
     override init() {
         sponsorType = .none
-        summary = ""
+//        summary = ""
+        attributedSummary = NSAttributedString()
         logoURL = ""
         bannerURL = ""
         splashScreenURL = ""
@@ -1044,8 +1059,9 @@ class SIVenueMap: SIObject {
 
 class SIAffiliate: SIObject {
     
-    var abstract : String
-    var summary : String
+//    var abstract : String
+//    var summary : String
+    var attributedSummary: NSAttributedString
     var logoURL : String {
         didSet {
             requestAffiliateLogoImage(nil)
@@ -1055,8 +1071,9 @@ class SIAffiliate: SIObject {
     var pagePath : String
     
     override init() {
-        abstract = ""
-        summary = ""
+//        abstract = ""
+//        summary = ""
+        attributedSummary = NSAttributedString()
         logoURL = ""
         websiteURL = ""
         pagePath = ""

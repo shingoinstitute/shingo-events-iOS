@@ -12,7 +12,14 @@ import Crashlytics
 class ChallengerInfoViewController: UIViewController {
 
     @IBOutlet weak var logoImage: UIImageView!
-    @IBOutlet weak var abstractTextField: UITextView!
+    @IBOutlet weak var abstractTextField: UITextView! {
+        didSet {
+            abstractTextField.backgroundColor = SIColor.shingoBlue
+            abstractTextField.text = ""
+            abstractTextField.textColor = .white
+            abstractTextField.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        }
+    }
     
     var scrollView: UIScrollView = UIScrollView.newAutoLayout()
     var backgroundView: UIView = {
@@ -31,10 +38,11 @@ class ChallengerInfoViewController: UIViewController {
         navigationItem.title = recipient.name
         automaticallyAdjustsScrollViewInsets = false
         
-        setSummaryText()
+        recipient.getRecipientImage() { image in self.logoImage.image = image }
+        
+        abstractTextField.attributedText = recipient.attributedSummary
 
         updateViewConstraints()
-        
     }
     
     override func updateViewConstraints() {
@@ -70,39 +78,6 @@ class ChallengerInfoViewController: UIViewController {
             didUpdateConstraints = true
         }
         super.updateViewConstraints()
-    }
-    
-    fileprivate func setSummaryText() {
-        
-        abstractTextField.backgroundColor = SIColor.shingoBlue
-        abstractTextField.text = ""
-        abstractTextField.textColor = .white
-        abstractTextField.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
-        
-        recipient.getRecipientImage() { image in
-            self.logoImage.image = image
-        }
-        
-        if !recipient.summary.isEmpty {
-            do {
-                let attributedText = try NSMutableAttributedString(data: recipient.summary.data(using: String.Encoding.utf8)!,
-                                                                          options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
-                                                                            NSCharacterEncodingDocumentAttribute : String.Encoding.utf8.rawValue,
-                                                                            NSForegroundColorAttributeName : UIColor.white],
-                                                                          documentAttributes: nil)
-                attributedText.addAttributes([NSFontAttributeName : UIFont.helveticaOfFontSize(16), NSForegroundColorAttributeName : UIColor.white], range: NSMakeRange(0, attributedText.string.characters.count - 1))
-                
-                abstractTextField.attributedText = attributedText
-            } catch {
-                let error = NSError(domain: "NSAttributedString",
-                                    code: 72283,
-                                    userInfo: [
-                                        NSLocalizedDescriptionKey : "Could not parse text for recipient summary.",
-                                        NSLocalizedFailureReasonErrorKey: "Could not parse text for recipient summary. Most likely reason is because the text passed back from the API was not UTF-8 coding compliant."
-                                    ])
-                Crashlytics.sharedInstance().recordError(error)
-            }
-        }
     }
 
 }

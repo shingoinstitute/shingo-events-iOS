@@ -1117,7 +1117,7 @@
         <!--Schedule-->
         <scene sceneID="AYG-7x-KYt">
             <objects>
-                <tableViewController id="PqC-BM-dR8" customClass="SchedulesTableViewController" customModule="Shingo_Events" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="PqC-BM-dR8" customClass="ScheduleTableViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="139" sectionHeaderHeight="18" sectionFooterHeight="18" id="4Tz-rr-5lK">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1372,6 +1372,6 @@
         <image name="white_star" width="50" height="50"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Bbs-g6-pYd"/>
+        <segue reference="Vtm-iE-WQY"/>
     </inferredMetricsTieBreakers>
 </document>

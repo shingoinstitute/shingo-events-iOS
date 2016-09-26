@@ -295,20 +295,25 @@ extension MainMenuViewController {
                 contentViewHeightConstraint.constant = -40
             }
             
-            // @deployment
-            // Uncomment lines below to animate constraints
-//            UIView.animate(withDuration: 1.5,
-//                                       delay: 0.5,
-//                                       usingSpringWithDamping: 0.5,
-//                                       initialSpringVelocity: 0,
-//                                       options: UIViewAnimationOptions(),
-//                                       animations: { self.view.layoutIfNeeded() },
-//                                       completion: nil)
- 
- 
-            // @production
-            // Uncomment line below for non-animated constraints
+            #if DEBUG
+                
+            // @development
             view.layoutIfNeeded()
+                
+            #else
+                
+            // @deployment
+            UIView.animate(withDuration: 1.5,
+                                       delay: 0.5,
+                                       usingSpringWithDamping: 0.5,
+                                       initialSpringVelocity: 0,
+                                       options: UIViewAnimationOptions(),
+                                       animations: { self.view.layoutIfNeeded() },
+                                       completion: nil)
+            #endif
+ 
+
+            
             
             didAnimateLayout = true
         }

@@ -53,7 +53,9 @@ class ExhibitorInfoViewController: UIViewController {
         scrollView.addSubviews([contentImageView, descriptionTextField])
         contentImageView.addSubview(exhibitorImageView)
         
-        getDescriptionForRichText()
+        setDescriptionText()
+        
+//        descriptionTextField.attributedText = exhibitor.attributedSummary
         
         updateViewConstraints()
     }
@@ -80,45 +82,35 @@ class ExhibitorInfoViewController: UIViewController {
         super.updateViewConstraints()
     }
     
-    func getDescriptionForRichText() {
-        let richText = NSMutableAttributedString()
-        let attrs = [NSFontAttributeName : UIFont.systemFont(ofSize: 16.0),
-                     NSForegroundColorAttributeName : UIColor.white]
-        descriptionTextField.linkTextAttributes = [NSForegroundColorAttributeName : UIColor.cyan,
-                                                   NSUnderlineStyleAttributeName : NSUnderlineStyle.styleSingle.rawValue]
-                                                   
+    func setDescriptionText() {
+        let attributedString = NSMutableAttributedString()
         
-        if !exhibitor.summary.isEmpty {
-            let htmlString: String! = "<style>body{color: white;}</style><font size=\"5\">" + exhibitor.summary + "</font></style>";
-            do {
-            let description = try NSAttributedString(data: htmlString.data(using: String.Encoding.utf8)!,
-                                                        options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
-                                                            NSCharacterEncodingDocumentAttribute : String.Encoding.utf8.rawValue],
-                                                        documentAttributes: nil)
-            richText.append(description)
-            } catch {
-                let error = NSError(domain: "NSAttributedString",
-                                    code: 72283,
-                                    userInfo: [
-                                        NSLocalizedDescriptionKey : "Could not parse text for exhibitor summary.",
-                                        NSLocalizedFailureReasonErrorKey: "Could not parse text for exhibitor summary. Most likely reason is because the text passed back from the API was not UTF-8 coding compliant."
-                                    ])
-                Crashlytics.sharedInstance().recordError(error)
-            }
+        let attrs = [NSFontAttributeName : UIFont.preferredFont(forTextStyle: .body),
+                     NSForegroundColorAttributeName : UIColor.white]
+        
+        if exhibitor.attributedSummary.string.isEmpty {
+            attributedString.append(NSAttributedString(string: "Description coming soon."))
         } else {
-            richText.append(NSAttributedString(string: "Description coming soon."));
+            attributedString.append(exhibitor.attributedSummary)
         }
-        richText.append(NSAttributedString(string: "\n\n"))
+        
+        attributedString.append(NSAttributedString(string: "\n\n"))
         
         
         if !exhibitor.website.isEmpty  {
-            richText.append(NSAttributedString(string: String("Website: " + exhibitor.website + "\n"), attributes: attrs))
-        }
-        if !exhibitor.contactEmail.isEmpty {
-            richText.append(NSAttributedString(string: String("Email: " + exhibitor.contactEmail + "\n"), attributes: attrs))
+            attributedString.append(NSAttributedString(string: String("Website: \(exhibitor.website)\n")))
         }
         
-        descriptionTextField.attributedText = richText;
+        if !exhibitor.contactEmail.isEmpty {
+            attributedString.append(NSAttributedString(string: String("Email: \(exhibitor.contactEmail)\n")))
+        }
+        
+        attributedString.addAttributes(attrs, range: attributedString.fullRange)
+        
+        descriptionTextField.attributedText = attributedString
+        
+        descriptionTextField.linkTextAttributes = [NSForegroundColorAttributeName : UIColor.cyan,
+                                                   NSUnderlineStyleAttributeName : NSUnderlineStyle.styleSingle.rawValue]
     }
     
 

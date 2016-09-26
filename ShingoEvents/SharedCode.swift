@@ -20,7 +20,7 @@ struct Alphabet {
 }
 
 struct SIParagraphStyle {
-    private static var style: NSMutableParagraphStyle { get { return NSMutableParagraphStyle() } }
+    private static var style = NSMutableParagraphStyle()
     public static var center: NSParagraphStyle {
         get {
             style.alignment = .center

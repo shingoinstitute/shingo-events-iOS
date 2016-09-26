@@ -11,6 +11,7 @@ import Alamofire
 import AlamofireImage
 import MapKit
 import SwiftyJSON
+import Crashlytics
 
 let BASE_URL = "https://api.shingo.org"
 let EVENTS_URL = BASE_URL + "/salesforce/events"
@@ -439,7 +440,9 @@ extension SIRequest {
                 }
                 
                 if let summary = record["Summary__c"].string {
-                    session.summary = summary
+                    if let attributedSummary = parseHTMLStringUsingPreferredFont(string: summary) {
+                        session.attributedSummary = attributedSummary
+                    }
                 }
                 
                 if let speakers = record["Session_Speaker_Associations__r"]["records"].array {
@@ -509,7 +512,9 @@ extension SIRequest {
                 }
                 
                 if let summary = record["Summary__c"].string {
-                    session.summary = summary
+                    if let attributedSummary = self.parseHTMLStringUsingPreferredFont(string: summary) {
+                        session.attributedSummary = attributedSummary
+                    }
                 }
                 
                 if let roomName = record["Room__r"]["Name"].string {
@@ -598,7 +603,9 @@ extension SIRequest {
                 }
                 
                 if let biography = record["Speaker_Biography__c"].string {
-                    speaker.biography = biography
+                    if let attributedBiography = parseHTMLStringUsingPreferredFont(string: biography) {
+                        speaker.attributedBiography = attributedBiography
+                    }
                 }
                 
                 if let contactEmail = record["Contact__r"]["Email"].string {
@@ -671,7 +678,9 @@ extension SIRequest {
                 }
                 
                 if let biography = record["Speaker_Biography__c"].string {
-                    speaker.biography = biography
+                    if let attributedBiography = self.parseHTMLStringUsingPreferredFont(string: biography) {
+                        speaker.attributedBiography = attributedBiography
+                    }
                 }
                 
                 if let organization = record["Organization__r"].string {
@@ -721,7 +730,9 @@ extension SIRequest {
                     }
                     
                     if let summary = record["Organization__r"]["App_Abstract__c"].string {
-                        exhibitor.summary = summary
+                        if let attributedSummary = self.parseHTMLStringUsingPreferredFont(string: summary) {
+                            exhibitor.attributedSummary = attributedSummary
+                        }
                     }
                     
                     if let logoURL = record["Organization__r"]["Logo__c"].string {
@@ -782,7 +793,9 @@ extension SIRequest {
                 }
                 
                 if let summary = organization["App_Abstract__c"].string {
-                    exhibitor.summary = summary
+                    if let attributedSummary = self.parseHTMLStringUsingPreferredFont(string: summary) {
+                        exhibitor.attributedSummary = attributedSummary
+                    }
                 }
                 
                 if let email = organization["Public_Contact_Email__c"].string {
@@ -928,7 +941,9 @@ extension SIRequest {
                     }
                     
                     if let summary = record["Summary__c"].string {
-                        recipient.summary = summary
+                        if let attributedSummary = self.parseHTMLStringUsingPreferredFont(string: summary) {
+                            recipient.attributedSummary = attributedSummary
+                        }
                     }
                     
                     recipients.append(recipient)
@@ -990,7 +1005,9 @@ extension SIRequest {
                 }
                 
                 if let summary = record["Summary__c"].string {
-                    recipient.summary = summary
+                    if let attributedSummary = self.parseHTMLStringUsingPreferredFont(string: summary) {
+                        recipient.attributedSummary = attributedSummary
+                    }
                 }
             }
             
@@ -1178,7 +1195,9 @@ extension SIRequest {
                 }
                 
                 if let summary = record["App_Abstract__c"].string {
-                    sponsor.summary = summary
+                    if let attributedSummary = self.parseHTMLStringUsingPreferredFont(string: summary) {
+                        sponsor.attributedSummary = attributedSummary
+                    }
                 }
                 
                 if let bannerURL = record["Banner_URL__c"].string {
@@ -1363,7 +1382,9 @@ extension SIRequest {
                     }
                     
                     if let summary = record["App_Abstract__c"].string {
-                        affiliate.summary = summary
+                        if let attributedSummary = self.parseHTMLStringUsingPreferredFont(string: summary) {
+                            affiliate.attributedSummary = attributedSummary
+                        }
                     }
                     
                     affiliates.append(affiliate)
@@ -1432,6 +1453,40 @@ extension SIRequest {
             marks += "-"
         }
         return "\(marks)+"
+    }
+    
+    func parseHTMLStringUsingPreferredFont(string: String) -> NSAttributedString? {
+        
+        do {
+            
+            let options: [String:Any] = [
+                NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
+                NSCharacterEncodingDocumentAttribute : String.Encoding.utf8.rawValue,
+                NSParagraphStyleAttributeName : SIParagraphStyle.left,
+            ]
+            
+            guard let data = string.data(using: String.Encoding.utf8) else {
+                return nil
+            }
+            
+            let htmlString = try NSMutableAttributedString(data: data, options: options, documentAttributes: nil)
+            
+            htmlString.usePreferredFontWhileMaintainingAttributes(forTextStyle: .body)
+            
+            return htmlString
+        } catch {
+            #if !DEBUG
+            let error = NSError(domain: "NSAttributedStringDomain",
+                                code: 72283,
+                                userInfo: [
+                                NSLocalizedDescriptionKey : "Could not parse text into attributed string.",
+                                NSLocalizedFailureReasonErrorKey: "Could not parse text for SIObject summary. Most likely reason is because the text string passed back from the API was not UTF-8 coding compliant."
+                ])
+            Crashlytics.sharedInstance().recordError(error)
+            #endif
+            return nil
+        }
+        
     }
     
 }
