@@ -24,17 +24,18 @@ class EventTableViewCell: UITableViewCell {
         didSet {
             eventImageView.backgroundColor = .clear
             eventImageView.clipsToBounds = true
+            eventImageView.layer.cornerRadius = 5
         }
     }
     @IBOutlet weak var cardView: UIView! {
         didSet {
-            cardView.backgroundColor = SIColor.lightShingoBlue
+            cardView.backgroundColor = .white
             
-            cardView.layer.cornerRadius = 3
-            cardView.layer.shadowColor = SIColor.darkShingoBlue.cgColor
+            cardView.layer.cornerRadius = 5
+            cardView.layer.shadowColor = UIColor.darkShingoBlue.cgColor
             cardView.layer.shadowOffset = CGSize(width: 0, height: 2.0)
             cardView.layer.shadowOpacity = 1
-            cardView.layer.shadowRadius = 3
+            cardView.layer.shadowRadius = 5
             cardView.layer.masksToBounds = false
         }
     }
@@ -72,7 +73,7 @@ class EventTableViewCell: UITableViewCell {
             
             let imageWidth: CGFloat = self.contentView.frame.width - (self.leadingEventImageViewConstraint.constant + self.trailingEventImageViewConstraint.constant + self.rightArrowImageViewWidthConstraintConstant + self.totalCardViewMarginConstants)
             
-            self.eventImageView.resizeImageIntrinsicContentSize(toFitWidth: imageWidth)
+            self.eventImageView.resizeImageViewToIntrinsicContentSize(thatFitsWidth: imageWidth)
             
             if let delegate = self.delegate {
                 delegate.cellDidUpdate()

@@ -13,7 +13,7 @@ class AboutPageViewController: UIViewController {
     @IBOutlet weak var aboutTextField: UITextView! {
         didSet {
             aboutTextField.textColor = UIColor.white
-            aboutTextField.backgroundColor = SIColor.shingoBlue
+            aboutTextField.backgroundColor = .shingoBlue
             aboutTextField.isScrollEnabled = false
             
             aboutTextField.layer.cornerRadius = 3

@@ -14,7 +14,7 @@ class ChallengerInfoViewController: UIViewController {
     @IBOutlet weak var logoImage: UIImageView!
     @IBOutlet weak var abstractTextField: UITextView! {
         didSet {
-            abstractTextField.backgroundColor = SIColor.shingoBlue
+            abstractTextField.backgroundColor = .shingoBlue
             abstractTextField.text = ""
             abstractTextField.textColor = .white
             abstractTextField.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
@@ -24,7 +24,7 @@ class ChallengerInfoViewController: UIViewController {
     var scrollView: UIScrollView = UIScrollView.newAutoLayout()
     var backgroundView: UIView = {
         let view = UIView.newAutoLayout()
-        view.backgroundColor = SIColor.shingoBlue
+        view.backgroundColor = .shingoBlue
         return view
     }()
     
@@ -35,14 +35,30 @@ class ChallengerInfoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NotificationCenter.default.addObserver(self, selector: #selector(ChallengerInfoViewController.adjustFontForCategorySizeChange), name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
+        
         navigationItem.title = recipient.name
         automaticallyAdjustsScrollViewInsets = false
         
         recipient.getRecipientImage() { image in self.logoImage.image = image }
         
-        abstractTextField.attributedText = recipient.attributedSummary
+        let abstract = NSMutableAttributedString(attributedString: recipient.attributedSummary)
+        
+        let attributes = [
+            NSFontAttributeName : UIFont.preferredFont(forTextStyle: .body),
+            NSForegroundColorAttributeName : UIColor.white
+        ]
+        
+        abstract.addAttributes(attributes, range: abstract.fullRange)
+        
+        abstractTextField.attributedText = abstract
+        
 
         updateViewConstraints()
+    }
+    
+    func adjustFontForCategorySizeChange() {
+        abstractTextField.font = UIFont.preferredFont(forTextStyle: .body)
     }
     
     override func updateViewConstraints() {

@@ -147,7 +147,7 @@ class EventMenuViewController: UIViewController {
         contentView.backgroundColor = .clear
         
         eventNameLabel.text = event.name
-        eventNameLabel.backgroundColor = SIColor.shingoBlue.withAlphaComponent(0.5)
+        eventNameLabel.backgroundColor = UIColor.shingoBlue.withAlphaComponent(0.5)
         eventNameLabel.textColor = UIColor.white
         
         contentView.addSubviews([backgroundImage, eventNameLabel, eventHeaderImageView])

@@ -476,7 +476,7 @@ class SISpeaker: SIObject {
     }
     
     /// Gets additional information about the speaker object.
-    fileprivate func requestSpeakerInformation(_ callback: () -> ()) {
+    private func requestSpeakerInformation(_ callback: () -> ()) {
         SIRequest().requestSpeaker(speakerId: id) { (speaker) in
             if let speaker = speaker {
                 
@@ -496,9 +496,9 @@ class SISpeaker: SIObject {
         }
     }
     
-    fileprivate func requestSpeakerImage(_ callback: (() -> Void)?) {
+    private func requestSpeakerImage(_ callback: (() -> Void)?) {
         
-        if image != nil || pictureURL.isEmpty{
+        if image != nil || pictureURL.isEmpty {
             if let cb = callback { cb() }
             return
         }
@@ -513,26 +513,26 @@ class SISpeaker: SIObject {
         });
     }
     
-    func getSpeakerImage(_ callback: @escaping (UIImage) -> Void) {
+    func getSpeakerImage(callback: ((UIImage) -> Void)?) {
         
         guard let image = self.image else {
             requestSpeakerImage() {
                 if let image = self.image {
-                    callback(image)
+                    if let cb = callback { cb(image) }
                 } else if let image = UIImage(named: "silhouette") {
-                    callback(image)
+                    if let cb = callback { cb(image) }
                 } else {
-                    callback(UIImage())
+                    if let cb = callback { cb(UIImage()) }
                 }
             }
             return
         }
         
-        callback(image)
+        if let cb = callback { cb(image) }
         
     }
     
-    fileprivate func getMiddleInitial() -> [String] {
+    private func getMiddleInitial() -> [String] {
         if let fullname = name.split(" ") {
             
             var middle = [String]()

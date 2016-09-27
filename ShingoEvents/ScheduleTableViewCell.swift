@@ -38,7 +38,7 @@ class ScheduleTableViewCell: UITableViewCell {
     
     var isExpanded = false {
         didSet {
-            if self.isExpanded {
+            if isExpanded {
                 session.isSelected = true
                 expandCell()
             } else {
@@ -96,11 +96,8 @@ class ScheduleTableViewCell: UITableViewCell {
         
         if info.string == "\n\nTap To See Less..." {
             
-            let leftStyle = NSMutableParagraphStyle()
-            leftStyle.alignment = .left
-            
             let notificationText = NSMutableAttributedString(string: "Check back later for more information.",
-                                                             attributes: [NSParagraphStyleAttributeName : leftStyle])
+                                                             attributes: [NSParagraphStyleAttributeName : SIParagraphStyle.left])
             notificationText.addAttribute(NSFontAttributeName, value: UIFont.preferredFont(forTextStyle: .body), range: notificationText.fullRange)
             notificationText.append(info)
             
@@ -144,7 +141,7 @@ class ScheduleTableViewCell: UITableViewCell {
                 NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
                 NSCharacterEncodingDocumentAttribute : String.Encoding.utf8.rawValue,
                 NSParagraphStyleAttributeName : SIParagraphStyle.left,
-                ]
+            ]
             
             let attributedText = try NSMutableAttributedString(data: roomName.data(using: String.Encoding.utf8)!, options: attributes, documentAttributes: nil)
             

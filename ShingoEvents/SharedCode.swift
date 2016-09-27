@@ -20,9 +20,10 @@ struct Alphabet {
 }
 
 struct SIParagraphStyle {
-    private static var style = NSMutableParagraphStyle()
+    
     public static var center: NSParagraphStyle {
         get {
+            let style = NSMutableParagraphStyle()
             style.alignment = .center
             return style
         }
@@ -30,6 +31,7 @@ struct SIParagraphStyle {
     
     public static var justified: NSParagraphStyle {
         get {
+            let style = NSMutableParagraphStyle()
             style.alignment = .justified
             return style
         }
@@ -37,6 +39,7 @@ struct SIParagraphStyle {
     
     public static var left: NSParagraphStyle {
         get {
+            let style = NSMutableParagraphStyle()
             style.alignment = .left
             return style
         }
@@ -44,6 +47,7 @@ struct SIParagraphStyle {
     
     public static var natural: NSParagraphStyle {
         get {
+            let style = NSMutableParagraphStyle()
             style.alignment = .natural
             return style
         }
@@ -51,6 +55,7 @@ struct SIParagraphStyle {
     
     public static var right: NSParagraphStyle {
         get {
+            let style = NSMutableParagraphStyle()
             style.alignment = .right
             return style
         }
@@ -58,7 +63,7 @@ struct SIParagraphStyle {
 }
 
 // Shingo IP Colors
-struct SIColor {
+extension UIColor {
     
     ///Red: 21, Green: 92, Blue: 151.
     static var lightShingoBlue: UIColor { get { return UIColor(netHex: 0x155c97) } }
@@ -70,6 +75,8 @@ struct SIColor {
     static var darkShingoBlue: UIColor { get { return UIColor(netHex: 0x0e2145) } }
     ///Red: 205, Green: 137, Blue: 49.
     static var shingoGold: UIColor { get { return UIColor(netHex: 0xcd8931) } }
+    ///Red: 63, Green: 81, Blue: 36.
+    static var shingoGreen: UIColor { get {return UIColor(netHex: 0x3F5124) } }
 }
 
 extension UIColor {
@@ -297,24 +304,6 @@ extension UILabel {
     }
 }
 
-extension UIFont {
-    class func helveticaOfFontSize(_ size: CGFloat) -> UIFont {
-        if let font = UIFont(name: "Helvetica", size: size) {
-            return font
-        } else {
-            return UIFont.systemFont(ofSize: size)
-        }
-    }
-    
-    class func boldHelveticaOfFontSize(_ size: CGFloat) -> UIFont {
-        if let font = UIFont(name: "Helvetica-Bold", size: size) {
-            return font
-        } else {
-            return UIFont.boldSystemFont(ofSize: size)
-        }
-    }
-}
-
 extension Double {
     mutating func increment() -> Double {
         return self.advanced(by: 1.0)
@@ -331,7 +320,7 @@ extension UIImageView {
         return CGSize.zero
     }    
 
-    func resizeImageIntrinsicContentSize(toFitWidth width: CGFloat) {
+    func resizeImageViewToIntrinsicContentSize(thatFitsWidth width: CGFloat) {
         guard let image = self.image else { return }
         
         var isOpaque: Bool!

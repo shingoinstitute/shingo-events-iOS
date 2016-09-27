@@ -23,7 +23,7 @@ class EventsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = SIColor.shingoBlue
+        view.backgroundColor = .shingoBlue
         
         tableView.estimatedRowHeight = 200;
         tableView.rowHeight = UITableViewAutomaticDimension;
@@ -70,30 +70,10 @@ extension EventsTableViewController: SICellDelegate {
         return cell;
     }
     
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = UILabel()
-        
-        switch events.count {
-        case 1:
-            view.text = "   \(events.count) Event Found"
-        default:
-            view.text = "   \(events.count) Events Found"
-        }
-        
-        view.textColor = .white
-        view.textAlignment = .center
-        view.font = UIFont.preferredFont(forTextStyle: .subheadline)
-        return view
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 21
-    }
-    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let cell = tableView.cellForRow(at: indexPath) as! EventTableViewCell
-        cell.backgroundColor = SIColor.lightShingoBlue
+        cell.backgroundColor = .lightShingoBlue
         
         let activityView = ActivityViewController()
         activityView.message = "Loading Event Data..."

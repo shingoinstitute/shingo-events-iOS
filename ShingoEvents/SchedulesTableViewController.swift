@@ -56,7 +56,7 @@ class SchedulesTableViewController: UITableViewController, SISpeakerDelegate {
         tableView.estimatedRowHeight = 106
         tableView.rowHeight = UITableViewAutomaticDimension
         
-        tableView.backgroundColor = SIColor.shingoBlue
+        tableView.backgroundColor = .shingoBlue
         
         
         

@@ -26,6 +26,8 @@ class ResearchInfoViewController: UIViewController {
         
         navigationItem.title = recipient.name
         
+        NotificationCenter.default.addObserver(self, selector: #selector(ResearchInfoViewController.adjustFontForCategorySizeChange), name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
+        
         bookImage.removeFromSuperview()
         abstractTextField.removeFromSuperview()
         view.addSubview(scrollView)
@@ -35,10 +37,22 @@ class ResearchInfoViewController: UIViewController {
         
         automaticallyAdjustsScrollViewInsets = false
 
-        abstractTextField.text = ""
-        abstractTextField.attributedText = recipient.attributedSummary
+        let summary = NSMutableAttributedString(attributedString: recipient.attributedSummary)
+        
+        let attributes = [
+            NSFontAttributeName : UIFont.preferredFont(forTextStyle: .body),
+            NSForegroundColorAttributeName : UIColor.white
+        ]
+        
+        summary.addAttributes(attributes, range: summary.fullRange)
+        
+        abstractTextField.attributedText = summary
         
         updateViewConstraints()
+    }
+    
+    func adjustFontForCategorySizeChange() {
+        abstractTextField.font = UIFont.preferredFont(forTextStyle: .body)
     }
     
     override func updateViewConstraints() {
@@ -60,14 +74,14 @@ class ResearchInfoViewController: UIViewController {
             abstractTextField.autoPinEdge(.bottom, to: .bottom, of: scrollView, withOffset: 0)
             abstractTextField.isScrollEnabled = false
             abstractTextField.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
-            abstractTextField.backgroundColor = SIColor.shingoBlue
+            abstractTextField.backgroundColor = .shingoBlue
             
             view.bringSubview(toFront: scrollView)
             backdrop.autoPinEdge(.top, to: .bottom, of: bookImage, withOffset: 8)
             backdrop.autoPinEdge(toSuperviewEdge: .left)
             backdrop.autoPinEdge(toSuperviewEdge: .right)
             backdrop.autoPinEdge(toSuperviewEdge: .bottom)
-            backdrop.backgroundColor = SIColor.shingoBlue
+            backdrop.backgroundColor = .shingoBlue
             
             didUpdateConstraints = true
         }

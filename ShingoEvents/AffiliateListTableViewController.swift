@@ -58,7 +58,7 @@ class AffiliateListTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
-        view.backgroundColor = SIColor.shingoRed
+        view.backgroundColor = .shingoRed
         let header = UILabel()
         header.text = String(affiliateSections[section].0).uppercased()
         header.textColor = .white

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SpeakerListTableViewController: UITableViewController {
+class SpeakerListTableViewController: UITableViewController, SICellDelegate {
 
     var keyNoteSpeakers: [SISpeaker]!
     var concurrentSpeakers: [SISpeaker]!
@@ -20,145 +20,117 @@ class SpeakerListTableViewController: UITableViewController {
         self.unknownSpeakers
     ]
     
-    var dataSource: [[SISpeaker]?] {
-        get {
-            var value = [[SISpeaker]!]()
-            for speakers in speakerList {
-                if speakers == nil { continue }
-                if !(speakers?.isEmpty)! { value.append(speakers) }
+    lazy var dataSource: [[SISpeaker]] = {
+        var dataSourceForSection = [[SISpeaker]]()
+        for speakerListType in self.speakerList {
+            if let speakers = speakerListType {
+                if !speakers.isEmpty {
+                    dataSourceForSection.append(speakers)
+                }
             }
-            return value
         }
-    }
+        return dataSourceForSection
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.estimatedRowHeight = 117
+        NotificationCenter.default.addObserver(self, selector: #selector(SchedulesTableViewController.adjustFontForCategorySizeChange), name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
+        
+        tableView.estimatedRowHeight = 150
         tableView.rowHeight = UITableViewAutomaticDimension
+        
+        tableView.backgroundColor = .shingoBlue
+        
+        //Begin loading of speaker profile pictures
+        for speakerList in dataSource {
+            for speaker in speakerList {
+                if !speaker.didLoadImage {
+                    speaker.getSpeakerImage(callback: nil)
+                }
+            }
+        }
         
     }
     
+    fileprivate func cellShouldExpand(indexPath: IndexPath) -> Bool {
+        if dataSource.indices.contains(indexPath.section) {
+            if dataSource[indexPath.section].indices.contains(indexPath.row) {
+                return dataSource[indexPath.section][indexPath.row].isSelected
+            }
+        }
+        return false
+    }
+ 
+    func cellDidUpdate() {
+        tableView.beginUpdates()
+        tableView.endUpdates()
+    }
+    
+    func adjustFontForCategorySizeChange() {
+        tableView.beginUpdates()
+        tableView.endUpdates()
+    }
+    
+}
+
+extension SpeakerListTableViewController {
     // MARK: - Table view data source
-    
-    override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath) as! SpeakerListCell
-        if let speaker = cell.speaker {
-            performSegue(withIdentifier: "SpeakerDetails", sender: speaker)
-        }
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath) as! SpeakerListCell
-        if let speaker = cell.speaker {
-            performSegue(withIdentifier: "SpeakerDetails", sender: speaker)
-        }
-    }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         return dataSource.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataSource[section]!.count
+        return dataSource[section].count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "SpeakerListCell", for: indexPath) as! SpeakerListCell
-
-        cell.speaker = dataSource[(indexPath as NSIndexPath).section]?[(indexPath as NSIndexPath).row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SpeakerListCell", for: indexPath) as! SpeakerTableViewCell
+        
+        cell.speaker = dataSource[indexPath.section][indexPath.row]
+        
+        cell.isExpanded = cellShouldExpand(indexPath: indexPath)
         
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as! SpeakerTableViewCell
+        
+        cell.isExpanded = !cell.isExpanded
+        
+        tableView.beginUpdates()
+        tableView.endUpdates()
+    }
+    
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
-        let header = UILabel(text: "", font: UIFont(name: "Helvetica", size: 12))
+        let header = UILabel(text: "", font: UIFont.preferredFont(forTextStyle: .headline))
         header.textColor = .white
-        
-        guard let speakers = dataSource[section] else {
-            header.text = "   Speakers"
-            return header
+
+        guard let speaker = dataSource[section].first else {
+            return nil
         }
         
-        header.text = "  \(speakers[0].speakerType) Speakers"
+        switch speaker.speakerType {
+        case .keynote:
+            header.text  = "  Keynote Speakers"
+        case .concurrent:
+            header.text  = "  Concurrent Speakers"
+        case .none:
+            header.text  = "  Speakers"
+        }
         
         return header
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        
-        guard let section = dataSource[section] else {
-            return 0
-        }
-        
-        if section.isEmpty {
-            return 0
-        } else {
-            return 32
-        }
-    }
-    
-    // MARK: - Navigation
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "SpeakerDetails" {
-            let destination = segue.destination as! SpeakerDetailsViewController
-            if let speaker = sender as? SISpeaker {
-                destination.speaker = speaker
-            }
-        }
-    }
-
-}
-
-
-class SpeakerListCell: UITableViewCell {
-
-    @IBOutlet weak var speakerNameLabel: UILabel!
-    @IBOutlet weak var speakerImage: UIImageView! {
-        didSet {
-            speakerImage.backgroundColor = .clear
-        }
-    }
-    @IBOutlet weak var aiv: UIActivityIndicatorView! {
-        didSet {
-            aiv.hidesWhenStopped = true
-        }
-    }
-    @IBOutlet weak var summaryTextView: UITextView! {
-        didSet {
-            summaryTextView.layer.shadowColor = UIColor.gray.cgColor
-            summaryTextView.layer.shadowOffset = CGSize(width: 0, height: 2.0)
-            summaryTextView.layer.shadowOpacity = 1
-            summaryTextView.layer.shadowRadius = 3
-            summaryTextView.layer.masksToBounds = false
-            summaryTextView.layer.cornerRadius = 3
-        }
-    }
-    
-    var speaker: SISpeaker! {
-        didSet {
-            if !speaker.didLoadImage {
-                speakerImage.image = nil
-                aiv.startAnimating()
-            }
-            updateCell()
-        }
-    }
-    
-    func updateCell() {
-        speakerNameLabel.text = speaker.name + "\n" + speaker.title
-        speaker.getSpeakerImage() { image in
-            self.aiv.stopAnimating()
-            self.speakerImage.image = image
-        }
+        return 32
     }
     
 }
-
-
 
 
 

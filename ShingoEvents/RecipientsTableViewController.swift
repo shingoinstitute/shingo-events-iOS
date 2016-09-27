@@ -119,7 +119,7 @@ extension RecipientsTableViewController {
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
-        view.backgroundColor = SIColor.shingoRed
+        view.backgroundColor = .shingoRed
         
         let header = UILabel()
         header.font = UIFont.boldSystemFont(ofSize: 18)

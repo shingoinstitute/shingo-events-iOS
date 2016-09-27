@@ -25,7 +25,7 @@ class BugReportViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = SIColor.shingoRed
+        view.backgroundColor = .shingoRed
         
         descriptionTextField.delegate = self
         emailTextField.delegate = self
