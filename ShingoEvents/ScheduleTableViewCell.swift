@@ -38,11 +38,10 @@ class ScheduleTableViewCell: UITableViewCell {
     
     var isExpanded = false {
         didSet {
+            session.isSelected = isExpanded
             if isExpanded {
-                session.isSelected = true
                 expandCell()
             } else {
-                session.isSelected = false
                 shrinkCell()
             }
         }
@@ -114,7 +113,6 @@ class ScheduleTableViewCell: UITableViewCell {
         infoTextView.textAlignment = .center
         infoTextView.textColor = .gray
         infoTextView.font = UIFont.preferredFont(forTextStyle: .footnote)
-        infoTextView.layer.borderWidth = 0
     }
     
     @IBAction func didTapSpeakersButton() {

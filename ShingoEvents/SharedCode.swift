@@ -11,12 +11,9 @@ import UIKit
 
 protocol SICellDelegate { func cellDidUpdate() }
 protocol SISpeakerDelegate { func performActionOnSpeakers(data: [SISpeaker]) }
-protocol SIRequestDelegate { func cancelRequest() }
 
 struct Alphabet {
-    static func alphabet() -> [String] {
-        return ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "#"]
-    }
+    static var alphabet: [String] = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "#"]
 }
 
 struct SIParagraphStyle {

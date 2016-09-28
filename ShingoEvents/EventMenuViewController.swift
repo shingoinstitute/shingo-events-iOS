@@ -174,9 +174,6 @@ class EventMenuViewController: UIViewController {
                 self.navigationItem.title = ""
             }
         }
-    
-        definesPresentationContext = true
-        providesPresentationContextTransitionStyle = true
 
         // Add targets to all buttons
         scheduleButton.addTarget(self, action: #selector(EventMenuViewController.didTapSchedule(_:)), for: UIControlEvents.touchUpInside)
@@ -469,9 +466,7 @@ extension EventMenuViewController {
         if segue.identifier == "MapView" {
             let destination = segue.destination as! MapViewController
             if let venue = sender as? SIVenue {
-                if let location = venue.location {
-                    destination.location = location
-                }
+                destination.venue = venue
             }
         }
         
@@ -494,7 +489,7 @@ extension EventMenuViewController {
                     }
                 }
                 
-                for letter in Alphabet.alphabet() {
+                for letter in Alphabet.alphabet {
                     if let section = sections[letter] {
                         exhibitorSections.append((letter, section))
                     }
@@ -528,9 +523,9 @@ extension EventMenuViewController {
                     }
                 }
                 
-                for letter in Alphabet.alphabet() {
-                    if let section = sections[letter] {
-                        affiliateSections.append((letter, section))
+                for character in Alphabet.alphabet {
+                    if let section = sections[character] {
+                        affiliateSections.append((character, section))
                     }
                 }
                 

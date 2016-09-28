@@ -11,7 +11,7 @@ import Crashlytics
 import Fabric
 import Alamofire
 
-class MainMenuViewController: UIViewController, SIRequestDelegate {
+class MainMenuViewController: UIViewController {
     
     //Mark: - Properties
     var events : [SIEvent]?
@@ -67,7 +67,6 @@ class MainMenuViewController: UIViewController, SIRequestDelegate {
         super.viewDidLoad()
         
         activityView = ActivityViewController(message: "Loading Upcoming Conferences...")
-        activityView.delegate = self
         
         requestEvents()
         
@@ -161,14 +160,6 @@ class MainMenuViewController: UIViewController, SIRequestDelegate {
             didSetupConstraints = true
         }
         super.updateViewConstraints()
-    }
-    
-    func cancelRequest() {
-        dismiss(animated: false, completion: {
-            if let request = self.request {
-                request.cancel()
-            }
-        })
     }
     
     fileprivate func requestEvents() {

@@ -12,20 +12,18 @@ import UIKit
 
 class ActivityViewController: UIViewController {
     
-    var delegate: SIRequestDelegate?
-    
     var message = "Loading..." {
         didSet {
             messageLabel.text = message
         }
     }
-    var activityView:UIView = {
+    var activityView: UIView = {
         let view = UIView.newAutoLayout()
         view.backgroundColor = UIColor(white: 0.0, alpha: 0.5)
         view.layer.cornerRadius = 12
         return view
     }()
-    var messageLabel : UILabel = {
+    var messageLabel: UILabel = {
         let view = UILabel.newAutoLayout()
         view.font = UIFont.boldSystemFont(ofSize: UIFont.labelFontSize)
         view.textColor = UIColor.white
@@ -35,7 +33,7 @@ class ActivityViewController: UIViewController {
     }()
 
     var activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
-    var didAddActivityIndicatorConstraints = false
+    var didSetupConstraints = false
     
     convenience init() {
         self.init(nibName: nil, bundle: nil)
@@ -48,12 +46,13 @@ class ActivityViewController: UIViewController {
         setup()
     }
     
-    fileprivate func setup() {
-        modalTransitionStyle = .crossDissolve
+    private func setup() {
+        modalTransitionStyle = UIModalTransitionStyle.crossDissolve
         modalPresentationStyle = .overCurrentContext
         view.backgroundColor = UIColor.clear
         view.addSubview(activityView)
         activityView.addSubviews([activityIndicatorView, messageLabel])
+        activityIndicatorView.startAnimating()
     }
     
     override func viewDidLoad() {
@@ -64,13 +63,11 @@ class ActivityViewController: UIViewController {
     
     override func updateViewConstraints() {
         
-        if !didAddActivityIndicatorConstraints {
+        if !didSetupConstraints {
             activityView.autoAlignAxis(.horizontal, toSameAxisOf: view)
             activityView.autoAlignAxis(.vertical, toSameAxisOf: view)
             
             messageLabel.sizeToFit()
-            
-            activityIndicatorView.startAnimating()
 
             activityView.autoSetDimensions(to: CGSize(width: 160.0, height: 160.0))
             activityView.autoAlignAxis(.horizontal, toSameAxisOf: view)
@@ -83,15 +80,9 @@ class ActivityViewController: UIViewController {
             activityIndicatorView.autoAlignAxis(.vertical, toSameAxisOf: activityView)
             activityIndicatorView.autoAlignAxis(.horizontal, toSameAxisOf: activityView, withOffset: 8)
             
-            didAddActivityIndicatorConstraints = true
+            didSetupConstraints = true
         }
         super.updateViewConstraints()
-    }
-
-    func didTapCancel(_ sender: AnyObject) {
-        if let delegate = self.delegate {
-            delegate.cancelRequest()
-        }
     }
     
 }

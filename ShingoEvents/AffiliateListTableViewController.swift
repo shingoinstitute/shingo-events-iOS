@@ -13,10 +13,38 @@ class AffiliateListTableViewController: UITableViewController {
 
     var affiliateSections:[(String, [SIAffiliate])]!
     
+    lazy var sectionHeaders: [String] = {
+        var headers = [String]()
+        for section in self.affiliateSections {
+            headers.append(section.0)
+        }
+        return headers
+    }()
+    
+    lazy var affiliateDataSource: [[SIAffiliate]] = {
+        var sections = [[SIAffiliate]]()
+        for section in self.affiliateSections {
+            sections.append(section.1)
+        }
+        return sections
+    }()
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        DispatchQueue.global().async {
+            for section in self.affiliateSections {
+                for affiliate in section.1 {
+                    affiliate.isSelected = false
+                }
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.estimatedRowHeight = 117
+        tableView.estimatedRowHeight = 186
         tableView.rowHeight = UITableViewAutomaticDimension
         
         if affiliateSections.isEmpty {
@@ -31,95 +59,66 @@ class AffiliateListTableViewController: UITableViewController {
         
     }
     
-    // MARK: - User interaction
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath) as! AffiliateTableViewCell
-        if let affiliate = cell.affiliate {
-            performSegue(withIdentifier: "AffiliateView", sender: affiliate)
-        }
-    }
+}
+
+extension AffiliateListTableViewController {
     
-    // MARK: - Table view data source
+    // MARK: - TableView data source
     override func numberOfSections(in tableView: UITableView) -> Int {
-        if affiliateSections != nil {
-            return affiliateSections.count
-        } else {
-            return 0
-        }
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if affiliateSections != nil {
-            return affiliateSections[section].1.count
-        } else {
-            return 0
-        }
-    }
-
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = UIView()
-        view.backgroundColor = .shingoRed
-        let header = UILabel()
-        header.text = String(affiliateSections[section].0).uppercased()
-        header.textColor = .white
-        header.font = UIFont.boldSystemFont(ofSize: 16.0)
-        header.backgroundColor = .clear
-        
-        view.addSubview(header)
-        header.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets.init(top: 0, left: 8, bottom: 0, right: 0))
-        
-        return view
+        return affiliateSections.count
     }
     
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 30
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return affiliateDataSource[section].count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCellWithIdentifier("AffiliateCell", forIndexPath: indexPath) as! AffiliateTableViewCell
-        let cell = AffiliateTableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: "AffiliateCell", for: indexPath) as! AffiliateTableViewCell
         
-        cell.affiliate = affiliateSections[(indexPath as NSIndexPath).section].1[(indexPath as NSIndexPath).row]
+        cell.affiliate = affiliateDataSource[indexPath.section][indexPath.row]
         
-        cell.setNeedsUpdateConstraints()
-        cell.updateConstraintsIfNeeded()
+        cell.isExpanded = affiliateDataSource[indexPath.section][indexPath.row].isSelected
+        
         return cell
     }
-
-
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 116
-    }
-
     
-    // MARK: - Navigation
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "AffiliateView" {
-            let destination = segue.destination as! AfilliateViewController
-            if let affiliate = sender as? SIAffiliate {
-                destination.affiliate = affiliate
-            }
-        }
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as! AffiliateTableViewCell
+        
+        cell.isExpanded = !cell.isExpanded
+        
+        tableView.beginUpdates()
+        tableView.endUpdates()
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header = UILabel(text: "  \(sectionHeaders[section].uppercased())", font: UIFont.preferredFont(forTextStyle: .headline))
+        header.textColor = .white
+        header.backgroundColor = .shingoRed
+        return header
     }
 
-
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 32
+    }
+    
 }
 
 
-open class AffiliateTableViewCell: UITableViewCell {
+class AffiliateTableViewCell: UITableViewCell {
     
-    var logoImage:UIImageView = {
-        let view = UIImageView.newAutoLayout()
-        view.contentMode = .scaleAspectFit
-        return view
-    }()
-    var nameLabel:UILabel = {
-        let view = UILabel.newAutoLayout()
-        view.numberOfLines = 0
-        view.lineBreakMode = .byWordWrapping
-        return view
-    }()
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var logoImageView: UIImageView!
+    @IBOutlet weak var summaryTextView: UITextView! {
+        didSet {
+            summaryTextView.layer.shadowColor = UIColor.gray.cgColor
+            summaryTextView.layer.shadowOffset = CGSize(width: 0, height: 2.0)
+            summaryTextView.layer.shadowOpacity = 1
+            summaryTextView.layer.shadowRadius = 3
+            summaryTextView.layer.masksToBounds = false
+            summaryTextView.layer.cornerRadius = 3
+        }
+    }
     
     var affiliate: SIAffiliate! {
         didSet {
@@ -127,42 +126,79 @@ open class AffiliateTableViewCell: UITableViewCell {
         }
     }
     
-    var didSetupConstraints = false
-    
-    override open func updateConstraints() {
-        if !didSetupConstraints {
-
-            contentView.addSubview(logoImage)
-            contentView.addSubview(nameLabel)
-            
-            NSLayoutConstraint.autoSetPriority(UILayoutPriorityRequired) {
-                self.logoImage.autoSetContentCompressionResistancePriority(for: .vertical)
+    var isExpanded = false {
+        didSet {
+            affiliate.isSelected = isExpanded
+            if isExpanded {
+                expandCell()
+            } else {
+                shrinkCell()
             }
-            
-            logoImage.autoSetDimension(.width, toSize: contentView.frame.width * 0.33)
-            logoImage.autoAlignAxis(.horizontal, toSameAxisOf: contentView, withOffset: 0)
-            logoImage.autoPinEdge(.left, to: .left, of: contentView, withOffset: 8.0)
-            
-            nameLabel.autoSetDimension(.height, toSize: 42.0)
-            nameLabel.autoAlignAxis(.horizontal, toSameAxisOf: contentView)
-            nameLabel.autoPinEdge(.left, to: .right, of: logoImage, withOffset: 8.0)
-            nameLabel.autoPinEdge(.right, to: .right, of: contentView, withOffset: -8.0)
-            
-            didSetupConstraints = true
         }
-        super.updateConstraints()
     }
     
-    fileprivate func updateCell() {
+    private func updateCell() {
         
-        accessoryType = .disclosureIndicator
+        selectionStyle = .none
         
         if let affiliate = affiliate {
-            affiliate.getLogoImage() { image in
-                self.logoImage.image = image
-            }
             
             nameLabel.text = affiliate.name
+            
+            affiliate.getLogoImage() { image in
+                self.logoImageView.image = image
+                
+                let maxWidth = self.contentView.frame.width - 16
+                
+                if image.size.width > maxWidth {
+                    self.logoImageView.resizeImageViewToIntrinsicContentSize(thatFitsWidth: maxWidth)
+                }
+            }
         }
     }
+    
+    let tapToSeeLessText = NSAttributedString(string: "\n\nTap To See Less...", attributes: [
+        NSFontAttributeName : UIFont.preferredFont(forTextStyle: .footnote),
+        NSForegroundColorAttributeName : UIColor.gray,
+        NSParagraphStyleAttributeName : SIParagraphStyle.center
+    ])
+    
+    let selectMoreInfoText = NSAttributedString(string: "Select For More Info >", attributes: [
+        NSFontAttributeName : UIFont.preferredFont(forTextStyle: .footnote),
+        NSForegroundColorAttributeName : UIColor.gray,
+        NSParagraphStyleAttributeName : SIParagraphStyle.center
+    ])
+    
+    private func expandCell() {
+        
+        let summary = NSMutableAttributedString(attributedString: affiliate.attributedSummary)
+        
+        if summary.string.isEmpty {
+            summary.append( NSMutableAttributedString(string: "Check back later for more information."))
+        }
+  
+        let summaryAttrs = [
+            NSFontAttributeName : UIFont.preferredFont(forTextStyle: .body),
+            NSParagraphStyleAttributeName : SIParagraphStyle.left,
+            NSForegroundColorAttributeName : UIColor.black
+        ]
+        
+        summary.addAttributes(summaryAttrs, range: summary.fullRange)
+        
+        
+        
+        summary.append(tapToSeeLessText)
+        
+        summaryTextView.attributedText = summary
+        
+    }
+    
+    private func shrinkCell() {
+        
+        
+        
+        summaryTextView.attributedText = selectMoreInfoText
+    }
+
+    
 }

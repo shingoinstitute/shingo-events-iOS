@@ -13,7 +13,7 @@ protocol UnwindToMainVCProtocol {
     func updateEvents(_ events: [SIEvent]?)
 }
 
-class SettingsTableViewController: UITableViewController, SIRequestDelegate {
+class SettingsTableViewController: UITableViewController {
     
     var events: [SIEvent]?
     
@@ -43,7 +43,6 @@ class SettingsTableViewController: UITableViewController, SIRequestDelegate {
     @IBAction func didTapReloadData(_ sender: AnyObject) {
         
         let activityView = ActivityViewController()
-        activityView.delegate = self
         
         present(activityView, animated: true) {
             
@@ -60,15 +59,6 @@ class SettingsTableViewController: UITableViewController, SIRequestDelegate {
                 })
             })
         }
-    }
-    
-    func cancelRequest() {
-        
-        if let request = request {
-            request.cancel()
-        }
-        
-        dismiss(animated: true, completion: nil)
     }
     
     //MARK: - Navigation
