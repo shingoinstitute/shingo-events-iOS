@@ -8,6 +8,8 @@
 
 import UIKit
 
+
+
 class RecipientsTableViewController: UITableViewController {
 
     var spRecipients: [SIRecipient]!
@@ -42,30 +44,9 @@ class RecipientsTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    }
-    
-    // MARK: - Navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        if segue.identifier == "ChallengerInfoView" {
-            let destination = segue.destination as! ChallengerInfoViewController
-            if let recipient = sender as? SIRecipient {
-                destination.navigationController?.topViewController?.title = recipient.name
-                destination.recipient = recipient
-                // Send something
-            }
-        }
-        
-        if segue.identifier == "ResearchInfoView" {
-            let destination = segue.destination as! ResearchInfoViewController
-            
-            if let recipient = sender as? SIRecipient {
-                destination.navigationController?.topViewController?.title = recipient.name
-                destination.recipient = recipient
-                // Send something
-            }
-            
-        }
+        tableView.estimatedRowHeight = 150
+        tableView.rowHeight = UITableViewAutomaticDimension
         
     }
     
@@ -85,53 +66,35 @@ extension RecipientsTableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "RecipientCell", for: indexPath) as! RecipientTableViewCell
-        cell.recipient = dataSource[(indexPath as NSIndexPath).section][(indexPath as NSIndexPath).row]
+        
+        cell.entity = dataSource[indexPath.section][indexPath.row]
+        
+        cell.isExpanded = cell.entity.isSelected
+        
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as! RecipientTableViewCell
+
+        cell.isExpanded = !cell.isExpanded
         
-        if let recipient = cell.recipient {
-            switch recipient.awardType {
-                case .shingoPrize,
-                     .silver,
-                     .bronze:
-                    self.performSegue(withIdentifier: "ChallengerInfoView", sender: recipient)
-                case .research:
-                    self.performSegue(withIdentifier: "ResearchInfoView", sender: recipient)
-                case .publication:
-                    // Might change segue later to be a screen customized to publication recipients
-                    self.performSegue(withIdentifier: "ResearchInfoView", sender: recipient)
-                default:
-                    return
-            }
-        }
+        tableView.beginUpdates()
+        tableView.endUpdates()
+
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 42
-    }
-
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 132
+        return 32
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = UIView()
-        view.backgroundColor = .shingoRed
-        
-        let header = UILabel()
-        header.font = UIFont.boldSystemFont(ofSize: 18)
+        let header = UILabel(text: "\(dataSource[section][0].awardType.rawValue) Recipients", font: UIFont.preferredFont(forTextStyle: .headline))
         header.textColor = .white
+        header.textAlignment = .center
+        header.backgroundColor = .shingoRed
         
-        header.text = "\(dataSource[section][0].awardType.rawValue) Recipients"
-        
-        view.addSubview(header)
-        
-        header.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8))
-        
-        return view
+        return header
     }
 
 

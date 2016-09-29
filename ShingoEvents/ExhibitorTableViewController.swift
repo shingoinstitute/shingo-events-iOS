@@ -28,10 +28,10 @@ class ExhibitorTableViewController: UITableViewController {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
     }
     
-    fileprivate func displayNoContentNotification() {
+    private func displayNoContentNotification() {
         let label: UILabel = {
             let view = UILabel.newAutoLayout()
-            view.text = "This event does not have any exhibitors."
+            view.text = "Content Currently Unavailable."
             view.textColor = .white
             view.sizeToFit()
             return view
@@ -42,15 +42,6 @@ class ExhibitorTableViewController: UITableViewController {
         label.autoAlignAxis(toSuperviewAxis: .vertical)
     }
     
-    // MARK: - Navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "ExhibitorInfoView" {
-            let destination = segue.destination as! ExhibitorInfoViewController
-            if let exhibitor = sender as? SIExhibitor {
-                destination.exhibitor = exhibitor
-            }
-        }
-    }
 }
 
 extension ExhibitorTableViewController {
@@ -64,6 +55,26 @@ extension ExhibitorTableViewController {
         return sectionInformation[section].1.count
     }
 
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ExhibitorCell") as! ExhibitorTableViewCell
+        
+        cell.entity = sectionInformation[indexPath.section].1[indexPath.row]
+        
+        cell.isExpanded = cell.entity.isSelected
+        
+        return cell
+    }
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as! ExhibitorTableViewCell
+        
+        cell.isExpanded = !cell.isExpanded
+        
+        tableView.beginUpdates()
+        tableView.endUpdates()
+    }
+
+    
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = UILabel(text: "\t\(sectionInformation[section].0)", font: UIFont.preferredFont(forTextStyle: .headline))
         header.textColor = .white
@@ -76,32 +87,6 @@ extension ExhibitorTableViewController {
         return 30
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell: ExhibitorTableViewCell = ExhibitorTableViewCell()
-        cell.exhibitor = sectionInformation[(indexPath as NSIndexPath).section].1[(indexPath as NSIndexPath).row]
-        
-        cell.setNeedsUpdateConstraints()
-        cell.updateConstraintsIfNeeded()
-        
-        return cell
-    }
-
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath) as! ExhibitorTableViewCell
-        if let exhibitor = cell.exhibitor {
-            performSegue(withIdentifier: "ExhibitorInfoView", sender: exhibitor)
-        }
-    }
-
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            return 200.0
-        } else {
-            return 150
-        }
-    }
-
 
 }
 

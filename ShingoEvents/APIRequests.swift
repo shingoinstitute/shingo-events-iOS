@@ -603,8 +603,8 @@ extension SIRequest {
                 }
                 
                 if let biography = record["Speaker_Biography__c"].string {
-                    if let attributedBiography = parseHTMLStringUsingPreferredFont(string: biography) {
-                        speaker.attributedBiography = attributedBiography
+                    if let attributedSummary = parseHTMLStringUsingPreferredFont(string: biography) {
+                        speaker.attributedSummary = attributedSummary
                     }
                 }
                 
@@ -678,8 +678,8 @@ extension SIRequest {
                 }
                 
                 if let biography = record["Speaker_Biography__c"].string {
-                    if let attributedBiography = self.parseHTMLStringUsingPreferredFont(string: biography) {
-                        speaker.attributedBiography = attributedBiography
+                    if let attributedSummary = self.parseHTMLStringUsingPreferredFont(string: biography) {
+                        speaker.attributedSummary = attributedSummary
                     }
                 }
                 
@@ -1468,7 +1468,6 @@ extension SIRequest {
             let options: [String:Any] = [
                 NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
                 NSCharacterEncodingDocumentAttribute : String.Encoding.utf8.rawValue,
-                NSParagraphStyleAttributeName : SIParagraphStyle.left,
             ]
             
             guard let data = string.data(using: String.Encoding.utf8) else {

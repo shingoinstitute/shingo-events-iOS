@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import PureLayout
 
 class AffiliateListTableViewController: UITableViewController {
 
@@ -75,7 +74,7 @@ extension AffiliateListTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "AffiliateCell", for: indexPath) as! AffiliateTableViewCell
         
-        cell.affiliate = affiliateDataSource[indexPath.section][indexPath.row]
+        cell.entity = affiliateDataSource[indexPath.section][indexPath.row]
         
         cell.isExpanded = affiliateDataSource[indexPath.section][indexPath.row].isSelected
         
@@ -105,94 +104,4 @@ extension AffiliateListTableViewController {
 }
 
 
-class AffiliateTableViewCell: UITableViewCell {
-    
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var logoImageView: UIImageView!
-    @IBOutlet weak var summaryTextView: UITextView! {
-        didSet {
-            summaryTextView.layer.shadowColor = UIColor.gray.cgColor
-            summaryTextView.layer.shadowOffset = CGSize(width: 0, height: 2.0)
-            summaryTextView.layer.shadowOpacity = 1
-            summaryTextView.layer.shadowRadius = 3
-            summaryTextView.layer.masksToBounds = false
-            summaryTextView.layer.cornerRadius = 3
-        }
-    }
-    
-    var affiliate: SIAffiliate! {
-        didSet {
-            updateCell()
-        }
-    }
-    
-    var isExpanded = false {
-        didSet {
-            affiliate.isSelected = isExpanded
-            if isExpanded {
-                expandCell()
-            } else {
-                shrinkCell()
-            }
-        }
-    }
-    
-    private func updateCell() {
-        
-        selectionStyle = .none
-        
-        if let affiliate = affiliate {
-            
-            nameLabel.text = affiliate.name
-            
-            affiliate.getLogoImage() { image in
-                self.logoImageView.image = image
-                
-                let maxWidth = self.contentView.frame.width - 16
-                
-                if image.size.width > maxWidth {
-                    self.logoImageView.resizeImageViewToIntrinsicContentSize(thatFitsWidth: maxWidth)
-                }
-            }
-        }
-    }
-    
-    let tapToSeeLessText = NSAttributedString(string: "\n\nTap To See Less...", attributes: [
-        NSFontAttributeName : UIFont.preferredFont(forTextStyle: .footnote),
-        NSForegroundColorAttributeName : UIColor.gray,
-        NSParagraphStyleAttributeName : SIParagraphStyle.center
-    ])
-    
-    let selectMoreInfoText = NSAttributedString(string: "Select For More Info >", attributes: [
-        NSFontAttributeName : UIFont.preferredFont(forTextStyle: .footnote),
-        NSForegroundColorAttributeName : UIColor.gray,
-        NSParagraphStyleAttributeName : SIParagraphStyle.center
-    ])
-    
-    private func expandCell() {
-        
-        let summary = NSMutableAttributedString(attributedString: affiliate.attributedSummary)
-        
-        if summary.string.isEmpty {
-            summary.append( NSMutableAttributedString(string: "Check back later for more information."))
-        }
-  
-        let summaryAttrs = [
-            NSFontAttributeName : UIFont.preferredFont(forTextStyle: .body),
-            NSParagraphStyleAttributeName : SIParagraphStyle.left,
-            NSForegroundColorAttributeName : UIColor.black
-        ]
-        
-        summary.addAttributes(summaryAttrs, range: summary.fullRange)
- 
-        summary.append(tapToSeeLessText)
-        
-        summaryTextView.attributedText = summary
-    }
-    
-    private func shrinkCell() {
-        summaryTextView.attributedText = selectMoreInfoText
-    }
 
-    
-}

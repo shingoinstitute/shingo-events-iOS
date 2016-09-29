@@ -21,15 +21,15 @@ class SpeakerListTableViewController: UITableViewController, SICellDelegate {
     ]
     
     lazy var dataSource: [[SISpeaker]] = {
-        var dataSourceForSection = [[SISpeaker]]()
+        var dataSource = [[SISpeaker]]()
         for speakerListType in self.speakerList {
             if let speakers = speakerListType {
                 if !speakers.isEmpty {
-                    dataSourceForSection.append(speakers)
+                    dataSource.append(speakers)
                 }
             }
         }
-        return dataSourceForSection
+        return dataSource
     }()
     
     override func viewDidLoad() {
@@ -51,15 +51,6 @@ class SpeakerListTableViewController: UITableViewController, SICellDelegate {
             }
         }
         
-    }
-    
-    fileprivate func cellShouldExpand(indexPath: IndexPath) -> Bool {
-        if dataSource.indices.contains(indexPath.section) {
-            if dataSource[indexPath.section].indices.contains(indexPath.row) {
-                return dataSource[indexPath.section][indexPath.row].isSelected
-            }
-        }
-        return false
     }
  
     func cellDidUpdate() {
@@ -89,9 +80,9 @@ extension SpeakerListTableViewController {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "SpeakerListCell", for: indexPath) as! SpeakerTableViewCell
         
-        cell.speaker = dataSource[indexPath.section][indexPath.row]
+        cell.entity = dataSource[indexPath.section][indexPath.row]
         
-        cell.isExpanded = cellShouldExpand(indexPath: indexPath)
+        cell.isExpanded = cell.entity.isSelected
         
         return cell
     }

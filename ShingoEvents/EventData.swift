@@ -14,16 +14,19 @@ import Crashlytics
 
 class SIObject : AnyObject {
     
+    fileprivate var image : UIImage?
+    
     var name : String
     var id : String
-    fileprivate var image : UIImage?
+    var attributedSummary: NSAttributedString
     var didLoadImage: Bool
     var isSelected: Bool
     
     init() {
+        image = nil
         name = ""
         id = ""
-        image = nil
+        attributedSummary = NSAttributedString()
         didLoadImage = false
         isSelected = false
     }
@@ -341,7 +344,7 @@ class SISession: SIObject {
     var sessionType : SessionType
     var sessionTrack : String
 //    var summary : String
-    var attributedSummary: NSAttributedString
+//    var attributedSummary: NSAttributedString
     var room : SIRoom?
     var startDate : Date
     var endDate : Date
@@ -356,7 +359,7 @@ class SISession: SIObject {
         sessionType = .none
         sessionTrack = ""
 //        summary = ""
-        attributedSummary = NSAttributedString()
+//        attributedSummary = NSAttributedString()
         room = nil
         super.init()
     }
@@ -448,7 +451,7 @@ class SISpeaker: SIObject {
         }
     }*/
 //    var biography : String
-    var attributedBiography: NSAttributedString
+//    var attributedBiography: NSAttributedString
     var organizationName : String
     var contactEmail : String
     var speakerType: SpeakerType {
@@ -467,7 +470,7 @@ class SISpeaker: SIObject {
         title = ""
         pictureURL = ""
 //        biography = ""
-        attributedBiography = NSAttributedString()
+//        attributedBiography = NSAttributedString()
         organizationName = ""
         contactEmail = ""
         speakerType = .none
@@ -488,7 +491,7 @@ class SISpeaker: SIObject {
                     self.pictureURL = speaker.pictureURL
                 }
 //                self.biography = speaker.biography
-                self.attributedBiography = speaker.attributedBiography
+                self.attributedSummary = speaker.attributedSummary
                 self.organizationName = speaker.organizationName
                 self.contactEmail = speaker.contactEmail
                 self.associatedSessionIds = speaker.associatedSessionIds
@@ -566,7 +569,7 @@ class SISpeaker: SIObject {
 class SIExhibitor: SIObject {
     
 //    var summary: String
-    var attributedSummary: NSAttributedString
+//    var attributedSummary: NSAttributedString
     var contactEmail: String
     var website: String
     var logoURL: String {
@@ -585,7 +588,7 @@ class SIExhibitor: SIObject {
     
     override init() {
 //        summary = ""
-        attributedSummary = NSAttributedString()
+//        attributedSummary = NSAttributedString()
         contactEmail = ""
         website = ""
         logoURL = ""
@@ -715,7 +718,7 @@ class SIRecipient: SIObject {
     var pressRelease : String
     var profile : String
 //    var summary : String
-    var attributedSummary: NSAttributedString
+//    var attributedSummary: NSAttributedString
     var logoURL : String {
         didSet {
             requestRecipientImage(nil)
@@ -731,7 +734,7 @@ class SIRecipient: SIObject {
         pressRelease = ""
         profile = ""
 //        summary = ""
-        attributedSummary = NSAttributedString()
+//        attributedSummary = NSAttributedString()
         super.init()
     }
 
@@ -806,7 +809,7 @@ class SISponsor: SIObject {
     }
     
 //    var summary : String
-    var attributedSummary: NSAttributedString
+//    var attributedSummary: NSAttributedString
     var sponsorType : SponsorType
     var logoURL : String {
         didSet {
@@ -842,7 +845,7 @@ class SISponsor: SIObject {
     override init() {
         sponsorType = .none
 //        summary = ""
-        attributedSummary = NSAttributedString()
+//        attributedSummary = NSAttributedString()
         logoURL = ""
         bannerURL = ""
         splashScreenURL = ""
@@ -1061,7 +1064,7 @@ class SIAffiliate: SIObject {
     
 //    var abstract : String
 //    var summary : String
-    var attributedSummary: NSAttributedString
+//    var attributedSummary: NSAttributedString
     var logoURL : String {
         didSet {
             requestAffiliateLogoImage(nil)
@@ -1073,7 +1076,7 @@ class SIAffiliate: SIObject {
     override init() {
 //        abstract = ""
 //        summary = ""
-        attributedSummary = NSAttributedString()
+//        attributedSummary = NSAttributedString()
         logoURL = ""
         websiteURL = ""
         pagePath = ""

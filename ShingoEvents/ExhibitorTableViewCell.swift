@@ -8,72 +8,104 @@
 
 import UIKit
 
-
-class ExhibitorTableViewCell: UITableViewCell {
+class SITableViewCell: UITableViewCell {
     
-    var exhibitor: SIExhibitor! {
+    var entityNameLabel: UILabel!
+    var entityImageView: UIImageView!
+    var entityTextView: UITextView! {
+        didSet {
+            entityTextView.layer.shadowColor = UIColor.lightGray.cgColor
+            entityTextView.layer.shadowOffset = CGSize(width: 0, height: 2.0)
+            entityTextView.layer.shadowOpacity = 1
+            entityTextView.layer.shadowRadius = 3
+            entityTextView.layer.masksToBounds = false
+            entityTextView.layer.cornerRadius = 3
+        }
+    }
+    
+    var entity: SIObject! {
         didSet {
             updateCell()
         }
     }
     
-    var logoImage : UIImageView = {
-        let view = UIImageView.newAutoLayout()
-        view.contentMode = .scaleAspectFit
-        view.layer.cornerRadius = 3
-        view.clipsToBounds = true
-        return view
-    }()
-    
-    var nameLabel:UILabel = {
-        let view = UILabel.newAutoLayout()
-        view.numberOfLines = 4
-        view.lineBreakMode = .byWordWrapping
-        view.font = UIFont.boldSystemFont(ofSize: 14.0)
-        return view
-    }()
-    
-    var didSetupConstraints = false
-    
-    override func updateConstraints() {
-        if !didSetupConstraints {
-            
-            self.accessoryType = .disclosureIndicator
-            
-            contentView.addSubview(logoImage)
-            contentView.addSubview(nameLabel)
-            
-            NSLayoutConstraint.autoSetPriority(UILayoutPriorityRequired) {
-                self.logoImage.autoSetContentCompressionResistancePriority(for: .vertical)
-            }
-            
-            if UIDevice.current.userInterfaceIdiom == .pad {
-                logoImage.autoSetDimensions(to: CGSize(width: 300 - 16, height: 200 - 16))
+    var isExpanded = false {
+        didSet {
+            entity.isSelected = isExpanded
+            if isExpanded {
+                expandCell()
             } else {
-                logoImage.autoSetDimensions(to: CGSize(width: 150 - 16, height: 150 - 16))
+                shrinkCell()
             }
-            
-            logoImage.autoAlignAxis(.horizontal, toSameAxisOf: contentView)
-            logoImage.autoPinEdge(.left, to: .left, of: contentView, withOffset: 8)
-            
-            nameLabel.autoPinEdge(toSuperviewEdge: .top)
-            nameLabel.autoPinEdge(.left, to: .right, of: logoImage, withOffset: 8)
-            nameLabel.autoPinEdge(.right, to: .right, of: contentView, withOffset: -10)
-            nameLabel.autoPinEdge(toSuperviewEdge: .bottom)
-            
-            didSetupConstraints = true
         }
-        super.updateConstraints()
     }
     
-    fileprivate func updateCell() {
-        if let exhibitor = exhibitor {
-            nameLabel.text = exhibitor.name
-            exhibitor.getLogoImage() { image in
-                self.logoImage.image = image
-                self.setNeedsDisplay()
-            }
+    private let summaryAttrs = [
+        NSFontAttributeName : UIFont.preferredFont(forTextStyle: .body),
+        NSParagraphStyleAttributeName : SIParagraphStyle.left,
+        NSForegroundColorAttributeName : UIColor.black
+    ]
+    
+    private var defaultText = NSAttributedString(string: "Check back later for more information")
+    
+    private let tapToSeeLessText = NSAttributedString(string: "\n\nTap To See Less...", attributes: [
+        NSFontAttributeName : UIFont.preferredFont(forTextStyle: .footnote),
+        NSForegroundColorAttributeName : UIColor.gray,
+        NSParagraphStyleAttributeName : SIParagraphStyle.center
+        ])
+    
+    private let selectMoreInfoText = NSAttributedString(string: "Select For More Info >", attributes: [
+        NSFontAttributeName : UIFont.preferredFont(forTextStyle: .footnote),
+        NSForegroundColorAttributeName : UIColor.gray,
+        NSParagraphStyleAttributeName : SIParagraphStyle.center
+        ])
+    
+    func updateCell() {
+        selectionStyle = .none
+        entityNameLabel.text = entity.name
+    }
+    
+    func expandCell() {
+        let summary = NSMutableAttributedString(attributedString: entity.attributedSummary)
+        
+        if summary.string.isEmpty {
+            summary.append(defaultText)
+        }
+        
+        summary.addAttributes(summaryAttrs, range: summary.fullRange)
+        
+        summary.append(tapToSeeLessText)
+        
+        entityTextView.attributedText = summary
+    }
+    
+    func shrinkCell() {
+        entityTextView.attributedText = selectMoreInfoText
+    }
+    
+}
+
+class ExhibitorTableViewCell: SITableViewCell {
+    
+    @IBOutlet weak var nameLabel: UILabel! { didSet { entityNameLabel = nameLabel } }
+    @IBOutlet weak var exhibitorImageView: UIImageView! { didSet { entityImageView = exhibitorImageView } }
+    @IBOutlet weak var textView: UITextView! { didSet { entityTextView = textView } }
+    
+//    var exhibitor: SIExhibitor! {
+//        didSet {
+//            updateCell()
+//        }
+//    }
+    
+    override func updateCell() {
+        super.updateCell()
+        if let exhibitor = entity as? SIExhibitor {
+            exhibitor.getBannerImage({ (image) in
+                self.exhibitorImageView.image = image
+            })
         }
     }
+    
+    
     
 }

@@ -15,7 +15,7 @@ class ScheduleTableViewCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var infoTextView: UITextView! {
         didSet {
-            infoTextView.layer.shadowColor = UIColor.gray.cgColor
+            infoTextView.layer.shadowColor = UIColor.lightGray.cgColor
             infoTextView.layer.shadowOffset = CGSize(width: 0, height: 2.0)
             infoTextView.layer.shadowOpacity = 1
             infoTextView.layer.shadowRadius = 3
