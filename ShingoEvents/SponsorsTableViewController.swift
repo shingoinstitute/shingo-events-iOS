@@ -30,7 +30,7 @@ class SponsorsTableViewController: UITableViewController {
         }
     }
     
-    fileprivate func displayNoContentNotification() {
+    private func displayNoContentNotification() {
         let label: UILabel = {
             let view = UILabel.newAutoLayout()
             view.text = "No Content Available"
@@ -77,10 +77,10 @@ extension SponsorsTableViewController {
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = UILabel()
-        header.backgroundColor = .shingoRed
+        header.backgroundColor = .shingoBlue
         header.text = sectionTitles[section]
         header.textColor = .white
-        header.font = UIFont.boldSystemFont(ofSize: 16.0)
+        header.font = UIFont.preferredFont(forTextStyle: .headline)
         header.textAlignment = .center
         
         return header

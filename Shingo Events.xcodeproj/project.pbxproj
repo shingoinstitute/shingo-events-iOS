@@ -11,6 +11,7 @@
 		C21ECE281C5FB21500689FDE /* AffiliateListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21ECE271C5FB21500689FDE /* AffiliateListTableViewController.swift */; };
 		C224C8981C92138700F4E393 /* AboutPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C224C8971C92138700F4E393 /* AboutPageViewController.swift */; };
 		C224CDFC1CB6CA42003147F0 /* RecipientTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C224CDFB1CB6CA42003147F0 /* RecipientTableViewCell.swift */; };
+		C22668081D9D620900E5F062 /* TestCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22668061D9D5D1500E5F062 /* TestCode.swift */; };
 		C234BD561C5293CF002E9814 /* SpeakerListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C234BD551C5293CF002E9814 /* SpeakerListTableViewController.swift */; };
 		C2494E281C89FBFE00E2969D /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2494E271C89FBFE00E2969D /* Reachability.swift */; };
 		C24FF48C1D9195750061B3E2 /* ShingoEventsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24FF48B1D9195750061B3E2 /* ShingoEventsTests.swift */; };
@@ -63,6 +64,7 @@
 		C21ECE271C5FB21500689FDE /* AffiliateListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AffiliateListTableViewController.swift; sourceTree = "<group>"; };
 		C224C8971C92138700F4E393 /* AboutPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutPageViewController.swift; sourceTree = "<group>"; };
 		C224CDFB1CB6CA42003147F0 /* RecipientTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipientTableViewCell.swift; sourceTree = "<group>"; };
+		C22668061D9D5D1500E5F062 /* TestCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestCode.swift; path = ShingoEventsTests/TestCode.swift; sourceTree = SOURCE_ROOT; };
 		C22AB28E1C2484E800A7F3B1 /* Shingo Events.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Shingo Events.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C234BD551C5293CF002E9814 /* SpeakerListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeakerListTableViewController.swift; sourceTree = "<group>"; };
 		C2494E271C89FBFE00E2969D /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
@@ -255,6 +257,7 @@
 		C24FF4731D918E200061B3E2 /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				C22668061D9D5D1500E5F062 /* TestCode.swift */,
 				C2A6950C1C35AC2900F6E0B8 /* Info.plist */,
 				C2F17FA71C6AAFCF0028062C /* Assets.xcassets */,
 				C2CFC3171C4954C20036E485 /* Main.storyboard */,
@@ -512,6 +515,7 @@
 				C2CFC3041C4576D00036E485 /* SupportTableViewController.swift in Sources */,
 				C2CFC3141C483C1C0036E485 /* SchedulesTableViewController.swift in Sources */,
 				C2FF6B1E1CB2E2CF00331ED2 /* VenueMapsCollectionView.swift in Sources */,
+				C22668081D9D620900E5F062 /* TestCode.swift in Sources */,
 				C234BD561C5293CF002E9814 /* SpeakerListTableViewController.swift in Sources */,
 				C2B7EB401C7B813100162AFB /* ContactUsViewController.swift in Sources */,
 				C25F4F801D95E9E8009A9830 /* EventTableViewCell.swift in Sources */,

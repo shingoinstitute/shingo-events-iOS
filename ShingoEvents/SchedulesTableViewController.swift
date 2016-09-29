@@ -199,7 +199,7 @@ extension SchedulesTableViewController {
         
         let dateText = dateFormatter.string(from: agendas[section].date as Date)
         
-        let label = UILabel(text: "  \(agendas[section].displayName), \(dateText)", font: UIFont.preferredFont(forTextStyle: .headline))
+        let label = UILabel(text: "\t\(agendas[section].displayName), \(dateText)", font: UIFont.preferredFont(forTextStyle: .headline))
         label.textColor = UIColor.white
         
         return label

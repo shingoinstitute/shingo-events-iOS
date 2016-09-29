@@ -65,18 +65,11 @@ extension ExhibitorTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = UIView()
-        view.backgroundColor = .shingoRed
-        let header = UILabel()
-        header.text = sectionInformation[section].0
+        let header = UILabel(text: "\t\(sectionInformation[section].0)", font: UIFont.preferredFont(forTextStyle: .headline))
         header.textColor = .white
-        header.font = UIFont.boldSystemFont(ofSize: 16.0)
-        header.backgroundColor = .clear
+        header.backgroundColor = .shingoRed
         
-        view.addSubview(header)
-        header.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets.init(top: 0, left: 8, bottom: 0, right: 0))
-        
-        return view
+        return header
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {

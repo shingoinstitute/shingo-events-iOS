@@ -287,12 +287,9 @@ extension MainMenuViewController {
             }
             
             #if DEBUG
-                
             // @development
             view.layoutIfNeeded()
-                
             #else
-                
             // @deployment
             UIView.animate(withDuration: 1.5,
                                        delay: 0.5,
@@ -303,17 +300,10 @@ extension MainMenuViewController {
                                        completion: nil)
             #endif
  
-
-            
-            
             didAnimateLayout = true
         }
     }
     
 }
-
-
-
-
 
 

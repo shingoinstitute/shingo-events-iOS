@@ -1117,14 +1117,20 @@ extension SIRequest {
         
         let _ = getRequest(url: EVENTS_URL + "/sponsors?event_id=\(id)", description: "REQUEST SPONSORS, EVENT", callback: { json in
         
-            guard let json = json else {
+            guard var json = json else {
                 callback(nil)
                 return
             }
             
-//            let testJSON = TestCode.generateTestCode()
-            
             var sponsors = [SISponsor]()
+            
+            #if DEBUG
+                if let size = json["total_size"].int {
+                    if size == 0 {
+                        json = TestCode.generateTestJSONforSponsor()
+                    }
+                }
+            #endif
             
             if let records = json["sponsors"].array {
                 

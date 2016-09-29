@@ -92,7 +92,7 @@ extension AffiliateListTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = UILabel(text: "  \(sectionHeaders[section].uppercased())", font: UIFont.preferredFont(forTextStyle: .headline))
+        let header = UILabel(text: "\t\(sectionHeaders[section].uppercased())", font: UIFont.preferredFont(forTextStyle: .headline))
         header.textColor = .white
         header.backgroundColor = .shingoRed
         return header
@@ -184,19 +184,13 @@ class AffiliateTableViewCell: UITableViewCell {
         ]
         
         summary.addAttributes(summaryAttrs, range: summary.fullRange)
-        
-        
-        
+ 
         summary.append(tapToSeeLessText)
         
         summaryTextView.attributedText = summary
-        
     }
     
     private func shrinkCell() {
-        
-        
-        
         summaryTextView.attributedText = selectMoreInfoText
     }
 
