@@ -7,29 +7,12 @@
 //
 
 import UIKit
+import Alamofire
 
 class SchedulesTableViewController: UITableViewController, SISpeakerDelegate {
 
     var agendas: [SIAgenda]!
     var eventName: String!
-
-    /*
-     When a cell is tapped, it will expand to show additional
-     information, or shrink to show less information if it was
-     already expanded.
-     
-     cellShouldExpand keeps track of which cells have been
-     expanded so that cells are consistently expanded
-     or shrunken.
-     */
-    func cellShouldExpand(indexPath: IndexPath) -> Bool {
-        if agendas.indices.contains(indexPath.section) {
-            if agendas[indexPath.section].sessions.indices.contains(indexPath.row) {
-                return agendas[indexPath.section].sessions[indexPath.row].isSelected
-            }
-        }
-        return false
-    }
     
     override func loadView() {
         super.loadView()
@@ -39,7 +22,7 @@ class SchedulesTableViewController: UITableViewController, SISpeakerDelegate {
         } else if agendas.isEmpty {
             addNoContentLabelNotification()
         } else {
-            populateDataForTable()
+            requestDataForTable()
         }
     }
     
@@ -57,27 +40,32 @@ class SchedulesTableViewController: UITableViewController, SISpeakerDelegate {
         tableView.rowHeight = UITableViewAutomaticDimension
         
         tableView.backgroundColor = .shingoBlue
-        
-        
-        
+
     }
     
-    private func populateDataForTable() {
-        for agenda in agendas {
-            if !agenda.didLoadSessions {
-                agenda.requestAgendaSessions({
-                    if let sessions = self.sortSessionsByDate(agenda.sessions) {
-                        agenda.sessions = sessions
-                        
-                        for session in sessions {
-                            if !session.didLoadSessionInformation {
-                                session.requestSessionInformation({})
+    private func requestDataForTable() {
+
+        DispatchQueue.global(qos: .utility).async { [unowned self] in
+            for section in 0 ..< self.agendas.count {
+                let agenda = self.agendas[section]
+                if !agenda.didLoadSessions {
+                    agenda.requestAgendaSessions({
+                        if let sessions = self.sortSessionsByDate(agenda.sessions) {
+                            agenda.sessions = sessions
+                            
+                            DispatchQueue.main.async {
+                                self.tableView.reloadData()
+                            }
+                            
+                            for row in 0 ..< sessions.count {
+                                let session = sessions[row]
+                                if !session.didLoadSessionInformation {
+                                    session.requestSessionInformation({})
+                                }
                             }
                         }
-                        
-                        self.tableView.reloadData()
-                    }
-                })
+                    })
+                }
             }
         }
     }
@@ -103,7 +91,6 @@ class SchedulesTableViewController: UITableViewController, SISpeakerDelegate {
         infoLabel.autoAlignAxis(.horizontal, toSameAxisOf: tableView)
         infoLabel.autoPinEdge(.left, to: .left, of: tableView, withOffset: 16)
         infoLabel.autoPinEdge(.right, to: .right, of: tableView, withOffset: -16)
-        
     }
     
     func performActionOnSpeakers(data: [SISpeaker]) {
@@ -162,18 +149,14 @@ extension SchedulesTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ScheduleCell", for: indexPath) as! ScheduleTableViewCell
         
-        cell.session = agendas[indexPath.section].sessions[indexPath.row]
+        let session = agendas[indexPath.section].sessions[indexPath.row]
+        
+        
+        
+        cell.session = session
         cell.delegate = self
         
-        if !cell.session.didLoadSpeakers || cell.session.speakers.isEmpty {
-            cell.speakersButton.isHidden = true
-            cell.speakersButton.isUserInteractionEnabled = false
-        } else if !cell.session.speakers.isEmpty {
-            cell.speakersButton.isHidden = false
-            cell.speakersButton.isUserInteractionEnabled = true
-        }
-        
-        cell.isExpanded = cellShouldExpand(indexPath: indexPath);
+        cell.isExpanded = cell.session.isSelected
 
         return cell
     }

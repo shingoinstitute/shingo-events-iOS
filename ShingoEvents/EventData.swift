@@ -343,8 +343,6 @@ class SISession: SIObject {
     var displayName : String
     var sessionType : SessionType
     var sessionTrack : String
-//    var summary : String
-//    var attributedSummary: NSAttributedString
     var room : SIRoom?
     var startDate : Date
     var endDate : Date
@@ -358,38 +356,62 @@ class SISession: SIObject {
         endDate = Date.notionallyEmptyDate()
         sessionType = .none
         sessionTrack = ""
-//        summary = ""
-//        attributedSummary = NSAttributedString()
         room = nil
         super.init()
     }
     
+    private var sessionRequest: Alamofire.Request? {
+        willSet (newRequest) {
+            if let request = self.sessionRequest {
+                if let _ = request.response {
+                    request.cancel()
+                }
+            }
+            self.sessionRequest = newRequest
+        }
+    }
+    
+    private var speakersRequest: Alamofire.Request? {
+        willSet (newRequest) {
+            
+            if let request = self.speakersRequest {
+                if let _ = request.response {
+                    request.cancel()
+                }
+            }
+            self.speakersRequest = newRequest
+        }
+    }
+    
     /// Gets additional information about the session object.
     func requestSessionInformation(_ callback:@escaping () -> ()) {
-        SIRequest().requestSession(id, callback: { session in
+        sessionRequest = SIRequest().requestSession(id, callback: { session in
             if let session = session {
                 self.displayName = session.displayName
                 self.startDate = session.startDate
                 self.endDate = session.endDate
                 self.sessionType = session.sessionType
                 self.sessionTrack = session.sessionTrack
-//                self.summary = session.summary
                 self.room = session.room
                 self.name = session.name
                 self.id = session.id
                 self.attributedSummary = session.attributedSummary
+                self.didLoadSessionInformation = true
                 
-                self.requestSpeakers() {
-                    self.didLoadSessionInformation = true
-                    callback()
+                callback()
+                
+                if !self.didLoadSpeakers {
+                    self.requestSpeakers() {
+                        self.didLoadSpeakers = true
+                    }
                 }
             }
         });
     }
     
     /// Gets all speakers associated with the session object.
-    fileprivate func requestSpeakers(_ callback: @escaping () -> ()) {
-        SIRequest().requestSpeakers(sessionId: id, callback: { speakers in
+    func requestSpeakers(_ callback: @escaping () -> ()) {
+        speakersRequest = SIRequest().requestSpeakers(sessionId: id, callback: { speakers in
             if let speakers = speakers {
                 self.speakers = speakers
                 self.didLoadSpeakers = true

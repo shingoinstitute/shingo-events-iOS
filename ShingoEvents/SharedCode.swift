@@ -318,23 +318,24 @@ extension UIImageView {
     }    
 
     func resizeImageViewToIntrinsicContentSize(thatFitsWidth width: CGFloat) {
-        guard let image = self.image else { return }
         
-        var isOpaque: Bool!
-        if let view = self.superview {
-            isOpaque = view.isOpaque
-        } else {
-            isOpaque = false
+        guard let image = self.image else {
+            return
         }
         
-        let height = (width * image.size.height) / image.size.width;
-        let size = CGSize(width: width, height: height);
+        let size = CGSize(width: width, height: (width * image.size.height) / image.size.width)
         
-        UIGraphicsBeginImageContextWithOptions(size, isOpaque, 0.0);
-        image.draw(in: CGRect(x: 0, y: 0, width: size.width, height: size.height));
-        self.image = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
+//        DispatchQueue.global(qos: .default).async {
+            UIGraphicsBeginImageContextWithOptions(size, self.isOpaque, 0.0)
+            self.image?.draw(in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+//            DispatchQueue.main.async {
+                self.image = UIGraphicsGetImageFromCurrentImageContext()
+                UIGraphicsEndImageContext()
+//            }
+//        }
+        
     }
+    
 }
 
 extension UIImage {
@@ -464,7 +465,7 @@ extension Date {
         if minute < 10 {
             attributedText = NSMutableAttributedString(string: "\(hour):0\(minute)", attributes: [NSFontAttributeName : UIFont.preferredFont(forTextStyle: .headline)])
         } else {
-            attributedText = NSMutableAttributedString(string: "\(hour):0\(minute)", attributes: [NSFontAttributeName : UIFont.preferredFont(forTextStyle: .headline)])
+            attributedText = NSMutableAttributedString(string: "\(hour):\(minute)", attributes: [NSFontAttributeName : UIFont.preferredFont(forTextStyle: .headline)])
         }
         
         let pointSize = UIFont.preferredFont(forTextStyle: .headline).pointSize

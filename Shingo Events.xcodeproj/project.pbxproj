@@ -20,8 +20,8 @@
 		C25F4F821D99C3F5009A9830 /* ScheduleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25F4F811D99C3F5009A9830 /* ScheduleTableViewCell.swift */; };
 		C262CA8D1C3B1C29005845AF /* EventsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C262CA8C1C3B1C29005845AF /* EventsTableViewController.swift */; };
 		C264CCB41C57ECA7005CDB11 /* RecipientsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C264CCB31C57ECA7005CDB11 /* RecipientsTableViewController.swift */; };
+		C267F9221D9DD02E00E524E9 /* SITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C267F9211D9DD02E00E524E9 /* SITableViewCell.swift */; };
 		C26DC9021C59785700BB4DDA /* ExhibitorTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C26DC9011C59785700BB4DDA /* ExhibitorTableViewController.swift */; };
-		C26DC9041C597A8600BB4DDA /* ExhibitorInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C26DC9031C597A8600BB4DDA /* ExhibitorInfoViewController.swift */; };
 		C26DC9061C59841700BB4DDA /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C26DC9051C59841700BB4DDA /* MapViewController.swift */; };
 		C28B67E91C3F0BD700AC9193 /* EventData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28B67E81C3F0BD700AC9193 /* EventData.swift */; };
 		C28B67F31C406BDE00AC9193 /* EventMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28B67F21C406BDE00AC9193 /* EventMenuViewController.swift */; };
@@ -77,8 +77,8 @@
 		C25F4F811D99C3F5009A9830 /* ScheduleTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleTableViewCell.swift; sourceTree = "<group>"; };
 		C262CA8C1C3B1C29005845AF /* EventsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsTableViewController.swift; sourceTree = "<group>"; };
 		C264CCB31C57ECA7005CDB11 /* RecipientsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipientsTableViewController.swift; sourceTree = "<group>"; };
+		C267F9211D9DD02E00E524E9 /* SITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SITableViewCell.swift; sourceTree = "<group>"; };
 		C26DC9011C59785700BB4DDA /* ExhibitorTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExhibitorTableViewController.swift; sourceTree = "<group>"; };
-		C26DC9031C597A8600BB4DDA /* ExhibitorInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExhibitorInfoViewController.swift; sourceTree = "<group>"; };
 		C26DC9051C59841700BB4DDA /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		C28B67E81C3F0BD700AC9193 /* EventData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventData.swift; sourceTree = "<group>"; };
 		C28B67F21C406BDE00AC9193 /* EventMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventMenuViewController.swift; sourceTree = "<group>"; };
@@ -143,6 +143,7 @@
 				C2E9508E1D22E8F100178C03 /* APIRequests.swift */,
 				C28B67E81C3F0BD700AC9193 /* EventData.swift */,
 				C24FF46E1D918D1A0061B3E2 /* view controllers */,
+				C267F9211D9DD02E00E524E9 /* SITableViewCell.swift */,
 			);
 			name = src;
 			sourceTree = "<group>";
@@ -219,7 +220,6 @@
 			children = (
 				C26DC9011C59785700BB4DDA /* ExhibitorTableViewController.swift */,
 				C2B155101D626BE00099330F /* ExhibitorTableViewCell.swift */,
-				C26DC9031C597A8600BB4DDA /* ExhibitorInfoViewController.swift */,
 			);
 			name = exhibitors;
 			sourceTree = "<group>";
@@ -490,7 +490,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C26DC9041C597A8600BB4DDA /* ExhibitorInfoViewController.swift in Sources */,
 				C21ECE281C5FB21500689FDE /* AffiliateListTableViewController.swift in Sources */,
 				C25F4F821D99C3F5009A9830 /* ScheduleTableViewCell.swift in Sources */,
 				C2B7EB421C7CD89900162AFB /* BugReportViewController.swift in Sources */,
@@ -517,6 +516,7 @@
 				C2B7EB401C7B813100162AFB /* ContactUsViewController.swift in Sources */,
 				C25F4F801D95E9E8009A9830 /* EventTableViewCell.swift in Sources */,
 				C2FF6B261CB4313200331ED2 /* VenueMapViewController.swift in Sources */,
+				C267F9221D9DD02E00E524E9 /* SITableViewCell.swift in Sources */,
 				C224C8981C92138700F4E393 /* AboutPageViewController.swift in Sources */,
 				C2130BD81C987650009B3BB8 /* ActivityView.swift in Sources */,
 				C2A695111C35AC2900F6E0B8 /* AppDelegate.swift in Sources */,

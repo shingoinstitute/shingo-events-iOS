@@ -12,7 +12,7 @@ import UIKit
 
 class ActivityViewController: UIViewController {
     
-    var message = "Loading..." {
+    var message = "Downloading..." {
         didSet {
             messageLabel.text = message
         }

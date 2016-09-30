@@ -79,8 +79,8 @@ class SIRequest {
     
     
     /// HTTP POST request method.
-    fileprivate func postRequest(url: String, description: String, parameters: [String:String], callback: @escaping (_ value: JSON?) -> ()) {
-        Alamofire.request(url, parameters: parameters).responseJSON { response in
+    fileprivate func postRequest(url: String, description: String, parameters: [String:String], callback: @escaping (_ value: JSON?) -> ()) -> Alamofire.Request? {
+        return Alamofire.request(url, parameters: parameters).responseJSON { response in
             
             guard response.result.isSuccess else {
                 print("Error while performing API POST request: \(response.result.error)")
@@ -113,9 +113,9 @@ extension SIRequest {
     // MARK: - API Calls
     
     /// Returns all ready-to-publish events from Salesforce.
-    func requestEvents(_ callback: @escaping ([SIEvent]?) -> Void) -> Alamofire.Request? {
+    @discardableResult func requestEvents(_ callback: @escaping ([SIEvent]?) -> Void) -> Alamofire.Request? {
         
-        return self.getRequest(url: EVENTS_URL, description: "REQUEST EVENTS") { json in
+        return getRequest(url: EVENTS_URL, description: "REQUEST EVENTS") { json in
             
             guard let json = json else {
                 callback(nil)
@@ -173,9 +173,9 @@ extension SIRequest {
     }
     
     /// Returns an event from Salesforce using an event ID.
-    func requestEvent(eventId: String, callback: @escaping (SIEvent?) -> Void) {
+    @discardableResult func requestEvent(eventId: String, callback: @escaping (SIEvent?) -> Void) -> Alamofire.Request? {
         
-        let _ = getRequest(url: EVENTS_URL + "/\(eventId)", description: "REQUEST EVENT") { json in
+        return getRequest(url: EVENTS_URL + "/\(eventId)", description: "REQUEST EVENT") { json in
             
             guard let json = json else {
                 callback(nil)
@@ -227,9 +227,9 @@ extension SIRequest {
     }
     
     /// Gets all days for a single event using an event ID.
-    func requestAgendaDays(eventId: String, callback: @escaping ([SIAgenda]?) -> Void) {
+    @discardableResult func requestAgendaDays(eventId: String, callback: @escaping ([SIAgenda]?) -> Void) -> Alamofire.Request? {
 
-        let _ = getRequest(url: EVENTS_URL + "/days?event_id=\(eventId)", description: "REQUEST AGENDA FOR EVENT") { json in
+        return getRequest(url: EVENTS_URL + "/days?event_id=\(eventId)", description: "REQUEST AGENDA FOR EVENT") { json in
             
             guard let json = json else {
                 callback(nil)
@@ -241,9 +241,9 @@ extension SIRequest {
     }
     
     /// Gets all days from Salesforce.
-    func requestAgendaDays(_ callback: @escaping ([SIAgenda]?) -> ()) {
+    @discardableResult func requestAgendaDays(_ callback: @escaping ([SIAgenda]?) -> ()) -> Alamofire.Request? {
         
-        let _ = getRequest(url: EVENTS_URL + "/days", description: "REQUEST AGENDAS, ALL") { json in
+        return getRequest(url: EVENTS_URL + "/days", description: "REQUEST AGENDAS, ALL") { json in
             
             guard let json = json else {
                 callback(nil)
@@ -289,9 +289,9 @@ extension SIRequest {
     }
     
     /// Gets basic information for sessions associated with an SIAgenda.
-    func requestAgendaSessions(agendaId id: String, callback: @escaping (_ sessions: [SISession]?) -> Void) {
+    @discardableResult func requestAgendaSessions(agendaId id: String, callback: @escaping (_ sessions: [SISession]?) -> Void) -> Alamofire.Request? {
         
-        let _ = getRequest(url: EVENTS_URL + "/days/\(id)", description: "REQUEST SESSIONS, BASIC") { json in
+        return getRequest(url: EVENTS_URL + "/days/\(id)", description: "REQUEST SESSIONS, BASIC") { json in
             
             guard let json = json else {
                 callback(nil)
@@ -345,8 +345,8 @@ extension SIRequest {
     }
     
     /// Gets all sessions for a single event using an agenda ID. Note: Provides more detail than requestAgendaSessions().
-    func requestSessions(agendaId id: String, callback: @escaping ([SISession]?) -> ()) {
-        let _ = self.getRequest(url: EVENTS_URL + "/sessions?agenda_id=\(id)", description: "REQUEST SESSIONS, DETAILED") { json in
+    @discardableResult func requestSessions(agendaId id: String, callback: @escaping ([SISession]?) -> ()) -> Alamofire.Request? {
+        return getRequest(url: EVENTS_URL + "/sessions?agenda_id=\(id)", description: "REQUEST SESSIONS, DETAILED") { json in
             
             guard let json = json else {
                 callback(nil)
@@ -358,9 +358,8 @@ extension SIRequest {
     }
     
     /// Gets all sessions from Salesforce.
-    func requestSessions(_ callback: @escaping ([SISession]?) -> ()) {
-        
-        let _ = getRequest(url: EVENTS_URL + "/sessions", description: "REQUEST SESSIONS, ALL") { json in
+    @discardableResult func requestSessions(_ callback: @escaping ([SISession]?) -> ()) -> Alamofire.Request? {
+        return getRequest(url: EVENTS_URL + "/sessions", description: "REQUEST SESSIONS, ALL") { json in
             
             guard let json = json else {
                 callback(nil)
@@ -464,9 +463,9 @@ extension SIRequest {
     }
     
     /// Gets a single session using a session ID.
-    func requestSession(_ id: String, callback: @escaping (SISession?) -> ()) {
+    @discardableResult func requestSession(_ id: String, callback: @escaping (SISession?) -> ()) -> Alamofire.Request? {
         
-        let _ = self.getRequest(url: EVENTS_URL + "/sessions/\(id)", description: "REQUEST SESSION") { json in
+        return getRequest(url: EVENTS_URL + "/sessions/\(id)", description: "REQUEST SESSION") { json in
             
             guard let json = json else {
                 callback(nil)
@@ -512,8 +511,10 @@ extension SIRequest {
                 }
                 
                 if let summary = record["Summary__c"].string {
-                    if let attributedSummary = self.parseHTMLStringUsingPreferredFont(string: summary) {
-                        session.attributedSummary = attributedSummary
+                    if !summary.isEmpty {
+                        if let attributedSummary = self.parseHTMLStringUsingPreferredFont(string: summary) {
+                            session.attributedSummary = attributedSummary
+                        }
                     }
                 }
                 
@@ -529,9 +530,9 @@ extension SIRequest {
     }
     
     ///Gets all speakers from Salesforce, or use event ID to get all speakers for an event.
-    func requestSpeakers(eventId id: String, callback: @escaping ([SISpeaker]?) -> Void) {
+    @discardableResult func requestSpeakers(eventId id: String, callback: @escaping ([SISpeaker]?) -> Void) -> Alamofire.Request? {
         
-        let _ = getRequest(url: EVENTS_URL + "/speakers?event_id=\(id)", description: "REQUEST SPEAKERS, EVENT", callback: { json in
+        return getRequest(url: EVENTS_URL + "/speakers?event_id=\(id)", description: "REQUEST SPEAKERS, EVENT", callback: { json in
             
             guard let json = json else {
                 callback(nil)
@@ -546,9 +547,9 @@ extension SIRequest {
     
     
     ///Gets all speakers from Salesforce, or use session ID to get all speakers for a session.
-    func requestSpeakers(sessionId id: String, callback: @escaping ([SISpeaker]?) -> Void) {
+    @discardableResult func requestSpeakers(sessionId id: String, callback: @escaping ([SISpeaker]?) -> Void) -> Alamofire.Request? {
         
-        let _ = getRequest(url: EVENTS_URL + "/speakers?session_id=\(id)", description: "REQUEST SPEAKERS, SESSION") { json in
+        return getRequest(url: EVENTS_URL + "/speakers?session_id=\(id)", description: "REQUEST SPEAKERS, SESSION") { json in
             
             guard let json = json else {
                 callback(nil)
@@ -562,9 +563,9 @@ extension SIRequest {
     }
     
     /// Gets all speakers from salesforce.
-    func requestSpeakers(_ callback: @escaping ([SISpeaker]?) -> Void) {
+    @discardableResult func requestSpeakers(_ callback: @escaping ([SISpeaker]?) -> Void) -> Alamofire.Request? {
         
-        let _ = getRequest(url: EVENTS_URL + "/speakers", description: "REQUEST SPEAKERS, ALL") { json in
+        return getRequest(url: EVENTS_URL + "/speakers", description: "REQUEST SPEAKERS, ALL") { json in
             
             guard let json = json else {
                 callback(nil)
@@ -646,9 +647,9 @@ extension SIRequest {
     }
     
     /// Gets a single speaker using a speaker ID.
-    func requestSpeaker(speakerId id: String, callback: @escaping (SISpeaker?) -> ()) {
+    @discardableResult func requestSpeaker(speakerId id: String, callback: @escaping (SISpeaker?) -> ()) -> Alamofire.Request? {
         
-        let _ = getRequest(url: EVENTS_URL + "/speakers/\(id)", description: "REQUEST SPEAKER, SINGLE", callback: { json in
+        return getRequest(url: EVENTS_URL + "/speakers/\(id)", description: "REQUEST SPEAKER, SINGLE", callback: { json in
             
             guard let json = json else {
                 callback(nil)
@@ -704,9 +705,9 @@ extension SIRequest {
     }
     
     /// Gets all exhibitors for an event.
-    func requestExhibitors(eventId id: String, callback: @escaping ([SIExhibitor]?) -> ()) {
+    @discardableResult func requestExhibitors(eventId id: String, callback: @escaping ([SIExhibitor]?) -> ()) -> Alamofire.Request? {
         
-        let _ = getRequest(url: EVENTS_URL + "/exhibitors?event_id=\(id)", description: "REQUEST EXHIBITORS, EVENT", callback: { json in
+        return getRequest(url: EVENTS_URL + "/exhibitors?event_id=\(id)", description: "REQUEST EXHIBITORS, EVENT", callback: { json in
         
             guard let json = json else {
                 callback(nil)
@@ -751,9 +752,9 @@ extension SIRequest {
     }
     
     /// Requests additional information for an exhibitor using an exhibitor ID.
-    func requestExhibitor(exhibitorId id: String, callback: @escaping (SIExhibitor?) -> ()) {
+    @discardableResult func requestExhibitor(exhibitorId id: String, callback: @escaping (SIExhibitor?) -> ()) -> Alamofire.Request? {
         
-        let _ = getRequest(url: EVENTS_URL + "/exhibitors/\(id)", description: "REQUEST EXHIBITOR, SINGLE", callback: { json in
+        return getRequest(url: EVENTS_URL + "/exhibitors/\(id)", description: "REQUEST EXHIBITOR, SINGLE", callback: { json in
             
             guard let json = json else {
                 callback(nil)
@@ -815,9 +816,9 @@ extension SIRequest {
     }
     
     /// Requests all hotels for a single event.
-    func requestHotels(eventId id: String, callback: @escaping ([SIHotel]?) -> ()) {
+    @discardableResult func requestHotels(eventId id: String, callback: @escaping ([SIHotel]?) -> ()) -> Alamofire.Request? {
         
-        let _ = getRequest(url: EVENTS_URL + "/hotels?event_id=\(id)", description: "REQUEST HOTEL, EVENT", callback: { json in
+        return getRequest(url: EVENTS_URL + "/hotels?event_id=\(id)", description: "REQUEST HOTEL, EVENT", callback: { json in
         
             guard let json = json else {
                 callback(nil)
@@ -863,9 +864,9 @@ extension SIRequest {
     }
     
     /// Requets hotel and provides additional information than requestHotels().
-    func requestHotel(hotelId id: String, callback: @escaping (SIHotel?) -> Void) {
+    @discardableResult func requestHotel(hotelId id: String, callback: @escaping (SIHotel?) -> Void) -> Alamofire.Request? {
         
-        let _ = getRequest(url: EVENTS_URL + "/hotels/\(id)", description: "REQUEST HOTEL, DETAIL", callback: { json in
+        return getRequest(url: EVENTS_URL + "/hotels/\(id)", description: "REQUEST HOTEL, DETAIL", callback: { json in
         
             guard let json = json else {
                 callback(nil)
@@ -908,9 +909,9 @@ extension SIRequest {
     }
     
     /// Requests basic information for all recipients for an event.
-    func requestRecipients(eventId id: String, callback: @escaping ([SIRecipient]?) -> Void) {
+    @discardableResult func requestRecipients(eventId id: String, callback: @escaping ([SIRecipient]?) -> Void) -> Alamofire.Request? {
         
-        let _ = getRequest(url: EVENTS_URL + "/recipients?event_id=\(id)", description: "REQUEST RECIPIENTS, EVENT", callback: { json in
+        return getRequest(url: EVENTS_URL + "/recipients?event_id=\(id)", description: "REQUEST RECIPIENTS, EVENT", callback: { json in
         
             guard let json = json else {
                 callback(nil)
@@ -957,9 +958,9 @@ extension SIRequest {
     }
     
     /// Requests a single recipient with additional information.
-    func requestRecipient(recipientId id: String, callback: @escaping (SIRecipient?) -> Void) {
+    @discardableResult func requestRecipient(recipientId id: String, callback: @escaping (SIRecipient?) -> Void) -> Alamofire.Request? {
         
-        let _ = getRequest(url: EVENTS_URL + "/recipients/\(id)", description: "REQUEST RECIPIENT, DETAIL", callback: { json in
+        return getRequest(url: EVENTS_URL + "/recipients/\(id)", description: "REQUEST RECIPIENT, DETAIL", callback: { json in
         
             guard let json = json else {
                 callback(nil)
@@ -1035,9 +1036,9 @@ extension SIRequest {
     }
     
     /// Requests rooms for a venue.
-    func requestRooms(venueId id: String, callback: @escaping ([SIRoom]?) -> Void) {
+    @discardableResult func requestRooms(venueId id: String, callback: @escaping ([SIRoom]?) -> Void) -> Alamofire.Request? {
         
-        let _ = getRequest(url: EVENTS_URL + "/rooms?venue_id=\(id)", description: "REQUEST ROOMS, VENUE", callback: { json in
+        return getRequest(url: EVENTS_URL + "/rooms?venue_id=\(id)", description: "REQUEST ROOMS, VENUE", callback: { json in
         
             guard let json = json else {
                 callback(nil)
@@ -1073,9 +1074,9 @@ extension SIRequest {
     }
     
     /// Requests a room and provides additional information than requestRooms().
-    func requestRoom(roomId id: String, callback: @escaping (SIRoom?) -> Void) {
+    @discardableResult func requestRoom(roomId id: String, callback: @escaping (SIRoom?) -> Void) -> Alamofire.Request? {
         
-        let _ = getRequest(url: EVENTS_URL + "/rooms/\(id)", description: "REQUEST ROOM, DETAIL", callback: { json in
+        return getRequest(url: EVENTS_URL + "/rooms/\(id)", description: "REQUEST ROOM, DETAIL", callback: { json in
         
             guard let json = json else {
                 callback(nil)
@@ -1113,9 +1114,9 @@ extension SIRequest {
     }
     
     /// Requests all sponsors for an event.
-    func requestSponsors(eventId id: String, callback: @escaping ([SISponsor]?) -> Void) {
+    @discardableResult func requestSponsors(eventId id: String, callback: @escaping ([SISponsor]?) -> Void) -> Alamofire.Request? {
         
-        let _ = getRequest(url: EVENTS_URL + "/sponsors?event_id=\(id)", description: "REQUEST SPONSORS, EVENT", callback: { json in
+        return getRequest(url: EVENTS_URL + "/sponsors?event_id=\(id)", description: "REQUEST SPONSORS, EVENT", callback: { json in
         
             guard var json = json else {
                 callback(nil)
@@ -1173,9 +1174,9 @@ extension SIRequest {
     }
     
     /// Requests detailed information for a sponsor.
-    func requestSponsor(sponsorId id: String, callback: @escaping (SISponsor?) -> Void) {
+    @discardableResult func requestSponsor(sponsorId id: String, callback: @escaping (SISponsor?) -> Void) -> Alamofire.Request? {
        
-        let _ = getRequest(url: EVENTS_URL + "/sponsors/\(id)", description: "REQUEST SPONSOR, DETAIL", callback: { json in
+        return getRequest(url: EVENTS_URL + "/sponsors/\(id)", description: "REQUEST SPONSOR, DETAIL", callback: { json in
         
             guard let json = json else {
                 callback(nil)
@@ -1237,9 +1238,9 @@ extension SIRequest {
     }
     
     /// Requests all venues for an event. Typically there will only be one venue per event, but there is the possibility of being more than one.
-    func requestVenues(eventId id: String, callback: @escaping ([SIVenue]?) -> Void) {
+    @discardableResult func requestVenues(eventId id: String, callback: @escaping ([SIVenue]?) -> Void) -> Alamofire.Request? {
        
-        let _ = getRequest(url: EVENTS_URL + "/venues?event_id=\(id)", description: "REQUEST VENUES, EVENT", callback: { json in
+        return getRequest(url: EVENTS_URL + "/venues?event_id=\(id)", description: "REQUEST VENUES, EVENT", callback: { json in
         
             guard let json = json else {
                 callback(nil)
@@ -1277,9 +1278,9 @@ extension SIRequest {
     }
     
     /// Requests detailed information for a single venue.
-    func requestVenue(venueId id: String, callback: @escaping (SIVenue?) -> Void) {
+    @discardableResult func requestVenue(venueId id: String, callback: @escaping (SIVenue?) -> Void) -> Alamofire.Request? {
         
-        let _ = getRequest(url: EVENTS_URL + "/venues/\(id)", description: "REQUEST VENUE, DETAIL", callback: { json in
+        return getRequest(url: EVENTS_URL + "/venues/\(id)", description: "REQUEST VENUE, DETAIL", callback: { json in
         
             guard let json = json else {
                 callback(nil)
@@ -1356,9 +1357,9 @@ extension SIRequest {
     }
     
     /// Requests all affiliates from salesforce.
-    func requestAffiliates(callback: @escaping ([SIAffiliate]?) -> ()) {
+    @discardableResult func requestAffiliates(callback: @escaping ([SIAffiliate]?) -> ()) -> Alamofire.Request? {
         
-        let _ = getRequest(url: BASE_URL + "/salesforce/affiliates", description: "REQUEST AFFILIATES, ALL") { (json) in
+        return getRequest(url: BASE_URL + "/salesforce/affiliates", description: "REQUEST AFFILIATES, ALL") { (json) in
             guard let json = json else {
                 callback(nil)
                 return
@@ -1403,9 +1404,9 @@ extension SIRequest {
     }
     
     /// Posts a bug report to the backend server.
-    func postBugReport(parameters: [String:String], callback: @escaping (Bool) -> Void) {
+    @discardableResult func postBugReport(parameters: [String:String], callback: @escaping (Bool) -> Void) -> Alamofire.Request? {
         
-        postRequest(url: SUPPORT_URL + "/bugs", description: "POST BUG REPORT", parameters: parameters) { (json) in
+        return postRequest(url: SUPPORT_URL + "/bugs", description: "POST BUG REPORT", parameters: parameters) { (json) in
             guard let json = json else {
                 callback(false)
                 return
@@ -1420,9 +1421,9 @@ extension SIRequest {
     }
     
     /// Posts feedback to the backend server.
-    func postFeedback(parameters: [String:String], callback: @escaping (Bool) -> Void) {
+    @discardableResult func postFeedback(parameters: [String:String], callback: @escaping (Bool) -> Void) -> Alamofire.Request? {
         
-        postRequest(url: SUPPORT_URL + "/feedback", description: "POST FEEDBACK", parameters: parameters) { (json) in
+        return postRequest(url: SUPPORT_URL + "/feedback", description: "POST FEEDBACK", parameters: parameters) { (json) in
             guard let json = json else {
                 callback(false)
                 return

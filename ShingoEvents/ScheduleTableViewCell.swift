@@ -9,110 +9,112 @@
 import UIKit
 import Foundation
 
-class ScheduleTableViewCell: UITableViewCell {
+class ScheduleTableViewCell: SITableViewCell {
     
-    @IBOutlet weak var timeLabel: UILabel!
-    @IBOutlet weak var titleLabel: UILabel!
+    // timeLabel, titleLabel, and infoTextView each pass their reference to properties subclassed in SITableViewCell.
+    @IBOutlet weak var timeLabel: UILabel! { didSet { entityTimeLabel = timeLabel } }
+    @IBOutlet weak var titleLabel: UILabel! { didSet { entityNameLabel = titleLabel } }
     @IBOutlet weak var infoTextView: UITextView! {
         didSet {
-            infoTextView.layer.shadowColor = UIColor.lightGray.cgColor
-            infoTextView.layer.shadowOffset = CGSize(width: 0, height: 2.0)
-            infoTextView.layer.shadowOpacity = 1
-            infoTextView.layer.shadowRadius = 3
-            infoTextView.layer.masksToBounds = false
-            infoTextView.layer.cornerRadius = 3
+            infoTextView.isHidden = true
+            entityTextView = infoTextView
         }
     }
-    @IBOutlet weak var speakersButton: UIButton! {
+    
+    // Note: speakersButton and activityIndicator are not defined by SITableViewCell
+    @IBOutlet weak var speakersButton: UIButton!{
         didSet {
+            speakersButton.isHidden = true
             speakersButton.imageView?.contentMode = .scaleAspectFit
         }
     }
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView! {
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    
+    var session: SISession! {
         didSet {
-            activityIndicator.hidesWhenStopped = true
+            entity = session
         }
     }
     
     var delegate: SISpeakerDelegate?
     
-    var isExpanded = false {
-        didSet {
-            session.isSelected = isExpanded
-            if isExpanded {
-                expandCell()
-            } else {
-                shrinkCell()
-            }
-        }
-    }
-    
-    var session: SISession! {
-        didSet {
-            updateCell()
-        }
-    }
-    
-    func updateCell() {
+    override func updateCell() {
         
         selectionStyle = .none
-        timeLabel.font = UIFont.preferredFont(forTextStyle: .headline)
-        titleLabel.font = UIFont.preferredFont(forTextStyle: .body)
+        
+        
+        if !session.didLoadSpeakers {
+            DispatchQueue.global(qos: .utility).async {
+                self.session.requestSpeakers {
+                    DispatchQueue.main.async {
+                        if self.session.speakers.isEmpty {
+                            self.speakersButton.isHidden = true
+                        } else {
+                            self.speakersButton.isHidden = false
+                        }
+                    }
+                }
+            }
+        } else {
+            if session.speakers.isEmpty {
+                speakersButton.isHidden = true
+            } else {
+                speakersButton.isHidden = false
+            }
+        }
         
         speakersButton.addTarget(self, action: #selector(ScheduleTableViewCell.didTapSpeakersButton), for: .touchUpInside)
+
+        if !session.attributedSummary.string.isEmpty || session.room != nil {
+            infoTextView.isHidden = false
+        } else {
+            infoTextView.isHidden = true
+        }
+    
+        if let timeFrame = Date.timeFrameBetweenDates(startDate: session.startDate, endDate: session.endDate) {
+            timeLabel.attributedText = timeFrame
+        } else {
+            timeLabel.attributedText = NSAttributedString(string: "Session time unavailable", attributes: [NSFontAttributeName:UIFont.preferredFont(forTextStyle: .headline)])
+        }
         
-        if let session = session {
-            if let timeFrame = Date.timeFrameBetweenDates(startDate: session.startDate, endDate: session.endDate) {
-                timeLabel.attributedText = timeFrame
-            } else {
-                timeLabel.text = "Session time is currently unavailable"
-            }
-            
-            titleLabel.text = "\(session.sessionType.rawValue): \(session.displayName)"
-            
-            if !session.didLoadSessionInformation {
-                activityIndicator.startAnimating()
-                session.requestSessionInformation({
-                    if !session.speakers.isEmpty {
-                        self.speakersButton.isHidden = false
-                        self.speakersButton.isUserInteractionEnabled = true
-                    }
-                    self.layoutIfNeeded()
-                    self.activityIndicator.stopAnimating()
-                })
-            }
-            
+        titleLabel.text = "\(session.sessionType.rawValue): \(session.displayName)"
+        
+        if !session.didLoadSessionInformation {
+            activityIndicator.startAnimating()
+            session.requestSessionInformation({
+                if !self.session.speakers.isEmpty {
+                    self.speakersButton.isHidden = false
+                    self.speakersButton.isUserInteractionEnabled = true
+                }
+                self.layoutIfNeeded()
+                self.activityIndicator.stopAnimating()
+            })
         }
     }
     
-    private func expandCell() {
-        guard let info = getAttributedStringForSession() else {
-            infoTextView.text = "Check back later for more information."
-            infoTextView.font = UIFont.preferredFont(forTextStyle: .body)
-            infoTextView.textColor = .black
-            return
+    override func expandCell() {
+        if !infoTextView.isHidden {
+            super.expandCell()
+            
+            let sessionSummary = NSMutableAttributedString()
+            
+            if let room = session.room {
+                sessionSummary.append(NSAttributedString(string: "Room: \(room.name)", attributes: [NSFontAttributeName : UIFont.preferredFont(forTextStyle: .headline)]))
+                if !session.attributedSummary.string.isEmpty {
+                    sessionSummary.append(NSAttributedString(string: "\n\n"))
+                }
+            }
+            
+            let summary = NSMutableAttributedString(attributedString: session.attributedSummary)
+            
+            summary.addAttributes(summaryAttrs, range: summary.fullRange)
+            
+            sessionSummary.append(summary)
+
+            sessionSummary.append(tapToSeeLessText)
+            
+            infoTextView.attributedText = sessionSummary
         }
-        
-        if info.string == "\n\nTap To See Less..." {
-            
-            let notificationText = NSMutableAttributedString(string: "Check back later for more information.",
-                                                             attributes: [NSParagraphStyleAttributeName : SIParagraphStyle.left])
-            notificationText.addAttribute(NSFontAttributeName, value: UIFont.preferredFont(forTextStyle: .body), range: notificationText.fullRange)
-            notificationText.append(info)
-            
-            infoTextView.attributedText = notificationText
-            
-            return
-        }
-        
-        infoTextView.attributedText = info
-    }
-    
-    private func shrinkCell() {
-        infoTextView.text = "Select For More Info >"
-        infoTextView.textAlignment = .center
-        infoTextView.textColor = .gray
-        infoTextView.font = UIFont.preferredFont(forTextStyle: .footnote)
     }
     
     @IBAction func didTapSpeakersButton() {
@@ -121,50 +123,6 @@ class ScheduleTableViewCell: UITableViewCell {
                 delegate.performActionOnSpeakers(data: session.speakers)
             }
         }
-    }
-    
-    private func getAttributedStringForSession() -> NSAttributedString? {
-        
-        var roomName = ""
-        
-        if let room = session.room {
-            if !room.name.isEmpty {
-                roomName += "<p>Room: \(room.name)</p>"
-            }
-        }
-        
-        do {
-            
-            let attributes: [String:Any] = [
-                NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
-                NSCharacterEncodingDocumentAttribute : String.Encoding.utf8.rawValue,
-                NSParagraphStyleAttributeName : SIParagraphStyle.left,
-            ]
-            
-            let attributedText = try NSMutableAttributedString(data: roomName.data(using: String.Encoding.utf8)!, options: attributes, documentAttributes: nil)
-            
-            attributedText.addAttribute(NSFontAttributeName, value: UIFont.preferredFont(forTextStyle: .headline), range: attributedText.fullRange)
-            
-            attributedText.append(self.session.attributedSummary)
-            
-            let centerStyle = NSMutableParagraphStyle()
-            centerStyle.alignment = .center
-            
-            let swipeAttributes:[String:Any] = [
-                NSParagraphStyleAttributeName : SIParagraphStyle.center,
-                NSForegroundColorAttributeName : UIColor.gray,
-                NSFontAttributeName : UIFont.preferredFont(forTextStyle: .footnote)
-            ]
-            
-            let swipeUpIndicator = NSMutableAttributedString(string: "\n\nTap To See Less...", attributes: swipeAttributes)
-            
-            attributedText.append(swipeUpIndicator)
-            
-            return attributedText
-        } catch {
-            return nil
-        }
-        
     }
     
 }

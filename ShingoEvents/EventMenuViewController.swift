@@ -107,41 +107,44 @@ class EventMenuViewController: UIViewController {
     override func loadView() {
         super.loadView()
         
-        // Load Agenda
-        if !event.didLoadAgendas {
-            //Note: requestAgendas will request session data under the hood
-            event.requestAgendas() { self.event.didLoadAgendas = true }
+        DispatchQueue.global(qos: .utility).async { [unowned self] in
+            // Load Agenda
+            if !self.event.didLoadAgendas {
+                //Note: requestAgendas will request session data under the hood
+                self.event.requestAgendas() { self.event.didLoadAgendas = true }
+            }
+            
+            if !self.event.didLoadSpeakers {
+                // Load Speakers for entire event
+                self.event.requestSpeakers() {self.event.didLoadSpeakers = true}
+            }
+            
+            if !self.event.didLoadVenues {
+                // Load venue photos
+                self.event.requestVenues() {self.event.didLoadVenues = true}
+            }
+            
+            if !self.event.didLoadRecipients {
+                // Load Recipient information
+                self.event.requestRecipients() {self.event.didLoadRecipients  = true}
+            }
+            
+            if !self.event.didLoadAffiliates {
+                // Load Affiliate information
+                self.event.requestAffiliates() {self.event.didLoadAffiliates = true}
+            }
+            
+            if !self.event.didLoadExhibitors {
+                // Load Exhibitor information
+                self.event.requestExhibitors() {self.event.didLoadExhibitors = true}
+            }
+            
+            if !self.event.didLoadSponsors {
+                // Load Sponsor information
+                self.event.requestSponsors() {self.event.didLoadSponsors = true}
+            }
         }
         
-        if !event.didLoadSpeakers {
-            // Load Speakers for entire event
-            event.requestSpeakers() {self.event.didLoadSpeakers = true}
-        }
-        
-        if !event.didLoadVenues {
-            // Load venue photos
-            event.requestVenues() {self.event.didLoadVenues = true}
-        }
-        
-        if !event.didLoadRecipients {
-            // Load Recipient information
-            event.requestRecipients() {self.event.didLoadRecipients  = true}
-        }
-        
-        if !event.didLoadAffiliates {
-            // Load Affiliate information
-            event.requestAffiliates() {self.event.didLoadAffiliates = true}
-        }
-        
-        if !event.didLoadExhibitors {
-            // Load Exhibitor information
-            event.requestExhibitors() {self.event.didLoadExhibitors = true}
-        }
-        
-        if !event.didLoadSponsors {
-            // Load Sponsor information
-            event.requestSponsors() {self.event.didLoadSponsors = true}
-        }
         
         // Setup views
         contentView.backgroundColor = .clear
@@ -263,13 +266,16 @@ extension EventMenuViewController {
     
     // MARK: - Button Outlet functions
     func didTapSchedule(_ sender: AnyObject) {
+        (sender as! UIButton).isEnabled = false
         if event.didLoadAgendas {
             self.performSegue(withIdentifier: "SchedulesView", sender: self.event.agendaItems)
+            (sender as! UIButton).isEnabled = true
         } else {
             self.present(activityVC, animated: false, completion: { 
                 self.event.requestAgendas() {
                     self.dismiss(animated: true, completion: { 
                         self.performSegue(withIdentifier: "SchedulesView", sender: self.event.agendaItems)
+                        (sender as! UIButton).isEnabled = true
                     });
                 }
             });
