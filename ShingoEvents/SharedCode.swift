@@ -325,16 +325,13 @@ extension UIImageView {
         
         let size = CGSize(width: width, height: (width * image.size.height) / image.size.width)
         
-//        DispatchQueue.global(qos: .default).async {
-            UIGraphicsBeginImageContextWithOptions(size, self.isOpaque, 0.0)
-            self.image?.draw(in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
-//            DispatchQueue.main.async {
-                self.image = UIGraphicsGetImageFromCurrentImageContext()
-                UIGraphicsEndImageContext()
-//            }
-//        }
-        
+        UIGraphicsBeginImageContextWithOptions(size, self.isOpaque, 0.0)
+        self.image?.draw(in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+        self.image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
     }
+    
+
     
 }
 
@@ -366,6 +363,17 @@ extension UIImage {
         }
         return 0
     }
+    
+    class func transformIntrinsicContentSize(toFitWidth width: CGFloat, isOpaque opaque: Bool = true, forImage image: UIImage) -> UIImage? {
+        
+        let size = CGSize(width: width, height: (width * image.size.height) / image.size.width)
+        
+        UIGraphicsBeginImageContextWithOptions(size, opaque, 0.0)
+        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return resizedImage
+    }
+    
 }
 
 // NSDate comparison operator
@@ -404,9 +412,36 @@ extension Date {
         }
     }
     
+
+    
+    
+}
+
+/// Initializer defaults to en_US locale and MST time zone.
+class SIDateFormatter: DateFormatter {
+    
+    convenience init(dateFormat: String) {
+        self.init()
+        locale = Locale(identifier: "en_US")
+        timeZone = TimeZone(abbreviation: "MST")
+        self.dateFormat = dateFormat
+    }
+    
+    override init() {
+        super.init()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func getDateAsString() -> String {
+        
+    }
+    
     /// Returns time frame between a start date and end date.
     static func timeFrameBetweenDates(startDate: Date, endDate: Date) -> NSAttributedString? {
-
+        
         let calendar = Calendar.current
         let startComponents = calendar.dateComponents([.hour, .minute], from: startDate)
         let endComponents = calendar.dateComponents([.hour, .minute], from: endDate)
@@ -487,19 +522,23 @@ extension Date {
         return attributedText
     }
     
-    
 }
 
-extension DateFormatter {
-    /// Returns an object initialized with a set locale, date format, and time zone.
-    convenience init(locale: String, dateFormat: String) {
-        self.init()
-        self.locale = Locale(identifier: locale)
-        self.dateFormat = dateFormat
-        self.timeZone = TimeZone(abbreviation: "GMT")
-    }
-    
-}
+//extension DateFormatter {
+//    /// Returns an object initialized with a set locale, date format, and time zone.
+//    convenience init(locale: String, dateFormat: String) {
+//        self.init()
+//        self.locale = Locale(identifier: "en_US")
+//        self.dateFormat = dateFormat
+//        self.timeZone = TimeZone(abbreviation: "MST")
+//    }
+//    
+//    convenience init(timeZone: String) {
+//        self.init()
+//        
+//    }
+//    
+//}
 
 extension Array where Element:NSLayoutConstraint {
     var active: Bool {

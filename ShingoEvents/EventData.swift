@@ -14,10 +14,10 @@ import Crashlytics
 
 class SIObject : AnyObject {
     
-    fileprivate var image : UIImage?
+    var image: UIImage?
     
-    var name : String
-    var id : String
+    var name: String
+    var id: String
     var attributedSummary: NSAttributedString
     var didLoadImage: Bool
     var isSelected: Bool
@@ -46,6 +46,7 @@ class SIObject : AnyObject {
             callback(image)
         }
     }
+    
 }
 
 

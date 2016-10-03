@@ -30,7 +30,6 @@ class EventTableViewCell: UITableViewCell {
     @IBOutlet weak var cardView: UIView! {
         didSet {
             cardView.backgroundColor = .white
-            
             cardView.layer.cornerRadius = 5
             cardView.layer.shadowColor = UIColor.darkShingoBlue.cgColor
             cardView.layer.shadowOffset = CGSize(width: 0, height: 2.0)
@@ -43,7 +42,7 @@ class EventTableViewCell: UITableViewCell {
     @IBOutlet weak var leadingEventImageViewConstraint: NSLayoutConstraint!
     @IBOutlet weak var trailingEventImageViewConstraint: NSLayoutConstraint!
     private let rightArrowImageViewWidthConstraintConstant: CGFloat = 30
-    private let totalCardViewMarginConstants: CGFloat = (2 * 8)
+    private let cardViewMargins: CGFloat = (2 * 8)
     
     var event: SIEvent! { didSet { updateCell() } }
     
@@ -69,11 +68,13 @@ class EventTableViewCell: UITableViewCell {
                 return
             }
             
-            self.eventImageView.image = image;
+            self.eventImageView.image = image
             
-            let imageWidth: CGFloat = self.contentView.frame.width - (self.leadingEventImageViewConstraint.constant + self.trailingEventImageViewConstraint.constant + self.rightArrowImageViewWidthConstraintConstant + self.totalCardViewMarginConstants)
+            let maxImageWidth: CGFloat = self.contentView.frame.width - (self.leadingEventImageViewConstraint.constant + self.trailingEventImageViewConstraint.constant + self.rightArrowImageViewWidthConstraintConstant + self.cardViewMargins)
             
-            self.eventImageView.resizeImageViewToIntrinsicContentSize(thatFitsWidth: imageWidth)
+            if image.size.width > maxImageWidth {
+                self.eventImageView.resizeImageViewToIntrinsicContentSize(thatFitsWidth: maxImageWidth)
+            } 
             
             if let delegate = self.delegate {
                 delegate.cellDidUpdate()

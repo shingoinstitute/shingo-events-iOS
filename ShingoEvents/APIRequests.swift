@@ -22,8 +22,9 @@ class SIRequest {
     // MARK: - Properties
     
     // Date formatters uses convenience init that defaults timezone to GMT
-    var dateFormatter = DateFormatter(locale: "en_US_POSIX", dateFormat: "yyyy-MM-dd")
-    var sessionDateFormatter = DateFormatter(locale: "en_US_POSIX", dateFormat: "yyyy-MM-dd'T'HH:mm:ss.SSS")
+    
+    var dateFormatter = SIDateFormatter(dateFormat: "yyyy-MM-dd")
+    var sessionDateFormatter = SIDateFormatter(dateFormat: "yyyy-MM-dd'T'HH:mm:ss.SSS")
     
     
     // Mark: - Alamofire
