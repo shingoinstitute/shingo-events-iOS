@@ -70,11 +70,9 @@ class ScheduleTableViewCell: SITableViewCell {
         } else {
             infoTextView.isHidden = true
         }
-    
-        if let timeFrame = Date.timeFrameBetweenDates(startDate: session.startDate, endDate: session.endDate) {
+
+        if let timeFrame = DateFormatter.attributedTime(from: session.startDate, to: session.endDate) {
             timeLabel.attributedText = timeFrame
-        } else {
-            timeLabel.attributedText = NSAttributedString(string: "Session time unavailable", attributes: [NSFontAttributeName:UIFont.preferredFont(forTextStyle: .headline)])
         }
         
         titleLabel.text = "\(session.sessionType.rawValue): \(session.displayName)"

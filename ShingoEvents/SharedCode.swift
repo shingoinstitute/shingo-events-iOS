@@ -417,9 +417,10 @@ extension Date {
     
 }
 
-/// Initializer defaults to en_US locale and MST time zone.
-class SIDateFormatter: DateFormatter {
+/// Initializer defaults to en_US locale.
+extension DateFormatter {
     
+    /// Important! Defaults time zone to MST.
     convenience init(dateFormat: String) {
         self.init()
         locale = Locale(identifier: "en_US")
@@ -427,80 +428,60 @@ class SIDateFormatter: DateFormatter {
         self.dateFormat = dateFormat
     }
     
-    override init() {
-        super.init()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func getDateAsString() -> String {
+    static func time(from: Date, to: Date) -> String {
+
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "h:mm a"
+        timeFormatter.timeZone = TimeZone(abbreviation: "MST")
+        timeFormatter.locale = Locale(identifier: "en_US")
+        
+        let timeZoneOffset = TimeInterval(timeFormatter.timeZone.secondsFromGMT()) - TimeInterval(NSTimeZone.local.secondsFromGMT())
+
+        let startTime = timeFormatter.string(from: from.addingTimeInterval(timeZoneOffset))
+        let endTime = timeFormatter.string(from: to.addingTimeInterval(timeZoneOffset))
+        
+        return "\(startTime) - \(endTime)"
         
     }
-    
-    /// Returns time frame between a start date and end date.
-    static func timeFrameBetweenDates(startDate: Date, endDate: Date) -> NSAttributedString? {
+ 
+    static func attributedTime(from: Date, to: Date) -> NSAttributedString? {
         
-        let calendar = Calendar.current
-        let startComponents = calendar.dateComponents([.hour, .minute], from: startDate)
-        let endComponents = calendar.dateComponents([.hour, .minute], from: endDate)
+        let timeFrame: String = DateFormatter.time(from: from, to: to)
         
-        guard let startHour = startComponents.hour else {
+        guard let stringComponents = timeFrame.split("-") else {
             return nil
         }
         
-        guard let startMinute = startComponents.minute else {
+        guard let fromTime = stringComponents.first else {
             return nil
         }
         
-        guard let endHour = endComponents.hour else {
+        guard let toTime = stringComponents.last else {
             return nil
         }
         
-        guard let endMinute = endComponents.minute else {
+        guard let startComponents = fromTime.split(" ") else {
             return nil
         }
         
-        guard let startTime = Date.timeStringFromComponents(hour: startHour, minute: startMinute) else {
+        guard let endComponents = toTime.split(" ") else {
             return nil
         }
         
-        guard let endTime = Date.timeStringFromComponents(hour: endHour, minute: endMinute) else {
+        guard let startTime = startComponents.first else {
             return nil
         }
         
-        startTime.append(NSAttributedString(string: " - "))
-        startTime.append(endTime)
-        
-        return startTime
-    }
-    
-    static func timeStringFromComponents(hour h: Int, minute: Int) -> NSMutableAttributedString? {
-        var hour = h
-        var am_pm = ""
-        
-        if hour < 0 || hour > 24 || minute < 0 || minute > 60 {
+        guard let startPeriod = startComponents.last else {
             return nil
         }
         
-        switch hour {
-        case 0 ..< 12:
-            am_pm = "AM"
-        case 13 ..< 25:
-            hour = hour - 12
-            am_pm = "PM"
-        case 12:
-            am_pm = "PM"
-        default:
-            break
+        guard let endTime = endComponents.first else {
+            return nil
         }
         
-        var attributedText: NSMutableAttributedString!
-        if minute < 10 {
-            attributedText = NSMutableAttributedString(string: "\(hour):0\(minute)", attributes: [NSFontAttributeName : UIFont.preferredFont(forTextStyle: .headline)])
-        } else {
-            attributedText = NSMutableAttributedString(string: "\(hour):\(minute)", attributes: [NSFontAttributeName : UIFont.preferredFont(forTextStyle: .headline)])
+        guard let endPeriod = endComponents.last else {
+            return nil
         }
         
         let pointSize = UIFont.preferredFont(forTextStyle: .headline).pointSize
@@ -515,30 +496,22 @@ class SIDateFormatter: DateFormatter {
                 ]
             ]
         )
+        
         let smallCapsFont = UIFont(descriptor: smallCapsFontDesc, size: pointSize)
         
-        attributedText.append(NSAttributedString(string: am_pm, attributes: [NSFontAttributeName: smallCapsFont]))
+        let timeAttributes = [NSFontAttributeName:UIFont.preferredFont(forTextStyle: .headline)]
+        let periodAttributes = [NSFontAttributeName:smallCapsFont]
+        
+        let attributedText = NSMutableAttributedString(string: startTime, attributes: timeAttributes)
+        attributedText.append(NSAttributedString(string: startPeriod, attributes: periodAttributes))
+        attributedText.append(NSAttributedString(string: " - ", attributes: timeAttributes))
+        attributedText.append(NSAttributedString(string: endTime, attributes: timeAttributes))
+        attributedText.append(NSAttributedString(string: endPeriod, attributes: periodAttributes))
         
         return attributedText
     }
     
 }
-
-//extension DateFormatter {
-//    /// Returns an object initialized with a set locale, date format, and time zone.
-//    convenience init(locale: String, dateFormat: String) {
-//        self.init()
-//        self.locale = Locale(identifier: "en_US")
-//        self.dateFormat = dateFormat
-//        self.timeZone = TimeZone(abbreviation: "MST")
-//    }
-//    
-//    convenience init(timeZone: String) {
-//        self.init()
-//        
-//    }
-//    
-//}
 
 extension Array where Element:NSLayoutConstraint {
     var active: Bool {

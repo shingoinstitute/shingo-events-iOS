@@ -18,16 +18,16 @@ let EVENTS_URL = BASE_URL + "/salesforce/events"
 let SUPPORT_URL = BASE_URL + "/support"
 
 class SIRequest {
+
     
-    // MARK: - Properties
+    /* 
+     *Important! DateFormatter defaults timezone to MST.
+     */
+    var dateFormatter = DateFormatter(dateFormat: "yyyy-MM-dd")
+    var sessionDateFormatter = DateFormatter(dateFormat: "yyyy-MM-dd'T'HH:mm:ss.SSS")
     
-    // Date formatters uses convenience init that defaults timezone to GMT
+    var timeZoneOffset = TimeInterval(NSTimeZone.local.secondsFromGMT())
     
-    var dateFormatter = SIDateFormatter(dateFormat: "yyyy-MM-dd")
-    var sessionDateFormatter = SIDateFormatter(dateFormat: "yyyy-MM-dd'T'HH:mm:ss.SSS")
-    
-    
-    // Mark: - Alamofire
     
     /// HTTP GET request method.
     fileprivate func getRequest(url: String, description: String, callback: @escaping (JSON?) -> ()) -> Alamofire.Request? {
@@ -147,14 +147,14 @@ extension SIRequest {
                     
                     if let startDate = record["Start_Date__c"].string {
                         if let startDate = self.dateFormatter.date(from: startDate) {
-                            event.startDate = startDate
+                            event.startDate = startDate.addingTimeInterval(self.timeZoneOffset)
                         }
                         
                     }
                     
                     if let endDate = record["End_Date__c"].string {
                         if let endDate = self.dateFormatter.date(from: endDate) {
-                            event.endDate = endDate
+                            event.endDate = endDate.addingTimeInterval(self.timeZoneOffset)
                         }
                     }
                     
@@ -199,13 +199,13 @@ extension SIRequest {
                 
                 if let startDate = record["Start_Date__c"].string {
                     if let startDate = self.dateFormatter.date(from: startDate) {
-                        event.startDate = startDate
+                        event.startDate = startDate.addingTimeInterval(self.timeZoneOffset)
                     }
                 }
                 
                 if let endDate = record["End_Date__c"].string {
                     if let endDate = self.dateFormatter.date(from: endDate) {
-                        event.endDate = endDate
+                        event.endDate = endDate.addingTimeInterval(self.timeZoneOffset)
                     }
                 }
                 
@@ -279,7 +279,7 @@ extension SIRequest {
                 
                 if let date = record["Agenda_Date__c"].string {
                     if let date = self.dateFormatter.date(from: date) {
-                        agenda.date = date
+                        agenda.date = date.addingTimeInterval(self.timeZoneOffset)
                     }
                 }
                 
@@ -324,13 +324,13 @@ extension SIRequest {
                     
                     if let startDate = record["Start_Date_Time__c"].string {
                         if let startDate = self.sessionDateFormatter.date(from: startDate) {
-                            session.startDate = startDate
+                            session.startDate = startDate.addingTimeInterval(self.timeZoneOffset)
                         }
                     }
                     
                     if let endDate = record["End_Date_Time__c"].string {
                         if let endDate = self.sessionDateFormatter.date(from: endDate) {
-                            session.endDate = endDate
+                            session.endDate = endDate.addingTimeInterval(self.timeZoneOffset)
                         }
                     }
                     
@@ -396,13 +396,13 @@ extension SIRequest {
                 
                 if let startDate = record["Start_Date_Time__c"].string {
                     if let startDate = self.sessionDateFormatter.date(from: startDate.split("+")![0]) {
-                        session.startDate = startDate
+                        session.startDate = startDate.addingTimeInterval(self.timeZoneOffset)
                     }
                 }
             
                 if let endDate = record["End_Date_Time__c"].string {
                     if let endDate = self.sessionDateFormatter.date(from: endDate.split("+")![0]) {
-                        session.endDate = endDate
+                        session.endDate = endDate.addingTimeInterval(self.timeZoneOffset)
                     }
                 }
                 
@@ -493,13 +493,13 @@ extension SIRequest {
                 
                 if let startDate = record["Start_Date_Time__c"].string {
                     if let startDate = self.sessionDateFormatter.date(from: startDate.split("+")![0]) {
-                        session.startDate = startDate
+                        session.startDate = startDate.addingTimeInterval(self.timeZoneOffset)
                     }
                 }
                 
                 if let endDate = record["End_Date_Time__c"].string {
                     if let endDate = self.sessionDateFormatter.date(from: endDate.split("+")![0]) {
-                        session.endDate = endDate
+                        session.endDate = endDate.addingTimeInterval(self.timeZoneOffset)
                     }
                 }
                 
