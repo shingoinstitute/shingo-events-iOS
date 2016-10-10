@@ -10,6 +10,7 @@ import UIKit
 import DropDown
 
 class BugReportViewController: UIViewController {
+    
     var didMakeEdit = false
     var messageSent = false
     
@@ -17,7 +18,15 @@ class BugReportViewController: UIViewController {
     @IBOutlet weak var descriptionTextField: UITextView!
     @IBOutlet weak var submitButton: UIButton!
     
-    @IBOutlet weak var bugTypeButton: UIButton!
+    @IBOutlet weak var bugTypeButton: UIButton! {
+        didSet {
+            bugTypeButton.layer.cornerRadius = 3
+            bugTypeButton.layer.shadowColor = UIColor.darkShingoRed.cgColor
+            bugTypeButton.layer.shadowOffset = CGSize(width: 0, height: 2)
+            bugTypeButton.layer.shadowRadius = 3
+            bugTypeButton.layer.shadowOpacity = 1
+        }
+    }
     @IBOutlet weak var dropDownImageView: UIImageView!
     
     var dropDown = DropDown()
@@ -40,33 +49,28 @@ class BugReportViewController: UIViewController {
         submitButton.layer.borderWidth = 1
         submitButton.layer.borderColor = UIColor.lightGray.cgColor
         
-        view.bringSubview(toFront: dropDownImageView)
-        setupDropDown()
+        setupDropDownMenu()
     }
     
-    fileprivate func setupDropDown() {
+    func setupDropDownMenu() {
         
-        bugTypeButton.layer.cornerRadius = 4
-        bugTypeButton.layer.borderColor = UIColor.lightGray.cgColor
-        bugTypeButton.layer.borderWidth = 1
+        view.bringSubview(toFront: dropDownImageView)
         
-        dropDown.dataSource = ["App Crash", "General Feedback", "Spelling/Grammar", "Unexpected Behavior", "User Interface", "Other"]
+        let size: CGSize = bugTypeButton.sizeThatFits(CGSize(width: view.frame.width, height: view.frame.height))
+        let height = size.height
+        dropDown.bottomOffset = CGPoint(x: 0, y: height)
         
+        dropDown.anchorView = bugTypeButton
+        dropDown.dataSource = ["App Crash", "Spelling/Grammar", "Unexpected Behavior", "User Interface", "Other"]
         dropDown.dismissMode = .onTap
         dropDown.direction = .bottom
         
-        dropDown.anchorView = bugTypeButton
-        
-        dropDown.bottomOffset = CGPoint(x: 0, y: bugTypeButton.bounds.height)
-        
         dropDown.selectionAction = { (index, item) in
-            self.bugTypeButton.setTitle(item, for: UIControlState())
-            self.dropDownImageView.isHidden = true
+            self.bugTypeButton.setTitle(item, for: .normal)
         }
         
         dropDown.cancelAction = { _ in
-            self.bugTypeButton.setTitle("No Selection", for: UIControlState())
-            self.dropDownImageView.isHidden = false
+            self.bugTypeButton.setTitle("No Selection", for: .normal)
         }
         
     }
@@ -88,7 +92,6 @@ class BugReportViewController: UIViewController {
                         }
                     }
                 }
-                
             
                 let parameters: [String:String] = [
                     "device": "\(UIDevice.current.deviceType), iOS Version: \(UIDevice.current.systemVersion)",
@@ -139,11 +142,11 @@ class BugReportViewController: UIViewController {
     }
 }
 
-extension DropDown {
-    func setWidth(_ width: CGFloat) {
-        
-    }
-}
+//extension DropDown {
+//    func setWidth(_ width: CGFloat) {
+//        
+//    }
+//}
 
 extension BugReportViewController {
     

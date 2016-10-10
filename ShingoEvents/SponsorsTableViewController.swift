@@ -9,7 +9,7 @@
 import UIKit
 import PureLayout
 
-class SponsorsTableViewController: UITableViewController {
+class SponsorsTableViewController: UITableViewController, SICellDelegate {
 
     let cellIdentifier = "SponsorCell"
     
@@ -28,6 +28,9 @@ class SponsorsTableViewController: UITableViewController {
         if friends.isEmpty && supporters.isEmpty && benefactors.isEmpty && champions.isEmpty && presidents.isEmpty && other.isEmpty {
             displayNoContentNotification()
         }
+        
+        tableView.estimatedRowHeight = 150
+        tableView.rowHeight = UITableViewAutomaticDimension
     }
     
     private func displayNoContentNotification() {
@@ -43,6 +46,11 @@ class SponsorsTableViewController: UITableViewController {
         
         label.autoAlignAxis(.horizontal, toSameAxisOf: view)
         label.autoAlignAxis(.vertical, toSameAxisOf: view)
+    }
+    
+    func cellDidUpdate() {
+        tableView.beginUpdates()
+        tableView.endUpdates()
     }
 }
 
@@ -110,6 +118,8 @@ extension SponsorsTableViewController {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "SponsorCell", for: indexPath) as! SponsorTableViewCell
         
+        cell.delegate = self
+        
         switch sectionTitles[(indexPath as NSIndexPath).section] {
             case "Friends":
                 if (friends.count > 0) {
@@ -146,15 +156,6 @@ extension SponsorsTableViewController {
         return cell
     }
 
-
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 150.0
-    }
-
-    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 150.0
-    }
-
 }
 
 
@@ -166,53 +167,39 @@ class SponsorTableViewCell: UITableViewCell {
         }
     }
     
-    var didSetupConstraints = false
+    var delegate: SICellDelegate?
 
-    var nameLabel: UILabel = {
-        let view = UILabel.newAutoLayout()
-        view.numberOfLines = 0
-        view.lineBreakMode = .byWordWrapping
-        view.textAlignment = .center
-        return view
-    }()
-    
-    var logoImageView: UIImageView = {
-        let image = UIImageView.newAutoLayout()
-        image.contentMode = .scaleAspectFit
-        return image
-    }()
-    
-    override func updateConstraints() {
-        if !didSetupConstraints {
-            
-            contentView.addSubview(nameLabel)
-            contentView.addSubview(logoImageView)
-            
-            NSLayoutConstraint.autoSetPriority(UILayoutPriorityRequired) {
-                self.logoImageView.autoSetContentCompressionResistancePriority(for: .vertical)
-            }
-            
-            nameLabel.sizeToFit()
-            nameLabel.autoSetDimension(.height, toSize: 24)
-            nameLabel.autoPinEdge(.top, to: .top, of: contentView, withOffset: 5)
-            nameLabel.autoAlignAxis(.vertical, toSameAxisOf: contentView)
-            
-            logoImageView.autoPinEdge(.top, to: .bottom, of: nameLabel, withOffset: 5)
-            logoImageView.autoPinEdge(.left, to: .left, of: contentView, withOffset: 5)
-            logoImageView.autoPinEdge(.right, to: .right, of: contentView, withOffset: -5)
-            logoImageView.autoPinEdge(.bottom, to: .bottom, of: contentView, withOffset: -5)
-            
-            didSetupConstraints = true
+    @IBOutlet weak var nameLabel: UILabel! {
+        didSet {
+            nameLabel.numberOfLines = 0
+            nameLabel.lineBreakMode = .byWordWrapping
+            nameLabel.textAlignment = .center
         }
-        super.updateConstraints()
     }
     
-    fileprivate func updateCell() {
+    @IBOutlet weak var logoImageView: UIImageView!
+    
+    func updateCell() {
         if let sponsor = sponsor {
             nameLabel.text = sponsor.name
+            
             sponsor.getLogoImage() { image in
-                self.logoImageView.image = image
-                self.setNeedsDisplay()
+                
+                if image.size.width > self.contentView.frame.width {
+                    let foobar = UIImageView()
+                    foobar.image = image
+                    foobar.resizeImageViewToIntrinsicContentSize(thatFitsWidth: self.contentView.frame.width)
+                    if let image = foobar.image {
+                        self.logoImageView.image = image
+                    }
+                } else {
+                    self.logoImageView.image = image
+                }
+                
+                if let d = self.delegate {
+                    d.cellDidUpdate()
+                }
+                
             }
         }
         

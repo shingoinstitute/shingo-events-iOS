@@ -16,7 +16,7 @@ class VenueMapCollectionCell: UICollectionViewCell {
         }
     }
     
-    @IBOutlet weak var venueImage: UIImageView!
+    @IBOutlet weak var venueImage: UIImageView! { didSet { venueImage.contentMode = .scaleAspectFit } }
     @IBOutlet weak var mapNameLabel: UILabel!
     
     func updateCell() {
@@ -26,24 +26,18 @@ class VenueMapCollectionCell: UICollectionViewCell {
         
         if venueMap != nil {
             mapNameLabel.text = venueMap.name
-            mapNameLabel.font = UIFont(name: "Helvetica", size: 16.0)
+            mapNameLabel.font = UIFont.preferredFont(forTextStyle: .headline)
             venueMap.getVenueMapImage() { image in
                 self.venueImage.image = image
             }
-            venueImage.contentMode = .scaleAspectFit
         }
-        
         
     }
 }
 
 class VenueMapInformationCell: UICollectionViewCell {
     
-    var venue : SIVenue! {
-        didSet {
-            updateCell()
-        }
-    }
+    var venue: SIVenue! { didSet { updateCell() } }
     
     @IBOutlet weak var title: UILabel!
     @IBOutlet weak var address: UILabel!
@@ -56,10 +50,8 @@ class VenueMapInformationCell: UICollectionViewCell {
         
         title.textColor = UIColor.yellow
         title.text = venue.name
-        title.font = UIFont(name: "Helvetica", size: 18.0)
         
         address.textColor = UIColor.yellow
-        address.font = UIFont(name: "Helvetica", size: 18.0)
         address.text = venue.address
         
         if venue.name.isEmpty {

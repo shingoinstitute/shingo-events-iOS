@@ -1119,20 +1119,12 @@ extension SIRequest {
         
         return getRequest(url: EVENTS_URL + "/sponsors?event_id=\(id)", description: "REQUEST SPONSORS, EVENT", callback: { json in
         
-            guard var json = json else {
+            guard let json = json else {
                 callback(nil)
                 return
             }
             
             var sponsors = [SISponsor]()
-            
-            #if DEBUG
-                if let size = json["total_size"].int {
-                    if size == 0 {
-                        json = TestCode.generateTestJSONforSponsor()
-                    }
-                }
-            #endif
             
             if let records = json["sponsors"].array {
                 
@@ -1407,7 +1399,7 @@ extension SIRequest {
     /// Posts a bug report to the backend server.
     @discardableResult func postBugReport(parameters: [String:String], callback: @escaping (Bool) -> Void) -> Alamofire.Request? {
         
-        return postRequest(url: SUPPORT_URL + "/bugs", description: "POST BUG REPORT", parameters: parameters) { (json) in
+        return postRequest(url: SUPPORT_URL + "/bugs", description: "BUG REPORT", parameters: parameters) { (json) in
             guard let json = json else {
                 callback(false)
                 return
@@ -1424,7 +1416,7 @@ extension SIRequest {
     /// Posts feedback to the backend server.
     @discardableResult func postFeedback(parameters: [String:String], callback: @escaping (Bool) -> Void) -> Alamofire.Request? {
         
-        return postRequest(url: SUPPORT_URL + "/feedback", description: "POST FEEDBACK", parameters: parameters) { (json) in
+        return postRequest(url: SUPPORT_URL + "/feedback", description: "FEEDBACK", parameters: parameters) { (json) in
             guard let json = json else {
                 callback(false)
                 return
