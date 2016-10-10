@@ -24,9 +24,21 @@ class MainMenuViewController: UIViewController {
     var contentViewHeightConstraint: NSLayoutConstraint!
     
     // Menu buttons
-    @IBOutlet weak var eventsBtn: UIButton!
-    @IBOutlet weak var shingoModelBtn: UIButton!
-    @IBOutlet weak var settingsBtn: UIButton!
+    @IBOutlet weak var eventsBtn: UIButton! {
+        didSet {
+            eventsBtn.alpha = 0
+        }
+    }
+    @IBOutlet weak var shingoModelBtn: UIButton! {
+        didSet {
+            shingoModelBtn.alpha = 0
+        }
+    }
+    @IBOutlet weak var settingsBtn: UIButton! {
+        didSet {
+            settingsBtn.alpha = 0
+        }
+    }
     
     @IBOutlet weak var copyRightLabel: UILabel!
     
@@ -110,7 +122,7 @@ class MainMenuViewController: UIViewController {
             menuBackgroundImage.autoPinEdge(.bottom, to: .bottom, of: view)
             
             contentView.autoSetDimension(.height, toSize: 265)
-            contentViewHeightConstraint = contentView.autoPinEdge(.bottom, to: .bottom, of: view, withOffset: -view.frame.height)
+            contentViewHeightConstraint = contentView.autoPinEdge(.bottom, to: .bottom, of: view)
             if UIDevice.current.deviceType.rawValue >= 6.0 {
                 contentView.autoPinEdge(.left, to: .left, of: view, withOffset: 175.0)
                 contentView.autoPinEdge(.right, to: .right, of: view, withOffset: -175.0)
@@ -288,16 +300,19 @@ extension MainMenuViewController {
             
             #if DEBUG
             // @development
-            view.layoutIfNeeded()
+                self.eventsBtn.alpha = 1
+                self.shingoModelBtn.alpha = 1
+                self.settingsBtn.alpha = 1
+                view.layoutIfNeeded()
             #else
             // @deployment
-            UIView.animate(withDuration: 1.5,
-                                       delay: 0.5,
-                                       usingSpringWithDamping: 0.5,
-                                       initialSpringVelocity: 0,
-                                       options: UIViewAnimationOptions(),
-                                       animations: { self.view.layoutIfNeeded() },
-                                       completion: nil)
+                view.layoutIfNeeded()
+                UIView.animate(withDuration: 0.5) {
+                    self.eventsBtn.alpha = 1
+                    self.shingoModelBtn.alpha = 1
+                    self.settingsBtn.alpha = 1
+                }
+
             #endif
  
             didAnimateLayout = true
