@@ -216,8 +216,8 @@ extension String {
     
     var length: Int { get { return self.characters.count } }
     
-    func trim() -> String {
-        return self.trimmingCharacters(in: CharacterSet.whitespaces)
+    mutating func trim() {
+        self = self.trimmingCharacters(in: CharacterSet.whitespaces)
     }
     
     func split(_ character: Character) -> [String]? {
@@ -378,13 +378,13 @@ extension UIImage {
     
 }
 
-// NSDate comparison operator
+// Date comparison operator
 func > (left: Date, right: Date) -> Bool {
-    if left.isGreaterThanDate(right) {
-        return true
-    } else {
-        return false
-    }
+    return left.isGreaterThanDate(right)
+}
+
+func < (left: Date, right: Date) -> Bool {
+    return left.isLessThanDate(right)
 }
 
 extension Date {
@@ -404,15 +404,7 @@ extension Date {
         return Date.init(timeIntervalSince1970: 0)
     }
     
-    var isNotionallyEmpty: Bool {
-        get {
-            if self == Date.notionallyEmptyDate() {
-                return true
-            } else {
-                return false
-            }
-        }
-    }
+    var isNotionallyEmpty: Bool { get { return self == Date.notionallyEmptyDate() } }
     
 
     

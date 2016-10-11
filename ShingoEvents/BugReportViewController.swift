@@ -8,6 +8,7 @@
 
 import UIKit
 import DropDown
+import Alamofire
 
 class BugReportViewController: UIViewController {
     
@@ -92,18 +93,25 @@ class BugReportViewController: UIViewController {
                         }
                     }
                 }
+                
+                var email = emailTextField.text!
+                
+                if email.isEmpty {
+                    email = "email not provided"
+                }
             
-                let parameters: [String:String] = [
+                let parameters: Parameters = [
                     "device": "\(UIDevice.current.deviceType), iOS Version: \(UIDevice.current.systemVersion)",
-                    "description": descriptionTextField.text,
+                    "description": "\(descriptionTextField.text)",
                     "details": "Bug Type: \(bugTypeButton.titleLabel!.text!)",
-                    "email": emailTextField.text!
+                    "email": "\(email)"
                 ]
                 
                 let activity = ActivityViewController(message: "Sending Bug Report...")
                 present(activity, animated: true, completion: { 
-                    SIRequest().postBugReport(parameters: parameters, callback: { (success) in
+                    SIRequest.postBugReport(parameters: parameters, callback: { (success) in
                         self.dismiss(animated: false, completion: {
+                            
                             switch success {
                             case true:
                                 
@@ -119,7 +127,7 @@ class BugReportViewController: UIViewController {
                                 
                             case false:
                                 
-                                let message = UIAlertController(title: "Error", message: "Your message could not be sent, please try again later. If you have a secure internet connection and this problem persists, you may email us at shingo.events@usu.edu", preferredStyle: .alert)
+                                let message = UIAlertController(title: "Error", message: "There was an error and your message could not be send. If this problem persists, you may email us at shingo.events@usu.edu", preferredStyle: .alert)
                                 let action = UIAlertAction(title: "Dismiss", style: .default, handler: nil)
                                 message.addAction(action)
                                 

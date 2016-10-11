@@ -23,8 +23,10 @@
 		C267F9221D9DD02E00E524E9 /* SITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C267F9211D9DD02E00E524E9 /* SITableViewCell.swift */; };
 		C26DC9021C59785700BB4DDA /* ExhibitorTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C26DC9011C59785700BB4DDA /* ExhibitorTableViewController.swift */; };
 		C26DC9061C59841700BB4DDA /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C26DC9051C59841700BB4DDA /* MapViewController.swift */; };
-		C28B67E91C3F0BD700AC9193 /* EventData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28B67E81C3F0BD700AC9193 /* EventData.swift */; };
+		C28B67E91C3F0BD700AC9193 /* AppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28B67E81C3F0BD700AC9193 /* AppData.swift */; };
 		C28B67F31C406BDE00AC9193 /* EventMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28B67F21C406BDE00AC9193 /* EventMenuViewController.swift */; };
+		C28EC33A1DAC4FEB0012A8A8 /* AttendessTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28EC3391DAC4FEB0012A8A8 /* AttendessTableViewController.swift */; };
+		C28EC33D1DAC50480012A8A8 /* AttendeeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28EC33C1DAC50480012A8A8 /* AttendeeTableViewCell.swift */; };
 		C29162641D9B09C70009C862 /* SpeakerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29162631D9B09C70009C862 /* SpeakerTableViewCell.swift */; };
 		C2986DC01C640DE900ADCF40 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C2986DBF1C640DE900ADCF40 /* MapKit.framework */; };
 		C2986DC41C65136600ADCF40 /* ShingoModelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2986DC31C65136600ADCF40 /* ShingoModelViewController.swift */; };
@@ -38,7 +40,7 @@
 		C2CFC3141C483C1C0036E485 /* SchedulesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CFC3131C483C1C0036E485 /* SchedulesTableViewController.swift */; };
 		C2CFC3181C4954C20036E485 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C2CFC3171C4954C20036E485 /* Main.storyboard */; };
 		C2E9508D1D1C83F500178C03 /* SharedCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E9508C1D1C83F500178C03 /* SharedCode.swift */; };
-		C2E9508F1D22E8F100178C03 /* APIRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E9508E1D22E8F100178C03 /* APIRequests.swift */; };
+		C2E9508F1D22E8F100178C03 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E9508E1D22E8F100178C03 /* API.swift */; };
 		C2F17FA81C6AAFCF0028062C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C2F17FA71C6AAFCF0028062C /* Assets.xcassets */; };
 		C2FF6B1E1CB2E2CF00331ED2 /* VenueMapsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FF6B1D1CB2E2CF00331ED2 /* VenueMapsCollectionView.swift */; };
 		C2FF6B221CB2E43200331ED2 /* VenueMapCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FF6B211CB2E43200331ED2 /* VenueMapCollectionCell.swift */; };
@@ -80,8 +82,10 @@
 		C267F9211D9DD02E00E524E9 /* SITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SITableViewCell.swift; sourceTree = "<group>"; };
 		C26DC9011C59785700BB4DDA /* ExhibitorTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExhibitorTableViewController.swift; sourceTree = "<group>"; };
 		C26DC9051C59841700BB4DDA /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
-		C28B67E81C3F0BD700AC9193 /* EventData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventData.swift; sourceTree = "<group>"; };
+		C28B67E81C3F0BD700AC9193 /* AppData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppData.swift; sourceTree = "<group>"; };
 		C28B67F21C406BDE00AC9193 /* EventMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventMenuViewController.swift; sourceTree = "<group>"; };
+		C28EC3391DAC4FEB0012A8A8 /* AttendessTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttendessTableViewController.swift; sourceTree = "<group>"; };
+		C28EC33C1DAC50480012A8A8 /* AttendeeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttendeeTableViewCell.swift; sourceTree = "<group>"; };
 		C29162631D9B09C70009C862 /* SpeakerTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeakerTableViewCell.swift; sourceTree = "<group>"; };
 		C2986DBF1C640DE900ADCF40 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		C2986DC31C65136600ADCF40 /* ShingoModelViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShingoModelViewController.swift; sourceTree = "<group>"; };
@@ -96,7 +100,7 @@
 		C2CFC3131C483C1C0036E485 /* SchedulesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchedulesTableViewController.swift; sourceTree = "<group>"; };
 		C2CFC3171C4954C20036E485 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		C2E9508C1D1C83F500178C03 /* SharedCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedCode.swift; sourceTree = "<group>"; };
-		C2E9508E1D22E8F100178C03 /* APIRequests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIRequests.swift; sourceTree = "<group>"; };
+		C2E9508E1D22E8F100178C03 /* API.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		C2F17F661C655DAA0028062C /* Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		C2F17FA71C6AAFCF0028062C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C2FF6B1D1CB2E2CF00331ED2 /* VenueMapsCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VenueMapsCollectionView.swift; sourceTree = "<group>"; };
@@ -140,8 +144,8 @@
 				C24FF4721D918DE10061B3E2 /* helpers */,
 				C2F17F661C655DAA0028062C /* Bridging-Header.h */,
 				C2A695081C35AC2900F6E0B8 /* AppDelegate.swift */,
-				C2E9508E1D22E8F100178C03 /* APIRequests.swift */,
-				C28B67E81C3F0BD700AC9193 /* EventData.swift */,
+				C2E9508E1D22E8F100178C03 /* API.swift */,
+				C28B67E81C3F0BD700AC9193 /* AppData.swift */,
 				C24FF46E1D918D1A0061B3E2 /* view controllers */,
 				C267F9211D9DD02E00E524E9 /* SITableViewCell.swift */,
 			);
@@ -204,6 +208,7 @@
 				C25F4F7F1D95E9E8009A9830 /* EventTableViewCell.swift */,
 				C28B67F21C406BDE00AC9193 /* EventMenuViewController.swift */,
 				C24FF4701D918D950061B3E2 /* affiliates */,
+				C28EC33B1DAC50310012A8A8 /* attendees */,
 				C24FF46F1D918D870061B3E2 /* exhibitors */,
 				C224CDF91CB6C9DF003147F0 /* recipients */,
 				C224CDF81CB6C9C8003147F0 /* schedule */,
@@ -287,6 +292,15 @@
 				C29162631D9B09C70009C862 /* SpeakerTableViewCell.swift */,
 			);
 			name = speakers;
+			sourceTree = "<group>";
+		};
+		C28EC33B1DAC50310012A8A8 /* attendees */ = {
+			isa = PBXGroup;
+			children = (
+				C28EC3391DAC4FEB0012A8A8 /* AttendessTableViewController.swift */,
+				C28EC33C1DAC50480012A8A8 /* AttendeeTableViewCell.swift */,
+			);
+			name = attendees;
 			sourceTree = "<group>";
 		};
 		C2FF6B201CB2E3E700331ED2 /* venue maps */ = {
@@ -497,14 +511,15 @@
 				C2FF6B221CB2E43200331ED2 /* VenueMapCollectionCell.swift in Sources */,
 				C29162641D9B09C70009C862 /* SpeakerTableViewCell.swift in Sources */,
 				C26DC9061C59841700BB4DDA /* MapViewController.swift in Sources */,
-				C2E9508F1D22E8F100178C03 /* APIRequests.swift in Sources */,
+				C2E9508F1D22E8F100178C03 /* API.swift in Sources */,
 				C262CA8D1C3B1C29005845AF /* EventsTableViewController.swift in Sources */,
 				C2494E281C89FBFE00E2969D /* Reachability.swift in Sources */,
-				C28B67E91C3F0BD700AC9193 /* EventData.swift in Sources */,
+				C28B67E91C3F0BD700AC9193 /* AppData.swift in Sources */,
 				C2CFC3101C481EAB0036E485 /* TopViewController.swift in Sources */,
 				C26DC9021C59785700BB4DDA /* ExhibitorTableViewController.swift in Sources */,
 				C2B155111D626BE00099330F /* ExhibitorTableViewCell.swift in Sources */,
 				C2986DC41C65136600ADCF40 /* ShingoModelViewController.swift in Sources */,
+				C28EC33D1DAC50480012A8A8 /* AttendeeTableViewCell.swift in Sources */,
 				C224CDFC1CB6CA42003147F0 /* RecipientTableViewCell.swift in Sources */,
 				C264CCB41C57ECA7005CDB11 /* RecipientsTableViewController.swift in Sources */,
 				C2CFC3041C4576D00036E485 /* SupportTableViewController.swift in Sources */,
@@ -518,6 +533,7 @@
 				C2FF6B261CB4313200331ED2 /* VenueMapViewController.swift in Sources */,
 				C267F9221D9DD02E00E524E9 /* SITableViewCell.swift in Sources */,
 				C224C8981C92138700F4E393 /* AboutPageViewController.swift in Sources */,
+				C28EC33A1DAC4FEB0012A8A8 /* AttendessTableViewController.swift in Sources */,
 				C2130BD81C987650009B3BB8 /* ActivityView.swift in Sources */,
 				C2A695111C35AC2900F6E0B8 /* AppDelegate.swift in Sources */,
 				C2C021231C6272D3008732DC /* SponsorsTableViewController.swift in Sources */,

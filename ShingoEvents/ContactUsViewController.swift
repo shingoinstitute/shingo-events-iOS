@@ -63,23 +63,32 @@ class ContactUsViewController: UIViewController, UITextFieldDelegate, UITextView
                 
                 displayAlert(title: "Oops...", message: "Your message is still empty!")
                 
-            } else if !isValidEmail(emailTextField.text!) {
-                
-                displayAlert(title: "Invalid Email Address", message: "Please enter a valid email address")
-                
             } else {
+                
+                if !emailTextField.text!.isEmpty {
+                    if !isValidEmail(emailTextField.text!) {
+                        displayAlert(title: "Invalid Email Address", message: "Please enter a valid email address")
+                        return
+                    }
+                }
+                
+                var email = "not provided"
+                
+                if !emailTextField.text!.isEmpty {
+                    email = emailTextField.text!
+                }
                 
                 let parameters: [String:String] = [
                     "description": descriptionTextField.text!,
                     "device": "\(UIDevice.current.deviceType)",
                     "details": "iOS Version: \(UIDevice.current.systemVersion)",
                     "rating": "\(rating)",
-                    "email": emailTextField.text!
+                    "email": email
                 ]
                 
                 let activity = ActivityViewController(message: "Sending Feedback...")
                 present(activity, animated: true, completion: { 
-                    SIRequest().postFeedback(parameters: parameters, callback: { (success) in
+                    SIRequest.postFeedback(parameters: parameters, callback: { (success) in
                         self.dismiss(animated: false, completion: { 
                             switch success {
                             case true:
@@ -96,7 +105,7 @@ class ContactUsViewController: UIViewController, UITextFieldDelegate, UITextView
                                 
                             case false:
                                 
-                                let message = UIAlertController(title: "Error", message: "Your message could not be sent, please try again later. If you have a secure internet connection and this problem persists, you may email us at shingo.events@usu.edu", preferredStyle: .alert)
+                                let message = UIAlertController(title: "Error", message: "There was an error and your message could not be sent. If this problem persists, you may email us at shingo.events@usu.edu", preferredStyle: .alert)
                                 let action = UIAlertAction(title: "Okay", style: .default, handler: nil)
                                 message.addAction(action)
                                 self.present(message, animated: true, completion: nil)

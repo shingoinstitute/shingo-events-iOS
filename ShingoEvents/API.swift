@@ -221,6 +221,42 @@ extension SIRequest {
                     event.salesText = salesText
                 }
                 
+                if let attendeeRecords = record["Shingo_Attendees__r"]["records"].array {
+                    
+                    var attendees = [SIAttendee]()
+                    
+                    for record in attendeeRecords {
+                        
+                        let attendee = SIAttendee()
+                        
+                        let contact = record["Contact__r"]
+                        
+                        if let id = contact["Id"].string {
+                            attendee.id = id
+                        }
+                        
+                        if let name = contact["Name"].string {
+                            attendee.name = name
+                        }
+                        
+                        if let title = contact["Title"].string {
+                            attendee.title = title
+                        }
+                        
+                        if let org = contact["Account"]["Name"].string {
+                            attendee.organization = org
+                        }
+                        
+                        if let pictureURL = contact["Photograph__c"].string {
+                            attendee.pictureURL = pictureURL
+                        }
+                        
+                        attendees.append(attendee)
+                        
+                    }
+                    event.attendees = attendees
+                }
+                
             }
             callback(event)
         }
@@ -1397,37 +1433,171 @@ extension SIRequest {
     }
     
     /// Posts a bug report to the backend server.
-    @discardableResult func postBugReport(parameters: [String:String], callback: @escaping (Bool) -> Void) -> Alamofire.Request? {
+    class func postBugReport(parameters: Parameters, callback: @escaping (Bool) -> Void) {
         
-        return postRequest(url: SUPPORT_URL + "/bugs", description: "BUG REPORT", parameters: parameters) { (json) in
-            guard let json = json else {
-                callback(false)
-                return
+        guard let email = parameters["email"] as? String else {
+            return callback(false)
+        }
+        
+        guard let description = parameters["description"] as? String else {
+            return callback(false)
+        }
+        
+        guard let device = parameters["device"] as? String else {
+            return callback(false)
+        }
+        
+        guard let details = parameters["details"] as? String else  {
+            return callback(false)
+        }
+        
+        let headers = [
+            "content-type": "application/x-www-form-urlencoded",
+            "cache-control": "no-cache",
+        ]
+        
+        let postData = NSMutableData(data: "email=\(email)".data(using: .utf8)!)
+        postData.append("&description=\(description)".data(using: .utf8)!)
+        postData.append("&details=\(details)".data(using: .utf8)!)
+        postData.append("&device=\(device)".data(using: .utf8)!)
+        
+        var request = URLRequest(url: URL(string: "https://api.shingo.org/support/bugs")!,
+                                          cachePolicy: .useProtocolCachePolicy,
+                                          timeoutInterval: 10.0)
+        request.httpMethod = "POST"
+        request.allHTTPHeaderFields = headers
+        request.httpBody = postData as Data
+        
+        let session = URLSession.shared
+        let dataTask = session.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
+            
+            DispatchQueue.main.async {
+                
+                if (error != nil) {
+                    print(error)
+                    return callback(false)
+                }
+                
+                guard let data = data else {
+                    return callback(false)
+                }
+
+                do {
+                    let parseJSON = try JSONSerialization.jsonObject(with: data, options: .mutableLeaves) as? NSDictionary
+
+                    guard let value = parseJSON else {
+                        return callback(false)
+                    }
+
+                    let json = JSON(value)
+
+                    print(json)
+
+                    guard let success = json["success"].bool else {
+                        return callback(false)
+                    }
+                    
+                    return callback(success)
+                    
+                } catch {
+                    #if !DEBUG
+                        Crashlytics.sharedInstance().recordError(error)
+                    #endif
+                    return callback(false)
+                }
             }
             
-            if let success = json["success"].bool {
-                callback(success)
-            } else {
-                callback(false)
-            }
-        }
+        })
+        
+        dataTask.resume()
+        
     }
     
     /// Posts feedback to the backend server.
-    @discardableResult func postFeedback(parameters: [String:String], callback: @escaping (Bool) -> Void) -> Alamofire.Request? {
+    class func postFeedback(parameters: [String:String], callback: @escaping (Bool) -> Void) {
         
-        return postRequest(url: SUPPORT_URL + "/feedback", description: "FEEDBACK", parameters: parameters) { (json) in
-            guard let json = json else {
-                callback(false)
-                return
+        guard let email = parameters["email"] else {
+            return callback(false)
+        }
+        
+        guard let description = parameters["description"] else {
+            return callback(false)
+        }
+        
+        guard let device = parameters["device"] else {
+            return callback(false)
+        }
+        
+        guard let details = parameters["details"] else {
+            return callback(false)
+        }
+        
+        guard let rating = parameters["rating"] else {
+            return callback(false)
+        }
+        
+        let headers = [
+            "content-type": "application/x-www-form-urlencoded",
+            "cache-control": "no-cache",
+        ]
+        
+        let postData = NSMutableData(data: "email=\(email)".data(using: .utf8)!)
+        postData.append("&description=\(description)".data(using: .utf8)!)
+        postData.append("&details=\(details)".data(using: .utf8)!)
+        postData.append("&device=\(device)".data(using: .utf8)!)
+        postData.append("&rating=\(rating)".data(using: .utf8)!)
+        
+        var request = URLRequest(url: URL(string: "https://api.shingo.org/support/feedback")!,
+                                 cachePolicy: .useProtocolCachePolicy,
+                                 timeoutInterval: 10.0)
+        
+        request.httpMethod = "POST"
+        request.allHTTPHeaderFields = headers
+        request.httpBody = postData as Data
+        
+        let session = URLSession.shared
+        let dataTask = session.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
+            
+            DispatchQueue.main.async {
+                
+                if (error != nil) {
+                    print(error)
+                    return callback(false)
+                }
+                
+                guard let data = data else {
+                    return callback(false)
+                }
+                
+                do {
+                    let parseJSON = try JSONSerialization.jsonObject(with: data, options: .mutableLeaves) as? NSDictionary
+                    
+                    guard let value = parseJSON else {
+                        return callback(false)
+                    }
+                    
+                    let json = JSON(value)
+                    
+                    print(json)
+                    
+                    guard let success = json["success"].bool else {
+                        return callback(false)
+                    }
+                    
+                    return callback(success)
+                    
+                } catch {
+                    #if !DEBUG
+                        Crashlytics.sharedInstance().recordError(error)
+                    #endif
+                    return callback(false)
+                }
             }
             
-            if let success = json["success"].bool {
-                callback(success)
-            } else {
-                callback(false)
-            }
-        }
+        })
+        
+        dataTask.resume()
+        
     }
     
     // MARK: - Other

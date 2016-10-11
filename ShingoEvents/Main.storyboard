@@ -541,7 +541,7 @@
                                         <rect key="frame" x="0.0" y="371" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0X9-1i-tvy" id="MEn-RV-VAy">
-                                            <frame key="frameInset" width="375" height="43"/>
+                                            <frame key="frameInset" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dKK-GO-sUg">
@@ -817,6 +817,80 @@
             </objects>
             <point key="canvasLocation" x="2644" y="-2054.1229385307347"/>
         </scene>
+        <!--Title-->
+        <scene sceneID="Qmk-bC-ehq">
+            <objects>
+                <tableViewController id="PmE-Ln-agj" customClass="AttendessTableViewController" customModule="Shingo_Events" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="107" sectionHeaderHeight="28" sectionFooterHeight="28" id="gBs-dn-Jy1">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Attendee Cell" rowHeight="107" id="0Ka-IK-OYc" customClass="AttendeeTableViewCell" customModule="Shingo_Events" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="92" width="375" height="107"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0Ka-IK-OYc" id="6jj-3L-wzU">
+                                    <frame key="frameInset" width="375" height="106"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oPr-gx-O2z">
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0dM-BF-Ma4">
+                                            <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                                            <color key="textColor" red="0.29803922770000002" green="0.29803922770000002" blue="0.29803922770000002" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="silhouette" translatesAutoresizingMaskIntoConstraints="NO" id="7Jf-nk-7Dt">
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="75" id="26S-Os-jWq"/>
+                                                <constraint firstAttribute="width" constant="75" id="5am-Gz-7PY"/>
+                                            </constraints>
+                                        </imageView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="oPr-gx-O2z" firstAttribute="leading" secondItem="7Jf-nk-7Dt" secondAttribute="trailing" constant="8" id="C3F-0c-Qhe"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="oPr-gx-O2z" secondAttribute="trailing" id="H64-0N-L9c"/>
+                                        <constraint firstAttribute="topMargin" secondItem="7Jf-nk-7Dt" secondAttribute="top" id="IfV-IV-h5I"/>
+                                        <constraint firstItem="0dM-BF-Ma4" firstAttribute="trailing" secondItem="6jj-3L-wzU" secondAttribute="trailingMargin" id="PL7-4y-n23"/>
+                                        <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="0dM-BF-Ma4" secondAttribute="bottom" id="Q9L-88-HRa"/>
+                                        <constraint firstItem="0dM-BF-Ma4" firstAttribute="top" secondItem="oPr-gx-O2z" secondAttribute="bottom" constant="1" id="Sfd-1z-64f"/>
+                                        <constraint firstAttribute="leadingMargin" secondItem="7Jf-nk-7Dt" secondAttribute="leading" id="beK-gG-NM2"/>
+                                        <constraint firstAttribute="topMargin" secondItem="oPr-gx-O2z" secondAttribute="top" id="fcc-Tm-LIK"/>
+                                        <constraint firstItem="0dM-BF-Ma4" firstAttribute="leading" secondItem="7Jf-nk-7Dt" secondAttribute="trailing" constant="8" id="hrs-UC-kNn"/>
+                                        <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="7Jf-nk-7Dt" secondAttribute="bottom" id="wNR-if-n4g"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="attendeeImageView" destination="7Jf-nk-7Dt" id="0t5-w0-ZgP"/>
+                                    <outlet property="nameLabel" destination="oPr-gx-O2z" id="rEe-dK-EGj"/>
+                                    <outlet property="organizationLabel" destination="0dM-BF-Ma4" id="4VG-F8-Fmg"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="PmE-Ln-agj" id="VTq-GY-hVy"/>
+                            <outlet property="delegate" destination="PmE-Ln-agj" id="bjn-Bp-pCr"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Title" id="a4x-Eu-H47">
+                        <barButtonItem key="rightBarButtonItem" title="Sort" id="0Je-bH-PP8">
+                            <connections>
+                                <action selector="sortAttendees:" destination="PmE-Ln-agj" id="J2L-bn-LaA"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="sortBarButton" destination="0Je-bH-PP8" id="ePK-Xk-88X"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="kJO-IW-bp5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2592.8000000000002" y="-1312.8935532233884"/>
+        </scene>
         <!--Venue Map-->
         <scene sceneID="W1V-q4-iBY">
             <objects>
@@ -897,10 +971,10 @@
                         <segue destination="IVi-St-3H2" kind="show" identifier="RecipientsView" id="7uH-N8-zyn"/>
                         <segue destination="27Y-qz-tpL" kind="show" identifier="MapView" id="MaN-R7-jnJ"/>
                         <segue destination="TSR-Ef-6Mh" kind="show" identifier="ExhibitorsListView" id="oCa-2W-x3n"/>
-                        <segue destination="oeX-Ll-nwp" kind="show" identifier="AffiliatesListView" id="Ecg-KR-TRK"/>
                         <segue destination="PqC-BM-dR8" kind="show" identifier="SchedulesView" id="cGT-d7-faS"/>
                         <segue destination="ZKR-mo-2Bh" kind="show" identifier="SponsorsView" id="afP-xV-MiN"/>
                         <segue destination="juq-ej-IdF" kind="show" identifier="VenueView" id="uWp-FS-9xc"/>
+                        <segue destination="PmE-Ln-agj" kind="show" identifier="AttendeesView" id="OQ9-VL-xhm"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="i1w-Lf-HCC" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1105,7 +1179,7 @@
                         <color key="backgroundColor" red="0.050980392156862744" green="0.094117647058823528" blue="0.20784313725490197" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="AffiliateCell" rowHeight="186" id="OcO-Nd-GhQ" customClass="AffiliateTableViewCell" customModule="Shingo_Events" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="120" width="375" height="186"/>
+                                <rect key="frame" x="0.0" y="56" width="375" height="186"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="OcO-Nd-GhQ" id="4ID-AB-nPM">
                                     <frame key="frameInset" width="375" height="185"/>
@@ -1154,7 +1228,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BuQ-mg-85m" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2644" y="-1347.0764617691154"/>
+            <point key="canvasLocation" x="-463" y="-1350"/>
         </scene>
         <!--Schedule-->
         <scene sceneID="AYG-7x-KYt">
@@ -1377,10 +1451,11 @@
     <resources>
         <image name="down-arrow" width="33" height="33"/>
         <image name="right-arrow" width="54" height="96"/>
+        <image name="silhouette" width="54" height="96"/>
         <image name="speakers icon" width="33" height="33"/>
         <image name="white_star" width="50" height="50"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Vtm-iE-WQY"/>
+        <segue reference="Bbs-g6-pYd"/>
     </inferredMetricsTieBreakers>
 </document>
