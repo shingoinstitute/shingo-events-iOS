@@ -35,7 +35,11 @@ class BugReportViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .shingoRed
+        view.backgroundColor = .lightShingoRed
+        
+        let gradientLayer = RadialGradientLayer()
+        gradientLayer.frame = view.bounds
+        view.layer.insertSublayer(gradientLayer, at: 0)
         
         descriptionTextField.delegate = self
         emailTextField.delegate = self

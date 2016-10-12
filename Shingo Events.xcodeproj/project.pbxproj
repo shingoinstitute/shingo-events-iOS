@@ -147,7 +147,6 @@
 				C2E9508E1D22E8F100178C03 /* API.swift */,
 				C28B67E81C3F0BD700AC9193 /* AppData.swift */,
 				C24FF46E1D918D1A0061B3E2 /* view controllers */,
-				C267F9211D9DD02E00E524E9 /* SITableViewCell.swift */,
 			);
 			name = src;
 			sourceTree = "<group>";
@@ -252,6 +251,7 @@
 				C2E9508C1D1C83F500178C03 /* SharedCode.swift */,
 				C2130BD71C987650009B3BB8 /* ActivityView.swift */,
 				C2494E271C89FBFE00E2969D /* Reachability.swift */,
+				C267F9211D9DD02E00E524E9 /* SITableViewCell.swift */,
 			);
 			name = helpers;
 			sourceTree = "<group>";

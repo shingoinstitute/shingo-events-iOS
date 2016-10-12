@@ -13,7 +13,7 @@ protocol SICellDelegate { func cellDidUpdate() }
 protocol SISpeakerDelegate { func performActionOnSpeakers(data: [SISpeaker]) }
 
 struct Alphabet {
-    static var alphabet: [String] = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "#"]
+    static var english: [String] = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "#"]
 }
 
 struct SIParagraphStyle {
@@ -64,16 +64,25 @@ extension UIColor {
     
     ///Red: 21, Green: 92, Blue: 151.
     static var lightShingoBlue: UIColor { get { return UIColor(netHex: 0x155c97) } }
+    
     ///Red: 0, Green: 47, Blue: 86.
     static var shingoBlue: UIColor { get { return UIColor(netHex: 0x002f56) } }
+    
+    ///Red: 158, Green: 12, Blue: 50.
+    static var lightShingoRed: UIColor { get { return UIColor(netHex: 0x9e0c32) } }
+    
     ///Red: 101, Green: 8, Blue: 32.
     static var shingoRed: UIColor { get { return UIColor(netHex: 0x650820) } }
+    
     ///Red: 63, Green: 19, Blue: 27.
     static var darkShingoRed: UIColor { get { return UIColor(netHex: 0x3f131b) } }
+    
     ///Red: 14, Green: 33, Blue: 69.
     static var darkShingoBlue: UIColor { get { return UIColor(netHex: 0x0e2145) } }
+    
     ///Red: 205, Green: 137, Blue: 49.
     static var shingoGold: UIColor { get { return UIColor(netHex: 0xcd8931) } }
+    
     ///Red: 63, Green: 81, Blue: 36.
     static var shingoGreen: UIColor { get {return UIColor(netHex: 0x3F5124) } }
 }
@@ -273,6 +282,17 @@ extension String {
     
 }
 
+class SIMenuButton: UIButton {
+    
+    override var intrinsicContentSize: CGSize {
+        get {
+            return CGSize(width: 45, height: 45)
+        }
+    }
+    
+    
+}
+
 extension UIBarButtonItem {
     convenience init(title: String) {
         self.init()
@@ -333,9 +353,9 @@ extension UIImageView {
         UIGraphicsEndImageContext()
     }
     
-
-    
 }
+
+
 
 extension UIImage {
     func isEmpty() -> Bool {

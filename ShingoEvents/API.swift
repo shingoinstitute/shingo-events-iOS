@@ -13,24 +13,25 @@ import MapKit
 import SwiftyJSON
 import Crashlytics
 
-let BASE_URL = "https://api.shingo.org"
-let EVENTS_URL = BASE_URL + "/salesforce/events"
-let SUPPORT_URL = BASE_URL + "/support"
+
 
 class SIRequest {
-
+    
+    static let BASE_URL = "https://api.shingo.org"
+    static let EVENTS_URL = BASE_URL + "/salesforce/events"
+    static let SUPPORT_URL = BASE_URL + "/support"
     
     /* 
      *Important! DateFormatter defaults timezone to MST.
      */
-    var dateFormatter = DateFormatter(dateFormat: "yyyy-MM-dd")
-    var sessionDateFormatter = DateFormatter(dateFormat: "yyyy-MM-dd'T'HH:mm:ss.SSS")
+    static let dateFormatter = DateFormatter(dateFormat: "yyyy-MM-dd")
+    static let sessionDateFormatter = DateFormatter(dateFormat: "yyyy-MM-dd'T'HH:mm:ss.SSS")
     
-    var timeZoneOffset = TimeInterval(NSTimeZone.local.secondsFromGMT())
+    static let timeZoneOffset = TimeInterval(NSTimeZone.local.secondsFromGMT())
     
     
     /// HTTP GET request method.
-    fileprivate func getRequest(url: String, description: String, callback: @escaping (JSON?) -> ()) -> Alamofire.Request? {
+    func getRequest(url: String, description: String, callback: @escaping (JSON?) -> ()) -> Alamofire.Request? {
         
         return Alamofire.request(url).responseJSON { response in
             
@@ -43,8 +44,8 @@ class SIRequest {
                 print("+-\(self.marks(description + " - END"))")
                 print("| \(description + " - END") |")
                 print("+-\(self.marks(description + " - END"))")
-                callback(nil)
-                return
+                return callback(nil)
+                
             }
             
             guard let response = response.result.value else {
@@ -52,8 +53,8 @@ class SIRequest {
                 print("+-\(self.marks(description + " - END"))")
                 print("| \(description + " - END") |")
                 print("+-\(self.marks(description + " - END"))")
-                callback(nil)
-                return
+                return callback(nil)
+                
             }
             
             let responseJSON = JSON(response)
@@ -63,8 +64,7 @@ class SIRequest {
                     print("+-\(self.marks(description + " - END"))")
                     print("| \(description + " - END") |")
                     print("+-\(self.marks(description + " - END"))")
-                    callback(nil)
-                    return
+                    return callback(nil)
                 }
             }
             
@@ -80,7 +80,7 @@ class SIRequest {
     
     
     /// HTTP POST request method.
-    fileprivate func postRequest(url: String, description: String, parameters: [String:String], callback: @escaping (_ value: JSON?) -> ()) -> Alamofire.Request? {
+    func postRequest(url: String, description: String, parameters: [String:String], callback: @escaping (_ value: JSON?) -> ()) -> Alamofire.Request? {
         return Alamofire.request(url, parameters: parameters).responseJSON { response in
             
             guard response.result.isSuccess else {
@@ -107,16 +107,13 @@ class SIRequest {
         }
     }
     
-}
-
-extension SIRequest {
 
     // MARK: - API Calls
     
     /// Returns all ready-to-publish events from Salesforce.
     @discardableResult func requestEvents(_ callback: @escaping ([SIEvent]?) -> Void) -> Alamofire.Request? {
         
-        return getRequest(url: EVENTS_URL, description: "REQUEST EVENTS") { json in
+        return getRequest(url: SIRequest.EVENTS_URL, description: "REQUEST EVENTS") { json in
             
             guard let json = json else {
                 callback(nil)
@@ -146,15 +143,15 @@ extension SIRequest {
                     }
                     
                     if let startDate = record["Start_Date__c"].string {
-                        if let startDate = self.dateFormatter.date(from: startDate) {
-                            event.startDate = startDate.addingTimeInterval(self.timeZoneOffset)
+                        if let startDate = SIRequest.dateFormatter.date(from: startDate) {
+                            event.startDate = startDate.addingTimeInterval(SIRequest.timeZoneOffset)
                         }
                         
                     }
                     
                     if let endDate = record["End_Date__c"].string {
-                        if let endDate = self.dateFormatter.date(from: endDate) {
-                            event.endDate = endDate.addingTimeInterval(self.timeZoneOffset)
+                        if let endDate = SIRequest.dateFormatter.date(from: endDate) {
+                            event.endDate = endDate.addingTimeInterval(SIRequest.timeZoneOffset)
                         }
                     }
                     
@@ -176,7 +173,7 @@ extension SIRequest {
     /// Returns an event from Salesforce using an event ID.
     @discardableResult func requestEvent(eventId: String, callback: @escaping (SIEvent?) -> Void) -> Alamofire.Request? {
         
-        return getRequest(url: EVENTS_URL + "/\(eventId)", description: "REQUEST EVENT") { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/\(eventId)", description: "REQUEST EVENT") { json in
             
             guard let json = json else {
                 callback(nil)
@@ -198,14 +195,14 @@ extension SIRequest {
                 }
                 
                 if let startDate = record["Start_Date__c"].string {
-                    if let startDate = self.dateFormatter.date(from: startDate) {
-                        event.startDate = startDate.addingTimeInterval(self.timeZoneOffset)
+                    if let startDate = SIRequest.dateFormatter.date(from: startDate) {
+                        event.startDate = startDate.addingTimeInterval(SIRequest.timeZoneOffset)
                     }
                 }
                 
                 if let endDate = record["End_Date__c"].string {
-                    if let endDate = self.dateFormatter.date(from: endDate) {
-                        event.endDate = endDate.addingTimeInterval(self.timeZoneOffset)
+                    if let endDate = SIRequest.dateFormatter.date(from: endDate) {
+                        event.endDate = endDate.addingTimeInterval(SIRequest.timeZoneOffset)
                     }
                 }
                 
@@ -266,7 +263,7 @@ extension SIRequest {
     /// Gets all days for a single event using an event ID.
     @discardableResult func requestAgendaDays(eventId: String, callback: @escaping ([SIAgenda]?) -> Void) -> Alamofire.Request? {
 
-        return getRequest(url: EVENTS_URL + "/days?event_id=\(eventId)", description: "REQUEST AGENDA FOR EVENT") { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/days?event_id=\(eventId)", description: "REQUEST AGENDA FOR EVENT") { json in
             
             guard let json = json else {
                 callback(nil)
@@ -280,7 +277,7 @@ extension SIRequest {
     /// Gets all days from Salesforce.
     @discardableResult func requestAgendaDays(_ callback: @escaping ([SIAgenda]?) -> ()) -> Alamofire.Request? {
         
-        return getRequest(url: EVENTS_URL + "/days", description: "REQUEST AGENDAS, ALL") { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/days", description: "REQUEST AGENDAS, ALL") { json in
             
             guard let json = json else {
                 callback(nil)
@@ -314,8 +311,8 @@ extension SIRequest {
                 }
                 
                 if let date = record["Agenda_Date__c"].string {
-                    if let date = self.dateFormatter.date(from: date) {
-                        agenda.date = date.addingTimeInterval(self.timeZoneOffset)
+                    if let date = SIRequest.dateFormatter.date(from: date) {
+                        agenda.date = date.addingTimeInterval(SIRequest.timeZoneOffset)
                     }
                 }
                 
@@ -328,7 +325,7 @@ extension SIRequest {
     /// Gets basic information for sessions associated with an SIAgenda.
     @discardableResult func requestAgendaSessions(agendaId id: String, callback: @escaping (_ sessions: [SISession]?) -> Void) -> Alamofire.Request? {
         
-        return getRequest(url: EVENTS_URL + "/days/\(id)", description: "REQUEST SESSIONS, BASIC") { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/days/\(id)", description: "REQUEST SESSIONS, BASIC") { json in
             
             guard let json = json else {
                 callback(nil)
@@ -359,14 +356,14 @@ extension SIRequest {
                     }
                     
                     if let startDate = record["Start_Date_Time__c"].string {
-                        if let startDate = self.sessionDateFormatter.date(from: startDate) {
-                            session.startDate = startDate.addingTimeInterval(self.timeZoneOffset)
+                        if let startDate = SIRequest.sessionDateFormatter.date(from: startDate) {
+                            session.startDate = startDate.addingTimeInterval(SIRequest.timeZoneOffset)
                         }
                     }
                     
                     if let endDate = record["End_Date_Time__c"].string {
-                        if let endDate = self.sessionDateFormatter.date(from: endDate) {
-                            session.endDate = endDate.addingTimeInterval(self.timeZoneOffset)
+                        if let endDate = SIRequest.sessionDateFormatter.date(from: endDate) {
+                            session.endDate = endDate.addingTimeInterval(SIRequest.timeZoneOffset)
                         }
                     }
                     
@@ -383,7 +380,7 @@ extension SIRequest {
     
     /// Gets all sessions for a single event using an agenda ID. Note: Provides more detail than requestAgendaSessions().
     @discardableResult func requestSessions(agendaId id: String, callback: @escaping ([SISession]?) -> ()) -> Alamofire.Request? {
-        return getRequest(url: EVENTS_URL + "/sessions?agenda_id=\(id)", description: "REQUEST SESSIONS, DETAILED") { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/sessions?agenda_id=\(id)", description: "REQUEST SESSIONS, DETAILED") { json in
             
             guard let json = json else {
                 callback(nil)
@@ -396,7 +393,7 @@ extension SIRequest {
     
     /// Gets all sessions from Salesforce.
     @discardableResult func requestSessions(_ callback: @escaping ([SISession]?) -> ()) -> Alamofire.Request? {
-        return getRequest(url: EVENTS_URL + "/sessions", description: "REQUEST SESSIONS, ALL") { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/sessions", description: "REQUEST SESSIONS, ALL") { json in
             
             guard let json = json else {
                 callback(nil)
@@ -431,14 +428,14 @@ extension SIRequest {
                 }
                 
                 if let startDate = record["Start_Date_Time__c"].string {
-                    if let startDate = self.sessionDateFormatter.date(from: startDate.split("+")![0]) {
-                        session.startDate = startDate.addingTimeInterval(self.timeZoneOffset)
+                    if let startDate = SIRequest.sessionDateFormatter.date(from: startDate.split("+")![0]) {
+                        session.startDate = startDate.addingTimeInterval(SIRequest.timeZoneOffset)
                     }
                 }
             
                 if let endDate = record["End_Date_Time__c"].string {
-                    if let endDate = self.sessionDateFormatter.date(from: endDate.split("+")![0]) {
-                        session.endDate = endDate.addingTimeInterval(self.timeZoneOffset)
+                    if let endDate = SIRequest.sessionDateFormatter.date(from: endDate.split("+")![0]) {
+                        session.endDate = endDate.addingTimeInterval(SIRequest.timeZoneOffset)
                     }
                 }
                 
@@ -476,7 +473,7 @@ extension SIRequest {
                 }
                 
                 if let summary = record["Summary__c"].string {
-                    if let attributedSummary = parseHTMLStringUsingPreferredFont(string: summary) {
+                    if let attributedSummary = SIRequest.parseHTMLStringUsingPreferredFont(string: summary) {
                         session.attributedSummary = attributedSummary
                     }
                 }
@@ -502,7 +499,7 @@ extension SIRequest {
     /// Gets a single session using a session ID.
     @discardableResult func requestSession(_ id: String, callback: @escaping (SISession?) -> ()) -> Alamofire.Request? {
         
-        return getRequest(url: EVENTS_URL + "/sessions/\(id)", description: "REQUEST SESSION") { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/sessions/\(id)", description: "REQUEST SESSION") { json in
             
             guard let json = json else {
                 callback(nil)
@@ -528,14 +525,14 @@ extension SIRequest {
                 }
                 
                 if let startDate = record["Start_Date_Time__c"].string {
-                    if let startDate = self.sessionDateFormatter.date(from: startDate.split("+")![0]) {
-                        session.startDate = startDate.addingTimeInterval(self.timeZoneOffset)
+                    if let startDate = SIRequest.sessionDateFormatter.date(from: startDate.split("+")![0]) {
+                        session.startDate = startDate.addingTimeInterval(SIRequest.timeZoneOffset)
                     }
                 }
                 
                 if let endDate = record["End_Date_Time__c"].string {
-                    if let endDate = self.sessionDateFormatter.date(from: endDate.split("+")![0]) {
-                        session.endDate = endDate.addingTimeInterval(self.timeZoneOffset)
+                    if let endDate = SIRequest.sessionDateFormatter.date(from: endDate.split("+")![0]) {
+                        session.endDate = endDate.addingTimeInterval(SIRequest.timeZoneOffset)
                     }
                 }
                 
@@ -549,7 +546,7 @@ extension SIRequest {
                 
                 if let summary = record["Summary__c"].string {
                     if !summary.isEmpty {
-                        if let attributedSummary = self.parseHTMLStringUsingPreferredFont(string: summary) {
+                        if let attributedSummary = SIRequest.parseHTMLStringUsingPreferredFont(string: summary) {
                             session.attributedSummary = attributedSummary
                         }
                     }
@@ -569,7 +566,7 @@ extension SIRequest {
     ///Gets all speakers from Salesforce, or use event ID to get all speakers for an event.
     @discardableResult func requestSpeakers(eventId id: String, callback: @escaping ([SISpeaker]?) -> Void) -> Alamofire.Request? {
         
-        return getRequest(url: EVENTS_URL + "/speakers?event_id=\(id)", description: "REQUEST SPEAKERS, EVENT", callback: { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/speakers?event_id=\(id)", description: "REQUEST SPEAKERS, EVENT", callback: { json in
             
             guard let json = json else {
                 callback(nil)
@@ -586,7 +583,7 @@ extension SIRequest {
     ///Gets all speakers from Salesforce, or use session ID to get all speakers for a session.
     @discardableResult func requestSpeakers(sessionId id: String, callback: @escaping ([SISpeaker]?) -> Void) -> Alamofire.Request? {
         
-        return getRequest(url: EVENTS_URL + "/speakers?session_id=\(id)", description: "REQUEST SPEAKERS, SESSION") { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/speakers?session_id=\(id)", description: "REQUEST SPEAKERS, SESSION") { json in
             
             guard let json = json else {
                 callback(nil)
@@ -602,7 +599,7 @@ extension SIRequest {
     /// Gets all speakers from salesforce.
     @discardableResult func requestSpeakers(_ callback: @escaping ([SISpeaker]?) -> Void) -> Alamofire.Request? {
         
-        return getRequest(url: EVENTS_URL + "/speakers", description: "REQUEST SPEAKERS, ALL") { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/speakers", description: "REQUEST SPEAKERS, ALL") { json in
             
             guard let json = json else {
                 callback(nil)
@@ -641,7 +638,7 @@ extension SIRequest {
                 }
                 
                 if let biography = record["Speaker_Biography__c"].string {
-                    if let attributedSummary = parseHTMLStringUsingPreferredFont(string: biography) {
+                    if let attributedSummary = SIRequest.parseHTMLStringUsingPreferredFont(string: biography) {
                         speaker.attributedSummary = attributedSummary
                     }
                 }
@@ -686,7 +683,7 @@ extension SIRequest {
     /// Gets a single speaker using a speaker ID.
     @discardableResult func requestSpeaker(speakerId id: String, callback: @escaping (SISpeaker?) -> ()) -> Alamofire.Request? {
         
-        return getRequest(url: EVENTS_URL + "/speakers/\(id)", description: "REQUEST SPEAKER, SINGLE", callback: { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/speakers/\(id)", description: "REQUEST SPEAKER, SINGLE", callback: { json in
             
             guard let json = json else {
                 callback(nil)
@@ -716,7 +713,7 @@ extension SIRequest {
                 }
                 
                 if let biography = record["Speaker_Biography__c"].string {
-                    if let attributedSummary = self.parseHTMLStringUsingPreferredFont(string: biography) {
+                    if let attributedSummary = SIRequest.parseHTMLStringUsingPreferredFont(string: biography) {
                         speaker.attributedSummary = attributedSummary
                     }
                 }
@@ -744,7 +741,7 @@ extension SIRequest {
     /// Gets all exhibitors for an event.
     @discardableResult func requestExhibitors(eventId id: String, callback: @escaping ([SIExhibitor]?) -> ()) -> Alamofire.Request? {
         
-        return getRequest(url: EVENTS_URL + "/exhibitors?event_id=\(id)", description: "REQUEST EXHIBITORS, EVENT", callback: { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/exhibitors?event_id=\(id)", description: "REQUEST EXHIBITORS, EVENT", callback: { json in
         
             guard let json = json else {
                 callback(nil)
@@ -768,7 +765,7 @@ extension SIRequest {
                     }
                     
                     if let summary = record["Organization__r"]["App_Abstract__c"].string {
-                        if let attributedSummary = self.parseHTMLStringUsingPreferredFont(string: summary) {
+                        if let attributedSummary = SIRequest.parseHTMLStringUsingPreferredFont(string: summary) {
                             exhibitor.attributedSummary = attributedSummary
                         }
                     }
@@ -791,7 +788,7 @@ extension SIRequest {
     /// Requests additional information for an exhibitor using an exhibitor ID.
     @discardableResult func requestExhibitor(exhibitorId id: String, callback: @escaping (SIExhibitor?) -> ()) -> Alamofire.Request? {
         
-        return getRequest(url: EVENTS_URL + "/exhibitors/\(id)", description: "REQUEST EXHIBITOR, SINGLE", callback: { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/exhibitors/\(id)", description: "REQUEST EXHIBITOR, SINGLE", callback: { json in
             
             guard let json = json else {
                 callback(nil)
@@ -831,7 +828,7 @@ extension SIRequest {
                 }
                 
                 if let summary = organization["App_Abstract__c"].string {
-                    if let attributedSummary = self.parseHTMLStringUsingPreferredFont(string: summary) {
+                    if let attributedSummary = SIRequest.parseHTMLStringUsingPreferredFont(string: summary) {
                         exhibitor.attributedSummary = attributedSummary
                     }
                 }
@@ -855,7 +852,7 @@ extension SIRequest {
     /// Requests all hotels for a single event.
     @discardableResult func requestHotels(eventId id: String, callback: @escaping ([SIHotel]?) -> ()) -> Alamofire.Request? {
         
-        return getRequest(url: EVENTS_URL + "/hotels?event_id=\(id)", description: "REQUEST HOTEL, EVENT", callback: { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/hotels?event_id=\(id)", description: "REQUEST HOTEL, EVENT", callback: { json in
         
             guard let json = json else {
                 callback(nil)
@@ -903,7 +900,7 @@ extension SIRequest {
     /// Requets hotel and provides additional information than requestHotels().
     @discardableResult func requestHotel(hotelId id: String, callback: @escaping (SIHotel?) -> Void) -> Alamofire.Request? {
         
-        return getRequest(url: EVENTS_URL + "/hotels/\(id)", description: "REQUEST HOTEL, DETAIL", callback: { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/hotels/\(id)", description: "REQUEST HOTEL, DETAIL", callback: { json in
         
             guard let json = json else {
                 callback(nil)
@@ -948,7 +945,7 @@ extension SIRequest {
     /// Requests basic information for all recipients for an event.
     @discardableResult func requestRecipients(eventId id: String, callback: @escaping ([SIRecipient]?) -> Void) -> Alamofire.Request? {
         
-        return getRequest(url: EVENTS_URL + "/recipients?event_id=\(id)", description: "REQUEST RECIPIENTS, EVENT", callback: { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/recipients?event_id=\(id)", description: "REQUEST RECIPIENTS, EVENT", callback: { json in
         
             guard let json = json else {
                 callback(nil)
@@ -979,7 +976,7 @@ extension SIRequest {
                     }
                     
                     if let summary = record["Summary__c"].string {
-                        if let attributedSummary = self.parseHTMLStringUsingPreferredFont(string: summary) {
+                        if let attributedSummary = SIRequest.parseHTMLStringUsingPreferredFont(string: summary) {
                             recipient.attributedSummary = attributedSummary
                         }
                     }
@@ -997,7 +994,7 @@ extension SIRequest {
     /// Requests a single recipient with additional information.
     @discardableResult func requestRecipient(recipientId id: String, callback: @escaping (SIRecipient?) -> Void) -> Alamofire.Request? {
         
-        return getRequest(url: EVENTS_URL + "/recipients/\(id)", description: "REQUEST RECIPIENT, DETAIL", callback: { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/recipients/\(id)", description: "REQUEST RECIPIENT, DETAIL", callback: { json in
         
             guard let json = json else {
                 callback(nil)
@@ -1043,7 +1040,7 @@ extension SIRequest {
                 }
                 
                 if let summary = record["Summary__c"].string {
-                    if let attributedSummary = self.parseHTMLStringUsingPreferredFont(string: summary) {
+                    if let attributedSummary = SIRequest.parseHTMLStringUsingPreferredFont(string: summary) {
                         recipient.attributedSummary = attributedSummary
                     }
                 }
@@ -1075,7 +1072,7 @@ extension SIRequest {
     /// Requests rooms for a venue.
     @discardableResult func requestRooms(venueId id: String, callback: @escaping ([SIRoom]?) -> Void) -> Alamofire.Request? {
         
-        return getRequest(url: EVENTS_URL + "/rooms?venue_id=\(id)", description: "REQUEST ROOMS, VENUE", callback: { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/rooms?venue_id=\(id)", description: "REQUEST ROOMS, VENUE", callback: { json in
         
             guard let json = json else {
                 callback(nil)
@@ -1113,7 +1110,7 @@ extension SIRequest {
     /// Requests a room and provides additional information than requestRooms().
     @discardableResult func requestRoom(roomId id: String, callback: @escaping (SIRoom?) -> Void) -> Alamofire.Request? {
         
-        return getRequest(url: EVENTS_URL + "/rooms/\(id)", description: "REQUEST ROOM, DETAIL", callback: { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/rooms/\(id)", description: "REQUEST ROOM, DETAIL", callback: { json in
         
             guard let json = json else {
                 callback(nil)
@@ -1153,7 +1150,7 @@ extension SIRequest {
     /// Requests all sponsors for an event.
     @discardableResult func requestSponsors(eventId id: String, callback: @escaping ([SISponsor]?) -> Void) -> Alamofire.Request? {
         
-        return getRequest(url: EVENTS_URL + "/sponsors?event_id=\(id)", description: "REQUEST SPONSORS, EVENT", callback: { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/sponsors?event_id=\(id)", description: "REQUEST SPONSORS, EVENT", callback: { json in
         
             guard let json = json else {
                 callback(nil)
@@ -1205,7 +1202,7 @@ extension SIRequest {
     /// Requests detailed information for a sponsor.
     @discardableResult func requestSponsor(sponsorId id: String, callback: @escaping (SISponsor?) -> Void) -> Alamofire.Request? {
        
-        return getRequest(url: EVENTS_URL + "/sponsors/\(id)", description: "REQUEST SPONSOR, DETAIL", callback: { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/sponsors/\(id)", description: "REQUEST SPONSOR, DETAIL", callback: { json in
         
             guard let json = json else {
                 callback(nil)
@@ -1231,7 +1228,7 @@ extension SIRequest {
                 }
                 
                 if let summary = record["App_Abstract__c"].string {
-                    if let attributedSummary = self.parseHTMLStringUsingPreferredFont(string: summary) {
+                    if let attributedSummary = SIRequest.parseHTMLStringUsingPreferredFont(string: summary) {
                         sponsor.attributedSummary = attributedSummary
                     }
                 }
@@ -1269,7 +1266,7 @@ extension SIRequest {
     /// Requests all venues for an event. Typically there will only be one venue per event, but there is the possibility of being more than one.
     @discardableResult func requestVenues(eventId id: String, callback: @escaping ([SIVenue]?) -> Void) -> Alamofire.Request? {
        
-        return getRequest(url: EVENTS_URL + "/venues?event_id=\(id)", description: "REQUEST VENUES, EVENT", callback: { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/venues?event_id=\(id)", description: "REQUEST VENUES, EVENT", callback: { json in
         
             guard let json = json else {
                 callback(nil)
@@ -1309,7 +1306,7 @@ extension SIRequest {
     /// Requests detailed information for a single venue.
     @discardableResult func requestVenue(venueId id: String, callback: @escaping (SIVenue?) -> Void) -> Alamofire.Request? {
         
-        return getRequest(url: EVENTS_URL + "/venues/\(id)", description: "REQUEST VENUE, DETAIL", callback: { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/venues/\(id)", description: "REQUEST VENUE, DETAIL", callback: { json in
         
             guard let json = json else {
                 callback(nil)
@@ -1386,9 +1383,9 @@ extension SIRequest {
     }
     
     /// Requests all affiliates from salesforce.
-    @discardableResult func requestAffiliates(callback: @escaping ([SIAffiliate]?) -> ()) -> Alamofire.Request? {
+    @discardableResult static func requestAffiliates(callback: @escaping ([SIAffiliate]?) -> ()) -> Alamofire.Request? {
         
-        return getRequest(url: BASE_URL + "/salesforce/affiliates", description: "REQUEST AFFILIATES, ALL") { (json) in
+        return SIRequest().getRequest(url: SIRequest.BASE_URL + "/salesforce/affiliates", description: "REQUEST AFFILIATES, ALL") { (json) in
             guard let json = json else {
                 callback(nil)
                 return
@@ -1418,7 +1415,7 @@ extension SIRequest {
                     }
                     
                     if let summary = record["App_Abstract__c"].string {
-                        if let attributedSummary = self.parseHTMLStringUsingPreferredFont(string: summary) {
+                        if let attributedSummary = SIRequest.parseHTMLStringUsingPreferredFont(string: summary) {
                             affiliate.attributedSummary = attributedSummary
                         }
                     }
@@ -1625,7 +1622,7 @@ extension SIRequest {
         return "\(marks)+"
     }
     
-    func parseHTMLStringUsingPreferredFont(string: String) -> NSAttributedString? {
+    static func parseHTMLStringUsingPreferredFont(string: String) -> NSAttributedString? {
         
         do {
             

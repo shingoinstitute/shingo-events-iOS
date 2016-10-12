@@ -58,6 +58,10 @@ class AboutPageViewController: UIViewController {
         
         view.backgroundColor = UIColor.white
         
+        let gradientLayer = RadialGradientLayer()
+        gradientLayer.frame = view.bounds
+        view.layer.insertSublayer(gradientLayer, at: 0)
+        
         let attributesCentered = [
             NSFontAttributeName : UIFont.preferredFont(forTextStyle: .body),
             NSParagraphStyleAttributeName : SIParagraphStyle.center,
@@ -87,7 +91,7 @@ class AboutPageViewController: UIViewController {
         aboutText.append(NSAttributedString(string: "Our Mission:\n\n", attributes: boldAttributesCentered))
         aboutText.append(NSAttributedString(string: "We conduct cutting edge research, provide relevant education, perform insightful enterprise assessment, and recognize organizations committed to achieving sustainable world-class results.\n\n", attributes: attributesCentered))
         
-        aboutText.append(NSAttributedString(string: "Our Namesake\n\n", attributes: boldAttributesJustified))
+        aboutText.append(NSAttributedString(string: "Our Namesake:\n", attributes: boldAttributesJustified))
         aboutText.append(NSAttributedString(string: "Few individuals have contributed as much to the development of the ideas we call TQM, JIT and lean as did Shigeo Shingo. Over the course of his life, Dr. Shingo wrote and published 18 books, eight of which were translated from Japanese into English. Many years before they became popular in the Western world, Dr. Shingo wrote about the ideas of ensuring quality at the source, flowing value to customers, working with zero inventories, rapidly setting up machines through the system of “single-minute exchange of dies” (SMED) and going to the actual workplace to grasp the true situation there (“going to gemba”). He worked extensively with Toyota executives, especially Mr. Taiichi Ohno, who helped him to apply his understanding of these concepts in the real world.\n\n", attributes: attributesJustified))
         aboutText.append(NSAttributedString(string: "Always on the leading edge of new ideas, Dr. Shingo envisioned a collaboration with an organization that would further his life’s work through research, practical-yet-rigorous education and a program for recognizing the best in enterprise excellence throughout the world. In 1988, Shingo received his honorary Doctorate of Management from Utah State University and, later that year, his ambitions were realized when the Shingo Prize was organized and incorporated as part of the university. While the Shingo Prize remains an integral part of what we do, our scope has expanded to include various educational offerings, a focus on research and a growing international network of Shingo Institute Licensed Affiliates.", attributes: attributesJustified))
         

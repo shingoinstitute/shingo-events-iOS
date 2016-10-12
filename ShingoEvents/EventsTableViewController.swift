@@ -14,6 +14,8 @@ class EventsTableViewController: UITableViewController {
     
     // MARK: - Properties
     var events: [SIEvent]!
+
+    var gradientBackgroundView = UIView()
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -23,7 +25,12 @@ class EventsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .shingoBlue
+        tableView.backgroundView = gradientBackgroundView
+        gradientBackgroundView.backgroundColor = .lightShingoBlue
+        
+        let gradientLayer = RadialGradientLayer()
+        gradientLayer.frame = gradientBackgroundView.bounds
+        gradientBackgroundView.layer.insertSublayer(gradientLayer, at: 0)
         
         tableView.estimatedRowHeight = 200;
         tableView.rowHeight = UITableViewAutomaticDimension;
@@ -73,7 +80,8 @@ extension EventsTableViewController: SICellDelegate {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let cell = tableView.cellForRow(at: indexPath) as! EventTableViewCell
-        cell.backgroundColor = .lightShingoBlue
+        
+        cell.cardView.backgroundColor = .lightGray
         
         let activityView = ActivityViewController()
         activityView.message = "Loading Event Data..."
@@ -81,6 +89,7 @@ extension EventsTableViewController: SICellDelegate {
         let event = events[(indexPath as NSIndexPath).row]
         if event.didLoadEventData {
             self.performSegue(withIdentifier: "EventMenu", sender: event)
+            
         } else {
             present(activityView, animated: false, completion: { 
                 event.requestEvent() {
@@ -116,7 +125,42 @@ extension EventsTableViewController: SICellDelegate {
     
 }
 
+class RadialGradientLayer: CALayer {
+    
+    override init(){
+        
+        super.init()
+        
+        needsDisplayOnBoundsChange = true
+    }
 
+    
+    required init(coder aDecoder: NSCoder) {
+        
+        super.init()
+        
+    }
+    
+    override func draw(in ctx: CGContext) {
+        
+        ctx.saveGState()
+        
+        let locations:[CGFloat] = [0.0, 1.0]
+        let gradColors: [CGFloat] = [0, 0, 0, 0, 0, 0 , 0, 0.5]
+        
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        
+        let gradient = CGGradient(colorSpace: colorSpace, colorComponents: gradColors, locations: locations, count: 2)!
+        
+        let gradCenter = CGPoint(x: self.bounds.size.width / 2, y: self.bounds.size.height / 2)
+        let gradRadius = min(self.bounds.size.width, self.bounds.size.height)
+        
+        ctx.drawRadialGradient(gradient, startCenter: gradCenter, startRadius: 0, endCenter: gradCenter, endRadius: gradRadius, options: CGGradientDrawingOptions.drawsAfterEndLocation)
+
+        
+    }
+    
+}
 
 
 

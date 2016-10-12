@@ -8,46 +8,28 @@
 
 import UIKit
 
-class AttendessTableViewController: UITableViewController {
-
-    enum AttendeeSortOrder: String {
-        case ascending = "A - Z"
-        case descending = "Z - A"
-    }
+class AttendessTableViewController: UITableViewController, UISearchBarDelegate, UISearchResultsUpdating {
     
     var attendees: [SIAttendee]!
     
-    @IBOutlet weak var sortBarButton: UIBarButtonItem!
+    @IBOutlet weak var searchBar: UISearchBar!
     
-    var sortOrder: AttendeeSortOrder = .descending
+    var filteredResults: [SIAttendee] = []
     
-    @IBAction func sortAttendees(_ sender: AnyObject) {
-        
-        switch sortOrder {
-        case .descending:
-            sortOrder = .ascending
-            sortBarButton.title = "Sort " + sortOrder.rawValue
-            let sorted = attendees.sorted(by: { $0.getLastName() > $1.getLastName() })
-            attendees = sorted
-        case .ascending:
-            sortOrder = .descending
-            sortBarButton.title = "Sort " + sortOrder.rawValue
-            let sorted = attendees.sorted(by: { $0.getLastName() < $1.getLastName() })
-            attendees = sorted
-        }
-        
-        tableView.reloadData()
-    }
+    var shouldShowSearchResults = false
+    
+    var searchController = UISearchController(searchResultsController: nil)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.title = ""
-        
         tableView.estimatedRowHeight = 107
         tableView.rowHeight = UITableViewAutomaticDimension
         
-        sortBarButton.title = "Sort " + sortOrder.rawValue
+        searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = false
+        definesPresentationContext = true
+        tableView.tableHeaderView = searchController.searchBar
         
     }
 
@@ -58,16 +40,40 @@ class AttendessTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return attendees.count
+        if shouldShowSearchResults {
+            return filteredResults.count
+        } else {
+            return attendees.count
+        }
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Attendee Cell", for: indexPath) as! AttendeeTableViewCell
         
-        cell.attendee = attendees[indexPath.row]
+        cell.selectionStyle = .none
+        
+        if shouldShowSearchResults {
+            cell.attendee = filteredResults[indexPath.row]
+        } else {
+            cell.attendee = attendees[indexPath.row]
+        }
+        
 
         return cell
     }
 
+    func updateSearchResults(for searchController: UISearchController) {
+        filterContentFor(searchController.searchBar.text!)
+    }
+    
+    func filterContentFor(_ search: String) {
+        filteredResults = attendees.filter({ (attendee) -> Bool in
+            return attendee.name.lowercased().contains(search.lowercased())
+        })
+        shouldShowSearchResults = !search.isEmpty
+        filteredResults.sort(by: { $0.name < $1.name })
+        tableView.reloadData()
+    }
+    
 }

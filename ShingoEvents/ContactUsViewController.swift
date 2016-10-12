@@ -32,7 +32,11 @@ class ContactUsViewController: UIViewController, UITextFieldDelegate, UITextView
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .shingoRed
+        view.backgroundColor = .lightShingoRed
+        
+        let gradientLayer = RadialGradientLayer()
+        gradientLayer.frame = view.bounds
+        view.layer.insertSublayer(gradientLayer, at: 0)
         
         let starButtons: [SIButton] = [star1, star2, star3, star4, star5]
         

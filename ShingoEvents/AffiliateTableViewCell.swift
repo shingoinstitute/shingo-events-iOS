@@ -13,7 +13,7 @@ class AffiliateTableViewCell: SITableViewCell {
     @IBOutlet weak var nameLabel: UILabel! { didSet { entityNameLabel = nameLabel } }
     @IBOutlet weak var logoImageView: UIImageView! { didSet { entityImageView = logoImageView } }
     @IBOutlet weak var summaryTextView: UITextView! { didSet { entityTextView = summaryTextView } }
-
+    
     override func updateCell() {
         super.updateCell()
         if let affiliate = entity as? SIAffiliate {
@@ -28,10 +28,12 @@ class AffiliateTableViewCell: SITableViewCell {
 
                     self.logoImageView.resizeImageViewToIntrinsicContentSize(thatFitsWidth: maxWidth)
                     affiliate.image = self.logoImageView.image
+                    self.logoImageView.image = affiliate.image
                     
                 } else {
                     self.logoImageView.image = affiliate.image
                 }
+                
             }
         }
     }

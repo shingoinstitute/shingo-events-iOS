@@ -53,6 +53,8 @@ class EventTableViewCell: UITableViewCell {
         backgroundColor = .clear
         selectionStyle = .none
         
+        cardView.backgroundColor = .white
+        
         eventNameLabel.text = event.name
         
         let dateFormatter = DateFormatter()

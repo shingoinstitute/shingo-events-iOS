@@ -37,7 +37,7 @@ public let ReachabilityChangedNotification = NSNotification.Name("ReachabilityCh
 
 func callback(reachability:SCNetworkReachability, flags: SCNetworkReachabilityFlags, info: UnsafeMutableRawPointer?) {
     
-    guard let info = info else { return }
+    guard let info = info else { return } 
     
     let reachability = Unmanaged<Reachability>.fromOpaque(info).takeUnretainedValue()
     

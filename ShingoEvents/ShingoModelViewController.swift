@@ -57,6 +57,10 @@ class ShingoModelViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let gradientLayer = RadialGradientLayer()
+        gradientLayer.frame = view.bounds
+        view.layer.insertSublayer(gradientLayer, at: 0)
+        
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         contentView.addSubview(shingoModel)

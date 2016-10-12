@@ -38,7 +38,7 @@ class EventMenuViewController: UIViewController {
 
     let attendeesButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "Attendees_Button"), for: .normal)
+        button.setImage(UIImage(named: "Attendees-Button"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -62,7 +62,7 @@ class EventMenuViewController: UIViewController {
     }()
     let sponsorsButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "Sponsors_Button"), for: .normal)
+        button.setImage(UIImage(named: "Sponsors-Button"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -495,7 +495,7 @@ extension EventMenuViewController {
                     }
                 }
                 
-                for letter in Alphabet.alphabet {
+                for letter in Alphabet.english {
                     if let section = sections[letter] {
                         exhibitorSections.append((letter, section))
                     }
@@ -513,41 +513,6 @@ extension EventMenuViewController {
                 destination.attendees = attendees.sorted(by: { $0.getLastName() < $1.getLastName() })
             }
         }
-        
-//        if segue.identifier == "AffiliatesListView" {
-//            let destination = segue.destination as! AffiliateListTableViewController
-//            if let affiliates = sender as? [SIAffiliate] {
-//                
-//                // Populate section headers so affiliates can be presented alphabetically in seperate tableView sections
-//                var sections = [String : [SIAffiliate]]()
-//                
-//                var affiliateSections = [(String, [SIAffiliate])]()
-//                
-//                for affiliate in affiliates {
-//                    
-//                    // Get first letter of affiliate name
-//                    let character = getCharacterForSection(affiliate.name)
-//
-//                    // Add to dictionary
-//                    if var section = sections[character] {
-//                        section.append(affiliate)
-//                        sections[character] = section
-//                    } else {
-//                        sections[character] = [affiliate]
-//                    }
-//                }
-//                
-//                for character in Alphabet.alphabet {
-//                    if let section = sections[character] {
-//                        affiliateSections.append((character, section))
-//                    }
-//                }
-//                
-//                destination.affiliateSections = affiliateSections
-//            }
-//        }
-        
-        
         
         if segue.identifier == "VenueView" {
             let destination = segue.destination as! VenueMapsCollectionView
@@ -624,40 +589,6 @@ extension EventMenuViewController {
         
         return "#"
     }
-    
-//    func sortAgendaDays() {
-//        
-//        for i in 0 ..< event.agendaItems.count - 1 {
-//            
-//            for n in 0 ..< event.agendaItems.count - i - 1 {
-//                
-//                if event.agendaItems[n].date.isGreaterThanDate(event.agendaItems[n+1].date) {
-//                    let day = event.agendaItems[n]
-//                    event.agendaItems[n] = event.agendaItems[n+1]
-//                    event.agendaItems[n+1] = day
-//                }
-//            }
-//        }
-//    }
-//    
-//    func sortSpeakersInPlaceByLastName(_ speakers: inout [SISpeaker]) {
-//        
-//        if speakers.isEmpty { return }
-//        
-//        for i in 0 ..< speakers.count - 1 {
-//            
-//            for n in 0 ..< speakers.count - i - 1 {
-//                
-//                if speakers[n].name.last! > speakers[n+1].name.last! {
-//                    let speaker = speakers[n]
-//                    speakers[n] = speakers[n+1]
-//                    speakers[n+1] = speaker
-//                }
-//                
-//            }
-//            
-//        }
-//    }
 
 }
 

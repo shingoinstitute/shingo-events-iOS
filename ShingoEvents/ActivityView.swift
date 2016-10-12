@@ -47,6 +47,13 @@ class ActivityViewController: UIViewController {
     }
     
     private func setup() {
+        
+        view.backgroundColor = UIColor.clear
+        
+        let gradientLayer = RadialGradientLayer()
+        gradientLayer.frame = view.bounds
+        view.layer.insertSublayer(gradientLayer, at: 0)
+        
         modalTransitionStyle = UIModalTransitionStyle.crossDissolve
         modalPresentationStyle = .overCurrentContext
         view.backgroundColor = UIColor.clear

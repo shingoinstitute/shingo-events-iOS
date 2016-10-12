@@ -84,7 +84,7 @@ class SIAttendee: SIObject {
     func getImage(callback: @escaping (UIImage) -> Void) {
         requestImage(URLString: pictureURL) { (image) in
             guard let image = image else {
-                if let image = UIImage(named: "silhouette") {
+                if let image = UIImage(named: "Name Filled-100") {
                     return callback(image)
                 } else {
                     return callback(UIImage())
@@ -339,7 +339,7 @@ class SIEvent: SIObject {
     }
     
     func requestAffiliates(_ callback: @escaping () -> ()) {
-        SIRequest().requestAffiliates { (affiliates) in
+        SIRequest.requestAffiliates { (affiliates) in
             guard let affiliates = affiliates else {
                 callback()
                 return
@@ -691,7 +691,7 @@ class SISpeaker: SIObject {
             requestSpeakerImage() {
                 if let image = self.image {
                     if let cb = callback { cb(image) }
-                } else if let image = UIImage(named: "silhouette") {
+                } else if let image = UIImage(named: "Name Filled-100") {
                     if let cb = callback { cb(image) }
                 } else {
                     if let cb = callback { cb(UIImage()) }

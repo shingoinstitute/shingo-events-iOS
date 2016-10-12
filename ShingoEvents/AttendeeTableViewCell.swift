@@ -23,6 +23,9 @@ class AttendeeTableViewCell: UITableViewCell {
     var attendee: SIAttendee! { didSet { updateCell() } }
     
     func updateCell() {
+        
+        
+        
         if let attendee = attendee {
             nameLabel.text = attendee.name
             

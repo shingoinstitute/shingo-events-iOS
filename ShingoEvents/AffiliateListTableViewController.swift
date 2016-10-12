@@ -10,7 +10,7 @@ import UIKit
 
 class AffiliateListTableViewController: UITableViewController {
 
-    var affiliateSections:[(String, [SIAffiliate])]!
+    var affiliateSections: [(String, [SIAffiliate])]!
     
     lazy var sectionHeaders: [String] = {
         var headers = [String]()
@@ -31,17 +31,24 @@ class AffiliateListTableViewController: UITableViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
-        DispatchQueue.global().async {
-            for section in self.affiliateSections {
-                for affiliate in section.1 {
-                    affiliate.isSelected = false
-                }
+        for section in self.affiliateSections {
+            for affiliate in section.1 {
+                affiliate.isSelected = false
             }
         }
     }
     
+    var gradientBackgroundView = UIView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tableView.backgroundView = gradientBackgroundView
+        gradientBackgroundView.backgroundColor = .lightShingoBlue
+        
+        let gradientLayer = RadialGradientLayer()
+        gradientLayer.frame = gradientBackgroundView.bounds
+        gradientBackgroundView.layer.insertSublayer(gradientLayer, at: 0)
         
         tableView.estimatedRowHeight = 186
         tableView.rowHeight = UITableViewAutomaticDimension
