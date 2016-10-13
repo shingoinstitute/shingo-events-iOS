@@ -85,6 +85,8 @@ extension UIColor {
     
     ///Red: 63, Green: 81, Blue: 36.
     static var shingoGreen: UIColor { get {return UIColor(netHex: 0x3F5124) } }
+    
+    static var raven: UIColor { get { return UIColor(netHex: 0x373D3F) } }
 }
 
 extension UIColor {
@@ -279,17 +281,6 @@ extension String {
         }
         return nil
     }
-    
-}
-
-class SIMenuButton: UIButton {
-    
-    override var intrinsicContentSize: CGSize {
-        get {
-            return CGSize(width: 45, height: 45)
-        }
-    }
-    
     
 }
 
@@ -596,6 +587,7 @@ extension NSMutableAttributedString {
     func usePreferredFontWhileMaintainingAttributes(forTextStyle: UIFontTextStyle) {
         self.enumerateAttribute(NSFontAttributeName, in: fullRange, options: NSAttributedString.EnumerationOptions.longestEffectiveRangeNotRequired) {
             (_, range: NSRange, stop: UnsafeMutablePointer<ObjCBool>) in
+            
             let stringInRange = self.attributedSubstring(from: range)
             let pointSize = UIFont.preferredFont(forTextStyle: forTextStyle).pointSize
             var updatedFont: UIFont!
@@ -606,6 +598,7 @@ extension NSMutableAttributedString {
             } else {
                 updatedFont = UIFont.systemFont(ofSize: pointSize)
             }
+            
             self.addAttribute(NSFontAttributeName, value: updatedFont, range: range)
         }
     }

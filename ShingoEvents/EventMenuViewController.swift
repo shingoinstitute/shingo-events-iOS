@@ -24,14 +24,14 @@ class EventMenuViewController: UIViewController {
     
     let speakerButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "Speaker_Button"), for: .normal)
+        button.setImage(UIImage(named: "Speakers-Button"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
 
     let scheduleButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "Schedule_Button"), for: .normal)
+        button.setImage(UIImage(named: "Schedules-Button"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -44,19 +44,19 @@ class EventMenuViewController: UIViewController {
     }()
     let exhibitorsButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "Exhibitors_Button"), for: .normal)
+        button.setImage(UIImage(named: "Exhibitors-Button"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     let recipientsButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "Recipients_Button"), for: .normal)
+        button.setImage(UIImage(named: "Recipients-Button"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     let directionsButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "Directions_Button"), for: .normal)
+        button.setImage(UIImage(named: "Directions-Button"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -68,7 +68,7 @@ class EventMenuViewController: UIViewController {
     }()
     let venuePhotosButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(named: "Venue_Pictures_Button"), for: .normal)
+        button.setImage(UIImage(named: "Venue-Pictures-Button"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -99,8 +99,8 @@ class EventMenuViewController: UIViewController {
         self.sponsorsButton
     ]
     
-    let BUTTON_WIDTH: CGFloat = 110.0
-    let BUTTON_HEIGHT: CGFloat = 110.0
+    let BUTTON_WIDTH: CGFloat = 100.0
+    let BUTTON_HEIGHT: CGFloat = 100.0
     
     var didSetupConstraints = false
     
@@ -193,8 +193,19 @@ class EventMenuViewController: UIViewController {
         attendeesButton.addTarget(self, action: #selector(EventMenuViewController.didTapAttendess(_:)), for: UIControlEvents.touchUpInside)
         sponsorsButton.addTarget(self, action: #selector(EventMenuViewController.didTapSponsors(_:)), for: UIControlEvents.touchUpInside)
         
-        updateViewConstraints()
+        for button in buttonViews {
+            button.contentMode = .scaleAspectFit
+            button.layer.cornerRadius = 5
+            
+            let rect: CGRect = CGRect(x: 0, y: 0, width: BUTTON_WIDTH + 3, height: BUTTON_HEIGHT + 3);
+            button.layer.shadowPath = CGPath(roundedRect: rect, cornerWidth: 10, cornerHeight: 10, transform: nil);
+            button.layer.shadowColor = UIColor.black.cgColor;
+            button.layer.shadowOffset = CGSize(width: 0, height: 0);
+            button.layer.shadowRadius = 5;
+            button.layer.shadowOpacity = 0.25;
+        }
         
+        updateViewConstraints()
     }
     
     override func updateViewConstraints() {
@@ -204,6 +215,7 @@ class EventMenuViewController: UIViewController {
             for button in buttonViews {
                 button.autoSetDimension(.height, toSize: BUTTON_WIDTH)
                 button.autoSetDimension(.width, toSize: BUTTON_HEIGHT)
+                
             }
             
             // calculate button spacing from edge

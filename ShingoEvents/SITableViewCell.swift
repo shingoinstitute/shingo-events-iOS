@@ -16,7 +16,7 @@ class SITableViewCell: UITableViewCell {
     var entityTextView: UITextView! {
         didSet {
             entityTextView.layer.shadowColor = UIColor.lightGray.cgColor
-            entityTextView.layer.shadowOffset = CGSize(width: 0, height: 2.0)
+            entityTextView.layer.shadowOffset = CGSize(width: 0, height: 0)
             entityTextView.layer.shadowOpacity = 1
             entityTextView.layer.shadowRadius = 3
             entityTextView.layer.masksToBounds = false
@@ -53,12 +53,6 @@ class SITableViewCell: UITableViewCell {
         }
     }
     
-    let summaryAttrs = [
-        NSFontAttributeName : UIFont.preferredFont(forTextStyle: .body),
-        NSParagraphStyleAttributeName : SIParagraphStyle.left,
-        NSForegroundColorAttributeName : UIColor.black
-    ]
-    
     let tapToSeeLessText = NSAttributedString(string: "\n\nTap To See Less...", attributes: [
         NSFontAttributeName : UIFont.preferredFont(forTextStyle: .footnote),
         NSForegroundColorAttributeName : UIColor.gray,
@@ -80,8 +74,6 @@ class SITableViewCell: UITableViewCell {
     func expandCell() {
         if !entityTextView.isHidden {
             let summary = NSMutableAttributedString(attributedString: entity.attributedSummary)
-            
-            summary.addAttributes(summaryAttrs, range: summary.fullRange)
             
             summary.append(tapToSeeLessText)
             

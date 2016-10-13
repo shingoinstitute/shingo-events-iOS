@@ -103,12 +103,8 @@ class ScheduleTableViewCell: SITableViewCell {
                 }
             }
             
-            let summary = NSMutableAttributedString(attributedString: session.attributedSummary)
+            sessionSummary.append(session.attributedSummary)
             
-            summary.addAttributes(summaryAttrs, range: summary.fullRange)
-            
-            sessionSummary.append(summary)
-
             sessionSummary.append(tapToSeeLessText)
             
             infoTextView.attributedText = sessionSummary

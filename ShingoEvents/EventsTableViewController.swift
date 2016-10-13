@@ -70,28 +70,26 @@ extension EventsTableViewController: SICellDelegate {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "Event Cell", for: indexPath) as! EventTableViewCell;
 
-        cell.event = events[indexPath.row];
+        cell.backgroundColor = .clear
+        cell.cardView.backgroundColor = .white
         
-        cell.delegate = self;
+        cell.event = events[indexPath.row]
         
-        return cell;
+        cell.delegate = self
+        
+        return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let cell = tableView.cellForRow(at: indexPath) as! EventTableViewCell
-        
-        cell.cardView.backgroundColor = .lightGray
-        
-        let activityView = ActivityViewController()
-        activityView.message = "Loading Event Data..."
-
         let event = events[(indexPath as NSIndexPath).row]
+        
         if event.didLoadEventData {
             self.performSegue(withIdentifier: "EventMenu", sender: event)
             
         } else {
-            present(activityView, animated: false, completion: { 
+            let activityView = ActivityViewController(message: "Downloading Event Data...")
+            present(activityView, animated: false, completion: {
                 event.requestEvent() {
                     self.dismiss(animated: true, completion: {
                         if event.didLoadEventData {
@@ -99,7 +97,6 @@ extension EventsTableViewController: SICellDelegate {
                         } else {
                             self.displayBadRequestNotification()
                         }
-                        
                     })
                 }
             })

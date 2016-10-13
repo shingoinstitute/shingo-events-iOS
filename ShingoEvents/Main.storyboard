@@ -195,7 +195,7 @@
                                     <constraint firstAttribute="height" constant="50" id="bdY-RK-DId"/>
                                 </constraints>
                                 <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
-                                <state key="normal" title="The Shingo Model" image="Triangle Filled-100">
+                                <state key="normal" title="The Shingo Model" image="FlameOnly-100">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
@@ -221,7 +221,7 @@
                                     <constraint firstAttribute="height" constant="50" id="EBT-C3-KI1"/>
                                 </constraints>
                                 <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
-                                <state key="normal" title="Conferences &amp; Events" image="FlameOnly-100">
+                                <state key="normal" title="Conferences &amp; Events" image="Podium With Speaker-100">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
@@ -284,14 +284,14 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Event Cell" rowHeight="200" id="Tkb-jb-7pD" customClass="EventTableViewCell" customModule="Shingo_Events" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" reuseIdentifier="Event Cell" rowHeight="200" id="Tkb-jb-7pD" customClass="EventTableViewCell" customModule="Shingo_Events" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="92" width="320" height="200"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Tkb-jb-7pD" id="f1Y-Md-81P">
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Tkb-jb-7pD" id="f1Y-Md-81P">
                                     <frame key="frameInset" width="320" height="200"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="v4J-X6-0mF">
+                                        <view clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="v4J-X6-0mF">
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Event Name" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WyE-NE-mVN">
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -314,7 +314,7 @@
                                                     </constraints>
                                                 </imageView>
                                             </subviews>
-                                            <color key="backgroundColor" red="0.85532819964914908" green="0.86379679568527923" blue="0.86379679568527923" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                             <constraints>
                                                 <constraint firstItem="Tdr-Am-o5V" firstAttribute="top" secondItem="WyE-NE-mVN" secondAttribute="bottom" constant="8" id="30L-g2-I6C"/>
                                                 <constraint firstItem="WyE-NE-mVN" firstAttribute="top" secondItem="v4J-X6-0mF" secondAttribute="top" constant="8" id="7v3-gv-rS9"/>
@@ -632,7 +632,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fYu-MO-yXx">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fYu-MO-yXx">
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="90" placeholder="YES" id="20I-iJ-ma4"/>
@@ -644,8 +644,8 @@
                         </subviews>
                         <constraints>
                             <constraint firstItem="fYu-MO-yXx" firstAttribute="top" secondItem="CPb-h7-OWq" secondAttribute="bottom" constant="8" id="ItK-SJ-N1L"/>
-                            <constraint firstAttribute="leadingMargin" secondItem="fYu-MO-yXx" secondAttribute="leading" id="iFD-CO-Dlj"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="fYu-MO-yXx" secondAttribute="trailing" id="jnZ-GU-z37"/>
+                            <constraint firstItem="fYu-MO-yXx" firstAttribute="leading" secondItem="8K2-P8-luj" secondAttribute="leading" id="RzH-BM-bQO"/>
+                            <constraint firstAttribute="trailing" secondItem="fYu-MO-yXx" secondAttribute="trailing" id="l5c-2g-RTs"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="About" id="VNg-PD-lG5"/>
@@ -655,7 +655,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZFP-cK-jkS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-858" y="967"/>
+            <point key="canvasLocation" x="-858.75" y="966.25"/>
         </scene>
         <!--Bug Report-->
         <scene sceneID="Bjd-XH-Yht">
@@ -1506,16 +1506,16 @@
         <image name="FlameOnly-100" width="100" height="100"/>
         <image name="Handshake-100" width="100" height="100"/>
         <image name="Name Filled-100" width="100" height="100"/>
+        <image name="Podium With Speaker-100" width="100" height="100"/>
         <image name="Settings-100" width="100" height="100"/>
         <image name="Shingo Icon Fullscreen" width="320" height="480"/>
         <image name="Shingo Title" width="375" height="134"/>
-        <image name="Triangle Filled-100" width="100" height="100"/>
         <image name="down-arrow" width="33" height="33"/>
         <image name="right-arrow" width="54" height="96"/>
         <image name="speakers icon" width="33" height="33"/>
         <image name="white_star" width="50" height="50"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Bbs-g6-pYd"/>
+        <segue reference="Vtm-iE-WQY"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "MainMenuViewController.prepare(for : UIStoryboardSegue, sender : Any?) -&gt; ():TopViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "AttendessTableViewController.filterContentFor(String) -&gt; ():AttendessTableViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "AffiliateListTableViewController.viewDidLoad() -&gt; ():AffiliateListTableViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "EventMenuViewController.viewDidLoad() -&gt; ():EventMenuViewController.swift">
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>

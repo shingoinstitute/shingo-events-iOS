@@ -16,14 +16,11 @@ class AboutPageViewController: UIViewController {
             aboutTextField.backgroundColor = .shingoBlue
             aboutTextField.isScrollEnabled = false
             
-            aboutTextField.layer.cornerRadius = 3
-            
             aboutTextField.layer.shadowColor = UIColor.black.cgColor
             aboutTextField.layer.shadowOffset = CGSize(width: 0, height: 2.0)
             aboutTextField.layer.shadowOpacity = 1
             aboutTextField.layer.shadowRadius = 3
             aboutTextField.layer.masksToBounds = false
-            aboutTextField.layer.cornerRadius = 3
         }
     }
     
@@ -58,10 +55,6 @@ class AboutPageViewController: UIViewController {
         
         view.backgroundColor = UIColor.white
         
-        let gradientLayer = RadialGradientLayer()
-        gradientLayer.frame = view.bounds
-        view.layer.insertSublayer(gradientLayer, at: 0)
-        
         let attributesCentered = [
             NSFontAttributeName : UIFont.preferredFont(forTextStyle: .body),
             NSParagraphStyleAttributeName : SIParagraphStyle.center,
@@ -86,6 +79,8 @@ class AboutPageViewController: UIViewController {
             NSForegroundColorAttributeName : UIColor.white
         ]
         
+        
+        
         let aboutText = NSMutableAttributedString(string: "Our Purpose:\n\n", attributes: boldAttributesCentered)
         aboutText.append(NSAttributedString(string: "Based on timeless principles, we shape cultures that drive operational excellence.\n\n", attributes: attributesCentered))
         aboutText.append(NSAttributedString(string: "Our Mission:\n\n", attributes: boldAttributesCentered))
@@ -99,6 +94,11 @@ class AboutPageViewController: UIViewController {
      
         updateViewConstraints()
         
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        addTextFieldGradient()
     }
     
     override func viewDidLayoutSubviews() {
@@ -116,9 +116,9 @@ class AboutPageViewController: UIViewController {
             
             scrollView.autoPinEdgesToSuperviewEdges()
             
-            aboutTextField.autoPinEdge(.top, to: .top, of: scrollView, withOffset: 8)
-            aboutTextField.autoPinEdge(.left, to: .left, of: view, withOffset: 8)
-            aboutTextField.autoPinEdge(.right, to: .right, of: view, withOffset: -8)
+            aboutTextField.autoPinEdge(.top, to: .top, of: scrollView, withOffset: 0)
+            aboutTextField.autoPinEdge(.left, to: .left, of: view, withOffset: 0)
+            aboutTextField.autoPinEdge(.right, to: .right, of: view, withOffset: 0)
             
             shigeoImageView.autoPinEdge(.top, to: .bottom, of: aboutTextField, withOffset: 16)
             shigeoImageView.autoPinEdge(.left, to: .left, of: view, withOffset: 8)
@@ -133,6 +133,13 @@ class AboutPageViewController: UIViewController {
         }
         
         super.updateViewConstraints()
+        
+    }
+    
+    func addTextFieldGradient() {
+        let gradientLayer = RadialGradientLayer()
+        gradientLayer.frame = aboutTextField.bounds
+        aboutTextField.layer.insertSublayer(gradientLayer, at: 0)
     }
     
 }

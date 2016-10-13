@@ -1629,6 +1629,7 @@ class SIRequest {
             let options: [String:Any] = [
                 NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
                 NSCharacterEncodingDocumentAttribute : String.Encoding.utf8.rawValue,
+                NSForegroundColorAttributeName : UIColor.blue,
             ]
             
             guard let data = string.data(using: String.Encoding.utf8) else {
@@ -1642,7 +1643,7 @@ class SIRequest {
             return htmlString
         } catch {
             #if !DEBUG
-            let error = NSError(domain: "NSAttributedStringDomain",
+            let error = NSError(domain: "NSAttributedStringErrorDomain",
                                 code: 72283,
                                 userInfo: [
                                 NSLocalizedDescriptionKey : "Could not parse text into attributed string.",

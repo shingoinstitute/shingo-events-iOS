@@ -50,11 +50,6 @@ class EventTableViewCell: UITableViewCell {
     
     func updateCell() {
         
-        backgroundColor = .clear
-        selectionStyle = .none
-        
-        cardView.backgroundColor = .white
-        
         eventNameLabel.text = event.name
         
         let dateFormatter = DateFormatter()
