@@ -69,9 +69,9 @@ extension EventsTableViewController: SICellDelegate {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "Event Cell", for: indexPath) as! EventTableViewCell;
-
-        cell.backgroundColor = .clear
+        
         cell.cardView.backgroundColor = .white
+        cell.backgroundColor = .clear
         
         cell.event = events[indexPath.row]
         
@@ -81,6 +81,9 @@ extension EventsTableViewController: SICellDelegate {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let cell = tableView.cellForRow(at: indexPath) as! EventTableViewCell
+        cell.cardView.backgroundColor = .white
         
         let event = events[(indexPath as NSIndexPath).row]
         

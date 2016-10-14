@@ -307,7 +307,7 @@ extension UIView {
 }
 
 extension UILabel {
-    public convenience init(text: String, font: UIFont!) {
+    public convenience init(text: String, font: UIFont! = UIFont.preferredFont(forTextStyle: .body)) {
         self.init()
         self.text = text
         self.font = font

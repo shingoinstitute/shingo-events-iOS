@@ -12,8 +12,6 @@ class AttendessTableViewController: UITableViewController, UISearchBarDelegate, 
     
     var attendees: [SIAttendee]!
     
-    @IBOutlet weak var searchBar: UISearchBar!
-    
     var filteredResults: [SIAttendee] = []
     
     var shouldShowSearchResults = false
@@ -29,10 +27,11 @@ class AttendessTableViewController: UITableViewController, UISearchBarDelegate, 
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
+        
         tableView.tableHeaderView = searchController.searchBar
         
     }
-
+    
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {

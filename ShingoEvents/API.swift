@@ -1629,7 +1629,6 @@ class SIRequest {
             let options: [String:Any] = [
                 NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
                 NSCharacterEncodingDocumentAttribute : String.Encoding.utf8.rawValue,
-                NSForegroundColorAttributeName : UIColor.blue,
             ]
             
             guard let data = string.data(using: String.Encoding.utf8) else {

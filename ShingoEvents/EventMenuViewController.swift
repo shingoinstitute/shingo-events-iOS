@@ -222,29 +222,69 @@ class EventMenuViewController: UIViewController {
             let edgeSpacing = (view.frame.width * (1/4)) - (BUTTON_WIDTH / 2) + 10
             let verticalButtonSpacing: CGFloat = -10
             
-            // Set up constraints from bottom left to top right
-            exhibitorsButton.autoPinEdge(.bottom, to: .bottom, of: contentView, withOffset: verticalButtonSpacing)
-            exhibitorsButton.autoPinEdge(.left, to: .left, of: contentView, withOffset: edgeSpacing)
             
-            sponsorsButton.autoPinEdge(.bottom, to: .bottom, of: contentView, withOffset: verticalButtonSpacing)
-            sponsorsButton.autoPinEdge(.right, to: .right, of: contentView, withOffset: -edgeSpacing)
+            /*
+             
+             Constraints were added programmatically to this view because auto layout
+             simply wasn't cutting it when trying to design this on the storyboard.
+             
+             Buttons appear on menu in 2 columns with 4 rows per column.
+             The number inside the diagram presented below indicating the order the
+             constraints are added.
+             
+                #----------# #----------#
+                |          | |          |
+                | Schedule | | Speakers |
+                |    7     | |    8     |
+                #----------# #----------#
+
+                #----------# #----------#
+                |          | |          |
+                |Attendees | |Recipients|
+                |    5     | |    6     |
+                #----------# #----------#
+
+                #----------# #----------#
+                |          | |          |
+                |Exhibitors| | Sponsors |
+                |    3     | |    4     |
+                #----------# #----------#
+             
+                #----------# #----------#
+                |          | |          |
+                |Venue Pics| |Directions|
+                |     1    | |    2     |
+                #----------# #----------#
+
+             Constrains are added from bottom up so that by the event banner image knows 
+             how much vertical space it can take up. The event banner image is added 
+             last because it is the least important element.
+             
+             */
             
-            recipientsButton.autoPinEdge(.bottom, to: .top, of: exhibitorsButton, withOffset: verticalButtonSpacing)
-            recipientsButton.autoPinEdge(.left, to: .left, of: contentView, withOffset: edgeSpacing)
-            
-            attendeesButton.autoPinEdge(.bottom, to: .top, of: sponsorsButton, withOffset: verticalButtonSpacing)
-            attendeesButton.autoPinEdge(.right, to: .right, of: contentView, withOffset: -edgeSpacing)
-            
-            venuePhotosButton.autoPinEdge(.bottom, to: .top, of: recipientsButton, withOffset: verticalButtonSpacing)
+            // Constraints added up from bottom left to top right
+            venuePhotosButton.autoPinEdge(.bottom, to: .bottom, of: contentView, withOffset: verticalButtonSpacing)
             venuePhotosButton.autoPinEdge(.left, to: .left, of: contentView, withOffset: edgeSpacing)
             
-            directionsButton.autoPinEdge(.bottom, to: .top, of: attendeesButton, withOffset: verticalButtonSpacing)
+            directionsButton.autoPinEdge(.bottom, to: .bottom, of: contentView, withOffset: verticalButtonSpacing)
             directionsButton.autoPinEdge(.right, to: .right, of: contentView, withOffset: -edgeSpacing)
             
-            scheduleButton.autoPinEdge(.bottom, to: .top, of: venuePhotosButton, withOffset: verticalButtonSpacing)
+            exhibitorsButton.autoPinEdge(.bottom, to: .top, of: venuePhotosButton, withOffset: verticalButtonSpacing)
+            exhibitorsButton.autoPinEdge(.left, to: .left, of: contentView, withOffset: edgeSpacing)
+            
+            sponsorsButton.autoPinEdge(.bottom, to: .top, of: directionsButton, withOffset: verticalButtonSpacing)
+            sponsorsButton.autoPinEdge(.right, to: .right, of: contentView, withOffset: -edgeSpacing)
+            
+            attendeesButton.autoPinEdge(.bottom, to: .top, of: exhibitorsButton, withOffset: verticalButtonSpacing)
+            attendeesButton.autoPinEdge(.left, to: .left, of: contentView, withOffset: edgeSpacing)
+            
+            recipientsButton.autoPinEdge(.bottom, to: .top, of: sponsorsButton, withOffset: verticalButtonSpacing)
+            recipientsButton.autoPinEdge(.right, to: .right, of: contentView, withOffset: -edgeSpacing)
+            
+            scheduleButton.autoPinEdge(.bottom, to: .top, of: attendeesButton, withOffset: verticalButtonSpacing)
             scheduleButton.autoPinEdge(.left, to: .left, of: contentView, withOffset: edgeSpacing)
             
-            speakerButton.autoPinEdge(.bottom, to: .top, of: directionsButton, withOffset: verticalButtonSpacing)
+            speakerButton.autoPinEdge(.bottom, to: .top, of: recipientsButton, withOffset: verticalButtonSpacing)
             speakerButton.autoPinEdge(.right, to: .right, of: contentView, withOffset: -edgeSpacing)
             
             //Note: eventNameLabel's top, left, and right constraints are set in Main.storyboard
