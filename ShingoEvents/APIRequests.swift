@@ -1465,8 +1465,7 @@ class SIRequest {
         request.allHTTPHeaderFields = headers
         request.httpBody = postData as Data
         
-        let session = URLSession.shared
-        let dataTask = session.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
+        URLSession.shared.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
             
             DispatchQueue.main.async {
                 
@@ -1504,15 +1503,23 @@ class SIRequest {
                 }
             }
             
-        })
-        
-        dataTask.resume()
-        
+        }).resume()
     }
     
-    /// Posts feedback to the backend server.
+    /**
+     Posts feedback to the backend server.
+     parameters expects the following key, value pairs
+        :email:       - users email address
+        :description: - feedback provided by user
+        :device:      - users current device (i.e. iPhone 6)
+        :details:     - ios version
+        :rating:      - user rating (1-5 stars). If 0 stars, user did not give a rating
+     
+     This function doesn't use alamofire because of some header issues with the request.
+     **/
     class func postFeedback(parameters: [String:String], callback: @escaping (Bool) -> Void) {
         
+        // Validate that keys exist in the parameters object
         guard let email = parameters["email"] else {
             return callback(false)
         }
@@ -1533,28 +1540,31 @@ class SIRequest {
             return callback(false)
         }
         
+        // header content-type param must be x-www-form-urlencoded or the server will reject the request
         let headers = [
             "content-type": "application/x-www-form-urlencoded",
             "cache-control": "no-cache",
         ]
         
+        // create utf8 encoded parameter string in http body
         let postData = NSMutableData(data: "email=\(email)".data(using: .utf8)!)
         postData.append("&description=\(description)".data(using: .utf8)!)
         postData.append("&details=\(details)".data(using: .utf8)!)
         postData.append("&device=\(device)".data(using: .utf8)!)
         postData.append("&rating=\(rating)".data(using: .utf8)!)
         
+        // initialize request object and set property values
         var request = URLRequest(url: URL(string: "https://api.shingo.org/support/feedback")!,
                                  cachePolicy: .useProtocolCachePolicy,
                                  timeoutInterval: 10.0)
-        
         request.httpMethod = "POST"
         request.allHTTPHeaderFields = headers
         request.httpBody = postData as Data
         
-        let session = URLSession.shared
-        let dataTask = session.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
+        // Start session task and make request
+        URLSession.shared.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
             
+            // The response triggers UI events and must be processed on the main thread.
             DispatchQueue.main.async {
                 
                 if (error != nil) {
@@ -1591,9 +1601,7 @@ class SIRequest {
                 }
             }
             
-        })
-        
-        dataTask.resume()
+        }).resume()
         
     }
     
