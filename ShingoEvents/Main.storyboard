@@ -15,7 +15,7 @@
                         <viewControllerLayoutGuide type="bottom" id="BnI-e5-q5c"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="dLZ-iL-a0P">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
@@ -34,7 +34,7 @@
                         <viewControllerLayoutGuide type="bottom" id="KuO-bf-Ixl"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="n3d-Gc-qzk">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="eFP-YV-sMU">
@@ -47,7 +47,7 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="informationCell" id="DHk-IC-reB" customClass="VenueMapInformationCell" customModule="Shingo_Events" customModuleProvider="target">
-                                        <rect key="frame" x="40" y="74" width="283" height="371"/>
+                                        <rect key="frame" x="40" y="-20" width="283" height="371"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="283" height="371"/>
@@ -98,7 +98,7 @@
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="VenueMapCell" id="rgx-eH-Npt" customClass="VenueMapCollectionCell" customModule="Shingo_Events" customModuleProvider="target">
-                                        <rect key="frame" x="353" y="74" width="283" height="371"/>
+                                        <rect key="frame" x="353" y="-20" width="283" height="371"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="283" height="371"/>
@@ -166,7 +166,7 @@
                         <viewControllerLayoutGuide type="bottom" id="qJq-jL-J1z"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="5Qf-h3-9wY">
-                        <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Shingo Icon Fullscreen" translatesAutoresizingMaskIntoConstraints="NO" id="5Jn-am-lv5"/>
@@ -280,15 +280,15 @@
             <objects>
                 <tableViewController id="3gh-6S-bFF" customClass="EventsTableViewController" customModule="Shingo_Events" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="204" sectionHeaderHeight="28" sectionFooterHeight="28" id="eXo-c8-zLs">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" reuseIdentifier="Event Cell" rowHeight="200" id="Tkb-jb-7pD" customClass="EventTableViewCell" customModule="Shingo_Events" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="92" width="375" height="200"/>
+                                <rect key="frame" x="0.0" y="92" width="320" height="200"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Tkb-jb-7pD" id="f1Y-Md-81P">
-                                    <frame key="frameInset" width="375" height="200"/>
+                                    <frame key="frameInset" width="320" height="200"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <view clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="v4J-X6-0mF">
@@ -374,21 +374,63 @@
                         <viewControllerLayoutGuide type="bottom" id="gYw-RP-lar"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="QQC-BW-JC5">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter email address here" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="peZ-HJ-R5n">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter email address here (optional)" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="peZ-HJ-R5n">
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress"/>
                             </textField>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="HT1-ql-mAx">
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="200" id="U9T-yf-oic"/>
-                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done"/>
                             </textView>
+                            <button opaque="NO" tag="1" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vbb-wt-sj3" customClass="SIButton" customModule="Shingo_Events" customModuleProvider="target">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="7gE-DI-rSH"/>
+                                </constraints>
+                                <state key="normal" image="white_star"/>
+                                <connections>
+                                    <action selector="didTapStar:" destination="BMR-CH-MuX" eventType="touchUpInside" id="Arj-D5-ytc"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" tag="3" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pfj-cc-vs7" customClass="SIButton" customModule="Shingo_Events" customModuleProvider="target">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="rcX-Hv-elM"/>
+                                </constraints>
+                                <state key="normal" image="white_star"/>
+                                <connections>
+                                    <action selector="didTapStar:" destination="BMR-CH-MuX" eventType="touchUpInside" id="ydw-oa-xCa"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" tag="4" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YnA-zX-27K" customClass="SIButton" customModule="Shingo_Events" customModuleProvider="target">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="hw5-BZ-buU"/>
+                                </constraints>
+                                <state key="normal" image="white_star"/>
+                                <connections>
+                                    <action selector="didTapStar:" destination="BMR-CH-MuX" eventType="touchUpInside" id="LeL-V9-aJT"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" tag="2" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9K7-c5-8gj" customClass="SIButton" customModule="Shingo_Events" customModuleProvider="target">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="4iW-8v-Bw4"/>
+                                </constraints>
+                                <state key="normal" image="white_star"/>
+                                <connections>
+                                    <action selector="didTapStar:" destination="BMR-CH-MuX" eventType="touchUpInside" id="Naj-jb-AxF"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" tag="5" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fea-zE-fib" customClass="SIButton" customModule="Shingo_Events" customModuleProvider="target">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="O3h-oH-pie"/>
+                                </constraints>
+                                <state key="normal" image="white_star"/>
+                                <connections>
+                                    <action selector="didTapStar:" destination="BMR-CH-MuX" eventType="touchUpInside" id="Ibb-u1-gil"/>
+                                </connections>
+                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JQQ-2L-S5s">
                                 <color key="backgroundColor" red="0.97086027370000005" green="0.97100502560000002" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -400,51 +442,11 @@
                                     <action selector="sendMessage:" destination="BMR-CH-MuX" eventType="touchUpInside" id="tl4-Qr-DeM"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vbb-wt-sj3" customClass="SIButton" customModule="Shingo_Events" customModuleProvider="target">
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="7gE-DI-rSH"/>
-                                </constraints>
-                                <state key="normal" image="white_star"/>
-                                <connections>
-                                    <action selector="didTapStar:" destination="BMR-CH-MuX" eventType="touchUpInside" id="Arj-D5-ytc"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pfj-cc-vs7" customClass="SIButton" customModule="Shingo_Events" customModuleProvider="target">
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="rcX-Hv-elM"/>
-                                </constraints>
-                                <state key="normal" image="white_star"/>
-                                <connections>
-                                    <action selector="didTapStar:" destination="BMR-CH-MuX" eventType="touchUpInside" id="ydw-oa-xCa"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YnA-zX-27K" customClass="SIButton" customModule="Shingo_Events" customModuleProvider="target">
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="hw5-BZ-buU"/>
-                                </constraints>
-                                <state key="normal" image="white_star"/>
-                                <connections>
-                                    <action selector="didTapStar:" destination="BMR-CH-MuX" eventType="touchUpInside" id="LeL-V9-aJT"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9K7-c5-8gj" customClass="SIButton" customModule="Shingo_Events" customModuleProvider="target">
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="4iW-8v-Bw4"/>
-                                </constraints>
-                                <state key="normal" image="white_star"/>
-                                <connections>
-                                    <action selector="didTapStar:" destination="BMR-CH-MuX" eventType="touchUpInside" id="Naj-jb-AxF"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fea-zE-fib" customClass="SIButton" customModule="Shingo_Events" customModuleProvider="target">
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="O3h-oH-pie"/>
-                                </constraints>
-                                <state key="normal" image="white_star"/>
-                                <connections>
-                                    <action selector="didTapStar:" destination="BMR-CH-MuX" eventType="touchUpInside" id="Ibb-u1-gil"/>
-                                </connections>
-                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="500 characters left" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D40-As-AcY">
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" red="0.80000000000000004" green="0.80000000000000004" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -452,29 +454,33 @@
                             <constraint firstAttribute="leadingMargin" secondItem="HT1-ql-mAx" secondAttribute="leading" id="3o6-SN-5E1"/>
                             <constraint firstAttribute="trailingMargin" secondItem="peZ-HJ-R5n" secondAttribute="trailing" id="G2j-et-7i1"/>
                             <constraint firstAttribute="leadingMargin" secondItem="peZ-HJ-R5n" secondAttribute="leading" id="JUk-GS-D5x"/>
+                            <constraint firstItem="HT1-ql-mAx" firstAttribute="top" secondItem="D40-As-AcY" secondAttribute="bottom" constant="2" id="JbP-Wr-1r4"/>
                             <constraint firstItem="YnA-zX-27K" firstAttribute="top" secondItem="peZ-HJ-R5n" secondAttribute="bottom" constant="8" id="KMx-iv-aUQ"/>
                             <constraint firstItem="9K7-c5-8gj" firstAttribute="top" secondItem="peZ-HJ-R5n" secondAttribute="bottom" constant="8" id="L0w-Qo-nh1"/>
                             <constraint firstItem="JQQ-2L-S5s" firstAttribute="top" secondItem="HT1-ql-mAx" secondAttribute="bottom" constant="8" id="L1S-na-MMB"/>
                             <constraint firstAttribute="trailingMargin" secondItem="HT1-ql-mAx" secondAttribute="trailing" id="O95-2A-ENs"/>
                             <constraint firstItem="9K7-c5-8gj" firstAttribute="leading" secondItem="Vbb-wt-sj3" secondAttribute="trailing" constant="8" id="TkB-q1-Q6l"/>
+                            <constraint firstItem="D40-As-AcY" firstAttribute="trailing" secondItem="HT1-ql-mAx" secondAttribute="trailing" id="TyZ-fP-vEv"/>
                             <constraint firstItem="peZ-HJ-R5n" firstAttribute="top" secondItem="Dz1-rO-zsf" secondAttribute="bottom" constant="8" id="VbU-pP-a7P"/>
                             <constraint firstItem="9K7-c5-8gj" firstAttribute="width" secondItem="Vbb-wt-sj3" secondAttribute="width" id="Wtq-Cb-jXJ"/>
                             <constraint firstItem="fea-zE-fib" firstAttribute="width" secondItem="Vbb-wt-sj3" secondAttribute="width" id="XYU-We-DXN"/>
+                            <constraint firstItem="D40-As-AcY" firstAttribute="top" secondItem="fea-zE-fib" secondAttribute="bottom" constant="2" id="e2n-0l-IIM"/>
                             <constraint firstAttribute="trailingMargin" secondItem="fea-zE-fib" secondAttribute="trailing" id="ho8-HN-l3p"/>
                             <constraint firstItem="YnA-zX-27K" firstAttribute="leading" secondItem="Pfj-cc-vs7" secondAttribute="trailing" constant="8" id="jZw-Af-mit"/>
                             <constraint firstItem="Pfj-cc-vs7" firstAttribute="width" secondItem="Vbb-wt-sj3" secondAttribute="width" id="k9e-yV-E5s"/>
+                            <constraint firstItem="gYw-RP-lar" firstAttribute="top" secondItem="JQQ-2L-S5s" secondAttribute="bottom" constant="20" id="kZd-00-TSe"/>
                             <constraint firstItem="fea-zE-fib" firstAttribute="top" secondItem="peZ-HJ-R5n" secondAttribute="bottom" constant="8" id="lqL-Dc-6Vh"/>
                             <constraint firstAttribute="leadingMargin" secondItem="Vbb-wt-sj3" secondAttribute="leading" id="mnR-gu-3E9"/>
-                            <constraint firstItem="JQQ-2L-S5s" firstAttribute="centerX" secondItem="QQC-BW-JC5" secondAttribute="centerX" id="o5d-IQ-uAA"/>
                             <constraint firstItem="Vbb-wt-sj3" firstAttribute="top" secondItem="peZ-HJ-R5n" secondAttribute="bottom" constant="8" id="q1l-Eb-Erw"/>
-                            <constraint firstItem="HT1-ql-mAx" firstAttribute="top" secondItem="Vbb-wt-sj3" secondAttribute="bottom" constant="8" id="qXB-yg-53W"/>
                             <constraint firstItem="fea-zE-fib" firstAttribute="leading" secondItem="YnA-zX-27K" secondAttribute="trailing" constant="8" id="qgh-pj-F2s"/>
                             <constraint firstItem="YnA-zX-27K" firstAttribute="width" secondItem="Vbb-wt-sj3" secondAttribute="width" id="tdE-sy-AjS"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="JQQ-2L-S5s" secondAttribute="leading" id="v7r-7S-oTN"/>
                             <constraint firstItem="Pfj-cc-vs7" firstAttribute="leading" secondItem="9K7-c5-8gj" secondAttribute="trailing" constant="8" id="w1w-Nj-kQp"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Contact Us" id="OXH-ld-J2I"/>
                     <connections>
+                        <outlet property="characterCountLabel" destination="D40-As-AcY" id="RJy-Db-8xv"/>
                         <outlet property="descriptionTextField" destination="HT1-ql-mAx" id="ySz-Fq-eSh"/>
                         <outlet property="emailTextField" destination="peZ-HJ-R5n" id="8n8-wP-VVV"/>
                         <outlet property="star1" destination="Vbb-wt-sj3" id="Jle-dQ-aas"/>
@@ -489,24 +495,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zaw-7R-X9v" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="20j-iq-fd6" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="-111" y="969"/>
+            <point key="canvasLocation" x="-112.5" y="968.75"/>
         </scene>
         <!--Support-->
         <scene sceneID="B0u-1M-pZP">
             <objects>
                 <tableViewController id="6xI-ZT-ju6" customClass="SettingsTableViewController" customModule="Shingo_Events" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="45d-cS-F7V">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <sections>
                             <tableViewSection headerTitle="Support" id="JSk-u9-92e">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="dVd-iE-uyU">
-                                        <rect key="frame" x="0.0" y="120" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="120" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="dVd-iE-uyU" id="RiR-KG-zj5">
-                                            <frame key="frameInset" width="375" height="43"/>
+                                            <frame key="frameInset" width="320" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jUl-sW-10G">
@@ -526,10 +532,10 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="bjX-D4-r7D">
-                                        <rect key="frame" x="0.0" y="164" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="164" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="bjX-D4-r7D" id="7va-Nu-gEZ">
-                                            <frame key="frameInset" width="375" height="43"/>
+                                            <frame key="frameInset" width="320" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mFs-jf-5gd">
@@ -552,10 +558,10 @@
                             <tableViewSection headerTitle="About" id="h2r-ED-5Qz">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="1vs-7Q-Cer">
-                                        <rect key="frame" x="0.0" y="265" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="265" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1vs-7Q-Cer" id="wtH-06-VeD">
-                                            <frame key="frameInset" width="375" height="43"/>
+                                            <frame key="frameInset" width="320" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ETj-bI-OwL">
@@ -578,10 +584,10 @@
                             <tableViewSection headerTitle="Data" footerTitle="Forces a refresh of app data." id="Saw-I1-x81">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="0X9-1i-tvy">
-                                        <rect key="frame" x="0.0" y="373" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="373" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0X9-1i-tvy" id="MEn-RV-VAy">
-                                            <frame key="frameInset" width="375" height="43"/>
+                                            <frame key="frameInset" width="320" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dKK-GO-sUg">
@@ -629,7 +635,7 @@
                         <viewControllerLayoutGuide type="bottom" id="Iwo-c5-Ru0"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8K2-P8-luj">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clearsContextBeforeDrawing="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XAM-Tt-vzj">
@@ -643,17 +649,17 @@
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                             </textView>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalCompressionResistancePriority="1000" fixedFrame="YES" image="shigeoGrad" translatesAutoresizingMaskIntoConstraints="NO" id="5fu-wA-ceP">
-                                                <frame key="frameInset" minX="8" minY="312" width="304" height="160"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="1000" fixedFrame="YES" text="Shigeo Shingo, 1909-1990" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2eJ-hD-Vvu">
-                                                <frame key="frameInset" minX="7" minY="284" width="305" height="20"/>
+                                                <frame key="frameInset" minY="146" width="305" height="20"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="13"/>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalCompressionResistancePriority="1000" fixedFrame="YES" image="shigeoGrad" translatesAutoresizingMaskIntoConstraints="NO" id="5fu-wA-ceP">
+                                                <frame key="frameInset" minX="8" minY="174" width="304" height="226"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            </imageView>
                                         </subviews>
                                     </view>
                                 </subviews>
@@ -686,7 +692,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZFP-cK-jkS" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-858.75" y="966.25"/>
+            <point key="canvasLocation" x="-860.625" y="965"/>
         </scene>
         <!--Bug Report-->
         <scene sceneID="Bjd-XH-Yht">
@@ -697,7 +703,7 @@
                         <viewControllerLayoutGuide type="bottom" id="Qpz-Dn-Uay"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="6FF-i2-v8c">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter email address here (optional)" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yS0-43-Xsl">
@@ -709,6 +715,40 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please be specific about the problem. If applicable, include steps that can be taken to reproduce the unexpected behavior." lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oGL-EU-rKQ">
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="down-arrow" translatesAutoresizingMaskIntoConstraints="NO" id="Ygy-wT-3Id">
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="30" id="9Io-ji-fD5"/>
+                                    <constraint firstAttribute="height" constant="20" id="lhe-PS-DPX"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JRG-Wk-7y3">
+                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="211" id="GOs-6R-TSe"/>
+                                    <constraint firstAttribute="height" constant="26" id="eBY-d7-Aep"/>
+                                </constraints>
+                                <color key="tintColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <inset key="contentEdgeInsets" minX="5" minY="4" maxX="0.0" maxY="4"/>
+                                <state key="normal" title="Not Selected">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="didTapDropDown:" destination="b1Y-X9-6h0" eventType="touchUpInside" id="a9b-Ks-Qjd"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bug Type:" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hOD-Nr-bnS">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="26" id="sb5-P0-fAj"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iy8-cm-kMt">
                                 <color key="backgroundColor" red="0.97086027370000005" green="0.97100502560000002" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -722,68 +762,41 @@
                                     <action selector="didTapSubmit:" destination="b1Y-X9-6h0" eventType="touchUpInside" id="MUU-UQ-ul6"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select Bug Type:" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hOD-Nr-bnS">
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="118" id="7Yg-Fr-ocG"/>
-                                    <constraint firstAttribute="height" constant="26" id="sb5-P0-fAj"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="500 characters left" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8cI-XH-GRj">
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" red="0.80000000000000004" green="0.80000000000000004" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oGL-EU-rKQ">
-                                <string key="text">Please be specific and descriptive of the bug you are experiencing. If applicable, include steps that can be taken to reproduce the unexpected behavior.</string>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="down-arrow" translatesAutoresizingMaskIntoConstraints="NO" id="Ygy-wT-3Id">
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="30" id="9Io-ji-fD5"/>
-                                    <constraint firstAttribute="height" constant="20" id="lhe-PS-DPX"/>
-                                </constraints>
-                            </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JRG-Wk-7y3">
-                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="194" id="e6Q-2I-l7Y"/>
-                                    <constraint firstAttribute="height" constant="26" id="eBY-d7-Aep"/>
-                                </constraints>
-                                <color key="tintColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <inset key="contentEdgeInsets" minX="5" minY="4" maxX="0.0" maxY="4"/>
-                                <state key="normal" title="No Selection">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="didTapDropDown:" destination="b1Y-X9-6h0" eventType="touchUpInside" id="a9b-Ks-Qjd"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="Ygy-wT-3Id" firstAttribute="centerY" secondItem="JRG-Wk-7y3" secondAttribute="centerY" id="0Gc-Kg-W93"/>
                             <constraint firstAttribute="leadingMargin" secondItem="yS0-43-Xsl" secondAttribute="leading" id="7KB-gg-Ire"/>
                             <constraint firstItem="hOD-Nr-bnS" firstAttribute="top" secondItem="yS0-43-Xsl" secondAttribute="bottom" constant="8" id="7UK-GV-pwZ"/>
-                            <constraint firstItem="oGL-EU-rKQ" firstAttribute="top" secondItem="hOD-Nr-bnS" secondAttribute="bottom" constant="8" id="GKE-nq-tKY"/>
+                            <constraint firstItem="8cI-XH-GRj" firstAttribute="top" secondItem="JRG-Wk-7y3" secondAttribute="bottom" constant="5" id="CXX-eW-ouU"/>
                             <constraint firstAttribute="trailingMargin" secondItem="yS0-43-Xsl" secondAttribute="trailing" id="Gss-h1-UVk"/>
+                            <constraint firstItem="8cI-XH-GRj" firstAttribute="trailing" secondItem="knU-Qb-3MQ" secondAttribute="trailing" id="Ldc-1v-vfv"/>
+                            <constraint firstItem="oGL-EU-rKQ" firstAttribute="top" secondItem="knU-Qb-3MQ" secondAttribute="bottom" constant="8" id="M1F-ib-Xy3"/>
                             <constraint firstAttribute="trailingMargin" secondItem="oGL-EU-rKQ" secondAttribute="trailing" id="MIS-uc-LNr"/>
                             <constraint firstAttribute="leadingMargin" secondItem="knU-Qb-3MQ" secondAttribute="leading" id="PbD-go-11t"/>
                             <constraint firstAttribute="leadingMargin" secondItem="hOD-Nr-bnS" secondAttribute="leading" id="Qmm-M0-Qvp"/>
                             <constraint firstItem="JRG-Wk-7y3" firstAttribute="leading" secondItem="hOD-Nr-bnS" secondAttribute="trailing" constant="8" id="Qsf-th-DPO"/>
+                            <constraint firstItem="Qpz-Dn-Uay" firstAttribute="top" secondItem="iy8-cm-kMt" secondAttribute="bottom" constant="20" id="RlI-Dg-TlD"/>
                             <constraint firstItem="JRG-Wk-7y3" firstAttribute="top" secondItem="yS0-43-Xsl" secondAttribute="bottom" constant="8" id="VCH-va-IY4"/>
                             <constraint firstAttribute="trailingMargin" secondItem="knU-Qb-3MQ" secondAttribute="trailing" id="Y8w-8O-Sos"/>
                             <constraint firstAttribute="leadingMargin" secondItem="oGL-EU-rKQ" secondAttribute="leading" id="e0l-3Y-wsD"/>
-                            <constraint firstItem="knU-Qb-3MQ" firstAttribute="top" secondItem="oGL-EU-rKQ" secondAttribute="bottom" constant="8" id="eS5-gP-bDS"/>
-                            <constraint firstItem="iy8-cm-kMt" firstAttribute="centerX" secondItem="6FF-i2-v8c" secondAttribute="centerX" id="gR8-gp-Ybt"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="iy8-cm-kMt" secondAttribute="leading" id="eix-1q-iHK"/>
                             <constraint firstItem="yS0-43-Xsl" firstAttribute="top" secondItem="Tk3-eN-IkJ" secondAttribute="bottom" constant="8" id="gaD-Ds-dad"/>
-                            <constraint firstItem="iy8-cm-kMt" firstAttribute="top" secondItem="knU-Qb-3MQ" secondAttribute="bottom" constant="8" id="mfO-xK-q7K"/>
+                            <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="JRG-Wk-7y3" secondAttribute="trailing" priority="750" id="hPr-ar-DAM"/>
+                            <constraint firstItem="knU-Qb-3MQ" firstAttribute="top" secondItem="8cI-XH-GRj" secondAttribute="bottom" constant="2" id="j48-Ii-cdg"/>
+                            <constraint firstItem="iy8-cm-kMt" firstAttribute="top" secondItem="oGL-EU-rKQ" secondAttribute="bottom" constant="8" id="kHd-vW-Y38"/>
                             <constraint firstItem="Ygy-wT-3Id" firstAttribute="leading" secondItem="JRG-Wk-7y3" secondAttribute="trailing" constant="-30" id="oLn-tW-yjX"/>
-                            <constraint firstItem="Qpz-Dn-Uay" firstAttribute="top" secondItem="iy8-cm-kMt" secondAttribute="bottom" constant="8" id="oqW-aw-aSH"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Bug Report" id="TTz-rM-OBK"/>
                     <connections>
                         <outlet property="bugTypeButton" destination="JRG-Wk-7y3" id="ffh-Rh-lbb"/>
+                        <outlet property="characterCountLabel" destination="8cI-XH-GRj" id="MDN-FS-uio"/>
                         <outlet property="descriptionTextField" destination="knU-Qb-3MQ" id="UZT-Vd-etO"/>
                         <outlet property="dropDownImageView" destination="Ygy-wT-3Id" id="Kt2-aT-rCV"/>
                         <outlet property="emailTextField" destination="yS0-43-Xsl" id="5yk-Et-0Zb"/>
@@ -794,7 +807,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aPI-m4-Ogp" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="4gX-L7-xXR" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="614" y="968"/>
+            <point key="canvasLocation" x="613.125" y="967.5"/>
         </scene>
         <!--Map View Controller-->
         <scene sceneID="YEc-ef-NXP">
@@ -805,7 +818,7 @@
                         <viewControllerLayoutGuide type="bottom" id="RAg-v4-EUK"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="TNq-VM-7Ac">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clearsContextBeforeDrawing="NO" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="xPn-No-jBw"/>
@@ -843,15 +856,15 @@
             <objects>
                 <tableViewController id="ZKR-mo-2Bh" customClass="SponsorsTableViewController" customModule="Shingo_Events" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="133" sectionHeaderHeight="18" sectionFooterHeight="18" id="K5k-2I-xpC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.30588236451148987" green="0.011764706112444401" blue="0.094117648899555206" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="SponsorCell" rowHeight="150" id="hq0-RO-X6E" customClass="SponsorTableViewCell" customModule="Shingo_Events" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="120" width="375" height="150"/>
+                                <rect key="frame" x="0.0" y="120" width="320" height="150"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hq0-RO-X6E" id="PFj-99-wLE">
-                                    <frame key="frameInset" width="375" height="149"/>
+                                    <frame key="frameInset" width="320" height="149"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b9J-ML-qEo">
@@ -893,15 +906,15 @@
             <objects>
                 <tableViewController id="PmE-Ln-agj" customClass="AttendessTableViewController" customModule="Shingo_Events" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="107" sectionHeaderHeight="28" sectionFooterHeight="28" id="gBs-dn-Jy1">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Attendee Cell" rowHeight="107" id="0Ka-IK-OYc" customClass="AttendeeTableViewCell" customModule="Shingo_Events" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="92" width="375" height="107"/>
+                                <rect key="frame" x="0.0" y="92" width="320" height="107"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0Ka-IK-OYc" id="6jj-3L-wzU">
-                                    <frame key="frameInset" width="375" height="106"/>
+                                    <frame key="frameInset" width="320" height="106"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oPr-gx-O2z">
@@ -964,7 +977,7 @@
                         <viewControllerLayoutGuide type="bottom" id="jic-IU-oo2"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="fEc-g2-7hc">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.94759615384615381" green="0.94759615384615381" blue="0.94759615384615381" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
@@ -983,7 +996,7 @@
                         <viewControllerLayoutGuide type="bottom" id="gPo-cY-A0V"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="rAy-Ke-xpN">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ogs-jn-j1c">
@@ -1050,15 +1063,15 @@
             <objects>
                 <tableViewController id="9is-r1-ySf" customClass="SpeakerListTableViewController" customModule="Shingo_Events" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="151" sectionHeaderHeight="18" sectionFooterHeight="18" id="afy-B6-tuG">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.054901960784313725" green="0.12941176470588237" blue="0.27058823529411763" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="SpeakerListCell" rowHeight="150" id="I8y-NK-aYc" userLabel="SpeakerTableViewCell" customClass="SpeakerTableViewCell" customModule="Shingo_Events" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="120" width="375" height="150"/>
+                                <rect key="frame" x="0.0" y="120" width="320" height="150"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="I8y-NK-aYc" id="iCl-Bn-cnf">
-                                    <frame key="frameInset" width="375" height="149"/>
+                                    <frame key="frameInset" width="320" height="149"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Speaker Name" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7zI-7I-8Bu">
@@ -1121,16 +1134,16 @@
             <objects>
                 <tableViewController id="IVi-St-3H2" customClass="RecipientsTableViewController" customModule="Shingo_Events" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="u9t-iv-CCU">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.054901960784313725" green="0.12941176470588237" blue="0.27058823529411763" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="sectionIndexColor" red="0.5" green="0.0" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="RecipientCell" rowHeight="150" id="52S-ob-QNK" customClass="RecipientTableViewCell" customModule="Shingo_Events" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="120" width="375" height="150"/>
+                                <rect key="frame" x="0.0" y="120" width="320" height="150"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="52S-ob-QNK" id="kPz-dS-j9v">
-                                    <frame key="frameInset" width="375" height="149"/>
+                                    <frame key="frameInset" width="320" height="149"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="18A-Xz-GPP">
@@ -1196,7 +1209,7 @@
                         <viewControllerLayoutGuide type="bottom" id="nhF-vY-wMO"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="QtA-YM-IbV">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="top" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YC7-s1-3dj">
@@ -1238,15 +1251,15 @@
             <objects>
                 <tableViewController id="oeX-Ll-nwp" customClass="AffiliateListTableViewController" customModule="Shingo_Events" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="220" sectionHeaderHeight="18" sectionFooterHeight="18" id="Zti-6D-l6l">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.050980392156862744" green="0.094117647058823528" blue="0.20784313725490197" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="AffiliateCell" rowHeight="186" id="OcO-Nd-GhQ" customClass="AffiliateTableViewCell" customModule="Shingo_Events" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="120" width="375" height="186"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="AffiliateCell" rowHeight="188" id="OcO-Nd-GhQ" customClass="AffiliateTableViewCell" customModule="Shingo_Events" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="120" width="320" height="188"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="OcO-Nd-GhQ" id="4ID-AB-nPM">
-                                    <frame key="frameInset" width="375" height="185"/>
+                                    <frame key="frameInset" width="320" height="187"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BZD-7b-g2q">
@@ -1254,7 +1267,11 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="249" translatesAutoresizingMaskIntoConstraints="NO" id="QlV-wA-GdX"/>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="249" translatesAutoresizingMaskIntoConstraints="NO" id="QlV-wA-GdX">
+                                            <constraints>
+                                                <constraint firstAttribute="height" priority="750" constant="100" id="rYZ-8f-R3T"/>
+                                            </constraints>
+                                        </imageView>
                                         <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="749" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" text="Select For More Info &gt;" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="SXz-FX-Nn0">
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                             <color key="textColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="deviceWhite"/>
@@ -1277,6 +1294,7 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="logoImageHeightConstraint" destination="rYZ-8f-R3T" id="5xl-Tk-zHI"/>
                                     <outlet property="logoImageView" destination="QlV-wA-GdX" id="ZIu-jc-EL0"/>
                                     <outlet property="nameLabel" destination="BZD-7b-g2q" id="2gd-Cg-CaK"/>
                                     <outlet property="summaryTextView" destination="SXz-FX-Nn0" id="exI-kG-ctI"/>
@@ -1299,15 +1317,15 @@
             <objects>
                 <tableViewController id="PqC-BM-dR8" customClass="SchedulesTableViewController" customModule="Shingo_Events" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="139" sectionHeaderHeight="18" sectionFooterHeight="18" id="4Tz-rr-5lK">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.89999997615814209" green="0.89999997615814209" blue="0.89999997615814209" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ScheduleCell" rowHeight="106" id="40e-eU-7Lv" customClass="ScheduleTableViewCell" customModule="Shingo_Events" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="120" width="375" height="106"/>
+                                <rect key="frame" x="0.0" y="120" width="320" height="106"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="40e-eU-7Lv" id="9k3-pq-DYy">
-                                    <frame key="frameInset" width="375" height="105"/>
+                                    <frame key="frameInset" width="320" height="105"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Session Time" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nkt-ZO-gHb">
@@ -1406,7 +1424,7 @@
                         <viewControllerLayoutGuide type="bottom" id="K59-IO-Icb"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="h6K-dH-e3w">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Sd7-vT-Q5r">
@@ -1448,17 +1466,17 @@
             <objects>
                 <tableViewController id="TSR-Ef-6Mh" customClass="ExhibitorTableViewController" customModule="Shingo_Events" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" rowHeight="139" sectionHeaderHeight="18" sectionFooterHeight="18" id="IYO-i5-N5d">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.054901960784313725" green="0.12941176470588237" blue="0.27058823529411763" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="separatorColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <inset key="separatorInset" minX="15" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="ExhibitorCell" rowHeight="150" id="PJc-Ln-FqT" customClass="ExhibitorTableViewCell" customModule="Shingo_Events" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="120" width="375" height="150"/>
+                                <rect key="frame" x="0.0" y="120" width="320" height="150"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="PJc-Ln-FqT" id="QdK-HR-UIq">
-                                    <frame key="frameInset" width="375" height="149"/>
+                                    <frame key="frameInset" width="320" height="149"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="RaJ-yI-3pJ">

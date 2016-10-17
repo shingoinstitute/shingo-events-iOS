@@ -14,28 +14,32 @@ class AffiliateTableViewCell: SITableViewCell {
     @IBOutlet weak var logoImageView: UIImageView! { didSet { entityImageView = logoImageView } }
     @IBOutlet weak var summaryTextView: UITextView! { didSet { entityTextView = summaryTextView } }
     
+    @IBOutlet weak var logoImageHeightConstraint: NSLayoutConstraint!
+    
     override func updateCell() {
+        
         super.updateCell()
         if let affiliate = entity as? SIAffiliate {
-            
-            // maxWidth is the width of the container view minus the margins, where total margin width is 16
-            let maxWidth = self.contentView.frame.width - 16
 
-            affiliate.getLogoImage() { image in
-                
-                if image.size.width > maxWidth {
-                    self.logoImageView.image = image
-
-                    self.logoImageView.resizeImageViewToIntrinsicContentSize(thatFitsWidth: maxWidth)
-                    affiliate.image = self.logoImageView.image
+            if let image = affiliate.image {
+                logoImageView.image = image
+                logoImageHeightConstraint.constant = image.size.height
+//                logoImageView.constraints.updateConstant(forAttribute: .height, toValue: image.size.height)
+            } else {
+                affiliate.getLogoImage() { image in
                     self.logoImageView.image = affiliate.image
-                    
-                } else {
-                    self.logoImageView.image = affiliate.image
+                    self.logoImageHeightConstraint.constant = image.size.height
+//                    self.logoImageView.constraints.updateConstant(forAttribute: .height, toValue: image.size.height)
                 }
-                
             }
+            
+            
+            
         }
     }
 
+}
+
+extension NSLayoutConstraint {
+    
 }

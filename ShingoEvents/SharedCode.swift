@@ -346,9 +346,19 @@ extension UIImageView {
     
 }
 
-
-
 extension UIImage {
+    
+    class func resize(image: UIImage, toFitWidth width: CGFloat, isOpaque: Bool = true) -> UIImage {
+        let size = CGSize(width: width, height: (width * image.size.height) / image.size.width)
+        UIGraphicsBeginImageContextWithOptions(size, isOpaque, 0)
+        image.draw(in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+        if let image = UIGraphicsGetImageFromCurrentImageContext() {
+            UIGraphicsEndImageContext()
+            return image
+        }
+        return image
+    }
+    
     func isEmpty() -> Bool {
         return cgImage == nil && ciImage == nil
     }
@@ -375,16 +385,6 @@ extension UIImage {
             return (NSData(data: representation) as Data).count / 1024
         }
         return 0
-    }
-    
-    class func transformIntrinsicContentSize(toFitWidth width: CGFloat, isOpaque opaque: Bool = true, forImage image: UIImage) -> UIImage? {
-        
-        let size = CGSize(width: width, height: (width * image.size.height) / image.size.width)
-        
-        UIGraphicsBeginImageContextWithOptions(size, opaque, 0.0)
-        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return resizedImage
     }
     
 }
@@ -572,7 +572,17 @@ extension Array where Element:NSLayoutConstraint {
             }
         }
     }
+    
+    func updateConstant(forAttribute attribute: NSLayoutAttribute, toValue value: CGFloat) {
+        for i in self {
+            if i.firstAttribute == attribute {
+                i.constant = value
+                break
+            }
+        }
+    }
 }
+
 
 func isValidEmail(_ value:String) -> Bool {
     let regEx = "^(?:(?:(?:(?: )*(?:(?:(?:\\t| )*\\r\\n)?(?:\\t| )+))+(?: )*)|(?: )+)?(?:(?:(?:[-A-Za-z0-9!#$%&’*+/=?^_'{|}~]+(?:\\.[-A-Za-z0-9!#$%&’*+/=?^_'{|}~]+)*)|(?:\"(?:(?:(?:(?: )*(?:(?:[!#-Z^-~]|\\[|\\])|(?:\\\\(?:\\t|[ -~]))))+(?: )*)|(?: )+)\"))(?:@)(?:(?:(?:[A-Za-z0-9](?:[-A-Za-z0-9]{0,61}[A-Za-z0-9])?)(?:\\.[A-Za-z0-9](?:[-A-Za-z0-9]{0,61}[A-Za-z0-9])?)*)|(?:\\[(?:(?:(?:(?:(?:[0-9]|(?:[1-9][0-9])|(?:1[0-9][0-9])|(?:2[0-4][0-9])|(?:25[0-5]))\\.){3}(?:[0-9]|(?:[1-9][0-9])|(?:1[0-9][0-9])|(?:2[0-4][0-9])|(?:25[0-5]))))|(?:(?:(?: )*[!-Z^-~])*(?: )*)|(?:[Vv][0-9A-Fa-f]+\\.[-A-Za-z0-9._~!$&'()*+,;=:]+))\\])))(?:(?:(?:(?: )*(?:(?:(?:\\t| )*\\r\\n)?(?:\\t| )+))+(?: )*)|(?: )+)?$"

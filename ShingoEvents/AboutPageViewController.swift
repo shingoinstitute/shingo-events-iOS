@@ -43,10 +43,12 @@ class AboutPageViewController: UIViewController {
             shigeoNameLabel.autoPinEdge(.left, to: .left, of: contentView, withOffset: 8)
             shigeoNameLabel.autoPinEdge(.right, to: .right, of: contentView, withOffset: -8)
             
-            shigeoImageView.autoSetDimension(.height, toSize: 160)
+            let imageSize = shigeoImageView.image!.size
+            let imageScale = shigeoImageView.image!.scale
+            let actualSize = CGSize(width: (imageSize.width * imageScale) / 2, height: (imageSize.height * imageScale) / 2)
+            shigeoImageView.autoSetDimensions(to: actualSize)
+            shigeoImageView.autoAlignAxis(.vertical, toSameAxisOf: view)
             shigeoImageView.autoPinEdge(.top, to: .bottom, of: shigeoNameLabel, withOffset: 8)
-            shigeoImageView.autoPinEdge(.left, to: .left, of: contentView, withOffset: 8)
-            shigeoImageView.autoPinEdge(.right, to: .right, of: contentView, withOffset: -8)
             shigeoImageView.autoPinEdge(.bottom, to: .bottom, of: contentView, withOffset: -8)
             
             scrollView.frame = view.frame
@@ -86,7 +88,9 @@ class AboutPageViewController: UIViewController {
             NSForegroundColorAttributeName : UIColor.white
         ]
         
-        let aboutText = NSMutableAttributedString(string: "Our Purpose:\n\n", attributes: boldAttributesCentered)
+        let aboutText = NSMutableAttributedString(string: "The Shingo Institute", attributes: boldAttributesJustified)
+        aboutText.append(NSAttributedString(string: "\nUtah State University\nshingo.events@usu.edu\n435.797.2283\n\n\n", attributes: attributesJustified))
+        aboutText.append(NSAttributedString(string: "Our Purpose:\n\n", attributes: boldAttributesCentered))
         aboutText.append(NSAttributedString(string: "Based on timeless principles, we shape cultures that drive operational excellence.\n\n", attributes: attributesCentered))
         aboutText.append(NSAttributedString(string: "Our Mission:\n\n", attributes: boldAttributesCentered))
         aboutText.append(NSAttributedString(string: "We conduct cutting edge research, provide relevant education, perform insightful enterprise assessment, and recognize organizations committed to achieving sustainable world-class results.\n\n", attributes: attributesCentered))

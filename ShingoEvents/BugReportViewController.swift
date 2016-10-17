@@ -16,19 +16,33 @@ class BugReportViewController: UIViewController {
     var messageSent = false
     
     @IBOutlet weak var emailTextField: UITextField!
-    @IBOutlet weak var descriptionTextField: UITextView!
+    @IBOutlet weak var descriptionTextField: UITextView! {
+        didSet {
+            descriptionTextField.layer.shadowColor = UIColor.lightShingoRed.cgColor
+            descriptionTextField.layer.shadowOffset = CGSize(width: 0, height: 0)
+            descriptionTextField.layer.shadowRadius = 5
+            descriptionTextField.layer.shadowOpacity = 1
+        }
+    }
     @IBOutlet weak var submitButton: UIButton!
     
     @IBOutlet weak var bugTypeButton: UIButton! {
         didSet {
             bugTypeButton.layer.cornerRadius = 3
-            bugTypeButton.layer.shadowColor = UIColor.darkShingoRed.cgColor
+            bugTypeButton.layer.shadowColor = UIColor.lightShingoRed.cgColor
             bugTypeButton.layer.shadowOffset = CGSize(width: 0, height: 2)
             bugTypeButton.layer.shadowRadius = 3
             bugTypeButton.layer.shadowOpacity = 1
         }
     }
     @IBOutlet weak var dropDownImageView: UIImageView!
+    @IBOutlet weak var characterCountLabel: UILabel! {
+        didSet {
+            characterCountLabel.text = "\(textViewCharacterLimit) characters left"
+        }
+    }
+    
+    let textViewCharacterLimit = 250
     
     var dropDown = DropDown()
     
@@ -46,18 +60,12 @@ class BugReportViewController: UIViewController {
         
         descriptionTextField.text = "Enter message here."
         descriptionTextField.textColor = UIColor.lightGray
-        descriptionTextField.layer.borderColor = UIColor.lightGray.cgColor
-        descriptionTextField.layer.borderWidth = 1
         descriptionTextField.layer.cornerRadius = 5
         
-        submitButton.layer.cornerRadius = 5
-        submitButton.layer.borderWidth = 1
-        submitButton.layer.borderColor = UIColor.lightGray.cgColor
-        
-        setupDropDownMenu()
+        addDropDownMenu()
     }
     
-    func setupDropDownMenu() {
+    func addDropDownMenu() {
         
         view.bringSubview(toFront: dropDownImageView)
         
@@ -79,6 +87,8 @@ class BugReportViewController: UIViewController {
         }
         
     }
+    
+
     
     @IBAction func didTapSubmit(_ sender: AnyObject) {
         
@@ -154,11 +164,6 @@ class BugReportViewController: UIViewController {
     }
 }
 
-//extension DropDown {
-//    func setWidth(_ width: CGFloat) {
-//        
-//    }
-//}
 
 extension BugReportViewController {
     
@@ -178,11 +183,12 @@ extension BugReportViewController: UITextViewDelegate, UITextFieldDelegate {
     //MARK: - UITextViewDelegate
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if text == "\n" {
-            textView.resignFirstResponder()
-            return false
-        }
-        return true
+        return NSString(string: textView.text).replacingCharacters(in: range, with: text).characters.count < textViewCharacterLimit + 1
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        let count = textView.text!.characters.count
+        characterCountLabel.text = "\(textViewCharacterLimit - count) characters left"
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
