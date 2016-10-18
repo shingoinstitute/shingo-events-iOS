@@ -2,10 +2,10 @@ PODS:
   - Alamofire (4.0.1)
   - AlamofireImage (3.1.0):
     - Alamofire (~> 4.0)
-  - Crashlytics (3.8.2):
+  - Crashlytics (3.8.3):
     - Fabric (~> 1.6.3)
   - DropDown (2)
-  - Fabric (1.6.9)
+  - Fabric (1.6.10)
   - PureLayout (3.0.2)
   - SwiftyJSON (2.3.2)
 
@@ -37,9 +37,9 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   Alamofire: 7682d43245de14874acd142ec137b144aa1dd335
   AlamofireImage: bb8c8351c51cb1633bb6be69b6dbbaff37ce65b7
-  Crashlytics: 27acca95a01b042a8294291dd6dff27f8f6af6d7
+  Crashlytics: 2b6dbe138a42395577cfa73dfa1aa7248cadf39e
   DropDown: 744784d9c9aa505100e942c16acd05430cbb2f0a
-  Fabric: bc5bec42cef4bcf1ee3ce0e218fc518e4b44dfbb
+  Fabric: c73f371ee543e3f0b80608f2674750e4910d1669
   PureLayout: 4d550abe49a94f24c2808b9b95db9131685fe4cd
   SwiftyJSON: 6118fb49d7519c4d31a0c1f3d5af936e9047b556
 
