@@ -12,15 +12,21 @@ class ResearchInfoViewController: UIViewController {
 
     @IBOutlet weak var bookImage: UIImageView!
     @IBOutlet weak var abstractTextField: UITextView!
-    var scrollView: UIScrollView = UIScrollView.newAutoLayoutView()
-    var backdrop = UIView.newAutoLayoutView()
+    var scrollView: UIScrollView = UIScrollView.newAutoLayout()
+    var backdrop = UIView.newAutoLayout()
     
     var recipient: SIRecipient!
+    
+    var didUpdateConstraints = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        recipient.getRecipientImage() { image in self.bookImage.image = image }
+        
         navigationItem.title = recipient.name
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(ResearchInfoViewController.adjustFontForCategorySizeChange), name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
         
         bookImage.removeFromSuperview()
         abstractTextField.removeFromSuperview()
@@ -29,54 +35,57 @@ class ResearchInfoViewController: UIViewController {
         scrollView.addSubview(bookImage)
         scrollView.addSubview(abstractTextField)
         
-        scrollView.autoPinToTopLayoutGuideOfViewController(self, withInset: 0)
-        scrollView.autoPinEdgeToSuperviewEdge(.Left)
-        scrollView.autoPinEdgeToSuperviewEdge(.Right)
-        scrollView.autoPinEdgeToSuperviewEdge(.Bottom)
-        
-        bookImage.autoPinEdgeToSuperviewEdge(.Top, withInset: 8)
-        bookImage.autoPinEdgeToSuperviewEdge(.Left, withInset: 8)
-        bookImage.autoPinEdgeToSuperviewEdge(.Right, withInset:  8)
-        bookImage.contentMode = .ScaleAspectFit
-        
-        abstractTextField.autoPinEdge(.Top, toEdge: .Bottom, ofView: bookImage, withOffset: 8)
-        abstractTextField.autoPinEdge(.Left, toEdge: .Left, ofView: view, withOffset: 0)
-        abstractTextField.autoPinEdge(.Right, toEdge: .Right, ofView: view, withOffset: 0)
-        abstractTextField.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: scrollView, withOffset: 0)
-        abstractTextField.scrollEnabled = false
-        abstractTextField.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
-        abstractTextField.backgroundColor = SIColor.shingoBlueColor()
-        
-        view.bringSubviewToFront(scrollView)
-        backdrop.autoPinEdge(.Top, toEdge: .Bottom, ofView: bookImage, withOffset: 8)
-        backdrop.autoPinEdgeToSuperviewEdge(.Left)
-        backdrop.autoPinEdgeToSuperviewEdge(.Right)
-        backdrop.autoPinEdgeToSuperviewEdge(.Bottom)
-        backdrop.backgroundColor = SIColor.shingoBlueColor()
-        
         automaticallyAdjustsScrollViewInsets = false
 
-        recipient.getRecipientImage() { image in
-            self.bookImage.image = image
-        }
+        let summary = NSMutableAttributedString(attributedString: recipient.attributedSummary)
         
-        abstractTextField.text = ""
+        let attributes = [
+            NSFontAttributeName : UIFont.preferredFont(forTextStyle: .body),
+            NSForegroundColorAttributeName : UIColor.white
+        ]
         
-        if !recipient.summary.isEmpty {
+        summary.addAttributes(attributes, range: summary.fullRange)
+        
+        abstractTextField.attributedText = summary
+        
+        updateViewConstraints()
+    }
+    
+    func adjustFontForCategorySizeChange() {
+        abstractTextField.font = UIFont.preferredFont(forTextStyle: .body)
+    }
+    
+    override func updateViewConstraints() {
+        if !didUpdateConstraints {
             
-            do {
-                let attributedText = try NSMutableAttributedString(data: recipient.summary.dataUsingEncoding(NSUTF8StringEncoding)!,
-                                                                      options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
-                                                                                NSCharacterEncodingDocumentAttribute : NSUTF8StringEncoding],
-                                                                      documentAttributes: nil)
-                attributedText.addAttributes([NSFontAttributeName : UIFont.helveticaOfFontSize(16), NSForegroundColorAttributeName : UIColor.whiteColor()], range: NSMakeRange(0, attributedText.string.characters.count - 1))
-                abstractTextField.attributedText = attributedText
-            } catch {
-                print("Error with richText in ResearchInfoViewController")
-            }
+            scrollView.autoPin(toTopLayoutGuideOf: self, withInset: 0)
+            scrollView.autoPinEdge(toSuperviewEdge: .left)
+            scrollView.autoPinEdge(toSuperviewEdge: .right)
+            scrollView.autoPinEdge(toSuperviewEdge: .bottom)
             
+            bookImage.autoPinEdge(toSuperviewEdge: .top, withInset: 8)
+            bookImage.autoPinEdge(toSuperviewEdge: .left, withInset: 8)
+            bookImage.autoPinEdge(toSuperviewEdge: .right, withInset:  8)
+            bookImage.contentMode = .scaleAspectFit
+            
+            abstractTextField.autoPinEdge(.top, to: .bottom, of: bookImage, withOffset: 8)
+            abstractTextField.autoPinEdge(.left, to: .left, of: view, withOffset: 0)
+            abstractTextField.autoPinEdge(.right, to: .right, of: view, withOffset: 0)
+            abstractTextField.autoPinEdge(.bottom, to: .bottom, of: scrollView, withOffset: 0)
+            abstractTextField.isScrollEnabled = false
+            abstractTextField.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+            abstractTextField.backgroundColor = .shingoBlue
+            
+            view.bringSubview(toFront: scrollView)
+            backdrop.autoPinEdge(.top, to: .bottom, of: bookImage, withOffset: 8)
+            backdrop.autoPinEdge(toSuperviewEdge: .left)
+            backdrop.autoPinEdge(toSuperviewEdge: .right)
+            backdrop.autoPinEdge(toSuperviewEdge: .bottom)
+            backdrop.backgroundColor = .shingoBlue
+            
+            didUpdateConstraints = true
         }
-        
+        super.updateViewConstraints()
     }
     
 

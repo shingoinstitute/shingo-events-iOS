@@ -15,27 +15,27 @@ class ExhibitorInfoViewController: UIViewController {
     var exhibitor: SIExhibitor!
     
     var exhibitorImageView: UIImageView = {
-        let view = UIImageView.newAutoLayoutView()
-        view.backgroundColor = .clearColor()
-        view.contentMode = .ScaleAspectFit
+        let view = UIImageView.newAutoLayout()
+        view.backgroundColor = .clear
+        view.contentMode = .scaleAspectFit
         return view
     }()
     var contentImageView: UIView = {
-        let view = UIView.newAutoLayoutView()
-        view.backgroundColor = .whiteColor()
+        let view = UIView.newAutoLayout()
+        view.backgroundColor = .white
         return view
     }()
     var descriptionTextField: UITextView = {
-        let view = UITextView.newAutoLayoutView()
+        let view = UITextView.newAutoLayout()
         view.text = ""
         view.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
-        view.backgroundColor = SIColor.shingoBlueColor()
-        view.editable = false
-        view.scrollEnabled = false
-        view.dataDetectorTypes = [UIDataDetectorTypes.Link, UIDataDetectorTypes.PhoneNumber]
+        view.backgroundColor = .shingoBlue
+        view.isEditable = false
+        view.isScrollEnabled = false
+        view.dataDetectorTypes = [UIDataDetectorTypes.link, UIDataDetectorTypes.phoneNumber]
         return view
     }()
-    var scrollView = UIScrollView.newAutoLayoutView()
+    var scrollView = UIScrollView.newAutoLayout()
 
     var didUpdateConstraints = false
     
@@ -43,7 +43,7 @@ class ExhibitorInfoViewController: UIViewController {
         super.viewDidLoad()
 
         navigationItem.title = exhibitor.name
-        view.backgroundColor = SIColor.shingoBlueColor()
+        view.backgroundColor = .shingoBlue
         
         exhibitor.getLogoImage { (image) in
             self.exhibitorImageView.image = image
@@ -53,7 +53,9 @@ class ExhibitorInfoViewController: UIViewController {
         scrollView.addSubviews([contentImageView, descriptionTextField])
         contentImageView.addSubview(exhibitorImageView)
         
-        getDescriptionForRichText()
+        setDescriptionText()
+        
+//        descriptionTextField.attributedText = exhibitor.attributedSummary
         
         updateViewConstraints()
     }
@@ -63,62 +65,52 @@ class ExhibitorInfoViewController: UIViewController {
             
             scrollView.autoPinEdgesToSuperviewEdgesWithNavbar(self, withTopInset: 0)
             
-            contentImageView.autoSetDimension(.Height, toSize: 150.0)
-            contentImageView.autoPinEdgeToSuperviewEdge(.Top, withInset: 0)
-            contentImageView.autoPinEdge(.Left, toEdge: .Left, ofView: view)
-            contentImageView.autoPinEdge(.Right, toEdge: .Right, ofView: view)
+            contentImageView.autoSetDimension(.height, toSize: 150.0)
+            contentImageView.autoPinEdge(toSuperviewEdge: .top, withInset: 0)
+            contentImageView.autoPinEdge(.left, to: .left, of: view)
+            contentImageView.autoPinEdge(.right, to: .right, of: view)
             
-            exhibitorImageView.autoPinEdgesToSuperviewEdgesWithInsets(UIEdgeInsetsMake(5, 5, 5, 5))
+            exhibitorImageView.autoPinEdgesToSuperviewEdges(with: UIEdgeInsetsMake(5, 5, 5, 5))
 
-            descriptionTextField.autoPinEdge(.Top, toEdge: .Bottom, ofView: contentImageView, withOffset: 8)
-            descriptionTextField.autoPinEdge(.Left, toEdge: .Left, ofView: view)
-            descriptionTextField.autoPinEdge(.Right, toEdge: .Right, ofView: view)
-            descriptionTextField.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: scrollView, withOffset: 0)
+            descriptionTextField.autoPinEdge(.top, to: .bottom, of: contentImageView, withOffset: 8)
+            descriptionTextField.autoPinEdge(.left, to: .left, of: view)
+            descriptionTextField.autoPinEdge(.right, to: .right, of: view)
+            descriptionTextField.autoPinEdge(.bottom, to: .bottom, of: scrollView, withOffset: 0)
             
             didUpdateConstraints = true
         }
         super.updateViewConstraints()
     }
     
-    func getDescriptionForRichText() {
-        let richText = NSMutableAttributedString()
-        let attrs = [NSFontAttributeName : UIFont.systemFontOfSize(16.0),
-                     NSForegroundColorAttributeName : UIColor.whiteColor()]
-        descriptionTextField.linkTextAttributes = [NSForegroundColorAttributeName : UIColor.cyanColor(),
-                                                   NSUnderlineStyleAttributeName : NSUnderlineStyle.StyleSingle.rawValue]
-                                                   
+    func setDescriptionText() {
+        let attributedString = NSMutableAttributedString()
         
-        if !exhibitor.summary.isEmpty {
-            let htmlString: String! = "<style>body{color: white;}</style><font size=\"5\">" + exhibitor.summary + "</font></style>";
-            do {
-            let description = try NSAttributedString(data: htmlString.dataUsingEncoding(NSUTF8StringEncoding)!,
-                                                        options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
-                                                            NSCharacterEncodingDocumentAttribute : NSUTF8StringEncoding],
-                                                        documentAttributes: nil)
-            richText.appendAttributedString(description)
-            } catch {
-                let error = NSError(domain: "NSAttributedString",
-                                    code: 72283,
-                                    userInfo: [
-                                        NSLocalizedDescriptionKey : "Could not parse text for exhibitor summary.",
-                                        NSLocalizedFailureReasonErrorKey: "Could not parse text for exhibitor summary. Most likely reason is because the text passed back from the API was not UTF-8 coding compliant."
-                                    ])
-                Crashlytics.sharedInstance().recordError(error)
-            }
+        let attrs = [NSFontAttributeName : UIFont.preferredFont(forTextStyle: .body),
+                     NSForegroundColorAttributeName : UIColor.white]
+        
+        if exhibitor.attributedSummary.string.isEmpty {
+            attributedString.append(NSAttributedString(string: "Description coming soon."))
         } else {
-            richText.appendAttributedString(NSAttributedString(string: "Description coming soon."));
+            attributedString.append(exhibitor.attributedSummary)
         }
-        richText.appendAttributedString(NSAttributedString(string: "\n\n"))
+        
+        attributedString.append(NSAttributedString(string: "\n\n"))
         
         
         if !exhibitor.website.isEmpty  {
-            richText.appendAttributedString(NSAttributedString(string: String("Website: " + exhibitor.website + "\n"), attributes: attrs))
-        }
-        if !exhibitor.contactEmail.isEmpty {
-            richText.appendAttributedString(NSAttributedString(string: String("Email: " + exhibitor.contactEmail + "\n"), attributes: attrs))
+            attributedString.append(NSAttributedString(string: String("Website: \(exhibitor.website)\n")))
         }
         
-        descriptionTextField.attributedText = richText;
+        if !exhibitor.contactEmail.isEmpty {
+            attributedString.append(NSAttributedString(string: String("Email: \(exhibitor.contactEmail)\n")))
+        }
+        
+        attributedString.addAttributes(attrs, range: attributedString.fullRange)
+        
+        descriptionTextField.attributedText = attributedString
+        
+        descriptionTextField.linkTextAttributes = [NSForegroundColorAttributeName : UIColor.cyan,
+                                                   NSUnderlineStyleAttributeName : NSUnderlineStyle.styleSingle.rawValue]
     }
     
 

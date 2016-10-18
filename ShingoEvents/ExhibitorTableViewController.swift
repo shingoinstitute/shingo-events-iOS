@@ -12,8 +12,17 @@ class ExhibitorTableViewController: UITableViewController {
     
     var sectionInformation = [(String, [SIExhibitor])]()
     
+    var gradientBackgroundView = UIView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tableView.backgroundView = gradientBackgroundView
+        gradientBackgroundView.backgroundColor = .lightShingoBlue
+        
+        let gradientLayer = RadialGradientLayer()
+        gradientLayer.frame = gradientBackgroundView.bounds
+        gradientBackgroundView.layer.insertSublayer(gradientLayer, at: 0)
         
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 150.0
@@ -23,92 +32,70 @@ class ExhibitorTableViewController: UITableViewController {
         }
     }
     
-    override func viewDidDisappear(animated: Bool) {
+    override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIContentSizeCategoryDidChangeNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
     }
     
     private func displayNoContentNotification() {
         let label: UILabel = {
-            let view = UILabel.newAutoLayoutView()
-            view.text = "This event does not have any exhibitors."
-            view.textColor = .whiteColor()
+            let view = UILabel.newAutoLayout()
+            view.text = "Content Currently Unavailable."
+            view.textColor = .white
             view.sizeToFit()
             return view
         }()
         
         view.addSubview(label)
-        label.autoAlignAxisToSuperviewAxis(.Horizontal)
-        label.autoAlignAxisToSuperviewAxis(.Vertical)
+        label.autoAlignAxis(toSuperviewAxis: .horizontal)
+        label.autoAlignAxis(toSuperviewAxis: .vertical)
     }
     
-    // MARK: - Navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "ExhibitorInfoView" {
-            let destination = segue.destinationViewController as! ExhibitorInfoViewController
-            if let exhibitor = sender as? SIExhibitor {
-                destination.exhibitor = exhibitor
-            }
-        }
-    }
 }
 
 extension ExhibitorTableViewController {
     
     // MARK: - Table view data source
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return sectionInformation.count
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return sectionInformation[section].1.count
     }
 
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = UIView()
-        view.backgroundColor = SIColor.shingoGoldColor()
-        let header = UILabel()
-        header.text = sectionInformation[section].0
-        header.textColor = .whiteColor()
-        header.font = UIFont.boldSystemFontOfSize(16.0)
-        header.backgroundColor = .clearColor()
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ExhibitorCell") as! ExhibitorTableViewCell
         
-        view.addSubview(header)
-        header.autoPinEdgesToSuperviewEdgesWithInsets(UIEdgeInsets.init(top: 0, left: 8, bottom: 0, right: 0))
+        cell.entity = sectionInformation[indexPath.section].1[indexPath.row]
         
-        return view
-    }
-    
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 30
-    }
-    
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
-        let cell: ExhibitorTableViewCell = ExhibitorTableViewCell()
-        cell.exhibitor = sectionInformation[indexPath.section].1[indexPath.row]
-        
-        cell.setNeedsUpdateConstraints()
-        cell.updateConstraintsIfNeeded()
+        cell.isExpanded = cell.entity.isSelected
         
         return cell
     }
 
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let cell = tableView.cellForRowAtIndexPath(indexPath) as! ExhibitorTableViewCell
-        if let exhibitor = cell.exhibitor {
-            performSegueWithIdentifier("ExhibitorInfoView", sender: exhibitor)
-        }
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as! ExhibitorTableViewCell
+        
+        cell.isExpanded = !cell.isExpanded
+        
+        tableView.beginUpdates()
+        tableView.endUpdates()
     }
 
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
-            return 200.0
-        } else {
-            return 150
-        }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header = UILabel(text: "\t\(sectionInformation[section].0)", font: UIFont.preferredFont(forTextStyle: .headline))
+        header.textColor = .white
+        header.backgroundColor = .shingoRed
+        
+        return header
     }
-
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 30
+    }
+    
 
 }
 

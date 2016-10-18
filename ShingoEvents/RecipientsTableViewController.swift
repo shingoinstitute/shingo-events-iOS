@@ -8,6 +8,8 @@
 
 import UIKit
 
+
+
 class RecipientsTableViewController: UITableViewController {
 
     var spRecipients: [SIRecipient]!
@@ -40,32 +42,20 @@ class RecipientsTableViewController: UITableViewController {
         super.loadView()
     }
     
+    var gradientBackgroundView = UIView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-    }
-    
-    // MARK: - Navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        if segue.identifier == "ChallengerInfoView" {
-            let destination = segue.destinationViewController as! ChallengerInfoViewController
-            if let recipient = sender as? SIRecipient {
-                destination.navigationController?.topViewController?.title = recipient.name
-                destination.recipient = recipient
-                // Send something
-            }
-        }
+        tableView.backgroundView = gradientBackgroundView
+        gradientBackgroundView.backgroundColor = .lightShingoBlue
         
-        if segue.identifier == "ResearchInfoView" {
-            let destination = segue.destinationViewController as! ResearchInfoViewController
-            
-            if let recipient = sender as? SIRecipient {
-                destination.navigationController?.topViewController?.title = recipient.name
-                destination.recipient = recipient
-                // Send something
-            }
-            
-        }
+        let gradientLayer = RadialGradientLayer()
+        gradientLayer.frame = gradientBackgroundView.bounds
+        gradientBackgroundView.layer.insertSublayer(gradientLayer, at: 0)
+        
+        tableView.estimatedRowHeight = 150
+        tableView.rowHeight = UITableViewAutomaticDimension
         
     }
     
@@ -74,64 +64,46 @@ class RecipientsTableViewController: UITableViewController {
 extension RecipientsTableViewController {
     
     // MARK: - Table view data source
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return dataSource.count
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return dataSource[section].count
     }
 
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("RecipientCell", forIndexPath: indexPath) as! RecipientTableViewCell
-        cell.recipient = dataSource[indexPath.section][indexPath.row]
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "RecipientCell", for: indexPath) as! RecipientTableViewCell
+        
+        cell.entity = dataSource[indexPath.section][indexPath.row]
+        
+        cell.isExpanded = cell.entity.isSelected
+        
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let cell = tableView.cellForRowAtIndexPath(indexPath) as! RecipientTableViewCell
-        
-        if let recipient = cell.recipient {
-            switch recipient.awardType {
-                case .ShingoPrize,
-                     .Silver,
-                     .Bronze:
-                    self.performSegueWithIdentifier("ChallengerInfoView", sender: recipient)
-                case .Research:
-                    self.performSegueWithIdentifier("ResearchInfoView", sender: recipient)
-                case .Publication:
-                    // Might change segue later to be a screen customized to publication recipients
-                    self.performSegueWithIdentifier("ResearchInfoView", sender: recipient)
-                default:
-                    return
-            }
-        }
-    }
-    
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 42
-    }
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as! RecipientTableViewCell
 
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 132
+        cell.isExpanded = !cell.isExpanded
+        
+        tableView.beginUpdates()
+        tableView.endUpdates()
+
     }
     
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = UIView()
-        view.backgroundColor = SIColor.shingoGoldColor()
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 32
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header = UILabel(text: "\(dataSource[section][0].awardType.rawValue) Recipients", font: UIFont.preferredFont(forTextStyle: .headline))
+        header.textColor = .white
+        header.textAlignment = .center
+        header.backgroundColor = .shingoRed
         
-        let header = UILabel()
-        header.font = UIFont.boldSystemFontOfSize(18)
-        header.textColor = .whiteColor()
-        
-        header.text = "\(dataSource[section][0].awardType.rawValue) Recipients"
-        
-        view.addSubview(header)
-        
-        header.autoPinEdgesToSuperviewEdgesWithInsets(UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8))
-        
-        return view
+        return header
     }
 
 

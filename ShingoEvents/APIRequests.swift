@@ -10,35 +10,30 @@ import Foundation
 import Alamofire
 import AlamofireImage
 import MapKit
+import SwiftyJSON
+import Crashlytics
 
-let BASE_URL = "https://api.shingo.org"
-let EVENTS_URL = BASE_URL + "/salesforce/events"
-let SUPPORT_URL = BASE_URL + "/support"
+
 
 class SIRequest {
     
-    // MARK: - Properties
+    static let BASE_URL = "https://api.shingo.org"
+    static let EVENTS_URL = BASE_URL + "/salesforce/events"
+    static let SUPPORT_URL = BASE_URL + "/support"
     
-    // Date formatters uses convenience init that defaults timezone to GMT
-    var dateFormatter = NSDateFormatter(locale: "en_US_POSIX", dateFormat: "yyyy-MM-dd")
-    var sessionDateFormatter = NSDateFormatter(locale: "en_US_POSIX", dateFormat: "yyyy-MM-dd'T'HH:mm:ss.SSS")
+    /* 
+     *Important! DateFormatter defaults timezone to MST.
+     */
+    static let dateFormatter = DateFormatter(dateFormat: "yyyy-MM-dd")
+    static let sessionDateFormatter = DateFormatter(dateFormat: "yyyy-MM-dd'T'HH:mm:ss.SSS")
     
+    static let timeZoneOffset = TimeInterval(NSTimeZone.local.secondsFromGMT())
     
-    // Mark: - Alamofire
     
     /// HTTP GET request method.
-    private func getRequest(url url: String, description: String, callback: (value: JSON?) -> ()) -> Alamofire.Request? {
+    func getRequest(url: String, description: String, callback: @escaping (JSON?) -> ()) -> Alamofire.Request? {
         
-        /*
-         Checks that the provided url is valid. 
-         See method declaration for detailed description.
-         */
-        if !SIRequest.isValidURL(url as URLStringConvertible) {
-            callback(value: nil)
-            return nil
-        }
-        
-        return Alamofire.request(.GET, url).responseJSON { response in
+        return Alamofire.request(url).responseJSON { response in
             
             print("+-\(self.marks(description))")
             print("| \(description) |")
@@ -49,8 +44,8 @@ class SIRequest {
                 print("+-\(self.marks(description + " - END"))")
                 print("| \(description + " - END") |")
                 print("+-\(self.marks(description + " - END"))")
-                callback(value: nil)
-                return
+                return callback(nil)
+                
             }
             
             guard let response = response.result.value else {
@@ -58,8 +53,8 @@ class SIRequest {
                 print("+-\(self.marks(description + " - END"))")
                 print("| \(description + " - END") |")
                 print("+-\(self.marks(description + " - END"))")
-                callback(value: nil)
-                return
+                return callback(nil)
+                
             }
             
             let responseJSON = JSON(response)
@@ -69,8 +64,7 @@ class SIRequest {
                     print("+-\(self.marks(description + " - END"))")
                     print("| \(description + " - END") |")
                     print("+-\(self.marks(description + " - END"))")
-                    callback(value: nil)
-                    return
+                    return callback(nil)
                 }
             }
             
@@ -80,34 +74,24 @@ class SIRequest {
             print("| \(description + " - END") |")
             print("+-\(self.marks(description + " - END"))")
             
-            callback(value: responseJSON)
+            callback(responseJSON)
         }
     }
     
     
     /// HTTP POST request method.
-    private func postRequest(url url: String, description: String, parameters: [String:String], callback: (value: JSON?) -> ()) {
-        
-        /*
-         Checks that the provided url is valid.
-         See method declaration for detailed description.
-         */
-        if !SIRequest.isValidURL(url as URLStringConvertible) {
-            callback(value: nil)
-            return
-        }
-        
-        Alamofire.request(.POST, url, parameters: parameters).responseJSON { response in
+    func postRequest(url: String, description: String, parameters: [String:String], callback: @escaping (_ value: JSON?) -> ()) -> Alamofire.Request? {
+        return Alamofire.request(url, parameters: parameters).responseJSON { response in
             
             guard response.result.isSuccess else {
                 print("Error while performing API POST request: \(response.result.error)")
-                callback(value: nil)
+                callback(nil)
                 return
             }
             
             guard let response = response.result.value else {
                 print("Error while performing API POST request: Invalid response")
-                callback(value: nil)
+                callback(nil)
                 return
             }
             
@@ -119,23 +103,20 @@ class SIRequest {
             print("| \(description + " - END") |")
             print("+-\(self.marks(description + " - END"))")
             
-            callback(value: responseJSON)
+            callback(responseJSON)
         }
     }
     
-}
-
-extension SIRequest {
 
     // MARK: - API Calls
     
     /// Returns all ready-to-publish events from Salesforce.
-    func requestEvents(callback: (events: [SIEvent]?) -> Void) -> Alamofire.Request? {
+    @discardableResult func requestEvents(_ callback: @escaping ([SIEvent]?) -> Void) -> Alamofire.Request? {
         
-        return getRequest(url: EVENTS_URL, description: "REQUEST EVENTS") { json in
+        return getRequest(url: SIRequest.EVENTS_URL, description: "REQUEST EVENTS") { json in
             
             guard let json = json else {
-                callback(events: nil)
+                callback(nil)
                 return
             }
             
@@ -162,15 +143,15 @@ extension SIRequest {
                     }
                     
                     if let startDate = record["Start_Date__c"].string {
-                        if let startDate = self.dateFormatter.dateFromString(startDate) {
-                            event.startDate = startDate
+                        if let startDate = SIRequest.dateFormatter.date(from: startDate) {
+                            event.startDate = startDate.addingTimeInterval(SIRequest.timeZoneOffset)
                         }
                         
                     }
                     
                     if let endDate = record["End_Date__c"].string {
-                        if let endDate = self.dateFormatter.dateFromString(endDate) {
-                            event.endDate = endDate
+                        if let endDate = SIRequest.dateFormatter.date(from: endDate) {
+                            event.endDate = endDate.addingTimeInterval(SIRequest.timeZoneOffset)
                         }
                     }
                     
@@ -185,17 +166,17 @@ extension SIRequest {
                     events.append(event)
                 }
             }
-            callback(events: events)
+            callback(events)
         }
     }
     
     /// Returns an event from Salesforce using an event ID.
-    func requestEvent(eventId id: String, callback: (event: SIEvent?) -> Void) {
+    @discardableResult func requestEvent(eventId: String, callback: @escaping (SIEvent?) -> Void) -> Alamofire.Request? {
         
-        getRequest(url: EVENTS_URL + "/\(id)", description: "REQUEST EVENT") { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/\(eventId)", description: "REQUEST EVENT") { json in
             
             guard let json = json else {
-                callback(event: nil)
+                callback(nil)
                 return
             }
             
@@ -214,14 +195,14 @@ extension SIRequest {
                 }
                 
                 if let startDate = record["Start_Date__c"].string {
-                    if let startDate = self.dateFormatter.dateFromString(startDate) {
-                        event.startDate = startDate
+                    if let startDate = SIRequest.dateFormatter.date(from: startDate) {
+                        event.startDate = startDate.addingTimeInterval(SIRequest.timeZoneOffset)
                     }
                 }
                 
                 if let endDate = record["End_Date__c"].string {
-                    if let endDate = self.dateFormatter.dateFromString(endDate) {
-                        event.endDate = endDate
+                    if let endDate = SIRequest.dateFormatter.date(from: endDate) {
+                        event.endDate = endDate.addingTimeInterval(SIRequest.timeZoneOffset)
                     }
                 }
                 
@@ -237,42 +218,78 @@ extension SIRequest {
                     event.salesText = salesText
                 }
                 
+                if let attendeeRecords = record["Shingo_Attendees__r"]["records"].array {
+                    
+                    var attendees = [SIAttendee]()
+                    
+                    for record in attendeeRecords {
+                        
+                        let attendee = SIAttendee()
+                        
+                        let contact = record["Contact__r"]
+                        
+                        if let id = contact["Id"].string {
+                            attendee.id = id
+                        }
+                        
+                        if let name = contact["Name"].string {
+                            attendee.name = name
+                        }
+                        
+                        if let title = contact["Title"].string {
+                            attendee.title = title
+                        }
+                        
+                        if let org = contact["Account"]["Name"].string {
+                            attendee.organization = org
+                        }
+                        
+                        if let pictureURL = contact["Photograph__c"].string {
+                            attendee.pictureURL = pictureURL
+                        }
+                        
+                        attendees.append(attendee)
+                        
+                    }
+                    event.attendees = attendees
+                }
+                
             }
-            callback(event: event)
+            callback(event)
         }
         
     }
     
     /// Gets all days for a single event using an event ID.
-    func requestAgendaDays(eventId eventId: String, callback: (agendas: [SIAgenda]?) -> Void) {
+    @discardableResult func requestAgendaDays(eventId: String, callback: @escaping ([SIAgenda]?) -> Void) -> Alamofire.Request? {
 
-        getRequest(url: EVENTS_URL + "/days?event_id=\(eventId)", description: "REQUEST AGENDA FOR EVENT") { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/days?event_id=\(eventId)", description: "REQUEST AGENDA FOR EVENT") { json in
             
             guard let json = json else {
-                callback(agendas: nil)
+                callback(nil)
                 return
             }
             
-            callback(agendas: self.parseDaysRequest(json))
+            callback(self.parseDaysRequest(json))
         }
     }
     
     /// Gets all days from Salesforce.
-    func requestAgendaDays(callback: (agendas: [SIAgenda]?) -> ()) {
+    @discardableResult func requestAgendaDays(_ callback: @escaping ([SIAgenda]?) -> ()) -> Alamofire.Request? {
         
-        getRequest(url: EVENTS_URL + "/days", description: "REQUEST AGENDAS, ALL") { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/days", description: "REQUEST AGENDAS, ALL") { json in
             
             guard let json = json else {
-                callback(agendas: nil)
+                callback(nil)
                 return
             }
             
-            callback(agendas: self.parseDaysRequest(json))
+            callback(self.parseDaysRequest(json))
         }
         
     }
 
-    private func parseDaysRequest(json: JSON) -> [SIAgenda] {
+    fileprivate func parseDaysRequest(_ json: JSON) -> [SIAgenda] {
         
         var agendas = [SIAgenda]()
         
@@ -294,8 +311,8 @@ extension SIRequest {
                 }
                 
                 if let date = record["Agenda_Date__c"].string {
-                    if let date = self.dateFormatter.dateFromString(date) {
-                        agenda.date = date
+                    if let date = SIRequest.dateFormatter.date(from: date) {
+                        agenda.date = date.addingTimeInterval(SIRequest.timeZoneOffset)
                     }
                 }
                 
@@ -306,12 +323,12 @@ extension SIRequest {
     }
     
     /// Gets basic information for sessions associated with an SIAgenda.
-    func requestAgendaSessions(agendaId id: String, callback: (sessions: [SISession]?) -> Void) {
+    @discardableResult func requestAgendaSessions(agendaId id: String, callback: @escaping (_ sessions: [SISession]?) -> Void) -> Alamofire.Request? {
         
-        getRequest(url: EVENTS_URL + "/days/\(id)", description: "REQUEST SESSIONS, BASIC") { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/days/\(id)", description: "REQUEST SESSIONS, BASIC") { json in
             
             guard let json = json else {
-                callback(sessions: nil)
+                callback(nil)
                 return
             }
             
@@ -339,14 +356,14 @@ extension SIRequest {
                     }
                     
                     if let startDate = record["Start_Date_Time__c"].string {
-                        if let startDate = self.sessionDateFormatter.dateFromString(startDate) {
-                            session.startDate = startDate
+                        if let startDate = SIRequest.sessionDateFormatter.date(from: startDate) {
+                            session.startDate = startDate.addingTimeInterval(SIRequest.timeZoneOffset)
                         }
                     }
                     
                     if let endDate = record["End_Date_Time__c"].string {
-                        if let endDate = self.sessionDateFormatter.dateFromString(endDate) {
-                            session.endDate = endDate
+                        if let endDate = SIRequest.sessionDateFormatter.date(from: endDate) {
+                            session.endDate = endDate.addingTimeInterval(SIRequest.timeZoneOffset)
                         }
                     }
                     
@@ -357,40 +374,39 @@ extension SIRequest {
                     sessions.append(session)
                 }
             }
-            callback(sessions: sessions)
+            callback(sessions)
         }
     }
     
     /// Gets all sessions for a single event using an agenda ID. Note: Provides more detail than requestAgendaSessions().
-    func requestSessions(agendaId id: String, callback: (sessions: [SISession]?) -> ()) {
-        getRequest(url: EVENTS_URL + "/sessions?agenda_id=\(id)", description: "REQUEST SESSIONS, DETAILED") { json in
+    @discardableResult func requestSessions(agendaId id: String, callback: @escaping ([SISession]?) -> ()) -> Alamofire.Request? {
+        return getRequest(url: SIRequest.EVENTS_URL + "/sessions?agenda_id=\(id)", description: "REQUEST SESSIONS, DETAILED") { json in
             
             guard let json = json else {
-                callback(sessions: nil)
+                callback(nil)
                 return
             }
             
-            callback(sessions: self.parseSessionResponse(json))
+            callback(self.parseSessionResponse(json: json))
         }
     }
     
     /// Gets all sessions from Salesforce.
-    func requestSessions(callback: (sessions: [SISession]?) -> ()) {
-        
-        getRequest(url: EVENTS_URL + "/sessions", description: "REQUEST SESSIONS, ALL") { json in
+    @discardableResult func requestSessions(_ callback: @escaping ([SISession]?) -> ()) -> Alamofire.Request? {
+        return getRequest(url: SIRequest.EVENTS_URL + "/sessions", description: "REQUEST SESSIONS, ALL") { json in
             
             guard let json = json else {
-                callback(sessions: nil)
+                callback(nil)
                 return
             }
             
-            callback(sessions: self.parseSessionResponse(json))
+            callback(self.parseSessionResponse(json: json))
             
         }
         
     }
     
-    private func parseSessionResponse(json: JSON) -> [SISession] {
+    fileprivate func parseSessionResponse(json: JSON) -> [SISession] {
         
         var sessions = [SISession]()
 
@@ -412,14 +428,14 @@ extension SIRequest {
                 }
                 
                 if let startDate = record["Start_Date_Time__c"].string {
-                    if let startDate = self.sessionDateFormatter.dateFromString(startDate.split("+")![0]) {
-                        session.startDate = startDate
+                    if let startDate = SIRequest.sessionDateFormatter.date(from: startDate.split("+")![0]) {
+                        session.startDate = startDate.addingTimeInterval(SIRequest.timeZoneOffset)
                     }
                 }
             
                 if let endDate = record["End_Date_Time__c"].string {
-                    if let endDate = self.sessionDateFormatter.dateFromString(endDate.split("+")![0]) {
-                        session.endDate = endDate
+                    if let endDate = SIRequest.sessionDateFormatter.date(from: endDate.split("+")![0]) {
+                        session.endDate = endDate.addingTimeInterval(SIRequest.timeZoneOffset)
                     }
                 }
                 
@@ -431,7 +447,7 @@ extension SIRequest {
                     session.sessionTrack = track
                 }
                 
-                if record["Room__r"].isExists() {
+                if record["Room__r"] != nil {
                     
                     let room = SIRoom()
                     
@@ -457,7 +473,9 @@ extension SIRequest {
                 }
                 
                 if let summary = record["Summary__c"].string {
-                    session.summary = summary
+                    if let attributedSummary = SIRequest.parseHTMLStringUsingPreferredFont(string: summary) {
+                        session.attributedSummary = attributedSummary
+                    }
                 }
                 
                 if let speakers = record["Session_Speaker_Associations__r"]["records"].array {
@@ -479,12 +497,12 @@ extension SIRequest {
     }
     
     /// Gets a single session using a session ID.
-    func requestSession(id: String, callback: (session: SISession?) -> ()) {
+    @discardableResult func requestSession(_ id: String, callback: @escaping (SISession?) -> ()) -> Alamofire.Request? {
         
-        getRequest(url: EVENTS_URL + "/sessions/\(id)", description: "REQUEST SESSION") { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/sessions/\(id)", description: "REQUEST SESSION") { json in
             
             guard let json = json else {
-                callback(session: nil)
+                callback(nil)
                 return
             }
             
@@ -507,14 +525,14 @@ extension SIRequest {
                 }
                 
                 if let startDate = record["Start_Date_Time__c"].string {
-                    if let startDate = self.sessionDateFormatter.dateFromString(startDate.split("+")![0]) {
-                        session.startDate = startDate
+                    if let startDate = SIRequest.sessionDateFormatter.date(from: startDate.split("+")![0]) {
+                        session.startDate = startDate.addingTimeInterval(SIRequest.timeZoneOffset)
                     }
                 }
                 
                 if let endDate = record["End_Date_Time__c"].string {
-                    if let endDate = self.sessionDateFormatter.dateFromString(endDate.split("+")![0]) {
-                        session.endDate = endDate
+                    if let endDate = SIRequest.sessionDateFormatter.date(from: endDate.split("+")![0]) {
+                        session.endDate = endDate.addingTimeInterval(SIRequest.timeZoneOffset)
                     }
                 }
                 
@@ -527,7 +545,11 @@ extension SIRequest {
                 }
                 
                 if let summary = record["Summary__c"].string {
-                    session.summary = summary
+                    if !summary.isEmpty {
+                        if let attributedSummary = SIRequest.parseHTMLStringUsingPreferredFont(string: summary) {
+                            session.attributedSummary = attributedSummary
+                        }
+                    }
                 }
                 
                 if let roomName = record["Room__r"]["Name"].string {
@@ -536,22 +558,22 @@ extension SIRequest {
                 
             }
             
-            callback(session: session)
+            callback(session)
         }
         
     }
     
     ///Gets all speakers from Salesforce, or use event ID to get all speakers for an event.
-    func requestSpeakers(eventId id: String, callback: (speakers: [SISpeaker]?) -> Void) {
+    @discardableResult func requestSpeakers(eventId id: String, callback: @escaping ([SISpeaker]?) -> Void) -> Alamofire.Request? {
         
-        getRequest(url: EVENTS_URL + "/speakers?event_id=\(id)", description: "REQUEST SPEAKERS, EVENT", callback: { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/speakers?event_id=\(id)", description: "REQUEST SPEAKERS, EVENT", callback: { json in
             
             guard let json = json else {
-                callback(speakers: nil)
+                callback(nil)
                 return
             }
             
-            callback(speakers: self.parseSpeakerResponse(json))
+            callback(self.parseSpeakerResponse(json: json))
             
         });
         
@@ -559,38 +581,38 @@ extension SIRequest {
     
     
     ///Gets all speakers from Salesforce, or use session ID to get all speakers for a session.
-    func requestSpeakers(sessionId id: String, callback: (speakers: [SISpeaker]?) -> Void) {
+    @discardableResult func requestSpeakers(sessionId id: String, callback: @escaping ([SISpeaker]?) -> Void) -> Alamofire.Request? {
         
-        getRequest(url: EVENTS_URL + "/speakers?session_id=\(id)", description: "REQUEST SPEAKERS, SESSION") { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/speakers?session_id=\(id)", description: "REQUEST SPEAKERS, SESSION") { json in
             
             guard let json = json else {
-                callback(speakers: nil)
+                callback(nil)
                 return
             }
             
-            callback(speakers: self.parseSpeakerResponse(json))
+            callback(self.parseSpeakerResponse(json: json))
             
         }
         
     }
     
     /// Gets all speakers from salesforce.
-    func requestSpeakers(callback: (speakers: [SISpeaker]?) -> Void) {
+    @discardableResult func requestSpeakers(_ callback: @escaping ([SISpeaker]?) -> Void) -> Alamofire.Request? {
         
-        getRequest(url: EVENTS_URL + "/speakers", description: "REQUEST SPEAKERS, ALL") { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/speakers", description: "REQUEST SPEAKERS, ALL") { json in
             
             guard let json = json else {
-                callback(speakers: nil)
+                callback(nil)
                 return
             }
             
-            callback(speakers: self.parseSpeakerResponse(json))
+            callback(self.parseSpeakerResponse(json: json))
             
         }
         
     }
     
-    private func parseSpeakerResponse(json: JSON) -> [SISpeaker] {
+    fileprivate func parseSpeakerResponse(json: JSON) -> [SISpeaker] {
         
         var speakers = [SISpeaker]()
         
@@ -616,7 +638,9 @@ extension SIRequest {
                 }
                 
                 if let biography = record["Speaker_Biography__c"].string {
-                    speaker.biography = biography
+                    if let attributedSummary = SIRequest.parseHTMLStringUsingPreferredFont(string: biography) {
+                        speaker.attributedSummary = attributedSummary
+                    }
                 }
                 
                 if let contactEmail = record["Contact__r"]["Email"].string {
@@ -631,14 +655,14 @@ extension SIRequest {
                     for session in sessionAssocs {
                         if let isKeynoteSpeaker = session["Is_Keynote_Speaker__c"].bool {
                             if isKeynoteSpeaker {
-                                speaker.speakerType = .Keynote
+                                speaker.speakerType = .keynote
                             } else {
-                                speaker.speakerType = .Concurrent
+                                speaker.speakerType = .concurrent
                             }
                         }
                     }
                 } else {
-                    speaker.speakerType = .Concurrent
+                    speaker.speakerType = .concurrent
                 }
                 
                 if let assocs = record["Session_Speaker_Associations__r"]["records"].array {
@@ -657,18 +681,18 @@ extension SIRequest {
     }
     
     /// Gets a single speaker using a speaker ID.
-    func requestSpeaker(speakerId id: String, callback: (speaker: SISpeaker?) -> ()) {
+    @discardableResult func requestSpeaker(speakerId id: String, callback: @escaping (SISpeaker?) -> ()) -> Alamofire.Request? {
         
-        getRequest(url: EVENTS_URL + "/speakers/\(id)", description: "REQUEST SPEAKER, SINGLE", callback: { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/speakers/\(id)", description: "REQUEST SPEAKER, SINGLE", callback: { json in
             
             guard let json = json else {
-                callback(speaker: nil)
+                callback(nil)
                 return
             }
             
             let speaker = SISpeaker()
             
-            if json["speaker"].isExists() {
+            if json["speaker"] != nil {
                 
                 let record = json["speaker"]
                 
@@ -689,7 +713,9 @@ extension SIRequest {
                 }
                 
                 if let biography = record["Speaker_Biography__c"].string {
-                    speaker.biography = biography
+                    if let attributedSummary = SIRequest.parseHTMLStringUsingPreferredFont(string: biography) {
+                        speaker.attributedSummary = attributedSummary
+                    }
                 }
                 
                 if let organization = record["Organization__r"].string {
@@ -707,18 +733,18 @@ extension SIRequest {
                 
             }
             
-            callback(speaker: speaker)
+            callback(speaker)
         });
         
     }
     
     /// Gets all exhibitors for an event.
-    func requestExhibitors(eventId id: String, callback: (exhibitors: [SIExhibitor]?) -> ()) {
+    @discardableResult func requestExhibitors(eventId id: String, callback: @escaping ([SIExhibitor]?) -> ()) -> Alamofire.Request? {
         
-        getRequest(url: EVENTS_URL + "/exhibitors?event_id=\(id)", description: "REQUEST EXHIBITORS, EVENT", callback: { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/exhibitors?event_id=\(id)", description: "REQUEST EXHIBITORS, EVENT", callback: { json in
         
             guard let json = json else {
-                callback(exhibitors: nil)
+                callback(nil)
                 return
             }
             
@@ -739,7 +765,9 @@ extension SIRequest {
                     }
                     
                     if let summary = record["Organization__r"]["App_Abstract__c"].string {
-                        exhibitor.summary = summary
+                        if let attributedSummary = SIRequest.parseHTMLStringUsingPreferredFont(string: summary) {
+                            exhibitor.attributedSummary = attributedSummary
+                        }
                     }
                     
                     if let logoURL = record["Organization__r"]["Logo__c"].string {
@@ -751,19 +779,19 @@ extension SIRequest {
                 
             }
           
-            callback(exhibitors: exhibitors)
+            callback(exhibitors)
             
         });
         
     }
     
     /// Requests additional information for an exhibitor using an exhibitor ID.
-    func requestExhibitor(exhibitorId id: String, callback: (exhibitor: SIExhibitor?) -> ()) {
+    @discardableResult func requestExhibitor(exhibitorId id: String, callback: @escaping (SIExhibitor?) -> ()) -> Alamofire.Request? {
         
-        getRequest(url: EVENTS_URL + "/exhibitors/\(id)", description: "REQUEST EXHIBITOR, SINGLE", callback: { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/exhibitors/\(id)", description: "REQUEST EXHIBITOR, SINGLE", callback: { json in
             
             guard let json = json else {
-                callback(exhibitor: nil)
+                callback(nil)
                 return
             }
             
@@ -800,7 +828,9 @@ extension SIRequest {
                 }
                 
                 if let summary = organization["App_Abstract__c"].string {
-                    exhibitor.summary = summary
+                    if let attributedSummary = SIRequest.parseHTMLStringUsingPreferredFont(string: summary) {
+                        exhibitor.attributedSummary = attributedSummary
+                    }
                 }
                 
                 if let email = organization["Public_Contact_Email__c"].string {
@@ -813,19 +843,19 @@ extension SIRequest {
 
             }
             
-            callback(exhibitor: exhibitor)
+            callback(exhibitor)
             
         })
         
     }
     
     /// Requests all hotels for a single event.
-    func requestHotels(eventId id: String, callback: (hotels: [SIHotel]?) -> ()) {
+    @discardableResult func requestHotels(eventId id: String, callback: @escaping ([SIHotel]?) -> ()) -> Alamofire.Request? {
         
-        getRequest(url: EVENTS_URL + "/hotels?event_id=\(id)", description: "REQUEST HOTEL, EVENT", callback: { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/hotels?event_id=\(id)", description: "REQUEST HOTEL, EVENT", callback: { json in
         
             guard let json = json else {
-                callback(hotels: nil)
+                callback(nil)
                 return
             }
             
@@ -861,19 +891,19 @@ extension SIRequest {
                 }
             }
             
-            callback(hotels: hotels)
+            callback(hotels)
             
         });
         
     }
     
     /// Requets hotel and provides additional information than requestHotels().
-    func requestHotel(hotelId id: String, callback: (hotel: SIHotel?) -> Void) {
+    @discardableResult func requestHotel(hotelId id: String, callback: @escaping (SIHotel?) -> Void) -> Alamofire.Request? {
         
-        getRequest(url: EVENTS_URL + "/hotels/\(id)", description: "REQUEST HOTEL, DETAIL", callback: { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/hotels/\(id)", description: "REQUEST HOTEL, DETAIL", callback: { json in
         
             guard let json = json else {
-                callback(hotel: nil)
+                callback(nil)
                 return
             }
             
@@ -906,19 +936,19 @@ extension SIRequest {
                 }
             }
             
-            callback(hotel: hotel)
+            callback(hotel)
             
         });
         
     }
     
     /// Requests basic information for all recipients for an event.
-    func requestRecipients(eventId id: String, callback: (recipients: [SIRecipient]?) -> Void) {
+    @discardableResult func requestRecipients(eventId id: String, callback: @escaping ([SIRecipient]?) -> Void) -> Alamofire.Request? {
         
-        getRequest(url: EVENTS_URL + "/recipients?event_id=\(id)", description: "REQUEST RECIPIENTS, EVENT", callback: { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/recipients?event_id=\(id)", description: "REQUEST RECIPIENTS, EVENT", callback: { json in
         
             guard let json = json else {
-                callback(recipients: nil)
+                callback(nil)
                 return
             }
             
@@ -946,32 +976,34 @@ extension SIRequest {
                     }
                     
                     if let summary = record["Summary__c"].string {
-                        recipient.summary = summary
+                        if let attributedSummary = SIRequest.parseHTMLStringUsingPreferredFont(string: summary) {
+                            recipient.attributedSummary = attributedSummary
+                        }
                     }
                     
                     recipients.append(recipient)
                 }
             }
             
-            callback(recipients: recipients)
+            callback(recipients)
             
         });
         
     }
     
     /// Requests a single recipient with additional information.
-    func requestRecipient(recipientId id: String, callback: (recipient: SIRecipient?) -> Void) {
+    @discardableResult func requestRecipient(recipientId id: String, callback: @escaping (SIRecipient?) -> Void) -> Alamofire.Request? {
         
-        getRequest(url: EVENTS_URL + "/recipients/\(id)", description: "REQUEST RECIPIENT, DETAIL", callback: { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/recipients/\(id)", description: "REQUEST RECIPIENT, DETAIL", callback: { json in
         
             guard let json = json else {
-                callback(recipient: nil)
+                callback(nil)
                 return
             }
             
             let recipient = SIRecipient()
             
-            if json["recipient"].isExists() {
+            if json["recipient"] != nil {
                 
                 let record = json["recipient"]
                 
@@ -1008,40 +1040,42 @@ extension SIRequest {
                 }
                 
                 if let summary = record["Summary__c"].string {
-                    recipient.summary = summary
+                    if let attributedSummary = SIRequest.parseHTMLStringUsingPreferredFont(string: summary) {
+                        recipient.attributedSummary = attributedSummary
+                    }
                 }
             }
             
-            callback(recipient: recipient)
+            callback(recipient)
             
         });
         
     }
     
-    private func parseRecipientAwardType(awardType: String) -> SIRecipient.AwardType {
+    fileprivate func parseRecipientAwardType(_ awardType: String) -> SIRecipient.AwardType {
         switch awardType {
             case "Shingo Prize":
-                return .ShingoPrize
+                return .shingoPrize
             case "Silver Medallion":
-                return .Silver
+                return .silver
             case "Bronze Medallion":
-                return .Bronze
+                return .bronze
             case "Research":
-                return .Research
+                return .research
             case "Publication":
-                return .Publication
+                return .publication
             default:
-                return .None
+                return .none
         }
     }
     
     /// Requests rooms for a venue.
-    func requestRooms(venueId id: String, callback: (rooms: [SIRoom]?) -> Void) {
+    @discardableResult func requestRooms(venueId id: String, callback: @escaping ([SIRoom]?) -> Void) -> Alamofire.Request? {
         
-        getRequest(url: EVENTS_URL + "/rooms?venue_id=\(id)", description: "REQUEST ROOMS, VENUE", callback: { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/rooms?venue_id=\(id)", description: "REQUEST ROOMS, VENUE", callback: { json in
         
             guard let json = json else {
-                callback(rooms: nil)
+                callback(nil)
                 return
             }
             
@@ -1067,19 +1101,19 @@ extension SIRequest {
                 
             }
             
-            callback(rooms: rooms)
+            callback(rooms)
             
         });
         
     }
     
     /// Requests a room and provides additional information than requestRooms().
-    func requestRoom(roomId id: String, callback: (room: SIRoom?) -> Void) {
+    @discardableResult func requestRoom(roomId id: String, callback: @escaping (SIRoom?) -> Void) -> Alamofire.Request? {
         
-        getRequest(url: EVENTS_URL + "/rooms/\(id)", description: "REQUEST ROOM, DETAIL", callback: { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/rooms/\(id)", description: "REQUEST ROOM, DETAIL", callback: { json in
         
             guard let json = json else {
-                callback(room: nil)
+                callback(nil)
                 return
             }
             
@@ -1107,23 +1141,21 @@ extension SIRequest {
 
             }
 
-            callback(room: room)
+            callback(room)
             
         });
         
     }
     
     /// Requests all sponsors for an event.
-    func requestSponsors(eventId id: String, callback: (sponsors: [SISponsor]?) -> Void) {
+    @discardableResult func requestSponsors(eventId id: String, callback: @escaping ([SISponsor]?) -> Void) -> Alamofire.Request? {
         
-        getRequest(url: EVENTS_URL + "/sponsors?event_id=\(id)", description: "REQUEST SPONSORS, EVENT", callback: { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/sponsors?event_id=\(id)", description: "REQUEST SPONSORS, EVENT", callback: { json in
         
             guard let json = json else {
-                callback(sponsors: nil)
+                callback(nil)
                 return
             }
-            
-//            let testJSON = TestCode.generateTestCode()
             
             var sponsors = [SISponsor]()
             
@@ -1161,25 +1193,25 @@ extension SIRequest {
                 }
             }
             
-            callback(sponsors: sponsors)
+            callback(sponsors)
             
         });
         
     }
     
     /// Requests detailed information for a sponsor.
-    func requestSponsor(sponsorId id: String, callback: (sponsor: SISponsor?) -> Void) {
+    @discardableResult func requestSponsor(sponsorId id: String, callback: @escaping (SISponsor?) -> Void) -> Alamofire.Request? {
        
-        getRequest(url: EVENTS_URL + "/sponsors/\(id)", description: "REQUEST SPONSOR, DETAIL", callback: { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/sponsors/\(id)", description: "REQUEST SPONSOR, DETAIL", callback: { json in
         
             guard let json = json else {
-                callback(sponsor: nil)
+                callback(nil)
                 return
             }
             
             let sponsor = SISponsor()
             
-            if json["sponsor"].isExists() {
+            if json["sponsor"] != nil {
                 
                 let record = json["sponsor"]
                 
@@ -1196,7 +1228,9 @@ extension SIRequest {
                 }
                 
                 if let summary = record["App_Abstract__c"].string {
-                    sponsor.summary = summary
+                    if let attributedSummary = SIRequest.parseHTMLStringUsingPreferredFont(string: summary) {
+                        sponsor.attributedSummary = attributedSummary
+                    }
                 }
                 
                 if let bannerURL = record["Banner_URL__c"].string {
@@ -1212,30 +1246,30 @@ extension SIRequest {
                 }
             }
             
-            callback(sponsor: sponsor)
+            callback(sponsor)
             
         });
         
     }
     
-    private func getSponsorType(type type: String) -> SISponsor.SponsorType {
+    fileprivate func getSponsorType(type: String) -> SISponsor.SponsorType {
         switch type {
-            case "President": return .President
-            case "Champion" : return .Champion
-            case "Benefactor": return .Benefactor
-            case "Supporter": return .Supporter
-            case "Friend": return .Friend
-            default: return .None
+            case "President": return .president
+            case "Champion" : return .champion
+            case "Benefactor": return .benefactor
+            case "Supporter": return .supporter
+            case "Friend": return .friend
+            default: return .none
         }
     }
     
     /// Requests all venues for an event. Typically there will only be one venue per event, but there is the possibility of being more than one.
-    func requestVenues(eventId id: String, callback: (venues: [SIVenue]?) -> Void) {
+    @discardableResult func requestVenues(eventId id: String, callback: @escaping ([SIVenue]?) -> Void) -> Alamofire.Request? {
        
-        getRequest(url: EVENTS_URL + "/venues?event_id=\(id)", description: "REQUEST VENUES, EVENT", callback: { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/venues?event_id=\(id)", description: "REQUEST VENUES, EVENT", callback: { json in
         
             guard let json = json else {
-                callback(venues: nil)
+                callback(nil)
                 return
             }
             
@@ -1263,25 +1297,25 @@ extension SIRequest {
                 }
             }
             
-            callback(venues: venues)
+            callback(venues)
             
         });
         
     }
     
     /// Requests detailed information for a single venue.
-    func requestVenue(venueId id: String, callback: (venue: SIVenue?) -> Void) {
+    @discardableResult func requestVenue(venueId id: String, callback: @escaping (SIVenue?) -> Void) -> Alamofire.Request? {
         
-        getRequest(url: EVENTS_URL + "/venues/\(id)", description: "REQUEST VENUE, DETAIL", callback: { json in
+        return getRequest(url: SIRequest.EVENTS_URL + "/venues/\(id)", description: "REQUEST VENUE, DETAIL", callback: { json in
         
             guard let json = json else {
-                callback(venue: nil)
+                callback(nil)
                 return
             }
             
             let venue = SIVenue()
             
-            if json["venue"].isExists() {
+            if json["venue"] != nil {
                 
                 let record = json["venue"]
                 
@@ -1329,31 +1363,31 @@ extension SIRequest {
                 
             }
             
-            callback(venue: venue)
+            callback(venue)
             
         });
         
     }
     
-    private func parseVenueType(type type: String) -> SIVenue.VenueType{
+    fileprivate func parseVenueType(type: String) -> SIVenue.VenueType{
         
         switch type {
-            case "Convention Center": return .ConventionCenter
-            case "Hotel": return .Hotel
-            case "Museum": return .Museum
-            case "Restaurant": return .Restaurant
-            case "Other": return .Other
-            default: return .None
+            case "Convention Center": return .conventionCenter
+            case "Hotel": return .hotel
+            case "Museum": return .museum
+            case "Restaurant": return .restaurant
+            case "Other": return .other
+            default: return .none
         }
         
     }
     
     /// Requests all affiliates from salesforce.
-    func requestAffiliates(callback: (affiliates: [SIAffiliate]?) -> ()) {
+    @discardableResult static func requestAffiliates(callback: @escaping ([SIAffiliate]?) -> ()) -> Alamofire.Request? {
         
-        getRequest(url: BASE_URL + "/salesforce/affiliates", description: "REQUEST AFFILIATES, ALL") { (json) in
+        return SIRequest().getRequest(url: SIRequest.BASE_URL + "/salesforce/affiliates", description: "REQUEST AFFILIATES, ALL") { (json) in
             guard let json = json else {
-                callback(affiliates: nil)
+                callback(nil)
                 return
             }
             
@@ -1381,50 +1415,194 @@ extension SIRequest {
                     }
                     
                     if let summary = record["App_Abstract__c"].string {
-                        affiliate.summary = summary
+                        if let attributedSummary = SIRequest.parseHTMLStringUsingPreferredFont(string: summary) {
+                            affiliate.attributedSummary = attributedSummary
+                        }
                     }
                     
                     affiliates.append(affiliate)
                 }
             }
             
-            callback(affiliates: affiliates)
+            callback(affiliates)
         }
         
     }
     
     /// Posts a bug report to the backend server.
-    func postBugReport(parameters: [String:String], callback: (Bool) -> Void) {
+    class func postBugReport(parameters: Parameters, callback: @escaping (Bool) -> Void) {
         
-        postRequest(url: SUPPORT_URL + "/bugs", description: "POST BUG REPORT",parameters: parameters) { (json) in
-            guard let json = json else {
-                callback(false)
-                return
+        guard let email = parameters["email"] as? String else {
+            return callback(false)
+        }
+        
+        guard let description = parameters["description"] as? String else {
+            return callback(false)
+        }
+        
+        guard let device = parameters["device"] as? String else {
+            return callback(false)
+        }
+        
+        guard let details = parameters["details"] as? String else  {
+            return callback(false)
+        }
+        
+        let headers = [
+            "content-type": "application/x-www-form-urlencoded",
+            "cache-control": "no-cache",
+        ]
+        
+        let postData = NSMutableData(data: "email=\(email)".data(using: .utf8)!)
+        postData.append("&description=\(description)".data(using: .utf8)!)
+        postData.append("&details=\(details)".data(using: .utf8)!)
+        postData.append("&device=\(device)".data(using: .utf8)!)
+        
+        var request = URLRequest(url: URL(string: "https://api.shingo.org/support/bugs")!,
+                                          cachePolicy: .useProtocolCachePolicy,
+                                          timeoutInterval: 10.0)
+        request.httpMethod = "POST"
+        request.allHTTPHeaderFields = headers
+        request.httpBody = postData as Data
+        
+        URLSession.shared.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
+            
+            DispatchQueue.main.async {
+                
+                if (error != nil) {
+                    print(error)
+                    return callback(false)
+                }
+                
+                guard let data = data else {
+                    return callback(false)
+                }
+
+                do {
+                    let parseJSON = try JSONSerialization.jsonObject(with: data, options: .mutableLeaves) as? NSDictionary
+
+                    guard let value = parseJSON else {
+                        return callback(false)
+                    }
+
+                    let json = JSON(value)
+
+                    print(json)
+
+                    guard let success = json["success"].bool else {
+                        return callback(false)
+                    }
+                    
+                    return callback(success)
+                    
+                } catch {
+                    #if !DEBUG
+                        Crashlytics.sharedInstance().recordError(error)
+                    #endif
+                    return callback(false)
+                }
             }
             
-            if let success = json["success"].bool {
-                callback(success)
-            } else {
-                callback(false)
-            }
-        }
+        }).resume()
     }
     
-    /// Posts feedback to the backend server.
-    func postFeedback(parameters: [String:String], callback: (Bool) -> Void) {
+    /**
+     Posts feedback to the backend server.
+     parameters expects the following key, value pairs
+        :email:       - users email address
+        :description: - feedback provided by user
+        :device:      - users current device (i.e. iPhone 6)
+        :details:     - ios version
+        :rating:      - user rating (1-5 stars). If 0 stars, user did not give a rating
+     
+     This function doesn't use alamofire because of some header issues with the request.
+     **/
+    class func postFeedback(parameters: [String:String], callback: @escaping (Bool) -> Void) {
         
-        postRequest(url: SUPPORT_URL + "/feedback", description: "POST FEEDBACK", parameters: parameters) { (json) in
-            guard let json = json else {
-                callback(false)
-                return
+        // Validate that keys exist in the parameters object
+        guard let email = parameters["email"] else {
+            return callback(false)
+        }
+        
+        guard let description = parameters["description"] else {
+            return callback(false)
+        }
+        
+        guard let device = parameters["device"] else {
+            return callback(false)
+        }
+        
+        guard let details = parameters["details"] else {
+            return callback(false)
+        }
+        
+        guard let rating = parameters["rating"] else {
+            return callback(false)
+        }
+        
+        // header content-type param must be x-www-form-urlencoded or the server will reject the request
+        let headers = [
+            "content-type": "application/x-www-form-urlencoded",
+            "cache-control": "no-cache",
+        ]
+        
+        // create utf8 encoded parameter string in http body
+        let postData = NSMutableData(data: "email=\(email)".data(using: .utf8)!)
+        postData.append("&description=\(description)".data(using: .utf8)!)
+        postData.append("&details=\(details)".data(using: .utf8)!)
+        postData.append("&device=\(device)".data(using: .utf8)!)
+        postData.append("&rating=\(rating)".data(using: .utf8)!)
+        
+        // initialize request object and set property values
+        var request = URLRequest(url: URL(string: "https://api.shingo.org/support/feedback")!,
+                                 cachePolicy: .useProtocolCachePolicy,
+                                 timeoutInterval: 10.0)
+        request.httpMethod = "POST"
+        request.allHTTPHeaderFields = headers
+        request.httpBody = postData as Data
+        
+        // Start session task and make request
+        URLSession.shared.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
+            
+            // The response triggers UI events and must be processed on the main thread.
+            DispatchQueue.main.async {
+                
+                if (error != nil) {
+                    print(error)
+                    return callback(false)
+                }
+                
+                guard let data = data else {
+                    return callback(false)
+                }
+                
+                do {
+                    let parseJSON = try JSONSerialization.jsonObject(with: data, options: .mutableLeaves) as? NSDictionary
+                    
+                    guard let value = parseJSON else {
+                        return callback(false)
+                    }
+                    
+                    let json = JSON(value)
+                    
+                    print(json)
+                    
+                    guard let success = json["success"].bool else {
+                        return callback(false)
+                    }
+                    
+                    return callback(success)
+                    
+                } catch {
+                    #if !DEBUG
+                        Crashlytics.sharedInstance().recordError(error)
+                    #endif
+                    return callback(false)
+                }
             }
             
-            if let success = json["success"].bool {
-                callback(success)
-            } else {
-                callback(false)
-            }
-        }
+        }).resume()
+        
     }
     
 }
@@ -1472,22 +1650,55 @@ extension SIRequest {
         let alert = UIAlertController(
             title: "Connection Error",
             message: "Could not connect to server. The Internet connection appears to be offline.",
-            preferredStyle: UIAlertControllerStyle.Alert)
+            preferredStyle: UIAlertControllerStyle.alert)
         
-        let action = UIAlertAction(title: "Okay", style: .Cancel, handler: completion)
+        let action = UIAlertAction(title: "Okay", style: .cancel, handler: completion)
 
         alert.addAction(action)
         
-        vc.presentViewController(alert, animated: true, completion: nil)
+        vc.present(alert, animated: true, completion: nil)
     }
     
-    private func marks(string: String) -> String {
+    fileprivate func marks(_ string: String) -> String {
         let count = string.characters.count
         var marks = ""
         for _ in 0 ..< count + 1 {
             marks += "-"
         }
         return "\(marks)+"
+    }
+    
+    static func parseHTMLStringUsingPreferredFont(string: String) -> NSAttributedString? {
+        
+        do {
+            
+            let options: [String:Any] = [
+                NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
+                NSCharacterEncodingDocumentAttribute : String.Encoding.utf8.rawValue,
+            ]
+            
+            guard let data = string.data(using: String.Encoding.utf8) else {
+                return nil
+            }
+            
+            let htmlString = try NSMutableAttributedString(data: data, options: options, documentAttributes: nil)
+            
+            htmlString.usePreferredFontWhileMaintainingAttributes(forTextStyle: .body)
+            
+            return htmlString
+        } catch {
+            #if !DEBUG
+            let error = NSError(domain: "NSAttributedStringErrorDomain",
+                                code: 72283,
+                                userInfo: [
+                                NSLocalizedDescriptionKey : "Could not parse text into attributed string.",
+                                NSLocalizedFailureReasonErrorKey: "Could not parse text for SIObject summary. Most likely reason is because the text string passed back from the API was not UTF-8 coding compliant."
+                ])
+            Crashlytics.sharedInstance().recordError(error)
+            #endif
+            return nil
+        }
+        
     }
     
 }

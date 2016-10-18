@@ -10,10 +10,10 @@ import UIKit
 import Alamofire
 
 protocol UnwindToMainVCProtocol {
-    func updateEvents(events: [SIEvent]?)
+    func updateEvents(_ events: [SIEvent]?)
 }
 
-class SettingsTableViewController: UITableViewController, SIRequestDelegate {
+class SettingsTableViewController: UITableViewController {
     
     var events: [SIEvent]?
     
@@ -26,33 +26,32 @@ class SettingsTableViewController: UITableViewController, SIRequestDelegate {
         
     }
 
-    override func canPerformUnwindSegueAction(action: Selector, fromViewController: UIViewController, withSender sender: AnyObject) -> Bool {
-        if self.respondsToSelector(action) {
+    override func canPerformUnwindSegueAction(_ action: Selector, from fromViewController: UIViewController, withSender sender: Any) -> Bool {
+        if self.responds(to: action) {
             return true
         } else {
             return false
         }
     }
     
-    @IBAction func didTapProfileSettings(sender: AnyObject) {}
+    @IBAction func didTapProfileSettings(_ sender: AnyObject) {}
 
-    @IBAction func didTapReportABug(sender: AnyObject) {
-        performSegueWithIdentifier("ReportBugView", sender: sender)
+    @IBAction func didTapReportABug(_ sender: AnyObject) {
+        performSegue(withIdentifier: "ReportBugView", sender: sender)
     }
     
-    @IBAction func didTapReloadData(sender: AnyObject) {
+    @IBAction func didTapReloadData(_ sender: AnyObject) {
         
         let activityView = ActivityViewController()
-        activityView.delegate = self
         
-        presentViewController(activityView, animated: true) {
+        present(activityView, animated: true) {
             
-            self.request = SIRequest().requestEvents({ events in
-                self.dismissViewControllerAnimated(false, completion: {
+            SIRequest().requestEvents({ events in
+                self.dismiss(animated: false, completion: {
                     if let events = events {
                         if let delegate = self.delegate {
                             delegate.updateEvents(events)
-                            self.performSegueWithIdentifier("UnwindToMainVC", sender: self)
+                            self.performSegue(withIdentifier: "UnwindToMainVC", sender: self)
                         }
                     } else {
                         SIRequest.displayInternetAlert(forViewController: self, completion: nil)
@@ -62,16 +61,7 @@ class SettingsTableViewController: UITableViewController, SIRequestDelegate {
         }
     }
     
-    func cancelRequest() {
-        
-        if let request = request {
-            request.cancel()
-        }
-        
-        dismissViewControllerAnimated(true, completion: nil)
-    }
-    
     //MARK: - Navigation
-    @IBAction func unwindToSettings(segue: UIStoryboardSegue) {}
+    @IBAction func unwindToSettings(_ segue: UIStoryboardSegue) {}
     
 }

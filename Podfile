@@ -1,21 +1,22 @@
-platform :ios, '8.0'
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '9.0'
+use_frameworks!
 
 target 'Shingo Events' do
-  use_frameworks!
+        pod 'Alamofire', '~> 4.0'
+        pod 'AlamofireImage', '~> 3.0'
+        pod 'Fabric'
+        pod 'Crashlytics'
+        pod 'PureLayout'
+        pod 'SwiftyJSON', git: 'https://github.com/BaiduHiDeviOS/SwiftyJSON.git', branch: 'swift3'
+	pod 'DropDown', git: 'https://github.com/AssistoLab/DropDown.git', branch: 'master'
+end
 
-  pod 'Alamofire', '~> 3.0'
-  pod 'AlamofireImage', '~> 2.0'
-  pod 'Fabric'
-  pod 'Crashlytics'
-  pod 'PureLayout'
-  pod 'DropDown'
 
- # target 'Shingo EventsTests' do
- #   inherit! :search_paths
- # end
-
- # target 'Shingo EventsUITests' do
- #   inherit! :search_paths
- # end
-
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['SWIFT_VERSION'] = '3.0'
+    end
+  end
 end

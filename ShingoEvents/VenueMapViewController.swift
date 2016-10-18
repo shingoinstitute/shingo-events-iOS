@@ -12,19 +12,19 @@ class VenueMapViewController: UIViewController, UIScrollViewDelegate {
 
     var venueMap: SIVenueMap!
     
-    var scrollView = UIScrollView.newAutoLayoutView()
-    var imageView = UIImageView.newAutoLayoutView()
+    var scrollView = UIScrollView.newAutoLayout()
+    var imageView = UIImageView.newAutoLayout()
     
     var didUpdateConstraints = false
     
-    let delegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    let delegate = UIApplication.shared.delegate as! AppDelegate
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         delegate.shouldSupportAllOrientation = true
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         delegate.shouldSupportAllOrientation = false
     }
@@ -34,13 +34,13 @@ class VenueMapViewController: UIViewController, UIScrollViewDelegate {
         
         navigationItem.title = venueMap.name
         
-        imageView.contentMode = UIViewContentMode.ScaleAspectFit
+        imageView.contentMode = UIViewContentMode.scaleAspectFit
         venueMap.getVenueMapImage() { image in
             self.imageView.image = self.resizeImage(image, toSize: self.view.frame.width)
         }
         
         
-        scrollView.contentMode = .Center
+        scrollView.contentMode = .center
         
         scrollView.delegate = self
         
@@ -53,18 +53,18 @@ class VenueMapViewController: UIViewController, UIScrollViewDelegate {
         updateViewConstraints()
     }
 
-    private func resizeImage(image: UIImage, toSize: CGFloat) -> UIImage {
+    fileprivate func resizeImage(_ image: UIImage, toSize: CGFloat) -> UIImage {
         
         let height = image.size.height * (toSize / image.size.width)
-        UIGraphicsBeginImageContext(CGSizeMake(toSize, height))
-        image.drawInRect(CGRectMake(0, 0, toSize, height))
+        UIGraphicsBeginImageContext(CGSize(width: toSize, height: height))
+        image.draw(in: CGRect(x: 0, y: 0, width: toSize, height: height))
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
-        return newImage
+        return newImage!
     }
     
-    override func willRotateToInterfaceOrientation(toInterfaceOrientation: UIInterfaceOrientation, duration: NSTimeInterval) {
+    override func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
 //        switch toInterfaceOrientation {
 //        case .Portrait:
 //            imageView.image = resizeImage(venueMap.getVenueMapImage(), toSize: view.frame.height)
@@ -90,7 +90,7 @@ class VenueMapViewController: UIViewController, UIScrollViewDelegate {
         super.updateViewConstraints()
     }
     
-    func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView
     }
     

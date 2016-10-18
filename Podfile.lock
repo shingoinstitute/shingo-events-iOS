@@ -1,29 +1,48 @@
 PODS:
-  - Alamofire (3.5.0)
-  - AlamofireImage (2.5.0):
-    - Alamofire (~> 3.5)
-  - Crashlytics (3.8.1):
+  - Alamofire (4.0.1)
+  - AlamofireImage (3.1.0):
+    - Alamofire (~> 4.0)
+  - Crashlytics (3.8.2):
     - Fabric (~> 1.6.3)
-  - DropDown (1.0.1)
-  - Fabric (1.6.8)
+  - DropDown (2)
+  - Fabric (1.6.9)
   - PureLayout (3.0.2)
+  - SwiftyJSON (2.3.2)
 
 DEPENDENCIES:
-  - Alamofire (~> 3.0)
-  - AlamofireImage (~> 2.0)
+  - Alamofire (~> 4.0)
+  - AlamofireImage (~> 3.0)
   - Crashlytics
-  - DropDown
+  - DropDown (from `https://github.com/AssistoLab/DropDown.git`, branch `master`)
   - Fabric
   - PureLayout
+  - SwiftyJSON (from `https://github.com/BaiduHiDeviOS/SwiftyJSON.git`, branch `swift3`)
+
+EXTERNAL SOURCES:
+  DropDown:
+    :branch: master
+    :git: https://github.com/AssistoLab/DropDown.git
+  SwiftyJSON:
+    :branch: swift3
+    :git: https://github.com/BaiduHiDeviOS/SwiftyJSON.git
+
+CHECKOUT OPTIONS:
+  DropDown:
+    :commit: 25e14b8f223cd3217103540d39a78d5ed8e158b1
+    :git: https://github.com/AssistoLab/DropDown.git
+  SwiftyJSON:
+    :commit: de5dc3b1b421805769590d331178551bbb0e5733
+    :git: https://github.com/BaiduHiDeviOS/SwiftyJSON.git
 
 SPEC CHECKSUMS:
-  Alamofire: b70a7352335f8ea5babd0a923eb7e8eacc67b877
-  AlamofireImage: 2d34936e5201270bb17a316a786e90e83b4a249d
-  Crashlytics: 4391d8df0b125345e9f209c5db6e7f40a6a8435d
-  DropDown: 335df9e9547e97a861a60aed8448821e239d3513
-  Fabric: 5755268d0171435ab167e3d0878a28a777deaf10
+  Alamofire: 7682d43245de14874acd142ec137b144aa1dd335
+  AlamofireImage: bb8c8351c51cb1633bb6be69b6dbbaff37ce65b7
+  Crashlytics: 27acca95a01b042a8294291dd6dff27f8f6af6d7
+  DropDown: 744784d9c9aa505100e942c16acd05430cbb2f0a
+  Fabric: bc5bec42cef4bcf1ee3ce0e218fc518e4b44dfbb
   PureLayout: 4d550abe49a94f24c2808b9b95db9131685fe4cd
+  SwiftyJSON: 6118fb49d7519c4d31a0c1f3d5af936e9047b556
 
-PODFILE CHECKSUM: 3a64647d9175a29427ca8d50c2ad535605fe7dd8
+PODFILE CHECKSUM: c4fe4d402ed179b5ad7c76d4133d1bb833a404e3
 
 COCOAPODS: 1.0.1

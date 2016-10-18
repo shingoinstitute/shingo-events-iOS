@@ -1,13 +1,12 @@
 //
-//  SimpleBrowserTests.swift
-//  SimpleBrowserTests
+//  ShingoEventsTests.swift
+//  ShingoEventsTests
 //
-//  Created by Craig Blackburn on 12/18/15.
-//  Copyright © 2015 Shingo Institute. All rights reserved.
+//  Created by Craig Blackburn on 9/20/16.
+//  Copyright © 2016 Shingo Institute. All rights reserved.
 //
 
 import XCTest
-@testable import ShingoEvents
 
 class ShingoEventsTests: XCTestCase {
     
@@ -28,7 +27,7 @@ class ShingoEventsTests: XCTestCase {
     
     func testPerformanceExample() {
         // This is an example of a performance test case.
-        self.measureBlock {
+        self.measure {
             // Put the code you want to measure the time of here.
         }
     }

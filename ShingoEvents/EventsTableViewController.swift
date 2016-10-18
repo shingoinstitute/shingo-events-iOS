@@ -15,124 +15,91 @@ class EventsTableViewController: UITableViewController {
     // MARK: - Properties
     var events: [SIEvent]!
 
-    override func loadView() {
-        super.loadView()
-        
-        //Begin requests for each event.
-        for event in events {
-            if !event.didLoadEventData {
-                event.requestEvent(nil)
-            }
-        }
-    }
+    var gradientBackgroundView = UIView()
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationItem.title = "Upcoming Events"
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        definesPresentationContext = true
-        providesPresentationContextTransitionStyle = true
         
-        view.backgroundColor = SIColor.prussianBlueColor()
+        tableView.backgroundView = gradientBackgroundView
+        gradientBackgroundView.backgroundColor = .lightShingoBlue
+        
+        let gradientLayer = RadialGradientLayer()
+        gradientLayer.frame = gradientBackgroundView.bounds
+        gradientBackgroundView.layer.insertSublayer(gradientLayer, at: 0)
+        
+        tableView.estimatedRowHeight = 200;
+        tableView.rowHeight = UITableViewAutomaticDimension;
+        
+        // Begins API requests for each event.
+        for event in events {
+            if !event.didLoadEventData {
+                event.requestEvent(nil)
+                tableView.reloadData()
+            }
+        }
     }
     
     func displayBadRequestNotification() {
         let alert = UIAlertController(title: "Oops!",
                                       message: "We were unable to fetch any data for you. Please make sure you have an internet connection.",
-                                      preferredStyle: UIAlertControllerStyle.Alert)
-        let action = UIAlertAction(title: "OK", style: .Default, handler: nil)
+                                      preferredStyle: UIAlertControllerStyle.alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(action)
-        presentViewController(alert, animated: true, completion: nil)
+        present(alert, animated: true, completion: nil)
     }
 }
 
 extension EventsTableViewController: SICellDelegate {
 
     // MARK: - Table view data source
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        switch section {
-            case 0:
-                return events.count
-            default:
-                return 0
-        }
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return events.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("EventsCell", forIndexPath: indexPath) as! EventTableViewCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Event Cell", for: indexPath) as! EventTableViewCell;
+        
+        cell.cardView.backgroundColor = .white
+        cell.backgroundColor = .clear
+        
+        cell.event = events[indexPath.row]
         
         cell.delegate = self
-        cell.event = events[indexPath.row]
         
         return cell
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if !events[indexPath.row].didLoadImage {
-            return 75
-        }
+        let cell = tableView.cellForRow(at: indexPath) as! EventTableViewCell
+        cell.cardView.backgroundColor = .white
         
-        if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
-            return 240
-        }
+        let event = events[(indexPath as NSIndexPath).row]
         
-        return 155
-    }
-    
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = UILabel()
-        
-        switch events.count {
-        case 1:
-            view.text = "   \(events.count) Event Found"
-        default:
-            view.text = "   \(events.count) Events Found"
-        }
-        
-        view.textColor = .whiteColor()
-        view.font = UIFont(name: "Helvetica", size: 12)
-        return view
-    }
-    
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 32
-    }
-    
-    override func tableView(tableView: UITableView, didHighlightRowAtIndexPath indexPath: NSIndexPath) {
-        let cell = tableView.cellForRowAtIndexPath(indexPath) as! EventTableViewCell
-        cell.backgroundColor = SIColor.lightBlueColor()
-    }
-    
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
-        let cell = tableView.cellForRowAtIndexPath(indexPath) as! EventTableViewCell
-        cell.backgroundColor = SIColor.lightBlueColor()
-        
-        let activityView = ActivityViewController()
-        activityView.message = "Loading Event Data..."
-
-        let event = events[indexPath.row]
         if event.didLoadEventData {
-            self.performSegueWithIdentifier("EventMenu", sender: event)
+            self.performSegue(withIdentifier: "EventMenu", sender: event)
+            
         } else {
-            presentViewController(activityView, animated: false, completion: { 
+            let activityView = ActivityViewController(message: "Downloading Event Data...")
+            present(activityView, animated: false, completion: {
                 event.requestEvent() {
-                    self.dismissViewControllerAnimated(true, completion: {
+                    self.dismiss(animated: true, completion: {
                         if event.didLoadEventData {
-                            self.performSegueWithIdentifier("EventMenu", sender: self.events[indexPath.row])
+                            self.performSegue(withIdentifier: "EventMenu", sender: self.events[(indexPath as NSIndexPath).row])
                         } else {
                             self.displayBadRequestNotification()
                         }
-                        
                     })
                 }
             })
@@ -140,10 +107,10 @@ extension EventsTableViewController: SICellDelegate {
     }
     
     // MARK: - Navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "EventMenu" {
-            let destination = segue.destinationViewController as! EventMenuViewController
+            let destination = segue.destination as! EventMenuViewController
             if let event = sender as? SIEvent {
                 destination.event = event
             }
@@ -151,65 +118,49 @@ extension EventsTableViewController: SICellDelegate {
         }
     }
     
-    func updateCell() {
+    func cellDidUpdate() {
         tableView.beginUpdates()
         tableView.endUpdates()
     }
     
 }
 
+class RadialGradientLayer: CALayer {
+    
+    override init(){
+        
+        super.init()
+        
+        needsDisplayOnBoundsChange = true
+    }
 
-class EventTableViewCell: UITableViewCell {
     
-    // MARK: - Properties
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var dateRangeLabel: UILabel!
-    @IBOutlet weak var eventImage: UIImageView!
-    
-    var event: SIEvent! {
-        didSet {
-            updateCell()
-        }
+    required init(coder aDecoder: NSCoder) {
+        
+        super.init()
+        
     }
     
-    var delegate: SICellDelegate?
-    
-    func updateCell() {
+    override func draw(in ctx: CGContext) {
         
-        backgroundColor = .clearColor()
-        selectionStyle = .None
+        ctx.saveGState()
         
-        guard let event = event else {
-            return
-        }
+        let locations:[CGFloat] = [0.0, 1.0]
+        let gradColors: [CGFloat] = [0, 0, 0, 0, 0, 0 , 0, 0.5]
+        
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        
+        let gradient = CGGradient(colorSpace: colorSpace, colorComponents: gradColors, locations: locations, count: 2)!
+        
+        let gradCenter = CGPoint(x: self.bounds.size.width / 2, y: self.bounds.size.height / 2)
+        let gradRadius = min(self.bounds.size.width, self.bounds.size.height)
+        
+        ctx.drawRadialGradient(gradient, startCenter: gradCenter, startRadius: 0, endCenter: gradCenter, endRadius: gradRadius, options: CGGradientDrawingOptions.drawsAfterEndLocation)
 
-        nameLabel.text = event.name
-        
-        eventImage.contentMode = .ScaleAspectFill
-        eventImage.clipsToBounds = true
-        eventImage.layer.cornerRadius = 3.0
-        
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.timeZone = NSTimeZone(abbreviation: "GMT")
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        dateFormatter.dateStyle = .MediumStyle
-        let dates = "\(dateFormatter.stringFromDate(event.startDate)) - \(dateFormatter.stringFromDate(event.endDate))"
-        dateRangeLabel.text = dates
-        
-        event.getBannerImage() { image in
-            
-            guard let image = image else {
-                return
-            }
-            
-            self.eventImage.image = image
-            if let delegate = self.delegate {
-                delegate.updateCell()
-            }
-            
-        }
         
     }
     
 }
+
+
 

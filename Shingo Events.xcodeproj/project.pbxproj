@@ -7,37 +7,36 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7CCDA641804EC78E12D067A2 /* Pods_Shingo_Events.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4D893190879C0BB6AAC6D82B /* Pods_Shingo_Events.framework */; };
-		C2130BD81C987650009B3BB8 /* ActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2130BD71C987650009B3BB8 /* ActivityViewController.swift */; };
-		C21B3ED81D1B433400C54FA4 /* ShingoEventsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21B3ED51D1B09DE00C54FA4 /* ShingoEventsTests.swift */; };
+		C2130BD81C987650009B3BB8 /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2130BD71C987650009B3BB8 /* ActivityView.swift */; };
 		C21ECE281C5FB21500689FDE /* AffiliateListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21ECE271C5FB21500689FDE /* AffiliateListTableViewController.swift */; };
-		C21ECE2A1C5FB22A00689FDE /* AfilliateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C21ECE291C5FB22A00689FDE /* AfilliateViewController.swift */; };
 		C224C8981C92138700F4E393 /* AboutPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C224C8971C92138700F4E393 /* AboutPageViewController.swift */; };
 		C224CDFC1CB6CA42003147F0 /* RecipientTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C224CDFB1CB6CA42003147F0 /* RecipientTableViewCell.swift */; };
-		C22AB2B21C2484E900A7F3B1 /* ShingoEventsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22AB2B11C2484E900A7F3B1 /* ShingoEventsUITests.swift */; };
-		C22EF40E1D6E427F00C4C5DC /* TestCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22CBB801D6B915200649A4F /* TestCode.swift */; };
+		C22668081D9D620900E5F062 /* TestCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22668061D9D5D1500E5F062 /* TestCode.swift */; };
+		C226680B1D9D710800E5F062 /* AffiliateTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22668091D9D707500E5F062 /* AffiliateTableViewCell.swift */; };
 		C234BD561C5293CF002E9814 /* SpeakerListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C234BD551C5293CF002E9814 /* SpeakerListTableViewController.swift */; };
-		C234BD581C529597002E9814 /* SpeakerDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C234BD571C529597002E9814 /* SpeakerDetailsViewController.swift */; };
 		C2494E281C89FBFE00E2969D /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2494E271C89FBFE00E2969D /* Reachability.swift */; };
+		C24FF48C1D9195750061B3E2 /* ShingoEventsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24FF48B1D9195750061B3E2 /* ShingoEventsTests.swift */; };
+		C25F4F801D95E9E8009A9830 /* EventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25F4F7F1D95E9E8009A9830 /* EventTableViewCell.swift */; };
+		C25F4F821D99C3F5009A9830 /* ScheduleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25F4F811D99C3F5009A9830 /* ScheduleTableViewCell.swift */; };
 		C262CA8D1C3B1C29005845AF /* EventsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C262CA8C1C3B1C29005845AF /* EventsTableViewController.swift */; };
 		C264CCB41C57ECA7005CDB11 /* RecipientsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C264CCB31C57ECA7005CDB11 /* RecipientsTableViewController.swift */; };
-		C264CCF01C5834A5005CDB11 /* ChallengerInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C264CCEF1C5834A5005CDB11 /* ChallengerInfoViewController.swift */; };
-		C264CCF21C5834EC005CDB11 /* ResearchInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C264CCF11C5834EC005CDB11 /* ResearchInfoViewController.swift */; };
+		C267F9221D9DD02E00E524E9 /* SITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C267F9211D9DD02E00E524E9 /* SITableViewCell.swift */; };
 		C26DC9021C59785700BB4DDA /* ExhibitorTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C26DC9011C59785700BB4DDA /* ExhibitorTableViewController.swift */; };
-		C26DC9041C597A8600BB4DDA /* ExhibitorInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C26DC9031C597A8600BB4DDA /* ExhibitorInfoViewController.swift */; };
 		C26DC9061C59841700BB4DDA /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C26DC9051C59841700BB4DDA /* MapViewController.swift */; };
-		C28B67E91C3F0BD700AC9193 /* EventData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28B67E81C3F0BD700AC9193 /* EventData.swift */; };
+		C28B67E91C3F0BD700AC9193 /* AppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28B67E81C3F0BD700AC9193 /* AppData.swift */; };
 		C28B67F31C406BDE00AC9193 /* EventMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28B67F21C406BDE00AC9193 /* EventMenuViewController.swift */; };
+		C28EC33A1DAC4FEB0012A8A8 /* AttendessTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28EC3391DAC4FEB0012A8A8 /* AttendessTableViewController.swift */; };
+		C28EC33D1DAC50480012A8A8 /* AttendeeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28EC33C1DAC50480012A8A8 /* AttendeeTableViewCell.swift */; };
+		C29162641D9B09C70009C862 /* SpeakerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C29162631D9B09C70009C862 /* SpeakerTableViewCell.swift */; };
 		C2986DC01C640DE900ADCF40 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C2986DBF1C640DE900ADCF40 /* MapKit.framework */; };
 		C2986DC41C65136600ADCF40 /* ShingoModelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2986DC31C65136600ADCF40 /* ShingoModelViewController.swift */; };
 		C2A695111C35AC2900F6E0B8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A695081C35AC2900F6E0B8 /* AppDelegate.swift */; };
-		C2A695241C35E30F00F6E0B8 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2A695231C35E30F00F6E0B8 /* SwiftyJSON.swift */; };
 		C2B155111D626BE00099330F /* ExhibitorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B155101D626BE00099330F /* ExhibitorTableViewCell.swift */; };
 		C2B7EB401C7B813100162AFB /* ContactUsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B7EB3F1C7B813100162AFB /* ContactUsViewController.swift */; };
 		C2B7EB421C7CD89900162AFB /* BugReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2B7EB411C7CD89900162AFB /* BugReportViewController.swift */; };
 		C2C021231C6272D3008732DC /* SponsorsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2C021221C6272D3008732DC /* SponsorsTableViewController.swift */; };
 		C2CFC3041C4576D00036E485 /* SupportTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CFC3031C4576D00036E485 /* SupportTableViewController.swift */; };
-		C2CFC3101C481EAB0036E485 /* LaunchMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CFC30F1C481EAB0036E485 /* LaunchMenuViewController.swift */; };
+		C2CFC3101C481EAB0036E485 /* TopViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CFC30F1C481EAB0036E485 /* TopViewController.swift */; };
 		C2CFC3141C483C1C0036E485 /* SchedulesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CFC3131C483C1C0036E485 /* SchedulesTableViewController.swift */; };
 		C2CFC3181C4954C20036E485 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C2CFC3171C4954C20036E485 /* Main.storyboard */; };
 		C2E9508D1D1C83F500178C03 /* SharedCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E9508C1D1C83F500178C03 /* SharedCode.swift */; };
@@ -46,66 +45,58 @@
 		C2FF6B1E1CB2E2CF00331ED2 /* VenueMapsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FF6B1D1CB2E2CF00331ED2 /* VenueMapsCollectionView.swift */; };
 		C2FF6B221CB2E43200331ED2 /* VenueMapCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FF6B211CB2E43200331ED2 /* VenueMapCollectionCell.swift */; };
 		C2FF6B261CB4313200331ED2 /* VenueMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FF6B251CB4313200331ED2 /* VenueMapViewController.swift */; };
+		E2AA68D48C33D2B3AEF48AE9 /* Pods_Shingo_Events.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E99765DC375460FA1542A948 /* Pods_Shingo_Events.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		C22AB2A31C2484E800A7F3B1 /* PBXContainerItemProxy */ = {
+		C24FF48E1D9195750061B3E2 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C22AB2861C2484E800A7F3B1 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = C22AB28D1C2484E800A7F3B1;
-			remoteInfo = SimpleBrowser;
-		};
-		C22AB2AE1C2484E800A7F3B1 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = C22AB2861C2484E800A7F3B1 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = C22AB28D1C2484E800A7F3B1;
-			remoteInfo = SimpleBrowser;
+			remoteInfo = "Shingo Events";
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		0D9E3C660688E2372B0D1FD4 /* Pods-Shingo Events.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shingo Events.release.xcconfig"; path = "Pods/Target Support Files/Pods-Shingo Events/Pods-Shingo Events.release.xcconfig"; sourceTree = "<group>"; };
-		2D372B05CBBB2E7BF78EA707 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4D893190879C0BB6AAC6D82B /* Pods_Shingo_Events.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Shingo_Events.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7EC5F842FB1C431B1896102C /* Pods-Shingo Events.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shingo Events.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Shingo Events/Pods-Shingo Events.debug.xcconfig"; sourceTree = "<group>"; };
-		C2130BD71C987650009B3BB8 /* ActivityViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityViewController.swift; sourceTree = "<group>"; };
-		C21B3ED41D1B09DD00C54FA4 /* Shingo EventsTests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Shingo EventsTests-Bridging-Header.h"; sourceTree = "<group>"; };
-		C21B3ED51D1B09DE00C54FA4 /* ShingoEventsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShingoEventsTests.swift; sourceTree = "<group>"; };
+		C2130BD71C987650009B3BB8 /* ActivityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
 		C21ECE271C5FB21500689FDE /* AffiliateListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AffiliateListTableViewController.swift; sourceTree = "<group>"; };
-		C21ECE291C5FB22A00689FDE /* AfilliateViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AfilliateViewController.swift; sourceTree = "<group>"; };
 		C224C8971C92138700F4E393 /* AboutPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutPageViewController.swift; sourceTree = "<group>"; };
 		C224CDFB1CB6CA42003147F0 /* RecipientTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipientTableViewCell.swift; sourceTree = "<group>"; };
+		C22668061D9D5D1500E5F062 /* TestCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestCode.swift; path = ShingoEventsTests/TestCode.swift; sourceTree = SOURCE_ROOT; };
+		C22668091D9D707500E5F062 /* AffiliateTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AffiliateTableViewCell.swift; sourceTree = "<group>"; };
 		C22AB28E1C2484E800A7F3B1 /* Shingo Events.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Shingo Events.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		C22AB2A21C2484E800A7F3B1 /* Shingo Events.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Shingo Events.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		C22AB2AD1C2484E800A7F3B1 /* Shingo Events.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Shingo Events.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		C22AB2B11C2484E900A7F3B1 /* ShingoEventsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShingoEventsUITests.swift; sourceTree = "<group>"; };
-		C22AB2B31C2484E900A7F3B1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C22CBB801D6B915200649A4F /* TestCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestCode.swift; sourceTree = "<group>"; };
 		C234BD551C5293CF002E9814 /* SpeakerListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeakerListTableViewController.swift; sourceTree = "<group>"; };
-		C234BD571C529597002E9814 /* SpeakerDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeakerDetailsViewController.swift; sourceTree = "<group>"; };
 		C2494E271C89FBFE00E2969D /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		C24FF47A1D91901E0061B3E2 /* ShingoEventsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShingoEventsTests.swift; sourceTree = "<group>"; };
+		C24FF47C1D91901E0061B3E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C24FF4891D9195740061B3E2 /* ShingoEventsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShingoEventsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C24FF48B1D9195750061B3E2 /* ShingoEventsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShingoEventsTests.swift; sourceTree = "<group>"; };
+		C24FF48D1D9195750061B3E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C25F4F7F1D95E9E8009A9830 /* EventTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTableViewCell.swift; sourceTree = "<group>"; };
+		C25F4F811D99C3F5009A9830 /* ScheduleTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleTableViewCell.swift; sourceTree = "<group>"; };
 		C262CA8C1C3B1C29005845AF /* EventsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsTableViewController.swift; sourceTree = "<group>"; };
 		C264CCB31C57ECA7005CDB11 /* RecipientsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipientsTableViewController.swift; sourceTree = "<group>"; };
-		C264CCEF1C5834A5005CDB11 /* ChallengerInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChallengerInfoViewController.swift; sourceTree = "<group>"; };
-		C264CCF11C5834EC005CDB11 /* ResearchInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResearchInfoViewController.swift; sourceTree = "<group>"; };
+		C267F9211D9DD02E00E524E9 /* SITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SITableViewCell.swift; sourceTree = "<group>"; };
 		C26DC9011C59785700BB4DDA /* ExhibitorTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExhibitorTableViewController.swift; sourceTree = "<group>"; };
-		C26DC9031C597A8600BB4DDA /* ExhibitorInfoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExhibitorInfoViewController.swift; sourceTree = "<group>"; };
 		C26DC9051C59841700BB4DDA /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
-		C28B67E81C3F0BD700AC9193 /* EventData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventData.swift; sourceTree = "<group>"; };
+		C28B67E81C3F0BD700AC9193 /* AppData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppData.swift; sourceTree = "<group>"; };
 		C28B67F21C406BDE00AC9193 /* EventMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventMenuViewController.swift; sourceTree = "<group>"; };
+		C28EC3391DAC4FEB0012A8A8 /* AttendessTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttendessTableViewController.swift; sourceTree = "<group>"; };
+		C28EC33C1DAC50480012A8A8 /* AttendeeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttendeeTableViewCell.swift; sourceTree = "<group>"; };
+		C29162631D9B09C70009C862 /* SpeakerTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeakerTableViewCell.swift; sourceTree = "<group>"; };
 		C2986DBF1C640DE900ADCF40 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		C2986DC31C65136600ADCF40 /* ShingoModelViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShingoModelViewController.swift; sourceTree = "<group>"; };
 		C2A695081C35AC2900F6E0B8 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C2A6950C1C35AC2900F6E0B8 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C2A695231C35E30F00F6E0B8 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
 		C2B155101D626BE00099330F /* ExhibitorTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExhibitorTableViewCell.swift; sourceTree = "<group>"; };
 		C2B7EB3F1C7B813100162AFB /* ContactUsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContactUsViewController.swift; sourceTree = "<group>"; };
 		C2B7EB411C7CD89900162AFB /* BugReportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BugReportViewController.swift; sourceTree = "<group>"; };
 		C2C021221C6272D3008732DC /* SponsorsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SponsorsTableViewController.swift; sourceTree = "<group>"; };
 		C2CFC3031C4576D00036E485 /* SupportTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SupportTableViewController.swift; sourceTree = "<group>"; };
-		C2CFC30F1C481EAB0036E485 /* LaunchMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchMenuViewController.swift; sourceTree = "<group>"; };
+		C2CFC30F1C481EAB0036E485 /* TopViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopViewController.swift; sourceTree = "<group>"; };
 		C2CFC3131C483C1C0036E485 /* SchedulesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchedulesTableViewController.swift; sourceTree = "<group>"; };
 		C2CFC3171C4954C20036E485 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		C2E9508C1D1C83F500178C03 /* SharedCode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedCode.swift; sourceTree = "<group>"; };
@@ -115,6 +106,7 @@
 		C2FF6B1D1CB2E2CF00331ED2 /* VenueMapsCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VenueMapsCollectionView.swift; sourceTree = "<group>"; };
 		C2FF6B211CB2E43200331ED2 /* VenueMapCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VenueMapCollectionCell.swift; sourceTree = "<group>"; };
 		C2FF6B251CB4313200331ED2 /* VenueMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VenueMapViewController.swift; sourceTree = "<group>"; };
+		E99765DC375460FA1542A948 /* Pods_Shingo_Events.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Shingo_Events.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,18 +115,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				C2986DC01C640DE900ADCF40 /* MapKit.framework in Frameworks */,
-				7CCDA641804EC78E12D067A2 /* Pods_Shingo_Events.framework in Frameworks */,
+				E2AA68D48C33D2B3AEF48AE9 /* Pods_Shingo_Events.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C22AB29F1C2484E800A7F3B1 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C22AB2AA1C2484E800A7F3B1 /* Frameworks */ = {
+		C24FF4861D9195740061B3E2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -153,79 +138,43 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
-		C21B3ED11D1B078800C54FA4 /* Supporting Files */ = {
+		C224CDF71CB6C960003147F0 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				C2130BD71C987650009B3BB8 /* ActivityViewController.swift */,
-				C2E9508C1D1C83F500178C03 /* SharedCode.swift */,
-				C2A695231C35E30F00F6E0B8 /* SwiftyJSON.swift */,
-				C2494E271C89FBFE00E2969D /* Reachability.swift */,
+				C24FF4721D918DE10061B3E2 /* helpers */,
+				C2F17F661C655DAA0028062C /* Bridging-Header.h */,
+				C2A695081C35AC2900F6E0B8 /* AppDelegate.swift */,
+				C2E9508E1D22E8F100178C03 /* APIRequests.swift */,
+				C28B67E81C3F0BD700AC9193 /* AppData.swift */,
+				C24FF46E1D918D1A0061B3E2 /* view controllers */,
 			);
-			name = "Supporting Files";
+			name = src;
 			sourceTree = "<group>";
 		};
-		C21B3ED71D1B0A0A00C54FA4 /* ShingoEventsTests */ = {
-			isa = PBXGroup;
-			children = (
-				C22CBB801D6B915200649A4F /* TestCode.swift */,
-				C21B3ED51D1B09DE00C54FA4 /* ShingoEventsTests.swift */,
-				C21B3ED41D1B09DD00C54FA4 /* Shingo EventsTests-Bridging-Header.h */,
-			);
-			name = ShingoEventsTests;
-			path = ShingoEvents;
-			sourceTree = "<group>";
-		};
-		C224CDF71CB6C960003147F0 /* Menus */ = {
-			isa = PBXGroup;
-			children = (
-				C2CFC30F1C481EAB0036E485 /* LaunchMenuViewController.swift */,
-				C262CA8C1C3B1C29005845AF /* EventsTableViewController.swift */,
-				C28B67F21C406BDE00AC9193 /* EventMenuViewController.swift */,
-				C2986DC31C65136600ADCF40 /* ShingoModelViewController.swift */,
-			);
-			name = Menus;
-			sourceTree = "<group>";
-		};
-		C224CDF81CB6C9C8003147F0 /* Session Information */ = {
+		C224CDF81CB6C9C8003147F0 /* schedule */ = {
 			isa = PBXGroup;
 			children = (
 				C2CFC3131C483C1C0036E485 /* SchedulesTableViewController.swift */,
-				C234BD551C5293CF002E9814 /* SpeakerListTableViewController.swift */,
-				C234BD571C529597002E9814 /* SpeakerDetailsViewController.swift */,
+				C25F4F811D99C3F5009A9830 /* ScheduleTableViewCell.swift */,
 			);
-			name = "Session Information";
+			name = schedule;
 			sourceTree = "<group>";
 		};
-		C224CDF91CB6C9DF003147F0 /* Recipients */ = {
+		C224CDF91CB6C9DF003147F0 /* recipients */ = {
 			isa = PBXGroup;
 			children = (
 				C264CCB31C57ECA7005CDB11 /* RecipientsTableViewController.swift */,
 				C224CDFB1CB6CA42003147F0 /* RecipientTableViewCell.swift */,
-				C264CCEF1C5834A5005CDB11 /* ChallengerInfoViewController.swift */,
-				C264CCF11C5834EC005CDB11 /* ResearchInfoViewController.swift */,
 			);
-			name = Recipients;
-			sourceTree = "<group>";
-		};
-		C224CDFA1CB6CA0A003147F0 /* Orgs */ = {
-			isa = PBXGroup;
-			children = (
-				C26DC9011C59785700BB4DDA /* ExhibitorTableViewController.swift */,
-				C2B155101D626BE00099330F /* ExhibitorTableViewCell.swift */,
-				C26DC9031C597A8600BB4DDA /* ExhibitorInfoViewController.swift */,
-				C21ECE271C5FB21500689FDE /* AffiliateListTableViewController.swift */,
-				C21ECE291C5FB22A00689FDE /* AfilliateViewController.swift */,
-				C2C021221C6272D3008732DC /* SponsorsTableViewController.swift */,
-			);
-			name = Orgs;
+			name = recipients;
 			sourceTree = "<group>";
 		};
 		C22AB2851C2484E800A7F3B1 = {
 			isa = PBXGroup;
 			children = (
 				C22AB2901C2484E800A7F3B1 /* ShingoEvents */,
-				C21B3ED71D1B0A0A00C54FA4 /* ShingoEventsTests */,
-				C22AB2B01C2484E800A7F3B1 /* ShingoEventsUITests */,
+				C24FF4791D91901E0061B3E2 /* ShingoEventsTests */,
+				C24FF48A1D9195750061B3E2 /* ShingoEventsTests */,
 				C22AB28F1C2484E800A7F3B1 /* Products */,
 				CB0A5FDCC55BAF34E0CAECA2 /* Frameworks */,
 				5DB25D0538898A8E281EE0AD /* Pods */,
@@ -236,8 +185,7 @@
 			isa = PBXGroup;
 			children = (
 				C22AB28E1C2484E800A7F3B1 /* Shingo Events.app */,
-				C22AB2A21C2484E800A7F3B1 /* Shingo Events.xctest */,
-				C22AB2AD1C2484E800A7F3B1 /* Shingo Events.xctest */,
+				C24FF4891D9195740061B3E2 /* ShingoEventsTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -245,34 +193,117 @@
 		C22AB2901C2484E800A7F3B1 /* ShingoEvents */ = {
 			isa = PBXGroup;
 			children = (
-				C2F17F661C655DAA0028062C /* Bridging-Header.h */,
-				C2A6950C1C35AC2900F6E0B8 /* Info.plist */,
-				C2F17FA71C6AAFCF0028062C /* Assets.xcassets */,
-				C2A695081C35AC2900F6E0B8 /* AppDelegate.swift */,
-				C2CFC3171C4954C20036E485 /* Main.storyboard */,
-				C224CDF71CB6C960003147F0 /* Menus */,
-				C2FF6B231CB2E50900331ED2 /* Classes */,
-				C21B3ED11D1B078800C54FA4 /* Supporting Files */,
-				C2FF6B201CB2E3E700331ED2 /* Maps */,
-				C2FF6B241CB2E52400331ED2 /* Settings Views */,
-				C224CDF81CB6C9C8003147F0 /* Session Information */,
-				C224CDF91CB6C9DF003147F0 /* Recipients */,
-				C224CDFA1CB6CA0A003147F0 /* Orgs */,
+				C24FF4731D918E200061B3E2 /* resources */,
+				C224CDF71CB6C960003147F0 /* src */,
 			);
 			path = ShingoEvents;
 			sourceTree = "<group>";
 		};
-		C22AB2B01C2484E800A7F3B1 /* ShingoEventsUITests */ = {
+		C24FF46E1D918D1A0061B3E2 /* view controllers */ = {
 			isa = PBXGroup;
 			children = (
-				C22AB2B11C2484E900A7F3B1 /* ShingoEventsUITests.swift */,
-				C22AB2B31C2484E900A7F3B1 /* Info.plist */,
+				C2CFC30F1C481EAB0036E485 /* TopViewController.swift */,
+				C262CA8C1C3B1C29005845AF /* EventsTableViewController.swift */,
+				C25F4F7F1D95E9E8009A9830 /* EventTableViewCell.swift */,
+				C28B67F21C406BDE00AC9193 /* EventMenuViewController.swift */,
+				C24FF4701D918D950061B3E2 /* affiliates */,
+				C28EC33B1DAC50310012A8A8 /* attendees */,
+				C24FF46F1D918D870061B3E2 /* exhibitors */,
+				C224CDF91CB6C9DF003147F0 /* recipients */,
+				C224CDF81CB6C9C8003147F0 /* schedule */,
+				C24FF4BF1D91D66D0061B3E2 /* speakers */,
+				C24FF4711D918DA00061B3E2 /* sponsors */,
+				C2FF6B241CB2E52400331ED2 /* support */,
+				C2FF6B201CB2E3E700331ED2 /* venue maps */,
 			);
-			name = ShingoEventsUITests;
-			path = SimpleBrowserUITests;
+			name = "view controllers";
 			sourceTree = "<group>";
 		};
-		C2FF6B201CB2E3E700331ED2 /* Maps */ = {
+		C24FF46F1D918D870061B3E2 /* exhibitors */ = {
+			isa = PBXGroup;
+			children = (
+				C26DC9011C59785700BB4DDA /* ExhibitorTableViewController.swift */,
+				C2B155101D626BE00099330F /* ExhibitorTableViewCell.swift */,
+			);
+			name = exhibitors;
+			sourceTree = "<group>";
+		};
+		C24FF4701D918D950061B3E2 /* affiliates */ = {
+			isa = PBXGroup;
+			children = (
+				C21ECE271C5FB21500689FDE /* AffiliateListTableViewController.swift */,
+				C22668091D9D707500E5F062 /* AffiliateTableViewCell.swift */,
+			);
+			name = affiliates;
+			sourceTree = "<group>";
+		};
+		C24FF4711D918DA00061B3E2 /* sponsors */ = {
+			isa = PBXGroup;
+			children = (
+				C2C021221C6272D3008732DC /* SponsorsTableViewController.swift */,
+			);
+			name = sponsors;
+			sourceTree = "<group>";
+		};
+		C24FF4721D918DE10061B3E2 /* helpers */ = {
+			isa = PBXGroup;
+			children = (
+				C2E9508C1D1C83F500178C03 /* SharedCode.swift */,
+				C2130BD71C987650009B3BB8 /* ActivityView.swift */,
+				C2494E271C89FBFE00E2969D /* Reachability.swift */,
+				C267F9211D9DD02E00E524E9 /* SITableViewCell.swift */,
+			);
+			name = helpers;
+			sourceTree = "<group>";
+		};
+		C24FF4731D918E200061B3E2 /* resources */ = {
+			isa = PBXGroup;
+			children = (
+				C22668061D9D5D1500E5F062 /* TestCode.swift */,
+				C2A6950C1C35AC2900F6E0B8 /* Info.plist */,
+				C2F17FA71C6AAFCF0028062C /* Assets.xcassets */,
+				C2CFC3171C4954C20036E485 /* Main.storyboard */,
+			);
+			name = resources;
+			sourceTree = "<group>";
+		};
+		C24FF4791D91901E0061B3E2 /* ShingoEventsTests */ = {
+			isa = PBXGroup;
+			children = (
+				C24FF47A1D91901E0061B3E2 /* ShingoEventsTests.swift */,
+				C24FF47C1D91901E0061B3E2 /* Info.plist */,
+			);
+			path = ShingoEventsTests;
+			sourceTree = "<group>";
+		};
+		C24FF48A1D9195750061B3E2 /* ShingoEventsTests */ = {
+			isa = PBXGroup;
+			children = (
+				C24FF48B1D9195750061B3E2 /* ShingoEventsTests.swift */,
+				C24FF48D1D9195750061B3E2 /* Info.plist */,
+			);
+			path = ShingoEventsTests;
+			sourceTree = "<group>";
+		};
+		C24FF4BF1D91D66D0061B3E2 /* speakers */ = {
+			isa = PBXGroup;
+			children = (
+				C234BD551C5293CF002E9814 /* SpeakerListTableViewController.swift */,
+				C29162631D9B09C70009C862 /* SpeakerTableViewCell.swift */,
+			);
+			name = speakers;
+			sourceTree = "<group>";
+		};
+		C28EC33B1DAC50310012A8A8 /* attendees */ = {
+			isa = PBXGroup;
+			children = (
+				C28EC3391DAC4FEB0012A8A8 /* AttendessTableViewController.swift */,
+				C28EC33C1DAC50480012A8A8 /* AttendeeTableViewCell.swift */,
+			);
+			name = attendees;
+			sourceTree = "<group>";
+		};
+		C2FF6B201CB2E3E700331ED2 /* venue maps */ = {
 			isa = PBXGroup;
 			children = (
 				C26DC9051C59841700BB4DDA /* MapViewController.swift */,
@@ -280,35 +311,26 @@
 				C2FF6B211CB2E43200331ED2 /* VenueMapCollectionCell.swift */,
 				C2FF6B251CB4313200331ED2 /* VenueMapViewController.swift */,
 			);
-			name = Maps;
+			name = "venue maps";
 			sourceTree = "<group>";
 		};
-		C2FF6B231CB2E50900331ED2 /* Classes */ = {
+		C2FF6B241CB2E52400331ED2 /* support */ = {
 			isa = PBXGroup;
 			children = (
-				C28B67E81C3F0BD700AC9193 /* EventData.swift */,
-				C2E9508E1D22E8F100178C03 /* APIRequests.swift */,
-			);
-			name = Classes;
-			sourceTree = "<group>";
-		};
-		C2FF6B241CB2E52400331ED2 /* Settings Views */ = {
-			isa = PBXGroup;
-			children = (
+				C2986DC31C65136600ADCF40 /* ShingoModelViewController.swift */,
 				C2CFC3031C4576D00036E485 /* SupportTableViewController.swift */,
 				C2B7EB411C7CD89900162AFB /* BugReportViewController.swift */,
 				C2B7EB3F1C7B813100162AFB /* ContactUsViewController.swift */,
 				C224C8971C92138700F4E393 /* AboutPageViewController.swift */,
 			);
-			name = "Settings Views";
+			name = support;
 			sourceTree = "<group>";
 		};
 		CB0A5FDCC55BAF34E0CAECA2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				C2986DBF1C640DE900ADCF40 /* MapKit.framework */,
-				2D372B05CBBB2E7BF78EA707 /* Pods.framework */,
-				4D893190879C0BB6AAC6D82B /* Pods_Shingo_Events.framework */,
+				E99765DC375460FA1542A948 /* Pods_Shingo_Events.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -337,41 +359,23 @@
 			productReference = C22AB28E1C2484E800A7F3B1 /* Shingo Events.app */;
 			productType = "com.apple.product-type.application";
 		};
-		C22AB2A11C2484E800A7F3B1 /* Shingo EventsTests */ = {
+		C24FF4881D9195740061B3E2 /* ShingoEventsTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C22AB2B91C2484E900A7F3B1 /* Build configuration list for PBXNativeTarget "Shingo EventsTests" */;
+			buildConfigurationList = C24FF4901D9195750061B3E2 /* Build configuration list for PBXNativeTarget "ShingoEventsTests" */;
 			buildPhases = (
-				C22AB29E1C2484E800A7F3B1 /* Sources */,
-				C22AB29F1C2484E800A7F3B1 /* Frameworks */,
-				C22AB2A01C2484E800A7F3B1 /* Resources */,
+				C24FF4851D9195740061B3E2 /* Sources */,
+				C24FF4861D9195740061B3E2 /* Frameworks */,
+				C24FF4871D9195740061B3E2 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				C22AB2A41C2484E800A7F3B1 /* PBXTargetDependency */,
+				C24FF48F1D9195750061B3E2 /* PBXTargetDependency */,
 			);
-			name = "Shingo EventsTests";
-			productName = SimpleBrowserTests;
-			productReference = C22AB2A21C2484E800A7F3B1 /* Shingo Events.xctest */;
+			name = ShingoEventsTests;
+			productName = ShingoEventsTests;
+			productReference = C24FF4891D9195740061B3E2 /* ShingoEventsTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		C22AB2AC1C2484E800A7F3B1 /* Shingo EventsUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = C22AB2BC1C2484E900A7F3B1 /* Build configuration list for PBXNativeTarget "Shingo EventsUITests" */;
-			buildPhases = (
-				C22AB2A91C2484E800A7F3B1 /* Sources */,
-				C22AB2AA1C2484E800A7F3B1 /* Frameworks */,
-				C22AB2AB1C2484E800A7F3B1 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				C22AB2AF1C2484E800A7F3B1 /* PBXTargetDependency */,
-			);
-			name = "Shingo EventsUITests";
-			productName = SimpleBrowserUITests;
-			productReference = C22AB2AD1C2484E800A7F3B1 /* Shingo Events.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
@@ -379,20 +383,19 @@
 		C22AB2861C2484E800A7F3B1 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0730;
+				LastSwiftUpdateCheck = 0800;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "Shingo Institute";
 				TargetAttributes = {
 					C22AB28D1C2484E800A7F3B1 = {
 						CreatedOnToolsVersion = 7.2;
 						DevelopmentTeam = XQL9FCF56P;
+						LastSwiftMigration = 0800;
 					};
-					C22AB2A11C2484E800A7F3B1 = {
-						CreatedOnToolsVersion = 7.2;
-						TestTargetID = C22AB28D1C2484E800A7F3B1;
-					};
-					C22AB2AC1C2484E800A7F3B1 = {
-						CreatedOnToolsVersion = 7.2;
+					C24FF4881D9195740061B3E2 = {
+						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = XQL9FCF56P;
+						ProvisioningStyle = Automatic;
 						TestTargetID = C22AB28D1C2484E800A7F3B1;
 					};
 				};
@@ -411,8 +414,7 @@
 			projectRoot = "";
 			targets = (
 				C22AB28D1C2484E800A7F3B1 /* Shingo Events */,
-				C22AB2A11C2484E800A7F3B1 /* Shingo EventsTests */,
-				C22AB2AC1C2484E800A7F3B1 /* Shingo EventsUITests */,
+				C24FF4881D9195740061B3E2 /* ShingoEventsTests */,
 			);
 		};
 /* End PBXProject section */
@@ -427,14 +429,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C22AB2A01C2484E800A7F3B1 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C22AB2AB1C2484E800A7F3B1 /* Resources */ = {
+		C24FF4871D9195740061B3E2 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -509,70 +504,58 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C22EF40E1D6E427F00C4C5DC /* TestCode.swift in Sources */,
-				C26DC9041C597A8600BB4DDA /* ExhibitorInfoViewController.swift in Sources */,
 				C21ECE281C5FB21500689FDE /* AffiliateListTableViewController.swift in Sources */,
+				C25F4F821D99C3F5009A9830 /* ScheduleTableViewCell.swift in Sources */,
 				C2B7EB421C7CD89900162AFB /* BugReportViewController.swift in Sources */,
 				C28B67F31C406BDE00AC9193 /* EventMenuViewController.swift in Sources */,
 				C2FF6B221CB2E43200331ED2 /* VenueMapCollectionCell.swift in Sources */,
-				C264CCF01C5834A5005CDB11 /* ChallengerInfoViewController.swift in Sources */,
+				C29162641D9B09C70009C862 /* SpeakerTableViewCell.swift in Sources */,
 				C26DC9061C59841700BB4DDA /* MapViewController.swift in Sources */,
 				C2E9508F1D22E8F100178C03 /* APIRequests.swift in Sources */,
 				C262CA8D1C3B1C29005845AF /* EventsTableViewController.swift in Sources */,
 				C2494E281C89FBFE00E2969D /* Reachability.swift in Sources */,
-				C234BD581C529597002E9814 /* SpeakerDetailsViewController.swift in Sources */,
-				C28B67E91C3F0BD700AC9193 /* EventData.swift in Sources */,
-				C2CFC3101C481EAB0036E485 /* LaunchMenuViewController.swift in Sources */,
+				C28B67E91C3F0BD700AC9193 /* AppData.swift in Sources */,
+				C2CFC3101C481EAB0036E485 /* TopViewController.swift in Sources */,
 				C26DC9021C59785700BB4DDA /* ExhibitorTableViewController.swift in Sources */,
-				C21ECE2A1C5FB22A00689FDE /* AfilliateViewController.swift in Sources */,
 				C2B155111D626BE00099330F /* ExhibitorTableViewCell.swift in Sources */,
 				C2986DC41C65136600ADCF40 /* ShingoModelViewController.swift in Sources */,
-				C2A695241C35E30F00F6E0B8 /* SwiftyJSON.swift in Sources */,
+				C28EC33D1DAC50480012A8A8 /* AttendeeTableViewCell.swift in Sources */,
 				C224CDFC1CB6CA42003147F0 /* RecipientTableViewCell.swift in Sources */,
 				C264CCB41C57ECA7005CDB11 /* RecipientsTableViewController.swift in Sources */,
 				C2CFC3041C4576D00036E485 /* SupportTableViewController.swift in Sources */,
 				C2CFC3141C483C1C0036E485 /* SchedulesTableViewController.swift in Sources */,
+				C226680B1D9D710800E5F062 /* AffiliateTableViewCell.swift in Sources */,
 				C2FF6B1E1CB2E2CF00331ED2 /* VenueMapsCollectionView.swift in Sources */,
+				C22668081D9D620900E5F062 /* TestCode.swift in Sources */,
 				C234BD561C5293CF002E9814 /* SpeakerListTableViewController.swift in Sources */,
 				C2B7EB401C7B813100162AFB /* ContactUsViewController.swift in Sources */,
+				C25F4F801D95E9E8009A9830 /* EventTableViewCell.swift in Sources */,
 				C2FF6B261CB4313200331ED2 /* VenueMapViewController.swift in Sources */,
+				C267F9221D9DD02E00E524E9 /* SITableViewCell.swift in Sources */,
 				C224C8981C92138700F4E393 /* AboutPageViewController.swift in Sources */,
-				C2130BD81C987650009B3BB8 /* ActivityViewController.swift in Sources */,
+				C28EC33A1DAC4FEB0012A8A8 /* AttendessTableViewController.swift in Sources */,
+				C2130BD81C987650009B3BB8 /* ActivityView.swift in Sources */,
 				C2A695111C35AC2900F6E0B8 /* AppDelegate.swift in Sources */,
 				C2C021231C6272D3008732DC /* SponsorsTableViewController.swift in Sources */,
 				C2E9508D1D1C83F500178C03 /* SharedCode.swift in Sources */,
-				C264CCF21C5834EC005CDB11 /* ResearchInfoViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C22AB29E1C2484E800A7F3B1 /* Sources */ = {
+		C24FF4851D9195740061B3E2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C21B3ED81D1B433400C54FA4 /* ShingoEventsTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		C22AB2A91C2484E800A7F3B1 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				C22AB2B21C2484E900A7F3B1 /* ShingoEventsUITests.swift in Sources */,
+				C24FF48C1D9195750061B3E2 /* ShingoEventsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		C22AB2A41C2484E800A7F3B1 /* PBXTargetDependency */ = {
+		C24FF48F1D9195750061B3E2 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = C22AB28D1C2484E800A7F3B1 /* Shingo Events */;
-			targetProxy = C22AB2A31C2484E800A7F3B1 /* PBXContainerItemProxy */;
-		};
-		C22AB2AF1C2484E800A7F3B1 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = C22AB28D1C2484E800A7F3B1 /* Shingo Events */;
-			targetProxy = C22AB2AE1C2484E800A7F3B1 /* PBXContainerItemProxy */;
+			targetProxy = C24FF48E1D9195750061B3E2 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -580,6 +563,7 @@
 		C22AB2B41C2484E900A7F3B1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -590,14 +574,15 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -619,15 +604,19 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "-D DEBUG";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "arm64 armv7 armv7s i386 x86_64";
+				VERSIONING_SYSTEM = "";
 			};
 			name = Debug;
 		};
 		C22AB2B51C2484E900A7F3B1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
@@ -638,14 +627,15 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -661,9 +651,13 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "arm64 armv7 armv7s i386 x86_64";
+				VERSIONING_SYSTEM = "";
 			};
 			name = Release;
 		};
@@ -671,12 +665,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7EC5F842FB1C431B1896102C /* Pods-Shingo Events.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = "";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = YES;
 				INFOPLIST_FILE = ShingoEvents/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -686,8 +681,10 @@
 				PRODUCT_NAME = "Shingo Events";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "./ShingoEvents/Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "arm64 armv7 armv7s i386 i386 x86_64";
+				VERSIONING_SYSTEM = "";
 			};
 			name = Debug;
 		};
@@ -695,11 +692,11 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0D9E3C660688E2372B0D1FD4 /* Pods-Shingo Events.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = YES;
 				INFOPLIST_FILE = ShingoEvents/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -709,61 +706,47 @@
 				PRODUCT_NAME = "Shingo Events";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "./ShingoEvents/Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "arm64 armv7 armv7s i386 i386 x86_64";
+				VERSIONING_SYSTEM = "";
 			};
 			name = Release;
 		};
-		C22AB2BA1C2484E900A7F3B1 /* Debug */ = {
+		C24FF4911D9195750061B3E2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ENABLE_MODULES = YES;
-				INFOPLIST_FILE = ShingoEvents/Info.plist;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				DEVELOPMENT_TEAM = XQL9FCF56P;
+				INFOPLIST_FILE = ShingoEventsTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "";
-				PRODUCT_NAME = "Shingo Events";
-				SWIFT_OBJC_BRIDGING_HEADER = "ShingoEvents/Shingo EventsTests-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				PRODUCT_BUNDLE_IDENTIFIER = com.usu.shingo.prize.conference.ShingoEventsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Shingo Events.app/Shingo Events";
 			};
 			name = Debug;
 		};
-		C22AB2BB1C2484E900A7F3B1 /* Release */ = {
+		C24FF4921D9195750061B3E2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ENABLE_MODULES = YES;
-				INFOPLIST_FILE = ShingoEvents/Info.plist;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				DEVELOPMENT_TEAM = XQL9FCF56P;
+				INFOPLIST_FILE = ShingoEventsTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "";
-				PRODUCT_NAME = "Shingo Events";
-				SWIFT_OBJC_BRIDGING_HEADER = "ShingoEvents/Shingo EventsTests-Bridging-Header.h";
+				PRODUCT_BUNDLE_IDENTIFIER = com.usu.shingo.prize.conference.ShingoEventsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Shingo Events.app/Shingo Events";
-			};
-			name = Release;
-		};
-		C22AB2BD1C2484E900A7F3B1 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				INFOPLIST_FILE = SimpleBrowserUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = shingo.org.SimpleBrowserUITests;
-				PRODUCT_NAME = "Shingo Events";
-				TEST_TARGET_NAME = SimpleBrowser;
-				USES_XCTRUNNER = YES;
-			};
-			name = Debug;
-		};
-		C22AB2BE1C2484E900A7F3B1 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				INFOPLIST_FILE = SimpleBrowserUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = shingo.org.SimpleBrowserUITests;
-				PRODUCT_NAME = "Shingo Events";
-				TEST_TARGET_NAME = SimpleBrowser;
-				USES_XCTRUNNER = YES;
 			};
 			name = Release;
 		};
@@ -788,20 +771,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C22AB2B91C2484E900A7F3B1 /* Build configuration list for PBXNativeTarget "Shingo EventsTests" */ = {
+		C24FF4901D9195750061B3E2 /* Build configuration list for PBXNativeTarget "ShingoEventsTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				C22AB2BA1C2484E900A7F3B1 /* Debug */,
-				C22AB2BB1C2484E900A7F3B1 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		C22AB2BC1C2484E900A7F3B1 /* Build configuration list for PBXNativeTarget "Shingo EventsUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				C22AB2BD1C2484E900A7F3B1 /* Debug */,
-				C22AB2BE1C2484E900A7F3B1 /* Release */,
+				C24FF4911D9195750061B3E2 /* Debug */,
+				C24FF4921D9195750061B3E2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

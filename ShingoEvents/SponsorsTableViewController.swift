@@ -9,7 +9,7 @@
 import UIKit
 import PureLayout
 
-class SponsorsTableViewController: UITableViewController {
+class SponsorsTableViewController: UITableViewController, SICellDelegate {
 
     let cellIdentifier = "SponsorCell"
     
@@ -22,34 +22,51 @@ class SponsorsTableViewController: UITableViewController {
     
     var sectionTitles = [String]()
     
+    var gradientBackgroundView = UIView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tableView.backgroundView = gradientBackgroundView
+        gradientBackgroundView.backgroundColor = .lightShingoRed
+        
+        let gradientLayer = RadialGradientLayer()
+        gradientLayer.frame = gradientBackgroundView.bounds
+        gradientBackgroundView.layer.insertSublayer(gradientLayer, at: 0)
         
         if friends.isEmpty && supporters.isEmpty && benefactors.isEmpty && champions.isEmpty && presidents.isEmpty && other.isEmpty {
             displayNoContentNotification()
         }
+        
+        tableView.estimatedRowHeight = 150
+        tableView.rowHeight = UITableViewAutomaticDimension
     }
     
     private func displayNoContentNotification() {
         let label: UILabel = {
-            let view = UILabel.newAutoLayoutView()
+            let view = UILabel.newAutoLayout()
             view.text = "No Content Available"
-            view.textColor = .whiteColor()
+            view.textColor = .white
             view.sizeToFit()
             return view
         }()
         
         view.addSubview(label)
         
-        label.autoAlignAxis(.Horizontal, toSameAxisOfView: view)
-        label.autoAlignAxis(.Vertical, toSameAxisOfView: view)
+        label.autoAlignAxis(.horizontal, toSameAxisOf: view)
+        label.autoAlignAxis(.vertical, toSameAxisOf: view)
+    }
+    
+    func cellDidUpdate() {
+        tableView.beginUpdates()
+        tableView.endUpdates()
     }
 }
 
 extension SponsorsTableViewController {
     
     // MARK: - Table view data source
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         
         sectionTitles = []
         
@@ -75,22 +92,22 @@ extension SponsorsTableViewController {
         return sectionTitles.count
     }
 
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = UILabel()
-        header.backgroundColor = SIColor.shingoGoldColor()
+        header.backgroundColor = .shingoBlue
         header.text = sectionTitles[section]
-        header.textColor = .whiteColor()
-        header.font = UIFont.boldSystemFontOfSize(16.0)
-        header.textAlignment = .Center
+        header.textColor = .white
+        header.font = UIFont.preferredFont(forTextStyle: .headline)
+        header.textAlignment = .center
         
         return header
     }
     
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 30
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         switch sectionTitles[section] {
         case "Presidents": return presidents.count
@@ -106,53 +123,46 @@ extension SponsorsTableViewController {
     }
 
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("SponsorCell", forIndexPath: indexPath) as! SponsorTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SponsorCell", for: indexPath) as! SponsorTableViewCell
         
-        switch sectionTitles[indexPath.section] {
+        cell.delegate = self
+        
+        switch sectionTitles[(indexPath as NSIndexPath).section] {
             case "Friends":
                 if (friends.count > 0) {
-                    cell.sponsor = friends[indexPath.row]
+                    cell.sponsor = friends[(indexPath as NSIndexPath).row]
                 }
             case "Supporters":
                 if (supporters.count > 0) {
-                    cell.sponsor = supporters[indexPath.row]
+                    cell.sponsor = supporters[(indexPath as NSIndexPath).row]
                 }
             case "Benefactors":
                 if (benefactors.count > 0) {
-                    cell.sponsor = benefactors[indexPath.row]
+                    cell.sponsor = benefactors[(indexPath as NSIndexPath).row]
                 }
             case "Champions":
                 if (champions.count > 0) {
-                    cell.sponsor = champions[indexPath.row]
+                    cell.sponsor = champions[(indexPath as NSIndexPath).row]
                 }
             case "Presidents":
                 if (presidents.count > 0) {
-                    cell.sponsor = presidents[indexPath.row]
+                    cell.sponsor = presidents[(indexPath as NSIndexPath).row]
                 }
             case "Other":
                 if other.count > 0 {
-                    cell.sponsor = other[indexPath.row]
+                    cell.sponsor = other[(indexPath as NSIndexPath).row]
                 }
             default: break
         }
         
-        cell.selectionStyle = .None
+        cell.selectionStyle = .none
         cell.contentView.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 150.0)
         cell.setNeedsUpdateConstraints()
         cell.updateConstraintsIfNeeded()
         
         return cell
-    }
-
-
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 150.0
-    }
-
-    override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 150.0
     }
 
 }
@@ -166,53 +176,39 @@ class SponsorTableViewCell: UITableViewCell {
         }
     }
     
-    var didSetupConstraints = false
+    var delegate: SICellDelegate?
 
-    var nameLabel: UILabel = {
-        let view = UILabel.newAutoLayoutView()
-        view.numberOfLines = 0
-        view.lineBreakMode = .ByWordWrapping
-        view.textAlignment = .Center
-        return view
-    }()
-    
-    var logoImageView: UIImageView = {
-        let image = UIImageView.newAutoLayoutView()
-        image.contentMode = .ScaleAspectFit
-        return image
-    }()
-    
-    override func updateConstraints() {
-        if !didSetupConstraints {
-            
-            contentView.addSubview(nameLabel)
-            contentView.addSubview(logoImageView)
-            
-            NSLayoutConstraint.autoSetPriority(UILayoutPriorityRequired) {
-                self.logoImageView.autoSetContentCompressionResistancePriorityForAxis(.Vertical)
-            }
-            
-            nameLabel.sizeToFit()
-            nameLabel.autoSetDimension(.Height, toSize: 24)
-            nameLabel.autoPinEdge(.Top, toEdge: .Top, ofView: contentView, withOffset: 5)
-            nameLabel.autoAlignAxis(.Vertical, toSameAxisOfView: contentView)
-            
-            logoImageView.autoPinEdge(.Top, toEdge: .Bottom, ofView: nameLabel, withOffset: 5)
-            logoImageView.autoPinEdge(.Left, toEdge: .Left, ofView: contentView, withOffset: 5)
-            logoImageView.autoPinEdge(.Right, toEdge: .Right, ofView: contentView, withOffset: -5)
-            logoImageView.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: contentView, withOffset: -5)
-            
-            didSetupConstraints = true
+    @IBOutlet weak var nameLabel: UILabel! {
+        didSet {
+            nameLabel.numberOfLines = 0
+            nameLabel.lineBreakMode = .byWordWrapping
+            nameLabel.textAlignment = .center
         }
-        super.updateConstraints()
     }
     
-    private func updateCell() {
+    @IBOutlet weak var logoImageView: UIImageView!
+    
+    func updateCell() {
         if let sponsor = sponsor {
             nameLabel.text = sponsor.name
+            
             sponsor.getLogoImage() { image in
-                self.logoImageView.image = image
-                self.setNeedsDisplay()
+                
+                if image.size.width > self.contentView.frame.width {
+                    let foobar = UIImageView()
+                    foobar.image = image
+                    foobar.resizeImageViewToIntrinsicContentSize(thatFitsWidth: self.contentView.frame.width)
+                    if let image = foobar.image {
+                        self.logoImageView.image = image
+                    }
+                } else {
+                    self.logoImageView.image = image
+                }
+                
+                if let d = self.delegate {
+                    d.cellDidUpdate()
+                }
+                
             }
         }
         

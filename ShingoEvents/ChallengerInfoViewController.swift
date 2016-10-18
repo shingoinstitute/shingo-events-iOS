@@ -12,12 +12,19 @@ import Crashlytics
 class ChallengerInfoViewController: UIViewController {
 
     @IBOutlet weak var logoImage: UIImageView!
-    @IBOutlet weak var abstractTextField: UITextView!
+    @IBOutlet weak var abstractTextField: UITextView! {
+        didSet {
+            abstractTextField.backgroundColor = .shingoBlue
+            abstractTextField.text = ""
+            abstractTextField.textColor = .white
+            abstractTextField.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+        }
+    }
     
-    var scrollView: UIScrollView = UIScrollView.newAutoLayoutView()
+    var scrollView: UIScrollView = UIScrollView.newAutoLayout()
     var backgroundView: UIView = {
-        let view = UIView.newAutoLayoutView()
-        view.backgroundColor = SIColor.prussianBlueColor()
+        let view = UIView.newAutoLayout()
+        view.backgroundColor = .shingoBlue
         return view
     }()
     
@@ -28,13 +35,30 @@ class ChallengerInfoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NotificationCenter.default.addObserver(self, selector: #selector(ChallengerInfoViewController.adjustFontForCategorySizeChange), name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
+        
         navigationItem.title = recipient.name
         automaticallyAdjustsScrollViewInsets = false
         
-        setSummaryText()
+        recipient.getRecipientImage() { image in self.logoImage.image = image }
+        
+        let abstract = NSMutableAttributedString(attributedString: recipient.attributedSummary)
+        
+        let attributes = [
+            NSFontAttributeName : UIFont.preferredFont(forTextStyle: .body),
+            NSForegroundColorAttributeName : UIColor.white
+        ]
+        
+        abstract.addAttributes(attributes, range: abstract.fullRange)
+        
+        abstractTextField.attributedText = abstract
+        
 
         updateViewConstraints()
-        
+    }
+    
+    func adjustFontForCategorySizeChange() {
+        abstractTextField.font = UIFont.preferredFont(forTextStyle: .body)
     }
     
     override func updateViewConstraints() {
@@ -46,63 +70,30 @@ class ChallengerInfoViewController: UIViewController {
             view.addSubviews([backgroundView, scrollView])
             scrollView.addSubviews([logoImage, abstractTextField])
             
-            scrollView.autoPinToTopLayoutGuideOfViewController(self, withInset: 8)
-            scrollView.autoPinEdgeToSuperviewEdge(.Left)
-            scrollView.autoPinEdgeToSuperviewEdge(.Right)
-            scrollView.autoPinEdgeToSuperviewEdge(.Bottom)
+            scrollView.autoPin(toTopLayoutGuideOf: self, withInset: 8)
+            scrollView.autoPinEdge(toSuperviewEdge: .left)
+            scrollView.autoPinEdge(toSuperviewEdge: .right)
+            scrollView.autoPinEdge(toSuperviewEdge: .bottom)
             
-            logoImage.autoPinEdgeToSuperviewEdge(.Top)
-            logoImage.autoPinEdge(.Left, toEdge: .Left, ofView: view, withOffset: 8)
-            logoImage.autoPinEdge(.Right, toEdge: .Right, ofView: view, withOffset: 8)
-            logoImage.contentMode = .ScaleAspectFit
+            logoImage.autoPinEdge(toSuperviewEdge: .top)
+            logoImage.autoPinEdge(.left, to: .left, of: view, withOffset: 8)
+            logoImage.autoPinEdge(.right, to: .right, of: view, withOffset: 8)
+            logoImage.contentMode = .scaleAspectFit
             
-            abstractTextField.autoPinEdge(.Top, toEdge: .Bottom, ofView: logoImage, withOffset: 8)
-            abstractTextField.autoPinEdge(.Left, toEdge: .Left, ofView: view, withOffset: 0)
-            abstractTextField.autoPinEdge(.Right, toEdge: .Right, ofView: view, withOffset: 0)
-            abstractTextField.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: scrollView, withOffset: 0)
-            abstractTextField.scrollEnabled = false
+            abstractTextField.autoPinEdge(.top, to: .bottom, of: logoImage, withOffset: 8)
+            abstractTextField.autoPinEdge(.left, to: .left, of: view, withOffset: 0)
+            abstractTextField.autoPinEdge(.right, to: .right, of: view, withOffset: 0)
+            abstractTextField.autoPinEdge(.bottom, to: .bottom, of: scrollView, withOffset: 0)
+            abstractTextField.isScrollEnabled = false
             
-            backgroundView.autoPinEdge(.Top, toEdge: .Bottom, ofView: logoImage, withOffset: 8)
-            backgroundView.autoPinEdge(.Bottom, toEdge: .Bottom, ofView: view)
-            backgroundView.autoPinEdge(.Left, toEdge: .Left, ofView: view)
-            backgroundView.autoPinEdge(.Right, toEdge: .Right, ofView: view)
+            backgroundView.autoPinEdge(.top, to: .bottom, of: logoImage, withOffset: 8)
+            backgroundView.autoPinEdge(.bottom, to: .bottom, of: view)
+            backgroundView.autoPinEdge(.left, to: .left, of: view)
+            backgroundView.autoPinEdge(.right, to: .right, of: view)
             
             didUpdateConstraints = true
         }
         super.updateViewConstraints()
-    }
-    
-    private func setSummaryText() {
-        
-        abstractTextField.backgroundColor = SIColor.prussianBlueColor()
-        abstractTextField.text = ""
-        abstractTextField.textColor = .whiteColor()
-        abstractTextField.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
-        
-        recipient.getRecipientImage() { image in
-            self.logoImage.image = image
-        }
-        
-        if !recipient.summary.isEmpty {
-            do {
-                let attributedText = try NSMutableAttributedString(data: recipient.summary.dataUsingEncoding(NSUTF8StringEncoding)!,
-                                                                          options: [NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
-                                                                            NSCharacterEncodingDocumentAttribute : NSUTF8StringEncoding,
-                                                                            NSForegroundColorAttributeName : UIColor.whiteColor()],
-                                                                          documentAttributes: nil)
-                attributedText.addAttributes([NSFontAttributeName : UIFont.helveticaOfFontSize(16), NSForegroundColorAttributeName : UIColor.whiteColor()], range: NSMakeRange(0, attributedText.string.characters.count - 1))
-                
-                abstractTextField.attributedText = attributedText
-            } catch {
-                let error = NSError(domain: "NSAttributedString",
-                                    code: 72283,
-                                    userInfo: [
-                                        NSLocalizedDescriptionKey : "Could not parse text for recipient summary.",
-                                        NSLocalizedFailureReasonErrorKey: "Could not parse text for recipient summary. Most likely reason is because the text passed back from the API was not UTF-8 coding compliant."
-                                    ])
-                Crashlytics.sharedInstance().recordError(error)
-            }
-        }
     }
 
 }

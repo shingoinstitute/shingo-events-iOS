@@ -7,96 +7,132 @@
 //
 
 import UIKit
+import Alamofire
 
 class SchedulesTableViewController: UITableViewController, SISpeakerDelegate {
 
     var agendas: [SIAgenda]!
     var eventName: String!
-
-    var cellShouldExpand: [[Bool]] {
-        get {
-            var agendaSource = [[Bool]]()
-            for agenda in self.agendas {
-                var sessionSource = [Bool]()
-                for session in agenda.sessions {
-                    sessionSource.append(session.isSelected)
-                }
-                agendaSource.append(sessionSource)
-            }
-            return agendaSource
+    
+    override func loadView() {
+        super.loadView()
+        
+        if agendas == nil {
+            addNoContentLabelNotification()
+        } else if agendas.isEmpty {
+            addNoContentLabelNotification()
+        } else {
+            requestDataForTable()
         }
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationItem.title = "Schedule"
     }
     
+    var gradientBackgroundView = UIView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tableView.backgroundView = gradientBackgroundView
+        gradientBackgroundView.backgroundColor = .lightShingoBlue
+        
+        let gradientLayer = RadialGradientLayer()
+        gradientLayer.frame = gradientBackgroundView.bounds
+        gradientBackgroundView.layer.insertSublayer(gradientLayer, at: 0)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(SchedulesTableViewController.adjustFontForCategorySizeChange), name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
+        
         tableView.estimatedRowHeight = 106
         tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.backgroundColor = SIColor.prussianBlueColor()
         
-        for agenda in agendas {
-            if !agenda.didLoadSessions {
-                agenda.requestAgendaSessions({
-                    if let sessions = self.sortSessionsByDate(agenda.sessions) {
-                        agenda.sessions = sessions
-                        
-                        for session in sessions {
-                            if !session.didLoadSessionInformation {
-                                session.requestSessionInformation({})
+        tableView.backgroundColor = .shingoBlue
+
+    }
+    
+    private func requestDataForTable() {
+
+        DispatchQueue.global(qos: .utility).async { [unowned self] in
+            for section in 0 ..< self.agendas.count {
+                let agenda = self.agendas[section]
+                if !agenda.didLoadSessions {
+                    agenda.requestAgendaSessions({
+                        if let sessions = self.sortSessionsByDate(agenda.sessions) {
+                            agenda.sessions = sessions
+                            
+                            DispatchQueue.main.async {
+                                self.tableView.reloadData()
+                            }
+                            
+                            for row in 0 ..< sessions.count {
+                                let session = sessions[row]
+                                if !session.didLoadSessionInformation {
+                                    session.requestSessionInformation({})
+                                }
                             }
                         }
-                        
-                        self.tableView.reloadData()
-                    }
-                })
+                    })
+                }
             }
         }
     }
     
+    func adjustFontForCategorySizeChange() {
+        tableView.reloadData()
+    }
+    
+    func addNoContentLabelNotification() {
+        
+        agendas = [SIAgenda]()
+        
+        let infoLabel = UILabel.newAutoLayout()
+        infoLabel.font = UIFont.preferredFont(forTextStyle: .headline)
+        infoLabel.textColor = .white
+        infoLabel.numberOfLines = 0
+        infoLabel.textAlignment = .center
+        infoLabel.text = "Content is currently unavailable, please check back later."
+        infoLabel.lineBreakMode = .byWordWrapping
+        
+        tableView.addSubview(infoLabel)
+        infoLabel.autoAlignAxis(.vertical, toSameAxisOf: tableView)
+        infoLabel.autoAlignAxis(.horizontal, toSameAxisOf: tableView)
+        infoLabel.autoPinEdge(.left, to: .left, of: tableView, withOffset: 16)
+        infoLabel.autoPinEdge(.right, to: .right, of: tableView, withOffset: -16)
+    }
+    
     func performActionOnSpeakers(data: [SISpeaker]) {
-        performSegueWithIdentifier("SpeakerListView", sender: data)
+        performSegue(withIdentifier: "SpeakerListView", sender: data)
     }
     
     // MARK: - Navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         navigationItem.title = ""
         
         switch segue.identifier! {
             
         case "SpeakerListView":
                 
-            let destination = segue.destinationViewController as! SpeakerListTableViewController
+            let destination = segue.destination as! SpeakerListTableViewController
             if let speakers = sender as? [SISpeaker] {
                 var kSpeakers = [SISpeaker]()
                 var cSpeakers = [SISpeaker]()
                 var uSpeakers = [SISpeaker]()
                 
                 for speaker in speakers {
-                    if speaker.speakerType == .Keynote {
+                    if speaker.speakerType == .keynote {
                         kSpeakers.append(speaker)
-                    } else if speaker.speakerType == .Concurrent {
+                    } else if speaker.speakerType == .concurrent {
                         cSpeakers.append(speaker)
                     } else {
                         uSpeakers.append(speaker)
                     }
                 }
                 
-                if !kSpeakers.isEmpty {
-                    destination.keyNoteSpeakers = kSpeakers
-                }
-                
-                if !cSpeakers.isEmpty {
-                    destination.concurrentSpeakers = cSpeakers
-                }
-                
-                if !uSpeakers.isEmpty {
-                    destination.unknownSpeakers = uSpeakers
-                }
-                
+                if !kSpeakers.isEmpty { destination.keyNoteSpeakers = kSpeakers }
+                if !cSpeakers.isEmpty { destination.concurrentSpeakers = cSpeakers }
+                if !uSpeakers.isEmpty { destination.unknownSpeakers = uSpeakers }
             }
             
         default:
@@ -111,35 +147,35 @@ class SchedulesTableViewController: UITableViewController, SISpeakerDelegate {
 extension SchedulesTableViewController {
 
     // MARK: - Table view data source
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return agendas.count
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return agendas[section].sessions.count
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("ScheduleCell", forIndexPath: indexPath) as! SchedulesTableViewCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ScheduleCell", for: indexPath) as! ScheduleTableViewCell
         
-        cell.speakersButton.hidden = true
-        cell.speakersButton.userInteractionEnabled = false
+        let session = agendas[indexPath.section].sessions[indexPath.row]
         
-        cell.session = agendas[indexPath.section].sessions[indexPath.row]
+        
+        
+        cell.session = session
         cell.delegate = self
         
-        if cellShouldExpand[indexPath.section][indexPath.row] {
-            cell.expandCell()
-        } else {
-            cell.shrinkCell()
-        }
+        cell.isExpanded = cell.session.isSelected
 
-        
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let cell = tableView.cellForRowAtIndexPath(indexPath) as! SchedulesTableViewCell
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 40
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as! ScheduleTableViewCell
         
         cell.isExpanded = !cell.isExpanded
         
@@ -147,33 +183,25 @@ extension SchedulesTableViewController {
         tableView.endUpdates()
     }
     
-    override func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let dateFormatter = NSDateFormatter()
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
-        dateFormatter.dateStyle = .MediumStyle
-        dateFormatter.timeZone = NSTimeZone(name: "GMT")
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeZone = TimeZone(identifier: "GMT")
         
-        let dateText = dateFormatter.stringFromDate(agendas[section].date)
+        let dateText = dateFormatter.string(from: agendas[section].date as Date)
         
-        let title = "  \(agendas[section].displayName), \(dateText)"
-        
-        let label = UILabel()
-        label.text = title
-        label.font = UIFont.boldSystemFontOfSize(16)
-        label.textColor = UIColor.whiteColor()
+        let label = UILabel(text: "\t\(agendas[section].displayName), \(dateText)", font: UIFont.preferredFont(forTextStyle: .headline))
+        label.textColor = UIColor.white
         
         return label
-    }
-    
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 32
     }
     
 }
 
 extension SchedulesTableViewController {
     // MARK: - Sorting
-    private func sortSessionsByDate(sender: AnyObject?) -> [SISession]? {
+    fileprivate func sortSessionsByDate(_ sender: [SIObject]?) -> [SISession]? {
         var sessions = sender as! [SISession]
         for i in 0 ..< sessions.count - 1 {
             
@@ -190,189 +218,6 @@ extension SchedulesTableViewController {
         return sessions
     }
 }
-
-class SchedulesTableViewCell: UITableViewCell {
-    
-    @IBOutlet weak var timeLabel: UILabel!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var infoTextView: UITextView! {
-        didSet {
-            infoTextView.layer.shadowColor = UIColor.grayColor().CGColor
-            infoTextView.layer.shadowOffset = CGSizeMake(0, 2.0)
-            infoTextView.layer.shadowOpacity = 1
-            infoTextView.layer.shadowRadius = 3
-            infoTextView.layer.masksToBounds = false
-            infoTextView.layer.cornerRadius = 3
-        }
-    }
-    @IBOutlet weak var speakersButton: UIButton! {
-        didSet {
-            speakersButton.imageView?.contentMode = .ScaleAspectFit
-        }
-    }
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView! {
-        didSet {
-            activityIndicator.hidesWhenStopped = true
-        }
-    }
-    
-    var delegate: SISpeakerDelegate?
-    
-    var isExpanded = false {
-        didSet {
-            if isExpanded {
-                self.expandCell()
-                session.isSelected = true
-            } else {
-                self.shrinkCell()
-                session.isSelected = false
-            }
-        }
-    }
-    
-    var session: SISession! {
-        didSet {
-            updateCell()
-        }
-    }
-    
-    func updateCell() {
-        
-        selectionStyle = .None
-        
-        speakersButton.addTarget(self, action: #selector(SchedulesTableViewCell.didTapSpeakersButton), forControlEvents: .TouchUpInside)
-        
-        if let session = session {
-            timeLabel.text = NSDate().timeFrameBetweenDates(startDate: session.startDate, endDate: session.endDate)
-            
-            titleLabel.font = UIFont.helveticaOfFontSize(16)
-            titleLabel.text = "\(session.sessionType.rawValue): \(session.displayName)"
-            
-            if !session.didLoadSessionInformation {
-                activityIndicator.startAnimating()
-                session.requestSessionInformation({
-                    if !session.speakers.isEmpty {
-                        self.speakersButton.hidden = false
-                        self.speakersButton.userInteractionEnabled = true
-                    }
-                    self.layoutIfNeeded()
-                    self.activityIndicator.stopAnimating()
-                })
-            } else {
-                if !session.speakers.isEmpty {
-                    self.speakersButton.hidden = false
-                    self.speakersButton.userInteractionEnabled = true
-                }
-            }
-            
-        }
-    }
-    
-    private func expandCell() {
-        guard let info = getAttributedStringForSession(room: session.room, summary: session.summary) else {
-            infoTextView.text = "Check back later for more information."
-            infoTextView.font = UIFont.helveticaOfFontSize(14)
-            infoTextView.textColor = .blackColor()
-            return
-        }
-        
-        if info.string == "\n\nTap To See Less..." {
-            
-            let leftStyle = NSMutableParagraphStyle()
-            leftStyle.alignment = .Left
-            
-            let notificationText = NSMutableAttributedString(string: "Check back later for more information.", attributes: [
-                NSFontAttributeName : UIFont.helveticaOfFontSize(14),
-                NSParagraphStyleAttributeName : leftStyle
-                ])
-            notificationText.appendAttributedString(info)
-            
-            infoTextView.attributedText = notificationText
-            
-            return
-        }
-        
-        infoTextView.attributedText = info
-    }
-    
-    private func shrinkCell() {
-        infoTextView.text = "Select For More Info >"
-        infoTextView.textAlignment = .Center
-        infoTextView.textColor = .grayColor()
-        infoTextView.font = UIFont.helveticaOfFontSize(14)
-        infoTextView.layer.borderWidth = 0
-    }
-    
-    @IBAction func didTapSpeakersButton() {
-        if !session.speakers.isEmpty {
-            if let delegate = delegate {
-                delegate.performActionOnSpeakers(session.speakers)
-            }
-        }
-    }
-    
-    private func getAttributedStringForSession(room room: SIRoom?, summary: String) -> NSAttributedString? {
-
-        var roomName = ""
-        
-        if let room = room {
-            if !room.name.isEmpty {
-                roomName += "<p><b>Room: \(room.name)</b></p>"
-            }
-        }
-        
-        do {
-            
-            let leftStyle = NSMutableParagraphStyle()
-            leftStyle.alignment = .Left
-            
-            let attributes: [String:AnyObject] = [
-                NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
-                NSCharacterEncodingDocumentAttribute : NSUTF8StringEncoding,
-                NSParagraphStyleAttributeName : leftStyle
-            ]
-            
-            let attributedRoomName = try NSMutableAttributedString(data: "<font face=\"Arial, Helvetica, sans-serif\" size=\"4\">\(roomName)</font>".dataUsingEncoding(NSUTF8StringEncoding)!,
-                                                               options: attributes,
-                                                               documentAttributes: nil)
-            
-            let attrSummary = try NSMutableAttributedString(data: "<font face=\"Arial, Helvetica, sans-serif\" size=\"4\">\(summary)</font>".dataUsingEncoding(NSUTF8StringEncoding)!,
-                                                        options: attributes,
-                                                        documentAttributes: nil)
-            
-            attributedRoomName.appendAttributedString(attrSummary)
-            
-            
-            
-            let centeredStyle = NSMutableParagraphStyle()
-            centeredStyle.alignment = .Center
-            
-            let swipeAttributes = [
-                NSParagraphStyleAttributeName : centeredStyle,
-                NSForegroundColorAttributeName : UIColor.grayColor(),
-                NSFontAttributeName : UIFont.helveticaOfFontSize(14)
-            ]
-            
-            let swipeUpIndicator = NSMutableAttributedString(string: "\n\nTap To See Less...", attributes: swipeAttributes)
-            
-            attributedRoomName.appendAttributedString(swipeUpIndicator)
-            
-            return attributedRoomName
-        } catch {
-            return nil
-        }
-
-    }
-    
-}
-
-
-
-
-
-
-
-
 
 
 
