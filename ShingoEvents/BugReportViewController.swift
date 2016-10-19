@@ -15,13 +15,29 @@ class BugReportViewController: UIViewController {
     var didMakeEdit = false
     var messageSent = false
     
-    @IBOutlet weak var emailTextField: UITextField!
+    @IBOutlet weak var doneButton: UIBarButtonItem! {
+        didSet {
+            doneButton.title = ""
+        }
+    }
+    @IBOutlet weak var emailTextField: UITextField! {
+        didSet {
+            emailTextField.delegate = self
+        }
+    }
     @IBOutlet weak var descriptionTextField: UITextView! {
         didSet {
+            descriptionTextField.keyboardDismissMode = .interactive
+            descriptionTextField.delegate = self
+            
             descriptionTextField.layer.shadowColor = UIColor.lightShingoRed.cgColor
             descriptionTextField.layer.shadowOffset = CGSize(width: 0, height: 0)
             descriptionTextField.layer.shadowRadius = 5
             descriptionTextField.layer.shadowOpacity = 1
+            
+            descriptionTextField.text = "Enter message here."
+            descriptionTextField.textColor = UIColor.lightGray
+            descriptionTextField.layer.cornerRadius = 5
         }
     }
     @IBOutlet weak var submitButton: UIButton!
@@ -42,6 +58,14 @@ class BugReportViewController: UIViewController {
         }
     }
     
+    // This is the constraint between the descriptionTextField and the view directly below it
+    @IBOutlet weak var textViewBottomConstraint: NSLayoutConstraint!
+    
+    // This is the constraint between the descriptionTextField and the bottom layout guide
+    @IBOutlet weak var textViewConstraintToSuperviewBottom: NSLayoutConstraint!
+
+    let defaultMargin: CGFloat = 8
+    
     let textViewCharacterLimit = 250
     
     var dropDown = DropDown()
@@ -51,18 +75,79 @@ class BugReportViewController: UIViewController {
         
         view.backgroundColor = .lightShingoRed
         
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(BugReportViewController.keyboardWillAppear(notification:)),
+                                               name: NSNotification.Name.UIKeyboardWillShow,
+                                               object: nil)
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(BugReportViewController.keyboardWillDisappear(notification:)),
+                                               name: NSNotification.Name.UIKeyboardWillHide,
+                                               object: nil)
+        
+        // Adds tap gesture that allows user to dismiss the keyboard by tapping anywhere outside the view
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(BugReportViewController.dismissKeyboard)))
+        
+        // Adds a perty looking gradient
         let gradientLayer = RadialGradientLayer()
         gradientLayer.frame = view.bounds
         view.layer.insertSublayer(gradientLayer, at: 0)
-        
-        descriptionTextField.delegate = self
-        emailTextField.delegate = self
-        
-        descriptionTextField.text = "Enter message here."
-        descriptionTextField.textColor = UIColor.lightGray
-        descriptionTextField.layer.cornerRadius = 5
-        
+ 
+        // Sets up the drop down menu that gives a list of bug types options the user can select
         addDropDownMenu()
+    }
+    
+    func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
+    // Detects when the keyboard appears, then animates descriptionTextfield so it's frame appears completely onscreen
+    func keyboardWillAppear(notification: Notification) {
+        // Will return if notification.userInfo is nil
+        guard let userInfo = notification.userInfo else {
+            return
+        }
+        
+        doneButton.title = "Done"
+        
+        // Gets the height of the keyboard so that we can calculate the new 'constant' value of descriptionTextView's bottom constraint
+        let keyboardHeight = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue.height
+        
+        // Begins animation as the keyboard appears onscreen
+        UIView.animate(withDuration: 1) {
+            // keyboardHeight                               : - height of the keyboard
+            // textViewConstraintToSuperviewBottom.constant : - length of descriptionTextView's constraint to bottom
+            // defaultMargin                                : - desired margin between the keyboard and descriptionTextView.
+            //                                                  This is multiplied by 2 to correct a deficit caused by the predictive
+            //                                                  quicktype keyboard not being calculated in the overall keyboard size
+            //                                                  by the time this method gets called.
+            //
+            // These properties are then used to calculate the new constraint values.
+            self.textViewBottomConstraint.constant = keyboardHeight - self.textViewConstraintToSuperviewBottom.constant + (self.defaultMargin * 2)
+            
+            // layoutIfNeeded called throughout block for smooth animation
+            self.view.layoutIfNeeded()
+        }
+        
+    }
+    
+    func keyboardWillDisappear(notification: Notification) {
+
+        doneButton.title = ""
+        
+        // Begins animation as the keyboard disappears offscreen
+        UIView.animate(withDuration: 1) {
+            // sets descriptionTextView's bottom constraint back to the original margin value
+            self.textViewBottomConstraint.constant = self.defaultMargin
+            
+            // layoutIfNeeded called throughout block for smooth animation
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    // 'Done' UIBarButtonItem on click listener
+    @IBAction func didTapDone(_ sender: AnyObject) {
+        dismissKeyboard()
     }
     
     func addDropDownMenu() {
@@ -88,7 +173,7 @@ class BugReportViewController: UIViewController {
         
     }
     
-
+    
     
     @IBAction func didTapSubmit(_ sender: AnyObject) {
         

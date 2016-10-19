@@ -465,6 +465,7 @@
                             <constraint firstItem="9K7-c5-8gj" firstAttribute="width" secondItem="Vbb-wt-sj3" secondAttribute="width" id="Wtq-Cb-jXJ"/>
                             <constraint firstItem="fea-zE-fib" firstAttribute="width" secondItem="Vbb-wt-sj3" secondAttribute="width" id="XYU-We-DXN"/>
                             <constraint firstItem="D40-As-AcY" firstAttribute="top" secondItem="fea-zE-fib" secondAttribute="bottom" constant="2" id="e2n-0l-IIM"/>
+                            <constraint firstItem="gYw-RP-lar" firstAttribute="top" relation="greaterThanOrEqual" secondItem="HT1-ql-mAx" secondAttribute="bottom" priority="250" constant="62" id="fvu-VX-4U7"/>
                             <constraint firstAttribute="trailingMargin" secondItem="fea-zE-fib" secondAttribute="trailing" id="ho8-HN-l3p"/>
                             <constraint firstItem="YnA-zX-27K" firstAttribute="leading" secondItem="Pfj-cc-vs7" secondAttribute="trailing" constant="8" id="jZw-Af-mit"/>
                             <constraint firstItem="Pfj-cc-vs7" firstAttribute="width" secondItem="Vbb-wt-sj3" secondAttribute="width" id="k9e-yV-E5s"/>
@@ -478,10 +479,17 @@
                             <constraint firstItem="Pfj-cc-vs7" firstAttribute="leading" secondItem="9K7-c5-8gj" secondAttribute="trailing" constant="8" id="w1w-Nj-kQp"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Contact Us" id="OXH-ld-J2I"/>
+                    <navigationItem key="navigationItem" title="Contact Us" id="OXH-ld-J2I">
+                        <barButtonItem key="rightBarButtonItem" title="Item" style="done" id="b3i-fU-jHp">
+                            <connections>
+                                <action selector="didTapDone:" destination="BMR-CH-MuX" id="u3Y-cD-aED"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="characterCountLabel" destination="D40-As-AcY" id="RJy-Db-8xv"/>
                         <outlet property="descriptionTextField" destination="HT1-ql-mAx" id="ySz-Fq-eSh"/>
+                        <outlet property="doneButton" destination="b3i-fU-jHp" id="yWw-AP-cM6"/>
                         <outlet property="emailTextField" destination="peZ-HJ-R5n" id="8n8-wP-VVV"/>
                         <outlet property="star1" destination="Vbb-wt-sj3" id="Jle-dQ-aas"/>
                         <outlet property="star2" destination="9K7-c5-8gj" id="i0x-sI-gLd"/>
@@ -489,6 +497,8 @@
                         <outlet property="star4" destination="YnA-zX-27K" id="nI9-QN-0xI"/>
                         <outlet property="star5" destination="fea-zE-fib" id="yW9-sm-OcU"/>
                         <outlet property="submitButton" destination="JQQ-2L-S5s" id="FSR-7B-Pe6"/>
+                        <outlet property="textViewBottomConstraint" destination="L1S-na-MMB" id="lDK-ZJ-ElB"/>
+                        <outlet property="textViewConstraintToSuperviewBottom" destination="fvu-VX-4U7" id="nOr-h2-hl2"/>
                         <segue destination="20j-iq-fd6" kind="unwind" identifier="UnwindToSupport" unwindAction="unwindToSettings:" id="S0A-X9-t4T"/>
                     </connections>
                 </viewController>
@@ -558,7 +568,7 @@
                             <tableViewSection headerTitle="About" id="h2r-ED-5Qz">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="1vs-7Q-Cer">
-                                        <rect key="frame" x="0.0" y="265" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="264" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1vs-7Q-Cer" id="wtH-06-VeD">
                                             <frame key="frameInset" width="375" height="43"/>
@@ -584,7 +594,7 @@
                             <tableViewSection headerTitle="Data" id="Saw-I1-x81">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="0X9-1i-tvy">
-                                        <rect key="frame" x="0.0" y="366" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="364" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0X9-1i-tvy" id="MEn-RV-VAy">
                                             <frame key="frameInset" width="375" height="43"/>
@@ -791,16 +801,26 @@
                             <constraint firstItem="knU-Qb-3MQ" firstAttribute="top" secondItem="8cI-XH-GRj" secondAttribute="bottom" constant="2" id="j48-Ii-cdg"/>
                             <constraint firstItem="iy8-cm-kMt" firstAttribute="top" secondItem="oGL-EU-rKQ" secondAttribute="bottom" constant="8" id="kHd-vW-Y38"/>
                             <constraint firstItem="Ygy-wT-3Id" firstAttribute="leading" secondItem="JRG-Wk-7y3" secondAttribute="trailing" constant="-30" id="oLn-tW-yjX"/>
+                            <constraint firstItem="Qpz-Dn-Uay" firstAttribute="top" relation="greaterThanOrEqual" secondItem="knU-Qb-3MQ" secondAttribute="bottom" priority="250" constant="120.5" id="q1C-Y8-mfI"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Bug Report" id="TTz-rM-OBK"/>
+                    <navigationItem key="navigationItem" title="Bug Report" id="TTz-rM-OBK">
+                        <barButtonItem key="rightBarButtonItem" title="Item" style="done" id="l67-ay-ohx">
+                            <connections>
+                                <action selector="didTapDone:" destination="b1Y-X9-6h0" id="jZL-5n-4Sb"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="bugTypeButton" destination="JRG-Wk-7y3" id="ffh-Rh-lbb"/>
                         <outlet property="characterCountLabel" destination="8cI-XH-GRj" id="MDN-FS-uio"/>
                         <outlet property="descriptionTextField" destination="knU-Qb-3MQ" id="UZT-Vd-etO"/>
+                        <outlet property="doneButton" destination="l67-ay-ohx" id="1bO-B3-DYf"/>
                         <outlet property="dropDownImageView" destination="Ygy-wT-3Id" id="Kt2-aT-rCV"/>
                         <outlet property="emailTextField" destination="yS0-43-Xsl" id="5yk-Et-0Zb"/>
                         <outlet property="submitButton" destination="iy8-cm-kMt" id="EJt-TH-JaK"/>
+                        <outlet property="textViewBottomConstraint" destination="M1F-ib-Xy3" id="AGf-0V-t0a"/>
+                        <outlet property="textViewConstraintToSuperviewBottom" destination="q1C-Y8-mfI" id="jQI-C3-nIe"/>
                         <segue destination="4gX-L7-xXR" kind="unwind" identifier="UnwindToSettings" unwindAction="unwindToSettings:" id="Mch-A9-rFz"/>
                     </connections>
                 </viewController>
@@ -914,7 +934,7 @@
                                 <rect key="frame" x="0.0" y="92" width="375" height="107"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0Ka-IK-OYc" id="6jj-3L-wzU">
-                                    <frame key="frameInset" width="375" height="106"/>
+                                    <frame key="frameInset" width="375" height="107"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oPr-gx-O2z">
