@@ -456,7 +456,7 @@ extension EventMenuViewController {
         
         if segue.identifier == "SchedulesView" {
             let destination = segue.destination as! SchedulesTableViewController
-            destination.agendas = event.agendaItems.sorted { $0.date.isGreaterThanDate($1.date) }
+            destination.agendas = event.agendaItems.sorted { $1.date.isGreaterThanDate($0.date) }
             destination.eventName = event.name
         }
         
@@ -482,9 +482,9 @@ extension EventMenuViewController {
                 
             }
             
-            destination.keyNoteSpeakers = keynoteSpeakers.sorted { $0.getFormattedName() > $1.getFormattedName() }
-            destination.concurrentSpeakers = concurrentSpeakers.sorted { $0.getFormattedName() > $1.getFormattedName() }
-            destination.unknownSpeakers = unknownSpeakers.sorted { $0.getFormattedName() > $1.getFormattedName() }
+            destination.keyNoteSpeakers = keynoteSpeakers.sorted { $1.getFormattedName() > $0.getFormattedName() }
+            destination.concurrentSpeakers = concurrentSpeakers.sorted { $1.getFormattedName() > $0.getFormattedName() }
+            destination.unknownSpeakers = unknownSpeakers.sorted { $1.getFormattedName() > $0.getFormattedName() }
             
         }
         
@@ -562,7 +562,7 @@ extension EventMenuViewController {
             let destination = segue.destination as! AttendessTableViewController
             if let attendees = sender as? [SIAttendee] {
                 
-                destination.attendees = attendees.sorted(by: { $0.getLastName() < $1.getLastName() })
+                destination.attendees = attendees.sorted(by: { $1.getLastName() < $0.getLastName() })
             }
         }
         

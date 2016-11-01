@@ -74,9 +74,7 @@ class SITableViewCell: UITableViewCell {
     func expandCell() {
         if !entityTextView.isHidden {
             let summary = NSMutableAttributedString(attributedString: entity.attributedSummary)
-            
             summary.append(tapToSeeLessText)
-            
             entityTextView.attributedText = summary
         }
     }

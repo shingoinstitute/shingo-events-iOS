@@ -1465,12 +1465,12 @@ class SIRequest {
         request.allHTTPHeaderFields = headers
         request.httpBody = postData as Data
         
-        URLSession.shared.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
+        URLSession.shared.dataTask(with: request as URLRequest, completionHandler: { (data, response, error: Error?) -> Void in
             
             DispatchQueue.main.async {
                 
                 if (error != nil) {
-                    print(error)
+                    print(error!)
                     return callback(false)
                 }
                 
@@ -1562,13 +1562,13 @@ class SIRequest {
         request.httpBody = postData as Data
         
         // Start session task and make request
-        URLSession.shared.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
+        URLSession.shared.dataTask(with: request as URLRequest, completionHandler: { (data, response, error: Error?) -> Void in
             
             // The response triggers UI events and must be processed on the main thread.
             DispatchQueue.main.async {
                 
                 if (error != nil) {
-                    print(error)
+                    print(error!)
                     return callback(false)
                 }
                 

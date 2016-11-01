@@ -59,18 +59,17 @@ class SchedulesTableViewController: UITableViewController, SISpeakerDelegate {
                 let agenda = self.agendas[section]
                 if !agenda.didLoadSessions {
                     agenda.requestAgendaSessions({
-                        if let sessions = self.sortSessionsByDate(agenda.sessions) {
-                            agenda.sessions = sessions
-                            
-                            DispatchQueue.main.async {
-                                self.tableView.reloadData()
-                            }
-                            
-                            for row in 0 ..< sessions.count {
-                                let session = sessions[row]
-                                if !session.didLoadSessionInformation {
-                                    session.requestSessionInformation({})
-                                }
+                        let sessions = agenda.sessions.sorted {$1.startDate.isGreaterThanDate($0.startDate)}
+                        agenda.sessions = sessions
+                        
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                        }
+                        
+                        for row in 0 ..< sessions.count {
+                            let session = sessions[row]
+                            if !session.didLoadSessionInformation {
+                                session.requestSessionInformation({})
                             }
                         }
                     })
@@ -199,25 +198,6 @@ extension SchedulesTableViewController {
     
 }
 
-extension SchedulesTableViewController {
-    // MARK: - Sorting
-    fileprivate func sortSessionsByDate(_ sender: [SIObject]?) -> [SISession]? {
-        var sessions = sender as! [SISession]
-        for i in 0 ..< sessions.count - 1 {
-            
-            for n in 0 ..< sessions.count - i - 1 {
-                
-                if sessions[n].startDate.isGreaterThanDate(sessions[n+1].startDate) {
-                    let session = sessions[n]
-                    sessions[n] = sessions[n+1]
-                    sessions[n+1] = session
-                }
-            }
-        }
-        
-        return sessions
-    }
-}
 
 
 
