@@ -13,7 +13,14 @@ protocol SICellDelegate { func cellDidUpdate() }
 protocol SISpeakerDelegate { func performActionOnSpeakers(data: [SISpeaker]) }
 
 struct Alphabet {
-    static var english: [String] = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "#"]
+    static private var upperCaseEnglish: [String] = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "#"]
+    static func upperCasedAlphabet(lang: String = "eng") -> [String] {
+        switch lang {
+            case "eng": return self.upperCaseEnglish
+        default:
+            return self.upperCaseEnglish
+        }
+    }
 }
 
 struct SIParagraphStyle {
@@ -267,7 +274,7 @@ extension String {
     }
     
     ///Returns the next contiguous string of characters (i.e. the next "word") as a String, separated by the given delimiter, or nil if it does not exist.
-    func next(_ after: String, delimiter: Character) -> String? {
+    func nextSubstring(_ after: String, delimiter: Character) -> String? {
         if let array = self.split(delimiter) {
             for i in 0 ..< array.count {
                 if array[i] == after {

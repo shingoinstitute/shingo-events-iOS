@@ -432,6 +432,14 @@ extension EventMenuViewController {
     
     func didTapSponsors(_ sender: AnyObject) {
         
+        if let sponsor = self.event.sponsors.first {
+            SIRequest().requestSponsor(sponsorId: sponsor.id, callback: { (sponsor) in
+                if let sponsor = sponsor {
+                    print(sponsor.attributedSummary)
+                }
+            })
+        }
+        
         if event.didLoadSponsors {
             self.performSegue(withIdentifier: "SponsorsView", sender: self.event.sponsors)
         } else {
@@ -482,9 +490,9 @@ extension EventMenuViewController {
                 
             }
             
-            destination.keyNoteSpeakers = keynoteSpeakers.sorted { $1.getFormattedName() > $0.getFormattedName() }
-            destination.concurrentSpeakers = concurrentSpeakers.sorted { $1.getFormattedName() > $0.getFormattedName() }
-            destination.unknownSpeakers = unknownSpeakers.sorted { $1.getFormattedName() > $0.getFormattedName() }
+            destination.keyNoteSpeakers = keynoteSpeakers.sorted { $0.getLastName() < $1.getLastName() }
+            destination.concurrentSpeakers = concurrentSpeakers.sorted { $0.getLastName() < $1.getLastName() }
+            destination.unknownSpeakers = unknownSpeakers.sorted { $0.getLastName() < $1.getLastName() }
             
         }
         
@@ -538,16 +546,17 @@ extension EventMenuViewController {
                 var exhibitorSections = [(String, [SIExhibitor])]()
                 
                 for exhibitor in exhibitors {
-                    let character = getCharacterForSection(exhibitor.name)
-                    
-                    if sections[character] != nil {
-                        sections[character]?.append(exhibitor)
-                    } else {
-                        sections[character] = [exhibitor]
+                    if let character: String = getCharacterForSection(name: exhibitor.name) {
+                        if sections[character] != nil {
+                            sections[character]?.append(exhibitor)
+                        } else {
+                            sections[character] = [SIExhibitor]()
+                            sections[character]?.append(exhibitor)
+                        }
                     }
                 }
                 
-                for letter in Alphabet.english {
+                for letter in Alphabet.upperCasedAlphabet() {
                     if let section = sections[letter] {
                         exhibitorSections.append((letter, section))
                     }
@@ -562,7 +571,7 @@ extension EventMenuViewController {
             let destination = segue.destination as! AttendessTableViewController
             if let attendees = sender as? [SIAttendee] {
                 
-                destination.attendees = attendees.sorted(by: { $1.getLastName() < $0.getLastName() })
+                destination.attendees = attendees.sorted { $0.getLastName() < $1.getLastName() }
             }
         }
         
@@ -614,32 +623,29 @@ extension EventMenuViewController {
 
 extension EventMenuViewController {
 
-    // MARK: - Custom Class Functions
-    func getCharacterForSection(_ name: String) -> String {
+    /**
+     This method parses a string and returns a character that can be used as a header in an alphabetically sorted list.
+     
+     - parameters:
+        - name: A name, title, etc. that belongs to an item in a list that should be sorted alphabetically.
+     
+     - returns: String (always a single character)
+     */
+    func getCharacterForSection(name: String) -> String? {
         
-        guard let fullname = name.split(" ") else {
-            return ""
-        }
-        
-        var usedName = ""
-
-        // Check that the first word in the name is not "the", and if so, use the next word in name.
-        if let first = fullname.first {
-            if first.lowercased() == "the" {
-                usedName = name.next(first, delimiter: " ")!
-            } else {
-                usedName = first
+        if let nameArray = name.split(" ") {
+            for subName in nameArray {
+                if subName.lowercased() == "the" {
+                    continue
+                } else {
+                    let firstCharacter = subName.characters.first
+                    if let letter: String = firstCharacter != nil ? String(describing: firstCharacter!).uppercased() : nil {
+                        return Int(letter) != nil ? "#" : letter
+                    }
+                }
             }
         }
-        
-        let sectionCharacter = String(usedName.characters.first!).uppercased()
-        
-        // If name begins with a number, change to the '#' character.
-        guard let _ = Int(sectionCharacter) else {
-            return sectionCharacter
-        }
-        
-        return "#"
+        return nil
     }
 
 }

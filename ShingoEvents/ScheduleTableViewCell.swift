@@ -30,11 +30,7 @@ class ScheduleTableViewCell: SITableViewCell {
     }
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
-    var session: SISession! {
-        didSet {
-            entity = session
-        }
-    }
+    var session: SISession! { didSet { entity = session } }
     
     var delegate: SISpeakerDelegate?
     
@@ -65,19 +61,15 @@ class ScheduleTableViewCell: SITableViewCell {
         
         speakersButton.addTarget(self, action: #selector(ScheduleTableViewCell.didTapSpeakersButton), for: .touchUpInside)
 
-        if !session.attributedSummary.string.isEmpty || session.room != nil {
-            infoTextView.isHidden = false
-        } else {
-            infoTextView.isHidden = true
-        }
-
+        infoTextView.isHidden = !(!session.attributedSummary.string.isEmpty || session.room != nil)
+        
         if let timeFrame = DateFormatter.attributedTime(from: session.startDate, to: session.endDate) {
             timeLabel.attributedText = timeFrame
         }
         
         titleLabel.text = "\(session.sessionType.rawValue): \(session.displayName)"
         
-        if !session.didLoadSessionInformation {
+        if !session.didLoadSessionDetails {
             activityIndicator.startAnimating()
             session.requestSessionInformation({
                 if !self.session.speakers.isEmpty {
@@ -91,6 +83,7 @@ class ScheduleTableViewCell: SITableViewCell {
     }
     
     override func expandCell() {
+        
         if !infoTextView.isHidden {
             super.expandCell()
             
@@ -120,3 +113,4 @@ class ScheduleTableViewCell: SITableViewCell {
     }
     
 }
+

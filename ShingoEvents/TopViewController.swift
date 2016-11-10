@@ -200,18 +200,18 @@ extension MainMenuViewController: UnwindToMainVCProtocol {
                 for affiliate in affiliates {
 
                     // Get first letter of affiliate name
-                    let character = getCharacterForSection(affiliate.name)
-
-                    // Add to dictionary
-                    if var section = sections[character] {
-                        section.append(affiliate)
-                        sections[character] = section
-                    } else {
-                        sections[character] = [affiliate]
+                    if let character = getCharacterForSection(name: affiliate.name) {
+                        // Add to dictionary
+                        if var section = sections[character] {
+                            section.append(affiliate)
+                            sections[character] = section
+                        } else {
+                            sections[character] = [affiliate]
+                        }
                     }
                 }
 
-                for character in Alphabet.english {
+                for character in Alphabet.upperCasedAlphabet() {
                     if let section = sections[character] {
                         affiliateSections.append((character, section))
                     }
@@ -226,31 +226,21 @@ extension MainMenuViewController: UnwindToMainVCProtocol {
         
     }
     
-    func getCharacterForSection(_ name: String) -> String {
+    func getCharacterForSection(name: String) -> String? {
         
-        guard let fullname = name.split(" ") else {
-            return ""
-        }
-        
-        var usedName = ""
-        
-        // Check that the first word in the name is not "the", and if so, use the next word in "name".
-        if let first = fullname.first {
-            if first.lowercased() == "the" {
-                usedName = name.next(first, delimiter: " ")!
-            } else {
-                usedName = first
+        if let nameArray = name.split(" ") {
+            for subName in nameArray {
+                if subName.lowercased() == "the" {
+                    continue
+                } else {
+                    let firstCharacter = subName.characters.first
+                    if let letter: String = firstCharacter != nil ? String(describing: firstCharacter!).uppercased() : nil {
+                        return Int(letter) != nil ? "#" : letter
+                    }
+                }
             }
         }
-        
-        let sectionCharacter = String(usedName.characters.first!).uppercased()
-        
-        // If name begins with a number, change to the '#' character.
-        guard let _ = Int(sectionCharacter) else {
-            return sectionCharacter
-        }
-        
-        return "#"
+        return nil
     }
     
     // Protocal for passing data back from the Support

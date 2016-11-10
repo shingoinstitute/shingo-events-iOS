@@ -34,12 +34,19 @@ class SponsorsTableViewController: UITableViewController, SICellDelegate {
         gradientLayer.frame = gradientBackgroundView.bounds
         gradientBackgroundView.layer.insertSublayer(gradientLayer, at: 0)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(SponsorsTableViewController.adjustFontForCategorySizeChange), name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
+        
         if friends.isEmpty && supporters.isEmpty && benefactors.isEmpty && champions.isEmpty && presidents.isEmpty && other.isEmpty {
             displayNoContentNotification()
         }
         
         tableView.estimatedRowHeight = 150
         tableView.rowHeight = UITableViewAutomaticDimension
+    }
+    
+    func adjustFontForCategorySizeChange() {
+        tableView.beginUpdates()
+        tableView.endUpdates()
     }
     
     private func displayNoContentNotification() {
@@ -68,7 +75,7 @@ extension SponsorsTableViewController {
     // MARK: - Table view data source
     override func numberOfSections(in tableView: UITableView) -> Int {
         
-        sectionTitles = []
+        self.sectionTitles = []
         
         if presidents.count > 0 {
             sectionTitles.append("Presidents")
@@ -89,7 +96,7 @@ extension SponsorsTableViewController {
             sectionTitles.append("Other")
         }
 
-        return sectionTitles.count
+        return self.sectionTitles.count
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -99,7 +106,6 @@ extension SponsorsTableViewController {
         header.textColor = .white
         header.font = UIFont.preferredFont(forTextStyle: .headline)
         header.textAlignment = .center
-        
         return header
     }
     
@@ -117,11 +123,9 @@ extension SponsorsTableViewController {
         case "Friends": return friends.count
         case "Other": return other.count
         default:
-            print("Error: Invalid section title detected in SponsorsTableViewController.")
             return 0
         }
     }
-
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
@@ -157,63 +161,25 @@ extension SponsorsTableViewController {
             default: break
         }
         
-        cell.selectionStyle = .none
-        cell.contentView.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 150.0)
-        cell.setNeedsUpdateConstraints()
-        cell.updateConstraintsIfNeeded()
+        cell.isExpanded = cell.entity.isSelected
         
         return cell
     }
 
-}
-
-
-class SponsorTableViewCell: UITableViewCell {
     
-    var sponsor: SISponsor! {
-        didSet {
-            updateCell()
-        }
-    }
-    
-    var delegate: SICellDelegate?
-
-    @IBOutlet weak var nameLabel: UILabel! {
-        didSet {
-            nameLabel.numberOfLines = 0
-            nameLabel.lineBreakMode = .byWordWrapping
-            nameLabel.textAlignment = .center
-        }
-    }
-    
-    @IBOutlet weak var logoImageView: UIImageView!
-    
-    func updateCell() {
-        if let sponsor = sponsor {
-            nameLabel.text = sponsor.name
-            
-            sponsor.getLogoImage() { image in
-                
-                if image.size.width > self.contentView.frame.width {
-                    let foobar = UIImageView()
-                    foobar.image = image
-                    foobar.resizeImageViewToIntrinsicContentSize(thatFitsWidth: self.contentView.frame.width)
-                    if let image = foobar.image {
-                        self.logoImageView.image = image
-                    }
-                } else {
-                    self.logoImageView.image = image
-                }
-                
-                if let d = self.delegate {
-                    d.cellDidUpdate()
-                }
-                
-            }
-        }
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as! SponsorTableViewCell
         
+        cell.isExpanded = !cell.isExpanded
+        
+        tableView.beginUpdates()
+        tableView.endUpdates()
     }
+    
 }
+
+
+
 
 
 

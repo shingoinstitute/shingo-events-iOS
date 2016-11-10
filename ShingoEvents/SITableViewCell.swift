@@ -15,24 +15,14 @@ class SITableViewCell: UITableViewCell {
     var entityImageView: UIImageView!
     var entityTextView: UITextView! {
         didSet {
+            entityTextView.isUserInteractionEnabled = false
+            entityTextView.isSelectable = false
             entityTextView.layer.shadowColor = UIColor.lightGray.cgColor
             entityTextView.layer.shadowOffset = CGSize(width: 0, height: 0)
             entityTextView.layer.shadowOpacity = 1
             entityTextView.layer.shadowRadius = 3
             entityTextView.layer.masksToBounds = false
             entityTextView.layer.cornerRadius = 3
-        }
-    }
-    
-    private var entityTextViewConstraints: [NSLayoutConstraint]? {
-        get {
-            return self.entityTextViewConstraints
-        }
-        
-        set {
-            if entityTextView != nil {
-                self.entityTextViewConstraints = entityTextView.constraints
-            }
         }
     }
     
@@ -57,13 +47,13 @@ class SITableViewCell: UITableViewCell {
         NSFontAttributeName : UIFont.preferredFont(forTextStyle: .footnote),
         NSForegroundColorAttributeName : UIColor.gray,
         NSParagraphStyleAttributeName : SIParagraphStyle.center
-        ])
+    ])
     
     let selectMoreInfoText = NSAttributedString(string: "Select For More Info >", attributes: [
         NSFontAttributeName : UIFont.preferredFont(forTextStyle: .footnote),
         NSForegroundColorAttributeName : UIColor.gray,
         NSParagraphStyleAttributeName : SIParagraphStyle.center
-        ])
+    ])
     
     func updateCell() {
         selectionStyle = .none

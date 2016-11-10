@@ -764,7 +764,11 @@ class SIRequest {
                         exhibitor.name = name
                     }
                     
-                    if let summary = record["Organization__r"]["App_Abstract__c"].string {
+                    if let summary = record["Organization__r"]["Summary__c"].string  {
+                        if let attributedSummary = SIRequest.parseHTMLStringUsingPreferredFont(string: summary) {
+                            exhibitor.attributedSummary = attributedSummary
+                        }
+                    } else if let summary = record["Organization__r"]["App_Abstract__c"].string {
                         if let attributedSummary = SIRequest.parseHTMLStringUsingPreferredFont(string: summary) {
                             exhibitor.attributedSummary = attributedSummary
                         }
@@ -827,7 +831,11 @@ class SIRequest {
                     exhibitor.logoURL = logoURL
                 }
                 
-                if let summary = organization["App_Abstract__c"].string {
+                if let summary = organization["Summary__c"].string  {
+                    if let attributedSummary = SIRequest.parseHTMLStringUsingPreferredFont(string: summary) {
+                        exhibitor.attributedSummary = attributedSummary
+                    }
+                } else if let summary = organization["App_Abstract__c"].string {
                     if let attributedSummary = SIRequest.parseHTMLStringUsingPreferredFont(string: summary) {
                         exhibitor.attributedSummary = attributedSummary
                     }
@@ -1205,8 +1213,7 @@ class SIRequest {
         return getRequest(url: SIRequest.EVENTS_URL + "/sponsors/\(id)", description: "REQUEST SPONSOR, DETAIL", callback: { json in
         
             guard let json = json else {
-                callback(nil)
-                return
+                return callback(nil)
             }
             
             let sponsor = SISponsor()
@@ -1214,20 +1221,28 @@ class SIRequest {
             if json["sponsor"] != nil {
                 
                 let record = json["sponsor"]
-                
+                print(record)
                 if let id = record["Id"].string {
                     sponsor.id = id
                 }
                 
-                if let name = record["Name"].string {
+                if let splashScreenURL = record["Splash_Screen_URL__c"].string {
+                    sponsor.splashScreenURL = splashScreenURL
+                }
+                
+                if let name = record["Organization__r"]["Name"].string {
                     sponsor.name = name
                 }
                 
-                if let logoURL = record["Logo__c"].string {
+                if let logoURL = record["Organization__r"]["Logo__c"].string {
                     sponsor.logoURL = logoURL
                 }
                 
-                if let summary = record["App_Abstract__c"].string {
+                if let summary = record["Organization__r"]["Summary__c"].string  {
+                    if let attributedSummary = SIRequest.parseHTMLStringUsingPreferredFont(string: summary) {
+                        sponsor.attributedSummary = attributedSummary
+                    }
+                } else if let summary = record["Organization__r"]["App_Abstract__c"].string {
                     if let attributedSummary = SIRequest.parseHTMLStringUsingPreferredFont(string: summary) {
                         sponsor.attributedSummary = attributedSummary
                     }
@@ -1235,10 +1250,6 @@ class SIRequest {
                 
                 if let bannerURL = record["Banner_URL__c"].string {
                     sponsor.bannerURL = bannerURL
-                }
-                
-                if let splashScreenURL = record["Splash_Screen_URL__c"].string {
-                    sponsor.splashScreenURL = splashScreenURL
                 }
                 
                 if let type = record["Sponsor_Level__c"].string {
@@ -1641,6 +1652,9 @@ class SIRequest {
             
             guard let data = string.data(using: String.Encoding.utf8) else {
                 return nil
+            }
+            if (string.lowercased().contains("enjoy a glass of wine")) {
+                print("foobar")
             }
             
             let htmlString = try NSMutableAttributedString(data: data, options: options, documentAttributes: nil)

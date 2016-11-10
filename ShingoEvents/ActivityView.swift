@@ -8,8 +8,17 @@
 
 import Foundation
 import UIKit
-//import Alamofire
 
+/**
+ 
+ This class provides a view that indicates data is being loaded onto the device from an external source.
+ 
+ This class is meant to be presented modally.
+ 
+ - author: Craig Blackburn 3/15/2016
+ 
+ - copyright: © 2016 Utah State University
+ */
 class ActivityViewController: UIViewController {
     
     var message = "Downloading..." {
@@ -35,37 +44,49 @@ class ActivityViewController: UIViewController {
     var activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
     var didSetupConstraints = false
     
+    public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        view.backgroundColor = UIColor.clear
+        
+        // add gradient layer for better visual
+        let gradientLayer = RadialGradientLayer()
+        gradientLayer.frame = view.bounds
+        view.layer.insertSublayer(gradientLayer, at: 0)
+        
+        // default modal transition style should be `crossDissolve`.
+        modalTransitionStyle = UIModalTransitionStyle.crossDissolve
+        
+        // default modal presentation style should be `overCurrentContext`.
+        modalPresentationStyle = .overCurrentContext
+        
+        // add subviews to parent view
+        view.addSubview(activityView)
+        activityView.addSubviews([activityIndicatorView, messageLabel])
+    }
+    
     convenience init() {
         self.init(nibName: nil, bundle: nil)
-        setup()
     }
     
     convenience init(message: String) {
         self.init(nibName: nil, bundle: nil)
         self.message = message
-        setup()
     }
     
-    private func setup() {
-        
-        view.backgroundColor = UIColor.clear
-        
-        let gradientLayer = RadialGradientLayer()
-        gradientLayer.frame = view.bounds
-        view.layer.insertSublayer(gradientLayer, at: 0)
-        
-        modalTransitionStyle = UIModalTransitionStyle.crossDissolve
-        modalPresentationStyle = .overCurrentContext
-        view.backgroundColor = UIColor.clear
-        view.addSubview(activityView)
-        activityView.addSubviews([activityIndicatorView, messageLabel])
-        activityIndicatorView.startAnimating()
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         messageLabel.text = message
         view.setNeedsUpdateConstraints()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        // `activityIndicatorView` should always be animating and starts as soon as the view becomes visible.
+        activityIndicatorView.startAnimating()
     }
     
     override func updateViewConstraints() {

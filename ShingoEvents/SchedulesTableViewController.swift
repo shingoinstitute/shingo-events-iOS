@@ -68,7 +68,7 @@ class SchedulesTableViewController: UITableViewController, SISpeakerDelegate {
                         
                         for row in 0 ..< sessions.count {
                             let session = sessions[row]
-                            if !session.didLoadSessionInformation {
+                            if !session.didLoadSessionDetails {
                                 session.requestSessionInformation({})
                             }
                         }
@@ -115,23 +115,23 @@ class SchedulesTableViewController: UITableViewController, SISpeakerDelegate {
                 
             let destination = segue.destination as! SpeakerListTableViewController
             if let speakers = sender as? [SISpeaker] {
-                var kSpeakers = [SISpeaker]()
-                var cSpeakers = [SISpeaker]()
-                var uSpeakers = [SISpeaker]()
+                var keynoteSpeakers = [SISpeaker]()
+                var concurrentSpeakers = [SISpeaker]()
+                var otherSpeakers = [SISpeaker]()
                 
                 for speaker in speakers {
                     if speaker.speakerType == .keynote {
-                        kSpeakers.append(speaker)
+                        keynoteSpeakers.append(speaker)
                     } else if speaker.speakerType == .concurrent {
-                        cSpeakers.append(speaker)
+                        concurrentSpeakers.append(speaker)
                     } else {
-                        uSpeakers.append(speaker)
+                        otherSpeakers.append(speaker)
                     }
                 }
                 
-                if !kSpeakers.isEmpty { destination.keyNoteSpeakers = kSpeakers }
-                if !cSpeakers.isEmpty { destination.concurrentSpeakers = cSpeakers }
-                if !uSpeakers.isEmpty { destination.unknownSpeakers = uSpeakers }
+                if !keynoteSpeakers.isEmpty { destination.keyNoteSpeakers = keynoteSpeakers }
+                if !concurrentSpeakers.isEmpty { destination.concurrentSpeakers = concurrentSpeakers }
+                if !otherSpeakers.isEmpty { destination.unknownSpeakers = otherSpeakers }
             }
             
         default:
@@ -158,13 +158,11 @@ extension SchedulesTableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ScheduleCell", for: indexPath) as! ScheduleTableViewCell
         
         let session = agendas[indexPath.section].sessions[indexPath.row]
-        
-        
-        
+
         cell.session = session
         cell.delegate = self
         
-        cell.isExpanded = cell.session.isSelected
+        cell.isExpanded = session.isSelected
 
         return cell
     }

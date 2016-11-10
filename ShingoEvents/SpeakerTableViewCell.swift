@@ -20,7 +20,7 @@ class SpeakerTableViewCell: SITableViewCell {
         }
     }
     
-    @IBOutlet weak var speakerImageWidthConstraint: NSLayoutConstraint!
+    @IBOutlet weak var speakerImageBottomConstraint: NSLayoutConstraint!
     
     override func updateCell() {
         super.updateCell()
@@ -37,7 +37,54 @@ class SpeakerTableViewCell: SITableViewCell {
                 self.aiv.stopAnimating()
             }
         }
+
     }
+    
+    func addSummaryTextField() {
+        
+        if entityTextView.superview != nil {
+            return
+        }
+        
+        contentView.addSubview(entityTextView)
+        
+        for constraint in entityNameLabel.constraints {
+            if constraint.firstAttribute == NSLayoutAttribute.bottom {
+                constraint.autoRemove()
+                break
+            }
+        }
+        
+        entityNameLabel.autoPinEdge(.bottom, to: .top, of: entityTextView, withOffset: -8)
+        
+        entityTextView.autoPinEdge(.leading, to: .leading, of: contentView, withOffset: 8).priority = 1000
+        entityTextView.autoPinEdge(.trailing, to: .trailing, of: contentView, withOffset: -8).priority = 1000
+        entityTextView.autoPinEdge(.bottom, to: .bottom, of: contentView, withOffset: -8).priority = 750
+        
+        contentView.layoutSubviews()
+    }
+    
+    func removeSummaryTextField() {
+        entityTextView.removeFromSuperview()
+        
+        entityNameLabel.autoPinEdge(.bottom,
+                                    to: .bottom,
+                                    of: contentView,
+                                    withOffset: 30,
+                                    relation: .greaterThanOrEqual).priority = 1000
+        
+        NSLayoutConstraint.autoCreateConstraintsWithoutInstalling {
+            let constraint = self.entityImageView.autoPinEdge(.bottom,
+                                                              to: .bottom,
+                                                              of: contentView,
+                                                              withOffset: -30)
+            constraint.priority = 750
+            constraint.autoInstall()
+            contentView.layoutSubviews()
+        }
+        
+    }
+    
 }
 
 

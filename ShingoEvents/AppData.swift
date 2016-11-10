@@ -33,7 +33,7 @@ class SIObject : AnyObject {
     
     fileprivate func requestImage(URLString: String, callback: @escaping (
         UIImage?) -> Void) {
-        
+
         Alamofire.request(URLString).responseImage { response in
             
             guard let image = response.result.value else {
@@ -368,15 +368,17 @@ class SIEvent: SIObject {
     
     func requestSponsors(_ callback: @escaping () -> ()) {
         SIRequest().requestSponsors(eventId: self.id) { (sponsors) in
-            guard let sponsors = sponsors else {
-                callback()
-                return
-            }
+            guard let sponsors = sponsors else { return callback() }
             
             self.sponsors = sponsors
             self.didLoadSponsors = true
             
-            callback()
+            for sponsor in self.sponsors {
+                // each sponsor object requests additional information not provided by the previous api request.
+                sponsor.requestSponsorDetails()
+            }
+            
+            return callback()
         }
     }
     
@@ -484,7 +486,7 @@ class SISession: SIObject {
     }
     
     var didLoadSpeakers : Bool
-    var didLoadSessionInformation : Bool
+    var didLoadSessionDetails : Bool
     var speakers : [SISpeaker]
     
     var displayName : String
@@ -496,7 +498,7 @@ class SISession: SIObject {
     
     override init() {
         didLoadSpeakers = false
-        didLoadSessionInformation = false
+        didLoadSessionDetails = false
         speakers = [SISpeaker]()
         displayName = ""
         startDate = Date.notionallyEmptyDate()
@@ -543,7 +545,7 @@ class SISession: SIObject {
                 self.name = session.name
                 self.id = session.id
                 self.attributedSummary = session.attributedSummary
-                self.didLoadSessionInformation = true
+                self.didLoadSessionDetails = true
                 
                 callback()
                 
@@ -610,17 +612,7 @@ class SISpeaker: SIObject {
     
     // speaker specific properties
     var title : String
-    var pictureURL : String /*{
-        didSet {
-            if !pictureURL.isEmpty {
-                dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), {
-                    self.requestSpeakerImage(nil)
-                })
-            }
-        }
-    }*/
-//    var biography : String
-//    var attributedBiography: NSAttributedString
+    var pictureURL : String
     var organizationName : String
     var contactEmail : String
     var speakerType: SpeakerType {
@@ -638,8 +630,6 @@ class SISpeaker: SIObject {
     override init() {
         title = ""
         pictureURL = ""
-//        biography = ""
-//        attributedBiography = NSAttributedString()
         organizationName = ""
         contactEmail = ""
         speakerType = .none
@@ -659,7 +649,6 @@ class SISpeaker: SIObject {
                 if self.pictureURL.isEmpty {
                     self.pictureURL = speaker.pictureURL
                 }
-//                self.biography = speaker.biography
                 self.attributedSummary = speaker.attributedSummary
                 self.organizationName = speaker.organizationName
                 self.contactEmail = speaker.contactEmail
@@ -668,6 +657,7 @@ class SISpeaker: SIObject {
         }
     }
     
+    // helper function that makes the http request to get speaker image.
     private func requestSpeakerImage(_ callback: (() -> Void)?) {
         
         if image != nil || pictureURL.isEmpty {
@@ -685,22 +675,23 @@ class SISpeaker: SIObject {
         });
     }
     
+    // Returns speaker image asynchronously. If self.image exists, the image will be immediately returned in the 
+    // callback, otherwise it will make an http request for the image. This method *always* returns an image
     func getSpeakerImage(callback: ((UIImage) -> Void)?) {
         
+        guard let cb = callback else { return requestSpeakerImage(nil) }
+        
         guard let image = self.image else {
-            requestSpeakerImage() {
+            return requestSpeakerImage() {
                 if let image = self.image {
-                    if let cb = callback { cb(image) }
-                } else if let image = UIImage(named: "Name Filled-100") {
-                    if let cb = callback { cb(image) }
+                    return cb(image)
                 } else {
-                    if let cb = callback { cb(UIImage()) }
+                    return cb(#imageLiteral(resourceName: "Name Filled-100"))
                 }
             }
-            return
         }
         
-        if let cb = callback { cb(image) }
+        return cb(image)
         
     }
     
@@ -721,6 +712,19 @@ class SISpeaker: SIObject {
         }
     }
     
+    /// returns last name.
+    func getLastName() -> String {
+        guard let fullname = name.split(" ") else {
+            return name
+        }
+        
+        if let lastname = fullname.last {
+            return lastname
+        }
+        
+        return name
+    }
+    
     /// Returns name in format of: "lastname, firstname M.I."
     func getFormattedName() -> String {
         
@@ -736,9 +740,7 @@ class SISpeaker: SIObject {
 
 
 class SIExhibitor: SIObject {
-    
-//    var summary: String
-//    var attributedSummary: NSAttributedString
+
     var contactEmail: String
     var website: String
     var logoURL: String {
@@ -756,8 +758,6 @@ class SIExhibitor: SIObject {
     fileprivate var bannerImage: UIImage?
     
     override init() {
-//        summary = ""
-//        attributedSummary = NSAttributedString()
         contactEmail = ""
         website = ""
         logoURL = ""
@@ -886,8 +886,6 @@ class SIRecipient: SIObject {
     var videoList : String //Comma separated list of URLs to videos
     var pressRelease : String
     var profile : String
-//    var summary : String
-//    var attributedSummary: NSAttributedString
     var logoURL : String {
         didSet {
             requestRecipientImage(nil)
@@ -902,8 +900,6 @@ class SIRecipient: SIObject {
         videoList = ""
         pressRelease = ""
         profile = ""
-//        summary = ""
-//        attributedSummary = NSAttributedString()
         super.init()
     }
 
@@ -977,8 +973,6 @@ class SISponsor: SIObject {
         president = 5
     }
     
-//    var summary : String
-//    var attributedSummary: NSAttributedString
     var sponsorType : SponsorType
     var logoURL : String {
         didSet {
@@ -995,26 +989,14 @@ class SISponsor: SIObject {
             requestSplashScreenImage(nil)
         }
     }
-    fileprivate var bannerImage : UIImage?
-    fileprivate var splashScreenImage : UIImage?
+    private var bannerImage : UIImage?
+    private var splashScreenImage : UIImage?
     var didLoadBannerImage: Bool
     var didLoadSplashScreen: Bool
-    
-//    convenience init(name: String, id: String, sponsorType: SponsorType, summary: String, logoURL: String, bannerURL: String) {
-//        self.init()
-//        self.name = name
-//        self.id = id
-//        self.sponsorType = sponsorType
-////        self.summary = summary
-//        self.attributedSummary = NSAttributedString()
-//        self.logoURL = logoURL
-//        self.bannerURL = bannerURL
-//    }
+    var didLoadSponsorDetails: Bool
     
     override init() {
         sponsorType = .none
-//        summary = ""
-//        attributedSummary = NSAttributedString()
         logoURL = ""
         bannerURL = ""
         splashScreenURL = ""
@@ -1022,6 +1004,7 @@ class SISponsor: SIObject {
         splashScreenImage = nil
         didLoadBannerImage = false
         didLoadSplashScreen = false
+        didLoadSponsorDetails = false
         super.init()
     }
     
@@ -1047,7 +1030,7 @@ class SISponsor: SIObject {
         }
     }
     
-    fileprivate func requestBannerImage(_ callback: (() -> Void)?) {
+    private func requestBannerImage(_ callback: (() -> Void)?) {
         
         if bannerImage != nil || bannerURL.isEmpty {
             if let cb = callback { cb() }
@@ -1065,7 +1048,7 @@ class SISponsor: SIObject {
         }
     }
     
-    fileprivate func requestSplashScreenImage(_ callback: (() -> Void)?) {
+    private func requestSplashScreenImage(_ callback: (() -> Void)?) {
         
         if splashScreenImage != nil || splashScreenURL.isEmpty {
             if let cb = callback { cb() }
@@ -1083,7 +1066,7 @@ class SISponsor: SIObject {
         });
     }
     
-    func getBannerImage(_ callback: @escaping (_ image: UIImage) -> ()) {
+    func getBannerImage(_ callback: @escaping (UIImage) -> ()) {
         
         if let image = self.bannerImage {
             callback(image)
@@ -1101,7 +1084,7 @@ class SISponsor: SIObject {
         }
     }
     
-    func getLogoImage(_ callback: @escaping (_ image: UIImage) -> ()) {
+    func getLogoImage(_ callback: @escaping (UIImage) -> ()) {
         
         if let image = self.image {
             callback(image)
@@ -1119,7 +1102,7 @@ class SISponsor: SIObject {
         }
     }
     
-    func getSplashScreenImage(_ callback: @escaping (_ image: UIImage) -> ()) {
+    func getSplashScreenImage(_ callback: @escaping (UIImage) -> ()) {
         
         if let image = self.splashScreenImage {
             callback(image)
@@ -1136,6 +1119,22 @@ class SISponsor: SIObject {
             }
         }
     }
+    
+    func requestSponsorDetails() {
+        SIRequest().requestSponsor(sponsorId: self.id) { sponsor in
+            if let sponsor = sponsor {
+                self.name = sponsor.name
+                self.logoURL = sponsor.logoURL
+                self.attributedSummary = sponsor.attributedSummary
+                self.bannerURL = sponsor.bannerURL
+                self.splashScreenImage = sponsor.splashScreenImage
+                self.sponsorType = sponsor.sponsorType
+                self.didLoadSponsorDetails = true
+            }
+        }
+    }
+    
+    
 }
 
 class SIVenue: SIObject {
@@ -1231,9 +1230,6 @@ class SIVenueMap: SIObject {
 
 class SIAffiliate: SIObject {
     
-//    var abstract : String
-//    var summary : String
-//    var attributedSummary: NSAttributedString
     var logoURL : String {
         didSet {
             requestAffiliateLogoImage(nil)
@@ -1243,9 +1239,6 @@ class SIAffiliate: SIObject {
     var pagePath : String
     
     override init() {
-//        abstract = ""
-//        summary = ""
-//        attributedSummary = NSAttributedString()
         logoURL = ""
         websiteURL = ""
         pagePath = ""
