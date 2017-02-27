@@ -127,37 +127,23 @@ extension EventsTableViewController: SICellDelegate {
 
 class RadialGradientLayer: CALayer {
     
-    override init(){
-        
+    override init() {
         super.init()
-        
         needsDisplayOnBoundsChange = true
     }
-
     
     required init(coder aDecoder: NSCoder) {
-        
         super.init()
-        
     }
     
     override func draw(in ctx: CGContext) {
-        
         ctx.saveGState()
-        
         let locations:[CGFloat] = [0.0, 1.0]
-        let gradColors: [CGFloat] = [0, 0, 0, 0, 0, 0 , 0, 0.5]
-        
-        let colorSpace = CGColorSpaceCreateDeviceRGB()
-        
-        let gradient = CGGradient(colorSpace: colorSpace, colorComponents: gradColors, locations: locations, count: 2)!
-        
+        let gradColors: [CGFloat] = [0, 0, 0, 0.1, 0, 0 , 0, 0.3]
+        let gradient = CGGradient(colorSpace: CGColorSpaceCreateDeviceRGB(), colorComponents: gradColors, locations: locations, count: locations.count)
         let gradCenter = CGPoint(x: self.bounds.size.width / 2, y: self.bounds.size.height / 2)
         let gradRadius = min(self.bounds.size.width, self.bounds.size.height)
-        
-        ctx.drawRadialGradient(gradient, startCenter: gradCenter, startRadius: 0, endCenter: gradCenter, endRadius: gradRadius, options: CGGradientDrawingOptions.drawsAfterEndLocation)
-
-        
+        ctx.drawRadialGradient(gradient!, startCenter: gradCenter, startRadius: 0, endCenter: gradCenter, endRadius: gradRadius, options: CGGradientDrawingOptions.drawsAfterEndLocation)
     }
     
 }

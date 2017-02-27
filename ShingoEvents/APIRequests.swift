@@ -25,15 +25,6 @@ class SIRequest {
     static let dateFormatter = DateFormatter(dateFormat: "yyyy-MM-dd")
     static let sessionDateFormatter = DateFormatter(dateFormat: "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
     
-    static func timeZoneOffset() -> Int {
-        // off set in hours in current time zone from UTC
-        let currentTZOffset = TimeZone.current.secondsFromGMT() / (60*60)
-        // off set in hours in MST time zone from UTC
-        let mstTZOffset = TimeZone.init(identifier: "MST")!.secondsFromGMT() / (60*60)
-        return currentTZOffset + abs(mstTZOffset)
-    }
-    
-    
     /// HTTP GET request method.
     func getRequest(url: String, description: String, callback: @escaping (JSON?) -> ()) -> Alamofire.Request? {
         
@@ -148,13 +139,13 @@ class SIRequest {
                     
                     if let startDate = record["Start_Date__c"].string {
                         if let startDate = SIRequest.dateFormatter.date(from: startDate) {
-                            event.startDate = self.correctDateOffset(date: startDate)
+                            event.startDate = self.getDateFromOffset(date: startDate)
                         }
                     }
                     
                     if let endDate = record["End_Date__c"].string {
                         if let endDate = SIRequest.dateFormatter.date(from: endDate) {
-                            event.endDate = self.correctDateOffset(date: endDate)
+                            event.endDate = self.getDateFromOffset(date: endDate)
                         }
                     }
                     
@@ -199,13 +190,13 @@ class SIRequest {
                 
                 if let startDate = record["Start_Date__c"].string {
                     if let startDate = SIRequest.dateFormatter.date(from: startDate) {
-                        event.startDate = self.correctDateOffset(date: startDate)
+                        event.startDate = self.getDateFromOffset(date: startDate)
                     }
                 }
                 
                 if let endDate = record["End_Date__c"].string {
                     if let endDate = SIRequest.dateFormatter.date(from: endDate) {
-                        event.endDate = self.correctDateOffset(date: endDate)
+                        event.endDate = self.getDateFromOffset(date: endDate)
                     }
                 }
                 
@@ -315,7 +306,7 @@ class SIRequest {
                 
                 if let date = record["Agenda_Date__c"].string {
                     if let date = SIRequest.dateFormatter.date(from: date) {
-                        agenda.date = correctDateOffset(date: date)
+                        agenda.date = getDateFromOffset(date: date)
                     }
                 }
                 
@@ -360,13 +351,13 @@ class SIRequest {
                     
                     if let startDate = record["Start_Date_Time__c"].string {
                         if let startDate = SIRequest.sessionDateFormatter.date(from: startDate) {
-                            session.startDate = self.correctDateOffset(date: startDate)
+                            session.startDate = self.getDateFromOffset(date: startDate)
                         }
                     }
                     
                     if let endDate = record["End_Date_Time__c"].string {
                         if let endDate = SIRequest.sessionDateFormatter.date(from: endDate) {
-                            session.endDate = self.correctDateOffset(date: endDate)
+                            session.endDate = self.getDateFromOffset(date: endDate)
                         }
                     }
                     
@@ -432,13 +423,13 @@ class SIRequest {
                 
                 if let startDate = record["Start_Date_Time__c"].string {
                     if let startDate = SIRequest.sessionDateFormatter.date(from: startDate) {
-                        session.startDate = self.correctDateOffset(date: startDate)
+                        session.startDate = self.getDateFromOffset(date: startDate)
                     }
                 }
             
                 if let endDate = record["End_Date_Time__c"].string {
                     if let endDate = SIRequest.sessionDateFormatter.date(from: endDate) {
-                        session.endDate = self.correctDateOffset(date: endDate)
+                        session.endDate = self.getDateFromOffset(date: endDate)
                     }
                 }
                 
@@ -529,13 +520,13 @@ class SIRequest {
                 
                 if let startDate = record["Start_Date_Time__c"].string {
                     if let startDate = SIRequest.sessionDateFormatter.date(from: startDate) {
-                        session.startDate = self.correctDateOffset(date: startDate)
+                        session.startDate = self.getDateFromOffset(date: startDate)
                     }
                 }
                 
                 if let endDate = record["End_Date_Time__c"].string {
                     if let endDate = SIRequest.sessionDateFormatter.date(from: endDate) {
-                        session.endDate = self.correctDateOffset(date: endDate)
+                        session.endDate = self.getDateFromOffset(date: endDate)
                     }
                 }
                 
@@ -1680,13 +1671,19 @@ class SIRequest {
         
     }
     
-    func correctDateOffset(date: Date) -> Date {
+    func getDateFromOffset(date: Date) -> Date {
         let calendar = Calendar.current
         var components = calendar.dateComponents(in: TimeZone.current, from: date)
         if components.hour == nil {
             components.hour = 0
         }
-        components.hour! += Int(SIRequest.timeZoneOffset())
+        
+        // off set in hours in current time zone from UTC
+        let currentTZOffset = TimeZone.current.secondsFromGMT() / (60*60)
+        // off set in hours in MST time zone from UTC
+        let mstTZOffset = TimeZone.init(identifier: "MST")!.secondsFromGMT() / (60*60)
+        
+        components.hour! += Int(currentTZOffset + abs(mstTZOffset))
         guard let newDate = components.date else {
             return date
         }
