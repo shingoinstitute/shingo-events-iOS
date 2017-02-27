@@ -14,11 +14,6 @@ class SIButton: UIButton {
 
 class ContactUsViewController: UIViewController {
 
-    @IBOutlet weak var doneButton: UIBarButtonItem! {
-        didSet {
-            doneButton.title = ""
-        }
-    }
     @IBOutlet weak var emailTextField: UITextField! {
         didSet {
             emailTextField.delegate = self
@@ -29,7 +24,6 @@ class ContactUsViewController: UIViewController {
             descriptionTextField.text = "Enter message here."
             descriptionTextField.textColor = UIColor.lightGray
             descriptionTextField.layer.cornerRadius = 3
-            
             descriptionTextField.delegate = self
         }
     }
@@ -84,15 +78,15 @@ class ContactUsViewController: UIViewController {
     
     func dismissKeyboard() {
         view.endEditing(true)
+        descriptionTextField.resignFirstResponder()
     }
+    
     
     func keyboardWillAppear(notification: Notification) {
         // Will return if notification.userInfo is nil
         guard let userInfo = notification.userInfo else {
             return
         }
-        
-        doneButton.title = "Done"
         
         // Gets the height of the keyboard so that we can calculate the new 'constant' value of descriptionTextView's bottom constraint
         let keyboardHeight = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue.height
@@ -115,8 +109,6 @@ class ContactUsViewController: UIViewController {
     }
     
     func keyboardWillDisappear(notification: Notification) {
-        doneButton.title = ""
-        
         // Begins animation as the keyboard disappears offscreen
         UIView.animate(withDuration: 1) {
             // sets descriptionTextView's bottom constraint back to the original margin value
@@ -125,10 +117,6 @@ class ContactUsViewController: UIViewController {
             // layoutIfNeeded called throughout block for smooth animation
             self.view.layoutIfNeeded()
         }
-    }
-    
-    @IBAction func didTapDone(_ sender: AnyObject) {
-        dismissKeyboard()
     }
     
     @IBAction func sendMessage(_ sender: AnyObject) {
@@ -165,7 +153,7 @@ class ContactUsViewController: UIViewController {
                 let activity = ActivityViewController(message: "Sending Feedback...")
                 present(activity, animated: true, completion: { 
                     SIRequest.postFeedback(parameters: parameters, callback: { (success) in
-                        self.dismiss(animated: false, completion: { 
+                        self.dismiss(animated: true, completion: {
                             switch success {
                             case true:
                                 
@@ -232,17 +220,18 @@ extension ContactUsViewController {
     
 }
 
-extension ContactUsViewController: UITextViewDelegate, UITextFieldDelegate {
-
-    // MARK: - UITextFieldDelegate
+extension ContactUsViewController: UITextFieldDelegate {
     
+    // MARK: - UITextFieldDelegate
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         emailTextField.resignFirstResponder()
         return true
     }
+}
+
+extension ContactUsViewController: UITextViewDelegate {
     
     // MARK: - UITextViewDeleagte
-    
     func textViewDidBeginEditing(_ textView: UITextView) {
         if !didMakeEdit {
             textView.text = ""
@@ -252,13 +241,20 @@ extension ContactUsViewController: UITextViewDelegate, UITextFieldDelegate {
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        
+        // Dismiss keyboard when user touches the "return" (done) key
+        if (text == "\n") {
+            view.endEditing(true)
+            return false
+        }
+        
+        // Calculates current character count of textview. If char count is above limit, user cannot type.
         return NSString(string: textView.text).replacingCharacters(in: range, with: text).characters.count < textViewCharacterLimit + 1
     }
     
     func textViewDidChange(_ textView: UITextView) {
         let count = textView.text!.characters.count
         characterCountLabel.text = "\(textViewCharacterLimit - count) characters left"
-        
     }
 
 }

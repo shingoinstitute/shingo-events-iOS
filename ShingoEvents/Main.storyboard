@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BzB-Wi-vpp">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BzB-Wi-vpp">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -405,7 +405,7 @@
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter email address here (optional)" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="peZ-HJ-R5n">
                                 <rect key="frame" x="16" y="72" width="343" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" returnKeyType="done"/>
                             </textField>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="HT1-ql-mAx">
                                 <rect key="frame" x="16" y="178.5" width="343" height="426.5"/>
@@ -513,17 +513,10 @@
                             <constraint firstItem="Pfj-cc-vs7" firstAttribute="leading" secondItem="9K7-c5-8gj" secondAttribute="trailing" constant="8" id="w1w-Nj-kQp"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Contact Us" id="OXH-ld-J2I">
-                        <barButtonItem key="rightBarButtonItem" title="Item" style="done" id="b3i-fU-jHp">
-                            <connections>
-                                <action selector="didTapDone:" destination="BMR-CH-MuX" id="u3Y-cD-aED"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Contact Us" id="OXH-ld-J2I"/>
                     <connections>
                         <outlet property="characterCountLabel" destination="D40-As-AcY" id="RJy-Db-8xv"/>
                         <outlet property="descriptionTextField" destination="HT1-ql-mAx" id="ySz-Fq-eSh"/>
-                        <outlet property="doneButton" destination="b3i-fU-jHp" id="yWw-AP-cM6"/>
                         <outlet property="emailTextField" destination="peZ-HJ-R5n" id="8n8-wP-VVV"/>
                         <outlet property="star1" destination="Vbb-wt-sj3" id="Jle-dQ-aas"/>
                         <outlet property="star2" destination="9K7-c5-8gj" id="i0x-sI-gLd"/>
@@ -604,7 +597,7 @@
                             <tableViewSection headerTitle="About" id="h2r-ED-5Qz">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="1vs-7Q-Cer">
-                                        <rect key="frame" x="0.0" y="200" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="201" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1vs-7Q-Cer" id="wtH-06-VeD">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
@@ -631,7 +624,7 @@
                             <tableViewSection headerTitle="Data" id="Saw-I1-x81">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="0X9-1i-tvy">
-                                        <rect key="frame" x="0.0" y="300" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="302" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0X9-1i-tvy" id="MEn-RV-VAy">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
@@ -759,13 +752,13 @@
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter email address here (optional)" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yS0-43-Xsl">
                                 <rect key="frame" x="16" y="72" width="343" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" returnKeyType="done"/>
                             </textField>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="knU-Qb-3MQ">
                                 <rect key="frame" x="16" y="157.5" width="343" height="389"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done"/>
                             </textView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Please be specific about the problem. If applicable, include steps that can be taken to reproduce the unexpected behavior." lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oGL-EU-rKQ">
                                 <rect key="frame" x="16" y="554.5" width="343" height="50.5"/>
@@ -852,18 +845,11 @@
                             <constraint firstItem="Qpz-Dn-Uay" firstAttribute="top" relation="greaterThanOrEqual" secondItem="knU-Qb-3MQ" secondAttribute="bottom" priority="250" constant="120.5" id="q1C-Y8-mfI"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Bug Report" id="TTz-rM-OBK">
-                        <barButtonItem key="rightBarButtonItem" title="Item" style="done" id="l67-ay-ohx">
-                            <connections>
-                                <action selector="didTapDone:" destination="b1Y-X9-6h0" id="jZL-5n-4Sb"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Bug Report" id="TTz-rM-OBK"/>
                     <connections>
                         <outlet property="bugTypeButton" destination="JRG-Wk-7y3" id="ffh-Rh-lbb"/>
                         <outlet property="characterCountLabel" destination="8cI-XH-GRj" id="MDN-FS-uio"/>
                         <outlet property="descriptionTextField" destination="knU-Qb-3MQ" id="UZT-Vd-etO"/>
-                        <outlet property="doneButton" destination="l67-ay-ohx" id="1bO-B3-DYf"/>
                         <outlet property="dropDownImageView" destination="Ygy-wT-3Id" id="Kt2-aT-rCV"/>
                         <outlet property="emailTextField" destination="yS0-43-Xsl" id="5yk-Et-0Zb"/>
                         <outlet property="submitButton" destination="iy8-cm-kMt" id="EJt-TH-JaK"/>
@@ -1000,7 +986,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="107"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0Ka-IK-OYc" id="6jj-3L-wzU">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="107"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="106"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oPr-gx-O2z">
