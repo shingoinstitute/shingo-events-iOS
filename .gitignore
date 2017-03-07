@@ -2,9 +2,10 @@
 *.xcuserstate
 *.xccheckout
 *.xcscmblueprint
+Shingo Events/xcuserdata/
 
 #CocoaPods
-
+Pods/
 
 #Git
 README.md
