@@ -14,12 +14,7 @@ class BugReportViewController: UIViewController {
     
     var didMakeEdit = false
     var messageSent = false
-    
-    @IBOutlet weak var doneButton: UIBarButtonItem! {
-        didSet {
-            doneButton.title = ""
-        }
-    }
+
     @IBOutlet weak var emailTextField: UITextField! {
         didSet {
             emailTextField.delegate = self
@@ -108,8 +103,6 @@ class BugReportViewController: UIViewController {
             return
         }
         
-        doneButton.title = "Done"
-        
         // Gets the height of the keyboard so that we can calculate the new 'constant' value of descriptionTextView's bottom constraint
         let keyboardHeight = (userInfo[UIKeyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue.height
         
@@ -132,9 +125,6 @@ class BugReportViewController: UIViewController {
     }
     
     func keyboardWillDisappear(notification: Notification) {
-
-        doneButton.title = ""
-        
         // Begins animation as the keyboard disappears offscreen
         UIView.animate(withDuration: 1) {
             // sets descriptionTextView's bottom constraint back to the original margin value
@@ -143,11 +133,6 @@ class BugReportViewController: UIViewController {
             // layoutIfNeeded called throughout block for smooth animation
             self.view.layoutIfNeeded()
         }
-    }
-    
-    // 'Done' UIBarButtonItem on click listener
-    @IBAction func didTapDone(_ sender: AnyObject) {
-        dismissKeyboard()
     }
     
     func addDropDownMenu() {
@@ -173,7 +158,9 @@ class BugReportViewController: UIViewController {
         
     }
     
-    
+    @IBAction func didTapDropDown(_ sender: AnyObject) {
+        dropDown.show()
+    }
     
     @IBAction func didTapSubmit(_ sender: AnyObject) {
         
@@ -207,9 +194,10 @@ class BugReportViewController: UIViewController {
                 ]
                 
                 let activity = ActivityViewController(message: "Sending Bug Report...")
+
                 present(activity, animated: true, completion: { 
                     SIRequest.postBugReport(parameters: parameters, callback: { (success) in
-                        self.dismiss(animated: false, completion: {
+                        self.dismiss(animated: true, completion: {
                             
                             switch success {
                             case true:
@@ -250,24 +238,21 @@ class BugReportViewController: UIViewController {
 }
 
 
-extension BugReportViewController {
-    
-    @IBAction func didTapDropDown(_ sender: AnyObject) {
-        dropDown.show()
-    }
-    
-}
-
-extension BugReportViewController: UITextViewDelegate, UITextFieldDelegate {
+extension BugReportViewController: UITextFieldDelegate {
     //MARK: - UITextFieldDelegate
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         emailTextField.resignFirstResponder()
         return true
     }
-    
+}
+
+extension BugReportViewController: UITextViewDelegate {
     //MARK: - UITextViewDelegate
-    
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if (text == "\n") {
+            view.endEditing(true)
+            return false
+        }
         return NSString(string: textView.text).replacingCharacters(in: range, with: text).characters.count < textViewCharacterLimit + 1
     }
     
