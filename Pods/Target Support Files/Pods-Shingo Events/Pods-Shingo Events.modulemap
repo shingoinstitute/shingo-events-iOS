@@ -1,6 +1,0 @@
-framework module Pods_Shingo_Events {
-  umbrella header "Pods-Shingo Events-umbrella.h"
-
-  export *
-  module * { export * }
-}

@@ -42,7 +42,6 @@
 		C2E0FF5B1DD3A23A005CDD7D /* SponsorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E0FF5A1DD3A23A005CDD7D /* SponsorTableViewCell.swift */; };
 		C2E9508D1D1C83F500178C03 /* SharedCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E9508C1D1C83F500178C03 /* SharedCode.swift */; };
 		C2E9508F1D22E8F100178C03 /* APIRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E9508E1D22E8F100178C03 /* APIRequests.swift */; };
-		C2F087011E6F22C400C47DDF /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C2A6950C1C35AC2900F6E0B8 /* Info.plist */; };
 		C2F17FA81C6AAFCF0028062C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C2F17FA71C6AAFCF0028062C /* Assets.xcassets */; };
 		C2FF6B1E1CB2E2CF00331ED2 /* VenueMapsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FF6B1D1CB2E2CF00331ED2 /* VenueMapsCollectionView.swift */; };
 		C2FF6B221CB2E43200331ED2 /* VenueMapCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FF6B211CB2E43200331ED2 /* VenueMapCollectionCell.swift */; };
@@ -430,7 +429,6 @@
 			files = (
 				C2CFC3181C4954C20036E485 /* Main.storyboard in Resources */,
 				C2F17FA81C6AAFCF0028062C /* Assets.xcassets in Resources */,
-				C2F087011E6F22C400C47DDF /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -486,7 +484,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		C2986DC51C65210C00ADCF40 /* ShellScript */ = {
