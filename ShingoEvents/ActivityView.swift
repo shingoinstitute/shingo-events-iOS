@@ -10,14 +10,8 @@ import Foundation
 import UIKit
 
 /**
- 
  This class provides a view that indicates data is being loaded onto the device from an external source.
- 
  This class is meant to be presented modally.
- 
- - author: Craig Blackburn 3/15/2016
- 
- - copyright: © 2016 Utah State University
  */
 class ActivityViewController: UIViewController {
     

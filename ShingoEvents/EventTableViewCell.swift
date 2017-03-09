@@ -10,6 +10,8 @@ import UIKit
 
 class EventTableViewCell: UITableViewCell {
     
+    var maxBannerImageWidth: CGFloat!
+    
     @IBOutlet weak var eventNameLabel: UILabel! {
         didSet {
             eventNameLabel.font = UIFont.preferredFont(forTextStyle: .headline)
@@ -27,22 +29,6 @@ class EventTableViewCell: UITableViewCell {
             eventImageView.layer.cornerRadius = 5
         }
     }
-    @IBOutlet weak var cardView: UIView! {
-        didSet {
-            cardView.backgroundColor = .white
-            cardView.layer.cornerRadius = 5
-            cardView.layer.shadowColor = UIColor.darkShingoBlue.cgColor
-            cardView.layer.shadowOffset = CGSize(width: 0, height: 2.0)
-            cardView.layer.shadowOpacity = 1
-            cardView.layer.shadowRadius = 5
-            cardView.layer.masksToBounds = false
-        }
-    }
-    
-    @IBOutlet weak var leadingEventImageViewConstraint: NSLayoutConstraint!
-    @IBOutlet weak var trailingEventImageViewConstraint: NSLayoutConstraint!
-    private let rightArrowImageViewWidthConstraintConstant: CGFloat = 30
-    private let cardViewMargins: CGFloat = (2 * 8)
     
     var event: SIEvent! { didSet { updateCell() } }
     
@@ -59,22 +45,30 @@ class EventTableViewCell: UITableViewCell {
         let dates = "\(dateFormatter.string(from: event.startDate as Date)) - \(dateFormatter.string(from: event.endDate as Date))"
         eventDateRangeLabel.text = dates
         
-        event.getBannerImage() { image in
-            
-            guard let image = image else {
-                return
+        
+        if let image = event.image {
+            eventImageView.image = image
+        } else {
+            event.getBannerImage() { image in
+                guard let image = image else {
+                    self.eventImageView.image = #imageLiteral(resourceName: "FlameOnly-100")
+                    return
+                }
+                self.eventImageView.image = image
             }
-            
-            self.eventImageView.image = image
-            
-            let maxImageWidth: CGFloat = self.contentView.frame.width - (self.leadingEventImageViewConstraint.constant + self.trailingEventImageViewConstraint.constant + self.rightArrowImageViewWidthConstraintConstant + self.cardViewMargins)
-            
-            if image.size.width > maxImageWidth {
-                self.eventImageView.resizeImageViewToIntrinsicContentSize(thatFitsWidth: maxImageWidth)
-            } 
-            
-            if let delegate = self.delegate {
-                delegate.cellDidUpdate()
+        }
+
+    }
+    
+    func resizeImageToMaxWidth() {
+        if let width = maxBannerImageWidth {
+            if let image = imageView!.image {
+                if image.size.width > width {
+                    let newHeight = (image.size.height / image.size.width) * width
+                    let size = CGSize(width: width, height: newHeight)
+                    let resizedImg = image.af_imageScaled(to: size)
+                    imageView!.image = resizedImg
+                }
             }
         }
     }

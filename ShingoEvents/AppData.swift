@@ -14,6 +14,8 @@ import Crashlytics
 
 class SIObject : AnyObject {
     
+    private let imageDownloader = ImageDownloader()
+    
     var image: UIImage?
     
     var name: String
@@ -31,19 +33,26 @@ class SIObject : AnyObject {
         isSelected = false
     }
     
-    fileprivate func requestImage(URLString: String, callback: @escaping (
-        UIImage?) -> Void) {
-
-        Alamofire.request(URLString).responseImage { response in
-            
-            guard let image = response.result.value else {
-                print("Warning, image download failed. Requested from \(URLString), for SIObject \"\(self.name)\".")
-                callback(nil)
-                return
+    fileprivate func requestImage(URLString: String, callback: @escaping (UIImage?) -> Void) {
+        let urlRequest = URLRequest(url: URL(string: URLString)!)
+        imageDownloader.download(urlRequest) { (response) in
+            guard var image = response.result.value else {
+                return callback(nil)
             }
-        
-            print("Image Downloaded! \(image.fileSizeOfPNG())kb recieved; Dimensions: \(Int(image.size.width))x\(Int(image.size.height)); ObjectType: \(Mirror(reflecting: self).subjectType)")
-            callback(image)
+            
+            if (image.scale > 1) {
+                let size = CGSize(width: image.size.width * image.scale, height: image.size.height * image.scale)
+                image = image.af_imageScaled(to: size)
+            }
+            
+            if (image.size.width > 321) {
+                let newHeight = (image.size.height / image.size.width) * 321
+                let size = CGSize(width: 321, height: newHeight)
+                image = image.af_imageScaled(to: size)
+            }
+
+            debugPrint("Image Downloaded for Object: \(Mirror(reflecting: self).subjectType), \(image)")
+            return callback(image)
         }
     }
     

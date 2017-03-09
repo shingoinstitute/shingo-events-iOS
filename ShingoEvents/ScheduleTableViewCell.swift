@@ -38,7 +38,6 @@ class ScheduleTableViewCell: SITableViewCell {
         
         selectionStyle = .none
         
-        
         if !session.didLoadSpeakers {
             DispatchQueue.global(qos: .utility).async {
                 self.session.requestSpeakers {
@@ -90,13 +89,17 @@ class ScheduleTableViewCell: SITableViewCell {
             let sessionSummary = NSMutableAttributedString()
             
             if let room = session.room {
-                sessionSummary.append(NSAttributedString(string: "Room: \(room.name)", attributes: [NSFontAttributeName : UIFont.preferredFont(forTextStyle: .headline)]))
+                sessionSummary.append(NSAttributedString(string: "Room: \(room.name)", attributes: [
+                        NSFontAttributeName : UIFont.preferredFont(forTextStyle: .headline)
+                    ]))
                 if !session.attributedSummary.string.isEmpty {
                     sessionSummary.append(NSAttributedString(string: "\n\n"))
                 }
             }
             
             sessionSummary.append(session.attributedSummary)
+            
+            sessionSummary.addAttribute(NSForegroundColorAttributeName, value: UIColor(netHex: 0x424242), range: sessionSummary.fullRange)
             
             sessionSummary.append(tapToSeeLessText)
             
