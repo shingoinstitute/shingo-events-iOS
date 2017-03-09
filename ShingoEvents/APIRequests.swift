@@ -26,9 +26,11 @@ class SIRequest {
     /// HTTP GET request method.
     func getRequest(url: String, description: String, callback: @escaping (JSON?) -> ()) -> Alamofire.Request? {
         return Alamofire.request(url).responseJSON(queue: DispatchQueue.global(qos: .utility), options: .allowFragments) { (response) in
-            print("+-\(self.marks(description))")
-            print("| \(description) |")
-            print("+-\(self.marks(description))")
+//            if description != "REQUEST EVENTS" {
+                print("+-\(self.marks(description))")
+                print("| \(description) |")
+                print("+-\(self.marks(description))")
+//            }
             
             guard response.result.isSuccess else {
                 print("Error while performing API GET request: \(response.result.error!)")
@@ -47,7 +49,7 @@ class SIRequest {
                 return callback(nil)
             }
             
-            let responseJSON = JSON(response)
+            var responseJSON = JSON(response)
             
             if let success = responseJSON["success"].bool {
                 if !success {
@@ -58,11 +60,75 @@ class SIRequest {
                 }
             }
             
-            print(responseJSON)
+            if description == "REQUEST EVENT" {
+                if responseJSON["event"] != nil {
+                    responseJSON["event"]["attributes"] = nil
+                    if let _ = responseJSON["event"]["Event_Manager__r"].dictionary {
+                        responseJSON["event"]["Event_Manager__r"]["attributes"] = nil
+                    }
+                    if responseJSON["event"]["Shingo_Day_Agendas__r"] != nil {
+                        if let agendas = responseJSON["event"]["Shingo_Day_Agendas__r"]["records"].array {
+                            for i in 0 ..< agendas.count {
+                                responseJSON["event"]["Shingo_Day_Agendas__r"]["records"][i]["attributes"] = nil
+                            }
+                        }
+                        if let prices = responseJSON["event"]["Shingo_Prices__r"]["records"].array {
+                            for i in 0 ..< prices.count {
+                                responseJSON["event"]["Shingo_Prices__r"]["records"][i]["attributes"] = nil
+                            }
+                        }
+                    }
+                }
+            }
             
-            print("+-\(self.marks(description + " - END"))")
-            print("| \(description + " - END") |")
-            print("+-\(self.marks(description + " - END"))")
+            if description == "REQUEST AGENDA FOR EVENT" {
+                if responseJSON["days"] != nil {
+                    if let days = responseJSON["days"].array {
+                        for i in 0 ..< days.count {
+                            if responseJSON["days"][i]["Shingo_Sessions__r"] != nil {
+                                if let records = responseJSON["days"][i]["Shingo_Sessions__r"]["records"].array {
+                                    for j in 0 ..< records.count {
+                                        responseJSON["days"][i]["Shingo_Sessions__r"]["records"][j]["attributes"] = nil
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            if description == "REQUEST AFFILIATES, ALL" {
+                if let records = responseJSON["affiliates"].array {
+                    var affiliates = records
+                    let lastAff = affiliates.popLast()
+                    print("{\t\"affiliates\" : {")
+                    print("\t[")
+                    for affiliate in affiliates {
+                        if let name = affiliate["Name"].string {
+                            print("\t\t\"\(name)\",")
+                        }
+                    }
+                    if let last = lastAff {
+                        if let name = last["Name"].string {
+                            print("\t\t\"\(name)\"")
+                            print("\t]\n}")
+                        }
+                    }
+                }
+                
+                print("+-\(self.marks(description + " - END"))")
+                print("| \(description + " - END") |")
+                print("+-\(self.marks(description + " - END"))")
+                
+            } else if description != "REQUEST EVENTS" {
+                print(responseJSON)
+                
+                print("+-\(self.marks(description + " - END"))")
+                print("| \(description + " - END") |")
+                print("+-\(self.marks(description + " - END"))")
+            }
+
+            
             
             callback(responseJSON)
         }
@@ -85,15 +151,13 @@ class SIRequest {
                 return
             }
             
-            let responseJSON = JSON(response)
-            
-            print(responseJSON)
+            print(JSON(response))
             
             print("+-\(self.marks(description + " - END"))")
             print("| \(description + " - END") |")
             print("+-\(self.marks(description + " - END"))")
             
-            callback(responseJSON)
+            callback(JSON(response))
         }
     }
     
@@ -109,13 +173,18 @@ class SIRequest {
             }
             var events = [SIEvent]()
             if let records = json["events"].array {
+                
                 for record in records {
                     
-//                    if let publishToApp = record["Publish_to_Web_App__c"].bool {
-//                        if !publishToApp {
-//                            continue
-//                        }
-//                    }
+                    if let publishToApp = record["Publish_to_Web_App__c"].bool {
+                        if !publishToApp {
+                            continue
+                        }
+                    }
+                    
+                    var printableRecord = record
+                    printableRecord["attributes"] = nil
+                    print(printableRecord)
                     
                     let event = SIEvent()
                     
@@ -149,6 +218,9 @@ class SIRequest {
                     
                     events.append(event)
                 }
+                print("+-\(self.marks("REQUEST EVENTS - END"))")
+                print("| \("REQUEST EVENTS - END") |")
+                print("+-\(self.marks("REQUEST EVENTS - END"))")
             }
             callback(events)
         }
