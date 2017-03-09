@@ -107,45 +107,66 @@ class EventMenuViewController: UIViewController {
     override func loadView() {
         super.loadView()
         
-        DispatchQueue.global(qos: .utility).async { [unowned self] in
+        DispatchQueue.global(qos: .utility).async { [unowned self, weak event = self.event!] in
+            
+            guard let event = event else {
+                return
+            }
+            
             // Load Agenda
             if !self.event.didLoadAgendas {
                 //Note: requestAgendas will request session data under the hood
-                self.event.requestAgendas() { self.event.didLoadAgendas = true }
+                self.event.requestAgendas() {
+                    event.didLoadAgendas = true
+                }
             }
             
             if !self.event.didLoadSpeakers {
                 // Load Speakers for entire event
-                self.event.requestSpeakers() {self.event.didLoadSpeakers = true}
+                self.event.requestSpeakers() {
+                    event.didLoadSpeakers = true
+                }
             }
             
             if !self.event.didLoadVenues {
                 // Load venue photos
-                self.event.requestVenues() {self.event.didLoadVenues = true}
+                self.event.requestVenues() {
+                    event.didLoadVenues = true
+                }
             }
             
             if !self.event.didLoadRecipients {
                 // Load Recipient information
-                self.event.requestRecipients() {self.event.didLoadRecipients  = true}
+                self.event.requestRecipients() {
+                    event.didLoadRecipients  = true
+                }
             }
             
             if !self.event.didLoadAffiliates {
                 // Load Affiliate information
-                self.event.requestAffiliates() {self.event.didLoadAffiliates = true}
+                self.event.requestAffiliates() {
+                    event.didLoadAffiliates = true
+                }
             }
             
             if !self.event.didLoadExhibitors {
                 // Load Exhibitor information
-                self.event.requestExhibitors() {self.event.didLoadExhibitors = true}
+                self.event.requestExhibitors() {
+                    event.didLoadExhibitors = true
+                }
             }
             
             if !self.event.didLoadSponsors {
                 // Load Sponsor information
-                self.event.requestSponsors() {self.event.didLoadSponsors = true}
+                self.event.requestSponsors() {
+                    event.didLoadSponsors = true
+                }
             }
             
             if !self.event.didLoadAttendees {
-                self.event.requestAttendees() { self.event.didLoadAttendees = true }
+                self.event.requestAttendees() {
+                    event.didLoadAttendees = true
+                }
             }
             
         }

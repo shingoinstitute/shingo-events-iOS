@@ -32,7 +32,7 @@ class EventsTableViewController: UITableViewController {
         gradientLayer.frame = gradientBackgroundView.bounds
         gradientBackgroundView.layer.insertSublayer(gradientLayer, at: 0)
         
-        tableView.estimatedRowHeight = 200;
+        tableView.estimatedRowHeight = 300;
         tableView.rowHeight = UITableViewAutomaticDimension;
         
         // Begins API requests for each event.
@@ -69,12 +69,14 @@ extension EventsTableViewController: SICellDelegate {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "Event Cell", for: indexPath) as! EventTableViewCell;
-        
-        cell.cardView.backgroundColor = .white
-        cell.backgroundColor = .clear
+
+        for constraint in cell.eventImageView.constraints {
+            if constraint.identifier == "bannerImageViewWidthConstraint" {
+                cell.maxBannerImageWidth = constraint.constant
+            }
+        }
         
         cell.event = events[indexPath.row]
-        
         cell.delegate = self
         
         return cell
@@ -83,7 +85,7 @@ extension EventsTableViewController: SICellDelegate {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let cell = tableView.cellForRow(at: indexPath) as! EventTableViewCell
-        cell.cardView.backgroundColor = .white
+        cell.contentView.backgroundColor = .white
         
         let event = events[(indexPath as NSIndexPath).row]
         
@@ -91,7 +93,7 @@ extension EventsTableViewController: SICellDelegate {
             self.performSegue(withIdentifier: "EventMenu", sender: event)
             
         } else {
-            let activityView = ActivityViewController(message: "Downloading Event Data...")
+            let activityView = ActivityViewController(message: "Grabbing Event Data...")
             present(activityView, animated: false, completion: {
                 event.requestEvent() {
                     self.dismiss(animated: true, completion: {
@@ -121,29 +123,6 @@ extension EventsTableViewController: SICellDelegate {
     func cellDidUpdate() {
         tableView.beginUpdates()
         tableView.endUpdates()
-    }
-    
-}
-
-class RadialGradientLayer: CALayer {
-    
-    override init() {
-        super.init()
-        needsDisplayOnBoundsChange = true
-    }
-    
-    required init(coder aDecoder: NSCoder) {
-        super.init()
-    }
-    
-    override func draw(in ctx: CGContext) {
-        ctx.saveGState()
-        let locations:[CGFloat] = [0.0, 1.0]
-        let gradColors: [CGFloat] = [0, 0, 0, 0.1, 0, 0 , 0, 0.3]
-        let gradient = CGGradient(colorSpace: CGColorSpaceCreateDeviceRGB(), colorComponents: gradColors, locations: locations, count: locations.count)
-        let gradCenter = CGPoint(x: self.bounds.size.width / 2, y: self.bounds.size.height / 2)
-        let gradRadius = min(self.bounds.size.width, self.bounds.size.height)
-        ctx.drawRadialGradient(gradient!, startCenter: gradCenter, startRadius: 0, endCenter: gradCenter, endRadius: gradRadius, options: CGGradientDrawingOptions.drawsAfterEndLocation)
     }
     
 }

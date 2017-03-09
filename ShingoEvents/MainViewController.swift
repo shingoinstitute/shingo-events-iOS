@@ -46,9 +46,10 @@ class MainMenuViewController: UIViewController {
         
         activityView = ActivityViewController(message: "Loading Upcoming Conferences...")
         
-        requestEvents()
-        
-        requestAffiliates()
+        DispatchQueue.global(qos: .background).async { [unowned self] in
+            self.requestEvents()
+            self.requestAffiliates()
+        }
         
         navigationItem.title = ""
         
@@ -104,26 +105,49 @@ extension MainMenuViewController {
     // MARK: - Button Listeners
     
     @IBAction func didTapEvents(_ sender: AnyObject) {
-        guard let reach = Reachability() else {
-            return
-        }
         
-        if reach.isReachable {
+//        let ssView = SplashScreenView(splashScreenImage: UIImage(named: "FlameOnly-100")!)
+//        ssView.presentSplashScreen(parentViewController: self) {
+//            if self.eventsDidLoad {
+//                ssView.dismissSplashScreen(parentViewController: self, completion: {
+//                    self.performSegue(withIdentifier: "EventsView", sender: self.events)
+//                })
+//            } else {
+//                if Reachability()!.isReachable {
+//                    self.request = SIRequest().requestEvents({ (events) in
+//                        ssView.dismissSplashScreen(parentViewController: self, completion: {
+//                            if let events = events {
+//                                self.events = events
+//                                self.eventsDidLoad = true
+//                                self.performSegue(withIdentifier: "EventsView", sender: self.events)
+//                            } else {
+//                                self.displayServerError()
+//                            }
+//                        });
+//                    });
+//                }
+//            }
+//        }
+        if Reachability()!.isReachable {
             if eventsDidLoad {
                 performSegue(withIdentifier: "EventsView", sender: self.events)
             } else {
+                
                 present(activityView, animated: true, completion: {
-                    self.request = SIRequest().requestEvents({ events in
-                        self.dismiss(animated: true, completion: {
-                            if let events = events {
-                                self.events = events
-                                self.eventsDidLoad = true
-                                self.performSegue(withIdentifier: "EventsView", sender: self.events)
-                            } else {
-                                self.displayServerError()
-                            }
+                    
+                    DispatchQueue.global(qos: .utility).async {
+                        self.request = SIRequest().requestEvents({ events in
+                            self.dismiss(animated: true, completion: {
+                                if let events = events {
+                                    self.events = events
+                                    self.eventsDidLoad = true
+                                    self.performSegue(withIdentifier: "EventsView", sender: self.events)
+                                } else {
+                                    self.displayServerError()
+                                }
+                            })
                         })
-                    })
+                    }
                 })
             }
         } else {
@@ -182,7 +206,8 @@ extension MainMenuViewController: UnwindToMainVCProtocol {
         case "EventsView":
             let destination = segue.destination as! EventsTableViewController
             if let events = sender as? [SIEvent] {
-                destination.events = events
+                self.events = events.sorted { $0.startDate.isGreaterThanDate($1.startDate) }
+                destination.events = self.events
             }
         case "Support":
             let destination = segue.destination as! SettingsTableViewController

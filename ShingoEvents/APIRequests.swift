@@ -13,8 +13,6 @@ import MapKit
 import SwiftyJSON
 import Crashlytics
 
-
-
 class SIRequest {
     
     static let BASE_URL = "https://api.shingo.org"
@@ -27,9 +25,7 @@ class SIRequest {
     
     /// HTTP GET request method.
     func getRequest(url: String, description: String, callback: @escaping (JSON?) -> ()) -> Alamofire.Request? {
-        
-        return Alamofire.request(url).responseJSON { response in
-            
+        return Alamofire.request(url).responseJSON(queue: DispatchQueue.global(qos: .utility), options: .allowFragments) { (response) in
             print("+-\(self.marks(description))")
             print("| \(description) |")
             print("+-\(self.marks(description))")
@@ -49,7 +45,6 @@ class SIRequest {
                 print("| \(description + " - END") |")
                 print("+-\(self.marks(description + " - END"))")
                 return callback(nil)
-                
             }
             
             let responseJSON = JSON(response)
@@ -71,8 +66,8 @@ class SIRequest {
             
             callback(responseJSON)
         }
+        
     }
-    
     
     /// HTTP POST request method.
     func postRequest(url: String, description: String, parameters: [String:String], callback: @escaping (_ value: JSON?) -> ()) -> Alamofire.Request? {
@@ -107,25 +102,20 @@ class SIRequest {
     
     /// Returns all ready-to-publish events from Salesforce.
     @discardableResult func requestEvents(_ callback: @escaping ([SIEvent]?) -> Void) -> Alamofire.Request? {
-        
         return getRequest(url: SIRequest.EVENTS_URL, description: "REQUEST EVENTS") { json in
-            
             guard let json = json else {
                 callback(nil)
                 return
             }
-            
             var events = [SIEvent]()
-                
             if let records = json["events"].array {
-                
                 for record in records {
                     
-                    if let publishToApp = record["Publish_to_Web_App__c"].bool {
-                        if !publishToApp {
-                            continue
-                        }
-                    }
+//                    if let publishToApp = record["Publish_to_Web_App__c"].bool {
+//                        if !publishToApp {
+//                            continue
+//                        }
+//                    }
                     
                     let event = SIEvent()
                     
