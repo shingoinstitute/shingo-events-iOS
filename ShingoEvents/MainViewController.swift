@@ -26,14 +26,8 @@ class MainMenuViewController: UIViewController {
     @IBOutlet weak var affiliatesButton: UIButton!
     @IBOutlet weak var shingoModelButton: UIButton!
     @IBOutlet weak var settingsButton: UIButton!
-    @IBOutlet weak var copyRightLabel: UILabel!
     
-    @IBOutlet weak var flameImageView: UIImageView! {
-        didSet {
-            flameImageView.backgroundColor = UIColor.black.withAlphaComponent(0.75)
-        }
-    }
-    
+    @IBOutlet weak var flameImageView: UIImageView!
     
     lazy var buttons: [UIButton] = {
         return [self.eventsButton, self.affiliatesButton, self.shingoModelButton, self.settingsButton]
@@ -43,6 +37,17 @@ class MainMenuViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let gradColors:[CGFloat] = [
+            0, 0, 0, 0,
+            0, 0, 0, 0.116666,
+            0, 0, 0, 0.233333,
+            0, 0, 0, 0.35
+        ]
+        let colorLocations:[CGFloat] = [0, 0.75, 0.85, 1.0]
+        let gradient = RadialGradientLayer(gradientColors: gradColors, gradientLocations: colorLocations)
+        gradient.frame = view.bounds
+        view.layer.insertSublayer(gradient, at: 0)
         
         activityView = ActivityViewController(message: "Loading Upcoming Conferences...")
         
@@ -61,7 +66,7 @@ class MainMenuViewController: UIViewController {
         for button in self.buttons {
             button.imageEdgeInsets = UIEdgeInsets(top: 0, left: -25, bottom: 0, right: -25)
             button.titleEdgeInsets = UIEdgeInsets(top: 0, left: -46, bottom: 0, right: 0)
-            button.backgroundColor = UIColor.black.withAlphaComponent(0.75)
+            button.backgroundColor = UIColor.black.withAlphaComponent(0.8)
             button.imageView?.contentMode = .scaleAspectFit
         }
         

@@ -180,14 +180,11 @@
                         <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Shingo Icon Fullscreen" translatesAutoresizingMaskIntoConstraints="NO" id="5Jn-am-lv5">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
-                            </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" image="Shingo Title" translatesAutoresizingMaskIntoConstraints="NO" id="802-Ke-4EG">
-                                <rect key="frame" x="16" y="0.0" width="343" height="134"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" image="FlameOnly-HiRes" translatesAutoresizingMaskIntoConstraints="NO" id="5Jn-am-lv5">
+                                <rect key="frame" x="16" y="0.0" width="343" height="595"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="vlY-KD-jc9">
-                                <rect key="frame" x="0.0" y="470.5" width="375" height="50"/>
+                                <rect key="frame" x="0.0" y="503" width="375" height="50"/>
                                 <color key="backgroundColor" red="0.50196081400000003" green="0.50196081400000003" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="qqj-6b-6pG"/>
@@ -201,7 +198,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="tak-ux-Hkh">
-                                <rect key="frame" x="0.0" y="412.5" width="375" height="50"/>
+                                <rect key="frame" x="0.0" y="445" width="375" height="50"/>
                                 <color key="backgroundColor" red="0.50196081400000003" green="0.50196081400000003" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="bdY-RK-DId"/>
@@ -215,7 +212,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="Nyd-eb-sGL">
-                                <rect key="frame" x="0.0" y="354.5" width="375" height="50"/>
+                                <rect key="frame" x="0.0" y="387" width="375" height="50"/>
                                 <color key="backgroundColor" red="0.50196081400000003" green="0.50196081400000003" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="W02-Mo-1R4"/>
@@ -229,7 +226,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="0qP-cY-Jaf">
-                                <rect key="frame" x="0.0" y="296.5" width="375" height="50"/>
+                                <rect key="frame" x="0.0" y="329" width="375" height="50"/>
                                 <color key="backgroundColor" red="0.50196081400000003" green="0.50196081400000003" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="EBT-C3-KI1"/>
@@ -242,27 +239,33 @@
                                     <action selector="didTapEvents:" destination="ZAg-ba-yVl" eventType="touchUpInside" id="75H-5b-Sxi"/>
                                 </connections>
                             </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" image="Shingo Title" translatesAutoresizingMaskIntoConstraints="NO" id="802-Ke-4EG">
+                                <rect key="frame" x="16" y="0.0" width="343" height="116"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="116" id="iSv-J1-W3P"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="0qP-cY-Jaf" firstAttribute="centerY" secondItem="5Jn-am-lv5" secondAttribute="centerY" priority="750" constant="20" id="8nH-b6-DOM"/>
+                            <constraint firstItem="5Jn-am-lv5" firstAttribute="leading" secondItem="5Qf-h3-9wY" secondAttribute="leadingMargin" id="7xI-Z1-Evm"/>
                             <constraint firstItem="vlY-KD-jc9" firstAttribute="top" secondItem="tak-ux-Hkh" secondAttribute="bottom" constant="8" id="BAd-qs-2p6"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="5Jn-am-lv5" secondAttribute="trailing" id="FJC-7g-aRg"/>
                             <constraint firstItem="tak-ux-Hkh" firstAttribute="top" secondItem="Nyd-eb-sGL" secondAttribute="bottom" constant="8" id="GUS-uE-Bu1"/>
-                            <constraint firstItem="5Jn-am-lv5" firstAttribute="leading" secondItem="5Qf-h3-9wY" secondAttribute="leading" id="Gcl-f7-Ame"/>
                             <constraint firstItem="Nyd-eb-sGL" firstAttribute="leading" secondItem="5Qf-h3-9wY" secondAttribute="leading" id="HIX-Dl-IPY"/>
                             <constraint firstAttribute="trailing" secondItem="Nyd-eb-sGL" secondAttribute="trailing" id="JDF-ZA-8n5"/>
                             <constraint firstItem="0qP-cY-Jaf" firstAttribute="leading" secondItem="5Qf-h3-9wY" secondAttribute="leading" id="Q5T-eM-O3C"/>
                             <constraint firstAttribute="trailing" secondItem="tak-ux-Hkh" secondAttribute="trailing" id="UUI-SY-aSH"/>
-                            <constraint firstAttribute="trailing" secondItem="5Jn-am-lv5" secondAttribute="trailing" id="VG3-cL-32l"/>
                             <constraint firstAttribute="trailing" secondItem="0qP-cY-Jaf" secondAttribute="trailing" id="Yuf-1Q-aFD"/>
                             <constraint firstItem="802-Ke-4EG" firstAttribute="top" secondItem="zEo-yN-E71" secondAttribute="bottom" id="by0-oG-T3Q"/>
+                            <constraint firstItem="qJq-jL-J1z" firstAttribute="top" secondItem="vlY-KD-jc9" secondAttribute="bottom" constant="50" id="coy-O1-ulZ"/>
+                            <constraint firstItem="5Jn-am-lv5" firstAttribute="top" secondItem="zEo-yN-E71" secondAttribute="bottom" id="gLC-Im-gKz"/>
                             <constraint firstItem="Nyd-eb-sGL" firstAttribute="top" secondItem="0qP-cY-Jaf" secondAttribute="bottom" constant="8" id="gqy-hp-ZVS"/>
                             <constraint firstItem="802-Ke-4EG" firstAttribute="leading" secondItem="5Qf-h3-9wY" secondAttribute="leadingMargin" id="iom-lk-US8"/>
                             <constraint firstItem="802-Ke-4EG" firstAttribute="trailing" secondItem="5Qf-h3-9wY" secondAttribute="trailingMargin" id="oDc-fX-OMs"/>
                             <constraint firstAttribute="trailing" secondItem="vlY-KD-jc9" secondAttribute="trailing" id="ple-6D-t79"/>
-                            <constraint firstItem="5Jn-am-lv5" firstAttribute="top" secondItem="5Qf-h3-9wY" secondAttribute="top" id="sk9-WH-9x4"/>
-                            <constraint firstItem="qJq-jL-J1z" firstAttribute="top" secondItem="5Jn-am-lv5" secondAttribute="bottom" id="tLS-J8-6Hb"/>
                             <constraint firstItem="tak-ux-Hkh" firstAttribute="leading" secondItem="5Qf-h3-9wY" secondAttribute="leading" id="urX-3A-Fy2"/>
+                            <constraint firstItem="qJq-jL-J1z" firstAttribute="top" secondItem="5Jn-am-lv5" secondAttribute="bottom" constant="8" id="yb7-c3-0P6"/>
                             <constraint firstItem="vlY-KD-jc9" firstAttribute="leading" secondItem="5Qf-h3-9wY" secondAttribute="leading" id="zfH-Zq-opR"/>
                         </constraints>
                     </view>
@@ -272,6 +275,7 @@
                     <connections>
                         <outlet property="affiliatesButton" destination="Nyd-eb-sGL" id="PRX-Cr-xzP"/>
                         <outlet property="eventsButton" destination="0qP-cY-Jaf" id="uU0-0j-mzu"/>
+                        <outlet property="flameImageView" destination="5Jn-am-lv5" id="7ln-P6-XgX"/>
                         <outlet property="settingsButton" destination="vlY-KD-jc9" id="uZz-UN-5Iz"/>
                         <outlet property="shingoModelButton" destination="tak-ux-Hkh" id="e96-5M-qUy"/>
                         <segue destination="3gh-6S-bFF" kind="show" identifier="EventsView" id="iHG-N7-94G"/>
@@ -282,7 +286,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vZn-rg-JCP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-474.375" y="-645"/>
+            <point key="canvasLocation" x="-474.39999999999998" y="-645.42728635682158"/>
         </scene>
         <!--Upcoming Events-->
         <scene sceneID="vVb-K5-mFD">
@@ -1609,11 +1613,11 @@
     </scenes>
     <resources>
         <image name="FlameOnly-100" width="100" height="100"/>
+        <image name="FlameOnly-HiRes" width="811" height="1800"/>
         <image name="Handshake-100" width="100" height="100"/>
         <image name="Name Filled-100" width="100" height="100"/>
         <image name="Podium With Speaker-100" width="100" height="100"/>
         <image name="Settings-100" width="100" height="100"/>
-        <image name="Shingo Icon Fullscreen" width="320" height="480"/>
         <image name="Shingo Title" width="375" height="134"/>
         <image name="down-arrow" width="33" height="33"/>
         <image name="right-arrow" width="54" height="96"/>
