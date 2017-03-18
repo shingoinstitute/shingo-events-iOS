@@ -10,6 +10,7 @@ import UIKit
 import Crashlytics
 import Fabric
 import DropDown
+import CoreData
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

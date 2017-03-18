@@ -16,6 +16,7 @@
 		C234BD561C5293CF002E9814 /* SpeakerListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C234BD551C5293CF002E9814 /* SpeakerListTableViewController.swift */; };
 		C2494E281C89FBFE00E2969D /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2494E271C89FBFE00E2969D /* Reachability.swift */; };
 		C24FF48C1D9195750061B3E2 /* ShingoEventsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24FF48B1D9195750061B3E2 /* ShingoEventsTests.swift */; };
+		C25613E71E7CB41000377D82 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C25613E51E7CB41000377D82 /* Model.xcdatamodeld */; };
 		C25F4F801D95E9E8009A9830 /* EventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25F4F7F1D95E9E8009A9830 /* EventTableViewCell.swift */; };
 		C25F4F821D99C3F5009A9830 /* ScheduleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25F4F811D99C3F5009A9830 /* ScheduleTableViewCell.swift */; };
 		C262CA8D1C3B1C29005845AF /* EventsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C262CA8C1C3B1C29005845AF /* EventsTableViewController.swift */; };
@@ -78,6 +79,7 @@
 		C24FF4891D9195740061B3E2 /* ShingoEventsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShingoEventsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C24FF48B1D9195750061B3E2 /* ShingoEventsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShingoEventsTests.swift; sourceTree = "<group>"; };
 		C24FF48D1D9195750061B3E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C25613E61E7CB41000377D82 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		C25F4F7F1D95E9E8009A9830 /* EventTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTableViewCell.swift; sourceTree = "<group>"; };
 		C25F4F811D99C3F5009A9830 /* ScheduleTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleTableViewCell.swift; sourceTree = "<group>"; };
 		C262CA8C1C3B1C29005845AF /* EventsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsTableViewController.swift; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 		C224CDF71CB6C960003147F0 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				C25613E41E7CB40100377D82 /* core data */,
 				C24FF4721D918DE10061B3E2 /* helpers */,
 				C2F17F661C655DAA0028062C /* Bridging-Header.h */,
 				C2A695081C35AC2900F6E0B8 /* AppDelegate.swift */,
@@ -320,6 +323,14 @@
 				C29162631D9B09C70009C862 /* SpeakerTableViewCell.swift */,
 			);
 			name = speakers;
+			sourceTree = "<group>";
+		};
+		C25613E41E7CB40100377D82 /* core data */ = {
+			isa = PBXGroup;
+			children = (
+				C25613E51E7CB41000377D82 /* Model.xcdatamodeld */,
+			);
+			name = "core data";
 			sourceTree = "<group>";
 		};
 		C28EC33B1DAC50310012A8A8 /* attendees */ = {
@@ -574,6 +585,7 @@
 				C2986DC41C65136600ADCF40 /* ShingoModelViewController.swift in Sources */,
 				C28EC33D1DAC50480012A8A8 /* AttendeeTableViewCell.swift in Sources */,
 				C2E5896D1E6F56D2006F8544 /* SplashScreenView.swift in Sources */,
+				C25613E71E7CB41000377D82 /* Model.xcdatamodeld in Sources */,
 				C224CDFC1CB6CA42003147F0 /* RecipientTableViewCell.swift in Sources */,
 				C264CCB41C57ECA7005CDB11 /* RecipientsTableViewController.swift in Sources */,
 				C2CFC3041C4576D00036E485 /* SupportTableViewController.swift in Sources */,
@@ -835,6 +847,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		C25613E51E7CB41000377D82 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				C25613E61E7CB41000377D82 /* Model.xcdatamodel */,
+			);
+			currentVersion = C25613E61E7CB41000377D82 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = C22AB2861C2484E800A7F3B1 /* Project object */;
 }
