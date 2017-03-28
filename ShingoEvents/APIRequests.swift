@@ -70,7 +70,7 @@ class SIRequest {
         return Alamofire.request(url, parameters: parameters).responseJSON { response in
             
             guard response.result.isSuccess else {
-                print("Error while performing API POST request: \(response.result.error)")
+                print("Error while performing API POST request: \(response.result.error!)")
                 callback(nil)
                 return
             }
@@ -138,9 +138,6 @@ class SIRequest {
                     
                     events.append(event)
                 }
-//                print("+-\(self.marks("REQUEST EVENTS - END"))")
-//                print("| \("REQUEST EVENTS - END") |")
-//                print("+-\(self.marks("REQUEST EVENTS - END"))")
             }
             callback(events)
         }
@@ -228,6 +225,44 @@ class SIRequest {
                         
                     }
                     event.attendees = attendees
+                }
+                
+                if let ads = record["Sponsor_Ads__r"]["records"].array {
+                    for ad in ads {
+                        
+                        guard let adId = ad["Id"].string else {
+                            continue
+                        }
+                        
+                        guard let adName = ad["Name"].string else {
+                            continue
+                        }
+                        
+                        guard let adEventId = ad["Event__c"].string else {
+                            continue
+                        }
+                        
+                        guard let sponsorId = ad["Sponsor__c"].string else {
+                            continue
+                        }
+                        
+                        guard let imageUrl = ad["Image_URL__c"].string else {
+                            continue
+                        }
+                        
+                        guard let adType = ad["Ad_Type__c"].string else {
+                            continue
+                        }
+
+                        event.append(advertisement: SponsorAd(id: adId,
+                                                              name: adName,
+                                                              parentEventId: adEventId,
+                                                              parentSponsorId: sponsorId,
+                                                              imageURL: imageUrl,
+                                                              adType: SponsorAd.parseType(adType)))
+
+                        
+                    }
                 }
                 
             }

@@ -14,6 +14,22 @@
 		C22668081D9D620900E5F062 /* TestCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22668061D9D5D1500E5F062 /* TestCode.swift */; };
 		C226680B1D9D710800E5F062 /* AffiliateTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C22668091D9D707500E5F062 /* AffiliateTableViewCell.swift */; };
 		C234BD561C5293CF002E9814 /* SpeakerListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C234BD551C5293CF002E9814 /* SpeakerListTableViewController.swift */; };
+		C24267A11E81C4D4004F27C0 /* SISponsor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24267A01E81C4D4004F27C0 /* SISponsor.swift */; };
+		C24267A41E81C691004F27C0 /* SponsorAd.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24267A31E81C691004F27C0 /* SponsorAd.swift */; };
+		C24267A61E81C82C004F27C0 /* SIObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24267A51E81C82C004F27C0 /* SIObject.swift */; };
+		C24267A81E81C850004F27C0 /* SIAttendee.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24267A71E81C850004F27C0 /* SIAttendee.swift */; };
+		C24267AA1E81C879004F27C0 /* SIEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24267A91E81C879004F27C0 /* SIEvent.swift */; };
+		C24267AC1E81C898004F27C0 /* SIAgenda.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24267AB1E81C898004F27C0 /* SIAgenda.swift */; };
+		C24267AE1E81C8AD004F27C0 /* SISession.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24267AD1E81C8AD004F27C0 /* SISession.swift */; };
+		C24267B01E81C8BC004F27C0 /* SISpeaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24267AF1E81C8BC004F27C0 /* SISpeaker.swift */; };
+		C24267B21E81C8CC004F27C0 /* SIExhibitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24267B11E81C8CC004F27C0 /* SIExhibitor.swift */; };
+		C24267B41E81C8DF004F27C0 /* SIHotel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24267B31E81C8DF004F27C0 /* SIHotel.swift */; };
+		C24267B61E81C8EC004F27C0 /* SIRecipient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24267B51E81C8EC004F27C0 /* SIRecipient.swift */; };
+		C24267B81E81C8FC004F27C0 /* SIRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24267B71E81C8FC004F27C0 /* SIRoom.swift */; };
+		C24267BA1E81C918004F27C0 /* SIVenue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24267B91E81C918004F27C0 /* SIVenue.swift */; };
+		C24267BC1E81C92F004F27C0 /* SIVenueMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24267BB1E81C92F004F27C0 /* SIVenueMap.swift */; };
+		C24267BE1E81C943004F27C0 /* SIAffiliate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24267BD1E81C943004F27C0 /* SIAffiliate.swift */; };
+		C2492B331E89C1DA00D4AE58 /* BannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2492B321E89C1DA00D4AE58 /* BannerView.swift */; };
 		C2494E281C89FBFE00E2969D /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2494E271C89FBFE00E2969D /* Reachability.swift */; };
 		C24FF48C1D9195750061B3E2 /* ShingoEventsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24FF48B1D9195750061B3E2 /* ShingoEventsTests.swift */; };
 		C25F4F801D95E9E8009A9830 /* EventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25F4F7F1D95E9E8009A9830 /* EventTableViewCell.swift */; };
@@ -23,7 +39,6 @@
 		C267F9221D9DD02E00E524E9 /* SITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C267F9211D9DD02E00E524E9 /* SITableViewCell.swift */; };
 		C26DC9021C59785700BB4DDA /* ExhibitorTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C26DC9011C59785700BB4DDA /* ExhibitorTableViewController.swift */; };
 		C26DC9061C59841700BB4DDA /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C26DC9051C59841700BB4DDA /* MapViewController.swift */; };
-		C28B67E91C3F0BD700AC9193 /* AppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28B67E81C3F0BD700AC9193 /* AppData.swift */; };
 		C28B67F31C406BDE00AC9193 /* EventMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28B67F21C406BDE00AC9193 /* EventMenuViewController.swift */; };
 		C28EC33A1DAC4FEB0012A8A8 /* AttendessTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28EC3391DAC4FEB0012A8A8 /* AttendessTableViewController.swift */; };
 		C28EC33D1DAC50480012A8A8 /* AttendeeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C28EC33C1DAC50480012A8A8 /* AttendeeTableViewCell.swift */; };
@@ -72,6 +87,22 @@
 		C22668091D9D707500E5F062 /* AffiliateTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AffiliateTableViewCell.swift; sourceTree = "<group>"; };
 		C22AB28E1C2484E800A7F3B1 /* Shingo Events.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Shingo Events.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C234BD551C5293CF002E9814 /* SpeakerListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeakerListTableViewController.swift; sourceTree = "<group>"; };
+		C24267A01E81C4D4004F27C0 /* SISponsor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SISponsor.swift; sourceTree = "<group>"; };
+		C24267A31E81C691004F27C0 /* SponsorAd.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SponsorAd.swift; sourceTree = "<group>"; };
+		C24267A51E81C82C004F27C0 /* SIObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SIObject.swift; sourceTree = "<group>"; };
+		C24267A71E81C850004F27C0 /* SIAttendee.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SIAttendee.swift; sourceTree = "<group>"; };
+		C24267A91E81C879004F27C0 /* SIEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SIEvent.swift; sourceTree = "<group>"; };
+		C24267AB1E81C898004F27C0 /* SIAgenda.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SIAgenda.swift; sourceTree = "<group>"; };
+		C24267AD1E81C8AD004F27C0 /* SISession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SISession.swift; sourceTree = "<group>"; };
+		C24267AF1E81C8BC004F27C0 /* SISpeaker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SISpeaker.swift; sourceTree = "<group>"; };
+		C24267B11E81C8CC004F27C0 /* SIExhibitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SIExhibitor.swift; sourceTree = "<group>"; };
+		C24267B31E81C8DF004F27C0 /* SIHotel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SIHotel.swift; sourceTree = "<group>"; };
+		C24267B51E81C8EC004F27C0 /* SIRecipient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SIRecipient.swift; sourceTree = "<group>"; };
+		C24267B71E81C8FC004F27C0 /* SIRoom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SIRoom.swift; sourceTree = "<group>"; };
+		C24267B91E81C918004F27C0 /* SIVenue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SIVenue.swift; sourceTree = "<group>"; };
+		C24267BB1E81C92F004F27C0 /* SIVenueMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SIVenueMap.swift; sourceTree = "<group>"; };
+		C24267BD1E81C943004F27C0 /* SIAffiliate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SIAffiliate.swift; sourceTree = "<group>"; };
+		C2492B321E89C1DA00D4AE58 /* BannerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BannerView.swift; sourceTree = "<group>"; };
 		C2494E271C89FBFE00E2969D /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		C24FF47A1D91901E0061B3E2 /* ShingoEventsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShingoEventsTests.swift; sourceTree = "<group>"; };
 		C24FF47C1D91901E0061B3E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -85,7 +116,6 @@
 		C267F9211D9DD02E00E524E9 /* SITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SITableViewCell.swift; sourceTree = "<group>"; };
 		C26DC9011C59785700BB4DDA /* ExhibitorTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExhibitorTableViewController.swift; sourceTree = "<group>"; };
 		C26DC9051C59841700BB4DDA /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
-		C28B67E81C3F0BD700AC9193 /* AppData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppData.swift; sourceTree = "<group>"; };
 		C28B67F21C406BDE00AC9193 /* EventMenuViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventMenuViewController.swift; sourceTree = "<group>"; };
 		C28EC3391DAC4FEB0012A8A8 /* AttendessTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttendessTableViewController.swift; sourceTree = "<group>"; };
 		C28EC33C1DAC50480012A8A8 /* AttendeeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttendeeTableViewCell.swift; sourceTree = "<group>"; };
@@ -169,7 +199,7 @@
 				C2F17F661C655DAA0028062C /* Bridging-Header.h */,
 				C2A695081C35AC2900F6E0B8 /* AppDelegate.swift */,
 				C2E9508E1D22E8F100178C03 /* APIRequests.swift */,
-				C28B67E81C3F0BD700AC9193 /* AppData.swift */,
+				C24267A21E81C513004F27C0 /* classes */,
 				C24FF46E1D918D1A0061B3E2 /* view controllers */,
 			);
 			name = src;
@@ -223,6 +253,37 @@
 			path = ShingoEvents;
 			sourceTree = "<group>";
 		};
+		C24267A21E81C513004F27C0 /* classes */ = {
+			isa = PBXGroup;
+			children = (
+				C24267BD1E81C943004F27C0 /* SIAffiliate.swift */,
+				C24267BB1E81C92F004F27C0 /* SIVenueMap.swift */,
+				C24267B91E81C918004F27C0 /* SIVenue.swift */,
+				C24267B71E81C8FC004F27C0 /* SIRoom.swift */,
+				C24267B51E81C8EC004F27C0 /* SIRecipient.swift */,
+				C24267B31E81C8DF004F27C0 /* SIHotel.swift */,
+				C24267B11E81C8CC004F27C0 /* SIExhibitor.swift */,
+				C24267AF1E81C8BC004F27C0 /* SISpeaker.swift */,
+				C24267AD1E81C8AD004F27C0 /* SISession.swift */,
+				C24267A01E81C4D4004F27C0 /* SISponsor.swift */,
+				C24267A31E81C691004F27C0 /* SponsorAd.swift */,
+				C24267A51E81C82C004F27C0 /* SIObject.swift */,
+				C24267A71E81C850004F27C0 /* SIAttendee.swift */,
+				C24267A91E81C879004F27C0 /* SIEvent.swift */,
+				C24267AB1E81C898004F27C0 /* SIAgenda.swift */,
+			);
+			name = classes;
+			sourceTree = "<group>";
+		};
+		C2492B341E89C1F500D4AE58 /* sponsor ads */ = {
+			isa = PBXGroup;
+			children = (
+				C2E5896C1E6F56D2006F8544 /* SplashScreenView.swift */,
+				C2492B321E89C1DA00D4AE58 /* BannerView.swift */,
+			);
+			name = "sponsor ads";
+			sourceTree = "<group>";
+		};
 		C24FF46E1D918D1A0061B3E2 /* view controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -273,9 +334,9 @@
 		C24FF4721D918DE10061B3E2 /* helpers */ = {
 			isa = PBXGroup;
 			children = (
+				C2492B341E89C1F500D4AE58 /* sponsor ads */,
 				C2E9508C1D1C83F500178C03 /* SharedCode.swift */,
 				C2130BD71C987650009B3BB8 /* ActivityView.swift */,
-				C2E5896C1E6F56D2006F8544 /* SplashScreenView.swift */,
 				C2494E271C89FBFE00E2969D /* Reachability.swift */,
 				C267F9211D9DD02E00E524E9 /* SITableViewCell.swift */,
 				C2E589561E6F32A5006F8544 /* RadialGradientLayer.swift */,
@@ -562,33 +623,48 @@
 				C2B7EB421C7CD89900162AFB /* BugReportViewController.swift in Sources */,
 				C28B67F31C406BDE00AC9193 /* EventMenuViewController.swift in Sources */,
 				C2FF6B221CB2E43200331ED2 /* VenueMapCollectionCell.swift in Sources */,
+				C24267BA1E81C918004F27C0 /* SIVenue.swift in Sources */,
 				C29162641D9B09C70009C862 /* SpeakerTableViewCell.swift in Sources */,
+				C2492B331E89C1DA00D4AE58 /* BannerView.swift in Sources */,
+				C24267B21E81C8CC004F27C0 /* SIExhibitor.swift in Sources */,
 				C26DC9061C59841700BB4DDA /* MapViewController.swift in Sources */,
 				C2E9508F1D22E8F100178C03 /* APIRequests.swift in Sources */,
 				C262CA8D1C3B1C29005845AF /* EventsTableViewController.swift in Sources */,
 				C2494E281C89FBFE00E2969D /* Reachability.swift in Sources */,
-				C28B67E91C3F0BD700AC9193 /* AppData.swift in Sources */,
+				C24267B61E81C8EC004F27C0 /* SIRecipient.swift in Sources */,
 				C2CFC3101C481EAB0036E485 /* MainViewController.swift in Sources */,
 				C26DC9021C59785700BB4DDA /* ExhibitorTableViewController.swift in Sources */,
 				C2B155111D626BE00099330F /* ExhibitorTableViewCell.swift in Sources */,
+				C24267B01E81C8BC004F27C0 /* SISpeaker.swift in Sources */,
+				C24267A11E81C4D4004F27C0 /* SISponsor.swift in Sources */,
 				C2986DC41C65136600ADCF40 /* ShingoModelViewController.swift in Sources */,
 				C28EC33D1DAC50480012A8A8 /* AttendeeTableViewCell.swift in Sources */,
+				C24267BE1E81C943004F27C0 /* SIAffiliate.swift in Sources */,
 				C2E5896D1E6F56D2006F8544 /* SplashScreenView.swift in Sources */,
 				C224CDFC1CB6CA42003147F0 /* RecipientTableViewCell.swift in Sources */,
+				C24267BC1E81C92F004F27C0 /* SIVenueMap.swift in Sources */,
 				C264CCB41C57ECA7005CDB11 /* RecipientsTableViewController.swift in Sources */,
+				C24267AC1E81C898004F27C0 /* SIAgenda.swift in Sources */,
+				C24267A61E81C82C004F27C0 /* SIObject.swift in Sources */,
 				C2CFC3041C4576D00036E485 /* SupportTableViewController.swift in Sources */,
 				C2CFC3141C483C1C0036E485 /* SchedulesTableViewController.swift in Sources */,
 				C226680B1D9D710800E5F062 /* AffiliateTableViewCell.swift in Sources */,
+				C24267AA1E81C879004F27C0 /* SIEvent.swift in Sources */,
 				C2FF6B1E1CB2E2CF00331ED2 /* VenueMapsCollectionView.swift in Sources */,
+				C24267A41E81C691004F27C0 /* SponsorAd.swift in Sources */,
 				C22668081D9D620900E5F062 /* TestCode.swift in Sources */,
 				C234BD561C5293CF002E9814 /* SpeakerListTableViewController.swift in Sources */,
+				C24267AE1E81C8AD004F27C0 /* SISession.swift in Sources */,
 				C2B7EB401C7B813100162AFB /* ContactUsViewController.swift in Sources */,
+				C24267A81E81C850004F27C0 /* SIAttendee.swift in Sources */,
 				C25F4F801D95E9E8009A9830 /* EventTableViewCell.swift in Sources */,
+				C24267B81E81C8FC004F27C0 /* SIRoom.swift in Sources */,
 				C2FF6B261CB4313200331ED2 /* VenueMapViewController.swift in Sources */,
 				C267F9221D9DD02E00E524E9 /* SITableViewCell.swift in Sources */,
 				C2E589571E6F32A5006F8544 /* RadialGradientLayer.swift in Sources */,
 				C224C8981C92138700F4E393 /* AboutPageViewController.swift in Sources */,
 				C28EC33A1DAC4FEB0012A8A8 /* AttendessTableViewController.swift in Sources */,
+				C24267B41E81C8DF004F27C0 /* SIHotel.swift in Sources */,
 				C2130BD81C987650009B3BB8 /* ActivityView.swift in Sources */,
 				C2E0FF5B1DD3A23A005CDD7D /* SponsorTableViewCell.swift in Sources */,
 				C2A695111C35AC2900F6E0B8 /* AppDelegate.swift in Sources */,
