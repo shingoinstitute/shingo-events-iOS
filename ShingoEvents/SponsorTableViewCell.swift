@@ -32,8 +32,6 @@ class SponsorTableViewCell: SITableViewCell {
     
     var delegate: SICellDelegate?
     
-    
-    
     override func updateCell() {
         super.updateCell()
         guard let sponsor = sponsor else {
@@ -55,44 +53,42 @@ class SponsorTableViewCell: SITableViewCell {
         
         nameLabel.text = sponsor.name
         
-        setLogoImage(sponsor: sponsor)
+        if logoImageView == nil {
+            logoImageView = UIImageView()
+        }
+        
+        if self.logoImageView.image == nil {
+            setLogoImage(sponsor: sponsor)
+        }
+        
     
         
     }
     
-//    override func expandCell() {
-//        if !entityTextView.isHidden {
-//            let summary = NSMutableAttributedString(attributedString: entity.attributedSummary)
-//            summary.append(tapToSeeLessText)
-//            entityTextView.attributedText = summary
-//        }
-//    }
-//    
-//    override func shrinkCell() {
-//        if !entityTextView.isHidden {
-//            entityTextView.attributedText = selectMoreInfoText
-//        }
-//    }
+    override func expandCell() {
+        if !entityTextView.isHidden {
+            let summary = NSMutableAttributedString(attributedString: entity.attributedSummary)
+            summary.append(tapToSeeLessText)
+            entityTextView.attributedText = summary
+        }
+    }
+    
+    override func shrinkCell() {
+        if !entityTextView.isHidden {
+            entityTextView.attributedText = selectMoreInfoText
+        }
+    }
     
     func setLogoImage(sponsor: SISponsor) {
+        
         sponsor.getLogoImage() { image in
             
-            if image.size.width > self.contentView.frame.width {
-                let imageView = UIImageView()
-                imageView.image = image
-                imageView.resizeImageViewToIntrinsicContentSize(thatFitsWidth: self.contentView.frame.width)
-                if let image = imageView.image {
-                    self.logoImageView.image = image
-                }
-                if let delegate = self.delegate {
-                    delegate.cellDidUpdate()
-                }
-            } else {
-                self.logoImageView.image = image
-                if let delegate = self.delegate {
-                    delegate.cellDidUpdate()
-                }
+            self.logoImageView.image = image.af_imageScaled(to: CGSize(width: self.contentView.frame.width, height: (image.size.height * self.contentView.frame.width) / image.size.width))
+            
+            if let delegate = self.delegate {
+                delegate.cellDidUpdate()
             }
+
         }
     }
     

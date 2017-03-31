@@ -18,77 +18,41 @@ class EventMenuViewController: UIViewController {
     
     var activityVC: ActivityViewController = ActivityViewController()
     
-    @IBOutlet weak var contentView: UIView!
-    @IBOutlet weak var eventNameLabel: UILabel!
-    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var speakerButton: UIButton! {
+        didSet {
+            let size = CGSize(width: 33, height: 33)
+            let speakerButtonImage = #imageLiteral(resourceName: "Speakers-Button").af_imageScaled(to: size)
+            speakerButton.imageView?.image = speakerButtonImage
+            speakerButton.imageView?.resizeImageViewToIntrinsicContentSize(thatFitsWidth: 33)
+        }
+    }
+    @IBOutlet weak var scheduleButton: UIButton!
+    @IBOutlet weak var attendeesButton: UIButton!
+    @IBOutlet weak var exhibitorsButton: UIButton!
+    @IBOutlet weak var recipientsButton: UIButton!
+    @IBOutlet weak var directionsButton: UIButton!
+    @IBOutlet weak var sponsorsButton: UIButton!
+    @IBOutlet weak var venuePhotosButton: UIButton!
     
-    let speakerButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "Speakers-Button"), for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
+    @IBOutlet weak var backgroundImage: UIImageView!
+    @IBOutlet weak var eventHeaderImageView: UIImageView! {
+        didSet {
+            eventHeaderImageView.contentMode = .scaleAspectFill
+            eventHeaderImageView.backgroundColor = .clear
+            eventHeaderImageView.clipsToBounds = true
+        }
+    }
 
-    let scheduleButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "Schedules-Button"), for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-
-    let attendeesButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "Attendees-Button"), for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    let exhibitorsButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "Exhibitors-Button"), for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    let recipientsButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "Recipients-Button"), for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    let directionsButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "Directions-Button"), for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    let sponsorsButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "Sponsors-Button"), for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    let venuePhotosButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "Venue-Pictures-Button"), for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
+    @IBOutlet weak var bannerViewWidthConstraint: NSLayoutConstraint!
+    @IBOutlet weak var bannerViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var bannerView: BannerView! {
+        didSet {
+            bannerView.backgroundColor = .clear
+            bannerView.bannerAds = event.getBannerAds()
+        }
+    }
     
-    var backgroundImage: UIImageView = {
-        let view = UIImageView.newAutoLayout()
-        view.image = UIImage(named: "Shingo Icon Large")
-        view.contentMode = .scaleAspectFill
-        view.clipsToBounds = true
-        return view
-    }()
-    var eventHeaderImageView: UIImageView = {
-        let view = UIImageView.newAutoLayout()
-        view.contentMode = .scaleAspectFill
-        view.backgroundColor = .clear
-        view.clipsToBounds = true
-        return view
-    }()
-    
-    lazy var buttonViews: [UIView] = [
+    lazy var buttons: [UIButton] = [
         self.scheduleButton,
         self.venuePhotosButton,
         self.recipientsButton,
@@ -98,9 +62,6 @@ class EventMenuViewController: UIViewController {
         self.attendeesButton,
         self.sponsorsButton
     ]
-    
-    let BUTTON_WIDTH: CGFloat = 100.0
-    let BUTTON_HEIGHT: CGFloat = 100.0
     
     var didSetupConstraints = false
     
@@ -168,39 +129,31 @@ class EventMenuViewController: UIViewController {
                     event.didLoadAttendees = true
                 }
             }
-            
         }
-        
-        
-        // Setup views
-        contentView.backgroundColor = .clear
-        
-        eventNameLabel.text = event.name
-        eventNameLabel.backgroundColor = UIColor.shingoBlue.withAlphaComponent(0.5)
-        eventNameLabel.textColor = UIColor.white
-        
-        contentView.addSubviews([backgroundImage, eventNameLabel, eventHeaderImageView])
-        contentView.addSubviews(buttonViews)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if event.didLoadImage {
-            navigationItem.title = self.event.name
-        } else {
-            navigationItem.title = ""
-        }
+        navigationItem.title = self.event.name
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        event.getBannerImage() { image in
-            if let image = image {
-                self.eventHeaderImageView.image = image
-                self.navigationItem.title = self.event.name
-            } else {
-                self.navigationItem.title = ""
+        
+        view.backgroundColor = .white
+        
+        bannerView.start()
+        
+        if let bannerImage = event.image {
+            eventHeaderImageView.image = bannerImage
+        } else {
+            event.getBannerImage() { image in
+                if let image = image {
+                    self.eventHeaderImageView.image = image
+                    self.navigationItem.title = self.event.name
+                } else {
+                    self.navigationItem.title = ""
+                }
             }
         }
 
@@ -214,118 +167,11 @@ class EventMenuViewController: UIViewController {
         attendeesButton.addTarget(self, action: #selector(EventMenuViewController.didTapAttendess(_:)), for: UIControlEvents.touchUpInside)
         sponsorsButton.addTarget(self, action: #selector(EventMenuViewController.didTapSponsors(_:)), for: UIControlEvents.touchUpInside)
         
-        for button in buttonViews {
-            button.contentMode = .scaleAspectFit
-            button.layer.cornerRadius = 5
-            
-            let rect: CGRect = CGRect(x: 0, y: 0, width: BUTTON_WIDTH + 3, height: BUTTON_HEIGHT + 3);
-            button.layer.shadowPath = CGPath(roundedRect: rect, cornerWidth: 10, cornerHeight: 10, transform: nil);
-            button.layer.shadowColor = UIColor.black.cgColor;
-            button.layer.shadowOffset = CGSize(width: 0, height: 0);
-            button.layer.shadowRadius = 5;
-            button.layer.shadowOpacity = 0.25;
+        for button in buttons {
+            button.backgroundColor = UIColor.black.withAlphaComponent(0.7)
+            button.imageView?.contentMode = .scaleAspectFit
+            button.clipsToBounds = true
         }
-        
-        updateViewConstraints()
-    }
-    
-    override func updateViewConstraints() {
-        if !didSetupConstraints {
-            
-            // set dimensions of buttons
-            for button in buttonViews {
-                button.autoSetDimension(.height, toSize: BUTTON_WIDTH)
-                button.autoSetDimension(.width, toSize: BUTTON_HEIGHT)
-                
-            }
-            
-            // calculate button spacing from edge
-            let edgeSpacing = (view.frame.width * (1/4)) - (BUTTON_WIDTH / 2) + 10
-            let verticalButtonSpacing: CGFloat = -10
-            
-            
-            /*
-             
-             Constraints were added programmatically to this view because auto layout
-             simply wasn't cutting it when trying to design this on the storyboard.
-             
-             Buttons appear on menu in 2 columns with 4 rows per column.
-             The number inside the diagram presented below indicating the order the
-             constraints are added.
-             
-                #----------# #----------#
-                |          | |          |
-                | Schedule | | Speakers |
-                |    7     | |    8     |
-                #----------# #----------#
-
-                #----------# #----------#
-                |          | |          |
-                |Attendees | |Recipients|
-                |    5     | |    6     |
-                #----------# #----------#
-
-                #----------# #----------#
-                |          | |          |
-                |Exhibitors| | Sponsors |
-                |    3     | |    4     |
-                #----------# #----------#
-             
-                #----------# #----------#
-                |          | |          |
-                |Venue Pics| |Directions|
-                |     1    | |    2     |
-                #----------# #----------#
-
-             Constrains are added from bottom up so that by the event banner image knows 
-             how much vertical space it can take up. The event banner image is added 
-             last because it is the least important element.
-             
-             */
-            
-            // Constraints added up from bottom left to top right
-            venuePhotosButton.autoPinEdge(.bottom, to: .bottom, of: contentView, withOffset: verticalButtonSpacing)
-            venuePhotosButton.autoPinEdge(.left, to: .left, of: contentView, withOffset: edgeSpacing)
-            
-            directionsButton.autoPinEdge(.bottom, to: .bottom, of: contentView, withOffset: verticalButtonSpacing)
-            directionsButton.autoPinEdge(.right, to: .right, of: contentView, withOffset: -edgeSpacing)
-            
-            exhibitorsButton.autoPinEdge(.bottom, to: .top, of: venuePhotosButton, withOffset: verticalButtonSpacing)
-            exhibitorsButton.autoPinEdge(.left, to: .left, of: contentView, withOffset: edgeSpacing)
-            
-            sponsorsButton.autoPinEdge(.bottom, to: .top, of: directionsButton, withOffset: verticalButtonSpacing)
-            sponsorsButton.autoPinEdge(.right, to: .right, of: contentView, withOffset: -edgeSpacing)
-            
-            attendeesButton.autoPinEdge(.bottom, to: .top, of: exhibitorsButton, withOffset: verticalButtonSpacing)
-            attendeesButton.autoPinEdge(.left, to: .left, of: contentView, withOffset: edgeSpacing)
-            
-            recipientsButton.autoPinEdge(.bottom, to: .top, of: sponsorsButton, withOffset: verticalButtonSpacing)
-            recipientsButton.autoPinEdge(.right, to: .right, of: contentView, withOffset: -edgeSpacing)
-            
-            scheduleButton.autoPinEdge(.bottom, to: .top, of: attendeesButton, withOffset: verticalButtonSpacing)
-            scheduleButton.autoPinEdge(.left, to: .left, of: contentView, withOffset: edgeSpacing)
-            
-            speakerButton.autoPinEdge(.bottom, to: .top, of: recipientsButton, withOffset: verticalButtonSpacing)
-            speakerButton.autoPinEdge(.right, to: .right, of: contentView, withOffset: -edgeSpacing)
-            
-            //Note: eventNameLabel's top, left, and right constraints are set in Main.storyboard
-            eventNameLabel.autoPinEdge(.bottom, to: .top, of: scheduleButton, withOffset: -12)
-            
-            // Constraints for event banner image (same as eventNameLabel.constraints)
-            eventHeaderImageView.autoPinEdge(.top, to: .top, of: eventNameLabel)
-            eventHeaderImageView.autoPinEdge(.left, to: .left, of: eventNameLabel)
-            eventHeaderImageView.autoPinEdge(.right, to: .right, of: eventNameLabel)
-            eventHeaderImageView.autoPinEdge(.bottom, to: .bottom, of: eventNameLabel)
-            
-            // constraints for backgroundImage
-            backgroundImage.autoPinEdge(.top, to: .bottom, of: eventNameLabel)
-            backgroundImage.autoPinEdge(.left, to: .left, of: view)
-            backgroundImage.autoPinEdge(.right, to: .right, of: view)
-            backgroundImage.autoPinEdge(.bottom, to: .bottom, of: view)
-            
-            didSetupConstraints = true
-        }
-        super.updateViewConstraints()
     }
     
     func displayBadRequestNotification() {
@@ -336,7 +182,6 @@ class EventMenuViewController: UIViewController {
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
     }
-    
     
 }
 

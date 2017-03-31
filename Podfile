@@ -8,6 +8,7 @@ target 'Shingo Events' do
         pod 'Fabric'
         pod 'Crashlytics'
         pod 'PureLayout'
+        pod 'ReachabilitySwift', '~> 3.0'
         pod 'SwiftyJSON', git: 'https://github.com/BaiduHiDeviOS/SwiftyJSON.git', branch: 'swift3'
 	pod 'DropDown', git: 'https://github.com/AssistoLab/DropDown.git', branch: 'master'
 end

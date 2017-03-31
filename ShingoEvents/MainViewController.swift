@@ -10,6 +10,7 @@ import UIKit
 import Crashlytics
 import Fabric
 import Alamofire
+import ReachabilitySwift
 
 class MainMenuViewController: UIViewController {
     
@@ -51,6 +52,14 @@ class MainMenuViewController: UIViewController {
         
         activityView = ActivityViewController(message: "Loading Upcoming Conferences...")
         
+        let workItem = DispatchWorkItem(qos: .background, flags: .assignCurrentContext) { 
+            self.requestEvents()
+            self.requestAffiliates()
+        }
+        
+        let queue = DispatchQueue.global(qos: .background)
+        queue.async(execute: workItem)
+        
         DispatchQueue.global(qos: .background).async { [unowned self] in
             self.requestEvents()
             self.requestAffiliates()
@@ -86,7 +95,7 @@ class MainMenuViewController: UIViewController {
         navigationController?.isNavigationBarHidden = false
     }
     
-    private func requestEvents() {
+    func requestEvents() {
         SIRequest().requestEvents({ events in
             if let events = events {
                 self.events = events
@@ -95,14 +104,14 @@ class MainMenuViewController: UIViewController {
         })
     }
     
-    private func requestAffiliates() {
+    func requestAffiliates() {
         SIRequest.requestAffiliates { (affiliates) in
             if let affiliates = affiliates {
                 self.affiliates = affiliates
             }
         }
     }
-    
+
 }
 
 extension MainMenuViewController {
@@ -111,54 +120,32 @@ extension MainMenuViewController {
     
     @IBAction func didTapEvents(_ sender: AnyObject) {
         
-//        let ssView = SplashScreenView(splashScreenImage: UIImage(named: "FlameOnly-100")!)
-//        ssView.presentSplashScreen(parentViewController: self) {
-//            if self.eventsDidLoad {
-//                ssView.dismissSplashScreen(parentViewController: self, completion: {
-//                    self.performSegue(withIdentifier: "EventsView", sender: self.events)
-//                })
-//            } else {
-//                if Reachability()!.isReachable {
-//                    self.request = SIRequest().requestEvents({ (events) in
-//                        ssView.dismissSplashScreen(parentViewController: self, completion: {
-//                            if let events = events {
-//                                self.events = events
-//                                self.eventsDidLoad = true
-//                                self.performSegue(withIdentifier: "EventsView", sender: self.events)
-//                            } else {
-//                                self.displayServerError()
-//                            }
-//                        });
-//                    });
-//                }
-//            }
-//        }
-        if Reachability()!.isReachable {
-            if eventsDidLoad {
-                performSegue(withIdentifier: "EventsView", sender: self.events)
-            } else {
-                
-                present(activityView, animated: true, completion: {
-                    
-                    DispatchQueue.global(qos: .utility).async {
-                        self.request = SIRequest().requestEvents({ events in
-                            self.dismiss(animated: true, completion: {
-                                if let events = events {
-                                    self.events = events
-                                    self.eventsDidLoad = true
-                                    self.performSegue(withIdentifier: "EventsView", sender: self.events)
-                                } else {
-                                    self.displayServerError()
-                                }
-                            })
-                        })
-                    }
-                })
-            }
-        } else {
-            SIRequest.displayInternetAlert(forViewController: self, completion: nil)
+        let reachability = Reachability()!
+        
+        if !reachability.isReachable {
+            return SIRequest.displayInternetAlert(forViewController: self, completion: nil)
         }
         
+        switch eventsDidLoad {
+        case true:
+            performSegue(withIdentifier: "EventsView", sender: self.events)
+        case false:
+            present(activityView, animated: true, completion: {
+                DispatchQueue.global(qos: .utility).async {
+                    self.request = SIRequest().requestEvents({ events in
+                        self.dismiss(animated: true, completion: {
+                            if let events = events {
+                                self.events = events
+                                self.eventsDidLoad = true
+                                self.performSegue(withIdentifier: "EventsView", sender: self.events)
+                            } else {
+                                self.displayServerError()
+                            }
+                        })
+                    })
+                }
+            })
+        }
     }
     
     @IBAction func didTapAffiliates(_ sender: AnyObject) {

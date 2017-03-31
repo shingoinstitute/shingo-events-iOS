@@ -351,6 +351,18 @@ extension UIImageView {
         UIGraphicsEndImageContext()
     }
     
+    func resizeIntrinsicContentSize(thatFitsHeight height: CGFloat) {
+        guard let image = self.image else {
+            return
+        }
+        
+        let size = CGSize(width: (height * image.size.width) / image.size.height, height: height)
+        UIGraphicsBeginImageContextWithOptions(size, self.isOpaque, 0.0)
+        self.image?.draw(in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+        self.image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+    }
+    
 }
 
 extension UIImage {
