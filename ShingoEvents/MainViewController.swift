@@ -60,10 +60,10 @@ class MainMenuViewController: UIViewController {
         let queue = DispatchQueue.global(qos: .background)
         queue.async(execute: workItem)
         
-//        DispatchQueue.global(qos: .background).async { [unowned self] in
-//            self.requestEvents()
-//            self.requestAffiliates()
-//        }
+        DispatchQueue.global(qos: .background).async { [unowned self] in
+            self.requestEvents()
+            self.requestAffiliates()
+        }
         
         navigationItem.title = ""
         

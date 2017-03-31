@@ -9,12 +9,8 @@
 import Foundation
 import UIKit
 
-protocol BannerViewDelegate {
-    func onBannerPresentationComplete()
-}
-
 class BannerView: UIView {
-    // default presentation length of banner ads is 5 seconds
+    // default presentation length of banner ads is 4 seconds
     static let defaultPresentationLength = TimeInterval(exactly: 10.0)
     
     var rotateTimer: Timer!
@@ -22,19 +18,18 @@ class BannerView: UIView {
     var didUpdateConstraints = false
     
     var bannerAds: [SponsorAd]!
-    var bannerImageView: UIImageView! {
+    
+    var banner: UIImageView! {
         didSet {
-            bannerImageView.contentMode = .scaleAspectFit
+            banner.contentMode = .scaleAspectFit
+            banner.backgroundColor = .clear
         }
     }
     
-    func start(banners: [SponsorAd]) {
+    func start() {
         updateConstraints()
-        
-        bannerAds = banners
-        
         if #available(iOS 10.0, *) {
-            rotateTimer = Timer.scheduledTimer(withTimeInterval: BannerView.defaultPresentationLength!, repeats: true, block: { (timer) in
+            rotateTimer = Timer.scheduledTimer(withTimeInterval: BannerView.defaultPresentationLength!, repeats: true, block: { (_) in
                 self.changeBanner()
             })
         } else {
@@ -49,26 +44,32 @@ class BannerView: UIView {
     
     override func updateConstraints() {
         if !didUpdateConstraints {
-            bannerImageView = UIImageView()
-            self.addSubview(bannerImageView)
-            bannerImageView.autoPinEdgesToSuperviewEdges()
+            banner = UIImageView()
+            addSubview(banner)
+            banner.autoPinEdgesToSuperviewEdges()
             didUpdateConstraints = true
         }
         super.updateConstraints()
     }
     
     func changeBanner() {
-        if !bannerAds.isEmpty {
-            let ad = bannerAds.removeFirst()
-            bannerAds.append(ad)
-            bannerImageView.image = ad.image
+        guard let nextBannerImage = getNextBanner() else {
+            rotateTimer.invalidate()
+            return
         }
+        
+        banner.image = nextBannerImage
     }
     
-    deinit {
-        if rotateTimer != nil {
-            rotateTimer.invalidate()
+    private func getNextBanner() -> UIImage? {
+        if bannerAds.isEmpty {
+            return nil
         }
+        bannerAds.append(bannerAds.removeFirst())
+        if let last = bannerAds.last {
+            return last.image
+        }
+        return nil
     }
     
     

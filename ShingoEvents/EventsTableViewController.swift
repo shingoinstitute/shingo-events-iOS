@@ -85,7 +85,6 @@ extension EventsTableViewController: SICellDelegate, SplashScreenViewDelegate {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
         let cell = tableView.cellForRow(at: indexPath) as! EventTableViewCell
         cell.contentView.backgroundColor = .white
         
@@ -101,17 +100,14 @@ extension EventsTableViewController: SICellDelegate, SplashScreenViewDelegate {
         }
         
         let splashScreen = SplashScreenView(viewController: self, identifier: identifier, event: event)
-        event.didDisplaySponsorAd = true
-        if event.didLoadEventData && event.didDisplaySponsorAd {
-            super.performSegue(withIdentifier: identifier, sender: event)
-        } else if event.didLoadEventData {
+
+        if event.didLoadEventData {
             present(splashScreen, animated: true) {
                 self.onPresentSplashScreenComplete(identifier: identifier, event: event)
             }
         } else {
             present(splashScreen, animated: true) {
                 event.requestEvent() {
-                    print("STOP Request Event")
                     if !event.didLoadEventData {
                         self.displayBadRequestNotification()
                     }
@@ -122,7 +118,7 @@ extension EventsTableViewController: SICellDelegate, SplashScreenViewDelegate {
     }
     
     /**
-     This function allows the view to dismiss a `SplashScreenView` and perform a segue at the correct time.
+     onPresentSplashScreenComplete allows the view to dismiss a `SplashScreenView` and perform a segue at the correct time.
      The view will dismiss a `SplashScreenView` and let the view controller perform a segue when:
      
      a) An event has already loaded its data, but still needs to display a sponsor ad, or

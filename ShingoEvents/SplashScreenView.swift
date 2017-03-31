@@ -15,7 +15,7 @@ protocol SplashScreenViewDelegate {
 
 class SplashScreenView: UIViewController {
     
-    static let defaultPresentationLength: TimeInterval = TimeInterval(exactly: 3.0)!
+    static let defaultPresentationLength = TimeInterval(exactly: 2.0)
     
     var presentedAt: Date?
     
@@ -90,11 +90,11 @@ class SplashScreenView: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if #available(iOS 10.0, *) {
-            Timer.scheduledTimer(withTimeInterval: SplashScreenView.defaultPresentationLength, repeats: true) { (_) in
+            Timer.scheduledTimer(withTimeInterval: SplashScreenView.defaultPresentationLength!, repeats: false) { (_) in
                 self.onMinPresentationTimerComplete()
             }
         } else {
-            Timer.scheduledTimer(timeInterval: SplashScreenView.defaultPresentationLength,
+            Timer.scheduledTimer(timeInterval: SplashScreenView.defaultPresentationLength!,
                                  target: self,
                                  selector: #selector(self.onMinPresentationTimerComplete),
                                  userInfo: nil,
