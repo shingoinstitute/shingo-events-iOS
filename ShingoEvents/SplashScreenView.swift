@@ -89,18 +89,9 @@ class SplashScreenView: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if #available(iOS 10.0, *) {
-            Timer.scheduledTimer(withTimeInterval: SplashScreenView.defaultPresentationLength!, repeats: false) { (_) in
-                self.onMinPresentationTimerComplete()
-            }
-        } else {
-            Timer.scheduledTimer(timeInterval: SplashScreenView.defaultPresentationLength!,
-                                 target: self,
-                                 selector: #selector(self.onMinPresentationTimerComplete),
-                                 userInfo: nil,
-                                 repeats: false)
+        Timer.scheduledTimer(withTimeInterval: SplashScreenView.defaultPresentationLength!, repeats: false) { (_) in
+            self.onMinPresentationTimerComplete()
         }
-        
     }
     
     override func updateViewConstraints() {

@@ -28,17 +28,9 @@ class BannerView: UIView {
     
     func start() {
         updateConstraints()
-        if #available(iOS 10.0, *) {
-            rotateTimer = Timer.scheduledTimer(withTimeInterval: BannerView.defaultPresentationLength!, repeats: true, block: { (_) in
-                self.changeBanner()
-            })
-        } else {
-            rotateTimer = Timer.scheduledTimer(timeInterval: BannerView.defaultPresentationLength!,
-                                               target: self,
-                                               selector: #selector(self.changeBanner),
-                                               userInfo: nil,
-                                               repeats: true)
-        }
+        rotateTimer = Timer.scheduledTimer(withTimeInterval: BannerView.defaultPresentationLength!, repeats: true, block: { (_) in
+            self.changeBanner()
+        })
         rotateTimer.fire()
     }
     
