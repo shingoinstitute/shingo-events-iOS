@@ -233,7 +233,6 @@ extension EventMenuViewController {
         }
     }
     
-    //TODO: Create screen on segue that shows more than the first potentially available venue
     func didTapDirections(_ sender: AnyObject) {
         if event.didLoadVenues {
             if let venue = self.event.venues.first {
@@ -492,10 +491,9 @@ extension EventMenuViewController {
     /**
      This method parses a string and returns a character that can be used as a header in an alphabetically sorted list.
      
-     - parameters:
-        - name: A name, title, etc. that belongs to an item in a list that should be sorted alphabetically.
+     - parameter name: A name, title, etc. that belongs to an item in a list that should be sorted alphabetically.
      
-     - returns: String (always a single character)
+     - returns: A single `Character` as a `String`
      */
     func getCharacterForSection(name: String) -> String? {
         
