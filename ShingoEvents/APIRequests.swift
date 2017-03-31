@@ -25,25 +25,19 @@ class SIRequest {
     
     /// HTTP GET request method.
     func getRequest(url: String, description: String, callback: @escaping (JSON?) -> ()) -> Alamofire.Request? {
-        return Alamofire.request(url).responseJSON(queue: DispatchQueue.global(qos: .utility), options: .allowFragments) { (response) in
-            print("+-\(self.marks(description))")
-            print("| \(description) |")
-            print("+-\(self.marks(description))")
+        return Alamofire.request(url).responseJSON(queue: DispatchQueue.global(qos: .utility), options: JSONSerialization.ReadingOptions.mutableLeaves) { (response) in
+            print("\n**** \(description) ****")
             
             guard response.result.isSuccess else {
                 print("Error while performing API GET request: \(response.result.error!)")
-                print("+-\(self.marks(description + " - END"))")
-                print("| \(description + " - END") |")
-                print("+-\(self.marks(description + " - END"))")
+                print("\n**** \(description) - END ****\n")
                 return callback(nil)
                 
             }
             
             guard let response = response.result.value else {
-                print("Error while performing API GET request: Invalid response")
-                print("+-\(self.marks(description + " - END"))")
-                print("| \(description + " - END") |")
-                print("+-\(self.marks(description + " - END"))")
+                print("\nError while performing API GET request: Invalid response\n")
+                print("\n**** \(description) - END ****\n")
                 return callback(nil)
             }
             
@@ -51,9 +45,7 @@ class SIRequest {
             
             print(responseJSON)
             
-            print("+-\(self.marks(description + " - END"))")
-            print("| \(description + " - END") |")
-            print("+-\(self.marks(description + " - END"))")
+            print("\n**** \(description) - END ****\n")
             
             if let success = responseJSON["success"].bool {
                 if !success {
@@ -83,10 +75,8 @@ class SIRequest {
             
             print(JSON(response))
             
-            print("+-\(self.marks(description + " - END"))")
-            print("| \(description + " - END") |")
-            print("+-\(self.marks(description + " - END"))")
-            
+            print("\n**** \(description) - END ****\n")
+
             callback(JSON(response))
         }
     }
@@ -1232,7 +1222,7 @@ class SIRequest {
             if json["sponsor"] != nil {
                 
                 let record = json["sponsor"]
-                print(record)
+
                 if let id = record["Id"].string {
                     sponsor.id = id
                 }
@@ -1641,15 +1631,6 @@ class SIRequest {
         alert.addAction(action)
         
         vc.present(alert, animated: true, completion: nil)
-    }
-    
-    func marks(_ string: String) -> String {
-        let count = string.characters.count
-        var marks = ""
-        for _ in 0 ..< count + 1 {
-            marks += "-"
-        }
-        return "\(marks)+"
     }
     
     static func parseHTMLStringUsingPreferredFont(string: String) -> NSAttributedString? {

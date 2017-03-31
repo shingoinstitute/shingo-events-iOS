@@ -39,47 +39,44 @@ class MainMenuViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let gradColors:[CGFloat] = [
+        activityView = ActivityViewController(message: "Loading Upcoming Conferences...")
+        
+        // begin API calls to fetch conference and affiliate data
+        let workItem = DispatchWorkItem(qos: .background, flags: .assignCurrentContext) {
+            self.requestEvents()
+            self.requestAffiliates()
+        }
+        let queue = DispatchQueue.global(qos: .background)
+        queue.async(execute: workItem)
+        
+        // Create background view gradient
+        let gradientColors:[CGFloat] = [
             0, 0, 0, 0,
             0, 0, 0, 0.116666,
             0, 0, 0, 0.233333,
             0, 0, 0, 0.35
         ]
         let colorLocations:[CGFloat] = [0, 0.75, 0.85, 1.0]
-        let gradient = RadialGradientLayer(gradientColors: gradColors, gradientLocations: colorLocations)
+        let gradient = RadialGradientLayer(gradientColors: gradientColors, gradientLocations: colorLocations)
         gradient.frame = view.bounds
         view.layer.insertSublayer(gradient, at: 0)
         
-        activityView = ActivityViewController(message: "Loading Upcoming Conferences...")
-        
-        let workItem = DispatchWorkItem(qos: .background, flags: .assignCurrentContext) { 
-            self.requestEvents()
-            self.requestAffiliates()
-        }
-        
-        let queue = DispatchQueue.global(qos: .background)
-        queue.async(execute: workItem)
-        
-        DispatchQueue.global(qos: .background).async { [unowned self] in
-            self.requestEvents()
-            self.requestAffiliates()
-        }
-        
+        // Navigation title set to empty string (don't need it)
         navigationItem.title = ""
         
+        // Set nav color scheme to black and yellow
         if let nav = navigationController?.navigationBar {
             nav.barStyle = UIBarStyle.black
             nav.tintColor = UIColor.yellow
         }
         
+        // Set text and image insets to add padding for menu buttons
         for button in self.buttons {
             button.imageEdgeInsets = UIEdgeInsets(top: 0, left: -25, bottom: 0, right: -25)
             button.titleEdgeInsets = UIEdgeInsets(top: 0, left: -46, bottom: 0, right: 0)
             button.backgroundColor = UIColor.black.withAlphaComponent(0.8)
             button.imageView?.contentMode = .scaleAspectFit
         }
-        
-        
         
     }
     
@@ -118,10 +115,14 @@ extension MainMenuViewController {
     
     // MARK: - Button Listeners
     
+    /**
+     didTapEvents is responsible for ensuring event data has been retrieved from the API
+     before allowing the screen to segue to the Event menu table view.
+    */
     @IBAction func didTapEvents(_ sender: AnyObject) {
         
+        // Checks for internet connectivity, alerts user if no internet is detected (since it's 100% necessary to make the application work)
         let reachability = Reachability()!
-        
         if !reachability.isReachable {
             return SIRequest.displayInternetAlert(forViewController: self, completion: nil)
         }
@@ -148,6 +149,10 @@ extension MainMenuViewController {
         }
     }
     
+    /**
+     didTapAffiliates ensures affiliate data has been retrieved before segueing to 
+     the affiliate table view.
+     */
     @IBAction func didTapAffiliates(_ sender: AnyObject) {
         if let affiliates = self.affiliates {
             performSegue(withIdentifier: "AffiliatesView", sender: affiliates)
@@ -243,6 +248,17 @@ extension MainMenuViewController: UnwindToMainVCProtocol {
         
     }
     
+    /**
+     getCharacterForSection determines which letter/character should be used for a given `name`
+     (where `name` is typically an organization title) in an alphabetically sorted table view.
+     This helps to ensure that company names that start with "the" get sorted with the "T's" and
+     names that start with a number get sorted under the "#" section (for example, a company named
+     "9 Ball Inc" would get sorted under "#" instead of under "9").
+     
+     - parameter name: The name or title, typically of a company or organization
+     
+     - returns: A single `Character` as a `String`
+    */
     func getCharacterForSection(name: String) -> String? {
         
         if let nameArray = name.split(" ") {
@@ -260,8 +276,10 @@ extension MainMenuViewController: UnwindToMainVCProtocol {
         return nil
     }
     
-    // Protocal for passing data back from the Support
-    // page when the 'reload data' button is pressed
+    /**
+    updateEvents is used as a protocal for passing data back from
+     `SupportTableViewController` when the "reload data" button is pressed
+    */
     func updateEvents(_ events: [SIEvent]?) {
         if let events = events {
             self.events = events
