@@ -18,13 +18,13 @@ class SIAgenda: SIObject {
     
     // agenda specific properties
     var displayName : String
-    var date : Date
+    var date : SIDate
     
     override init() {
         didLoadSessions = false
         sessions = [SISession]()
         displayName = ""
-        date = Date.notionallyEmptyDate()
+        date = SIDate()
         super.init()
     }
     

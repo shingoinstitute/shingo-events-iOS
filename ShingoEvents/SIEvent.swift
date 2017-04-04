@@ -38,8 +38,8 @@ class SIEvent: SIObject {
     private var recycledSplashAds: [SponsorAd]
     
     // Event specific properties
-    var startDate: Date
-    var endDate: Date
+    var startDate: SIDate
+    var endDate: SIDate
     var eventType: String
     var salesText: String
     var bannerURL: String {
@@ -72,8 +72,8 @@ class SIEvent: SIObject {
         sponsorSplashAds = []
         recycledBannerAds = []
         recycledSplashAds = []
-        startDate = Date.notionallyEmptyDate()
-        endDate = Date.notionallyEmptyDate()
+        startDate = SIDate()
+        endDate = SIDate()
         salesText = ""
         eventType = ""
         bannerURL = ""

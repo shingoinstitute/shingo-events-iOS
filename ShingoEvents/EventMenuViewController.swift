@@ -329,7 +329,7 @@ extension EventMenuViewController {
         
         if segue.identifier == "SchedulesView" {
             let destination = segue.destination as! SchedulesTableViewController
-            destination.agendas = event.agendaItems.sorted { $1.date.isGreaterThanDate($0.date) }
+            destination.agendas = event.agendaItems.sorted { $1.date.regionDate > $0.date.regionDate }
             destination.eventName = event.name
         }
         

@@ -10,6 +10,7 @@ target 'Shingo Events' do
         pod 'PureLayout'
         pod 'ReachabilitySwift', '~> 3.0'
         pod 'SwiftyJSON', git: 'https://github.com/BaiduHiDeviOS/SwiftyJSON.git', branch: 'swift3'
+        pod 'SwiftDate', '~> 4.0'
 	pod 'DropDown', git: 'https://github.com/AssistoLab/DropDown.git', branch: 'master'
 end
 

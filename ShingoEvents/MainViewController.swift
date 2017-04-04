@@ -11,6 +11,7 @@ import Crashlytics
 import Fabric
 import Alamofire
 import ReachabilitySwift
+import SwiftDate
 
 class MainMenuViewController: UIViewController {
     
@@ -203,7 +204,7 @@ extension MainMenuViewController: UnwindToMainVCProtocol {
         case "EventsView":
             let destination = segue.destination as! EventsTableViewController
             if let events = sender as? [SIEvent] {
-                self.events = events.sorted { $0.startDate.isGreaterThanDate($1.startDate) }
+                self.events = events.sorted { $0.startDate.regionDate > $1.startDate.regionDate }
                 destination.events = self.events
             }
         case "Support":

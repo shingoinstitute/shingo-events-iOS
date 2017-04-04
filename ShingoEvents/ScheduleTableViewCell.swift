@@ -39,15 +39,11 @@ class ScheduleTableViewCell: SITableViewCell {
         selectionStyle = .none
         
         if !session.didLoadSpeakers {
-            DispatchQueue.global(qos: .utility).async {
-                self.session.requestSpeakers {
-                    DispatchQueue.main.async {
-                        if self.session.speakers.isEmpty {
-                            self.speakersButton.isHidden = true
-                        } else {
-                            self.speakersButton.isHidden = false
-                        }
-                    }
+            self.session.requestSpeakers {
+                if self.session.speakers.isEmpty {
+                    self.speakersButton.isHidden = true
+                } else {
+                    self.speakersButton.isHidden = false
                 }
             }
         } else {
@@ -62,21 +58,25 @@ class ScheduleTableViewCell: SITableViewCell {
 
         infoTextView.isHidden = !(!session.attributedSummary.string.isEmpty || session.room != nil)
         
-        if let timeFrame = DateFormatter.attributedTime(from: session.startDate, to: session.endDate) {
-            timeLabel.attributedText = timeFrame
-        }
+        timeLabel.text = session.startDate.getTime() + " - " + session.endDate.getTime()
         
         titleLabel.text = "\(session.sessionType.rawValue): \(session.displayName)"
         
         if !session.didLoadSessionDetails {
-            activityIndicator.startAnimating()
+            DispatchQueue.main.async {
+                self.activityIndicator.startAnimating()
+            }
+            
             session.requestSessionInformation({
+                self.session.didLoadSessionDetails = true
                 if !self.session.speakers.isEmpty {
                     self.speakersButton.isHidden = false
                     self.speakersButton.isUserInteractionEnabled = true
                 }
+                DispatchQueue.main.async {
+                    self.activityIndicator.stopAnimating()
+                }
                 self.layoutIfNeeded()
-                self.activityIndicator.stopAnimating()
             })
         }
     }
@@ -96,7 +96,7 @@ class ScheduleTableViewCell: SITableViewCell {
                     sessionSummary.append(NSAttributedString(string: "\n\n"))
                 }
             }
-            
+
             sessionSummary.append(session.attributedSummary)
             
             sessionSummary.addAttribute(NSForegroundColorAttributeName, value: UIColor(netHex: 0x424242), range: sessionSummary.fullRange)

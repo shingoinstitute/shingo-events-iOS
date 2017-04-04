@@ -42,19 +42,26 @@ class EventTableViewCell: UITableViewCell {
         dateFormatter.timeZone = TimeZone(abbreviation: "GMT")
         dateFormatter.dateFormat = "yyyy-MM-dd"
         dateFormatter.dateStyle = .medium
-        let dates = "\(dateFormatter.string(from: event.startDate as Date)) - \(dateFormatter.string(from: event.endDate as Date))"
+        let dates = event.startDate.toString() + " - " + event.endDate.toString()
         eventDateRangeLabel.text = dates
         
         
         if let image = event.image {
             eventImageView.image = image
+            if let del = self.delegate {
+                del.cellDidUpdate()
+            }
         } else {
             event.getBannerImage() { image in
-                guard let image = image else {
+                
+                if let image = image {
+                    self.eventImageView.image = image
+                } else {
                     self.eventImageView.image = #imageLiteral(resourceName: "FlameOnly-100")
-                    return
                 }
-                self.eventImageView.image = image
+                if let delegate = self.delegate {
+                    delegate.cellDidUpdate()
+                }
             }
         }
 

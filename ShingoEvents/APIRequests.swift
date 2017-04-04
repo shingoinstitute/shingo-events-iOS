@@ -18,10 +18,9 @@ class SIRequest {
     static let BASE_URL = "https://api.shingo.org"
     static let EVENTS_URL = BASE_URL + "/salesforce/events"
     static let SUPPORT_URL = BASE_URL + "/support"
-    
-    // Important! DateFormatter defaults timezone to MST, which is the timezone dates/times always originate from
-    static let dateFormatter = DateFormatter(dateFormat: "yyyy-MM-dd")
-    static let sessionDateFormatter = DateFormatter(dateFormat: "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+
+    let defaultDateFormat = "yyyy-MM-dd"
+    let defaultSessionDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
     
     /// HTTP GET request method.
     func getRequest(url: String, description: String, callback: @escaping (JSON?) -> ()) -> Alamofire.Request? {
@@ -106,15 +105,15 @@ class SIRequest {
                         event.name = name
                     }
                     
-                    if let startDate = record["Start_Date__c"].string {
-                        if let startDate = SIRequest.dateFormatter.date(from: startDate) {
-                            event.startDate = self.getDateFromOffset(date: startDate)
+                    if let dateString = record["Start_Date__c"].string {
+                        if let date = SIDate(string: dateString, format: "yyyy-MM-dd") {
+                            event.startDate = date
                         }
                     }
                     
-                    if let endDate = record["End_Date__c"].string {
-                        if let endDate = SIRequest.dateFormatter.date(from: endDate) {
-                            event.endDate = self.getDateFromOffset(date: endDate)
+                    if let dateString = record["End_Date__c"].string {
+                        if let date = SIDate(string: dateString, format: "yyyy-MM-dd") {
+                            event.endDate = date
                         }
                     }
                     
@@ -157,15 +156,15 @@ class SIRequest {
                     event.name = name
                 }
                 
-                if let startDate = record["Start_Date__c"].string {
-                    if let startDate = SIRequest.dateFormatter.date(from: startDate) {
-                        event.startDate = self.getDateFromOffset(date: startDate)
+                if let dateString = record["Start_Date__c"].string {
+                    if let date = SIDate(string: dateString, format: "yyyy-MM-dd") {
+                        event.startDate = date
                     }
                 }
                 
-                if let endDate = record["End_Date__c"].string {
-                    if let endDate = SIRequest.dateFormatter.date(from: endDate) {
-                        event.endDate = self.getDateFromOffset(date: endDate)
+                if let dateString = record["End_Date__c"].string {
+                    if let date = SIDate(string: dateString, format: "yyyy-MM-dd") {
+                        event.endDate = date
                     }
                 }
                 
@@ -311,9 +310,9 @@ class SIRequest {
                     agenda.displayName = displayName
                 }
                 
-                if let date = record["Agenda_Date__c"].string {
-                    if let date = SIRequest.dateFormatter.date(from: date) {
-                        agenda.date = getDateFromOffset(date: date)
+                if let dateString = record["Agenda_Date__c"].string {
+                    if let date = SIDate(string: dateString, format: "yyyy-MM-dd") {
+                        agenda.date = date
                     }
                 }
                 
@@ -356,15 +355,15 @@ class SIRequest {
                         session.displayName = displayName
                     }
                     
-                    if let startDate = record["Start_Date_Time__c"].string {
-                        if let startDate = SIRequest.sessionDateFormatter.date(from: startDate) {
-                            session.startDate = self.getDateFromOffset(date: startDate)
+                    if let dateString = record["Start_Date_Time__c"].string {
+                        if let date = SIDate(string: dateString, format: self.defaultSessionDateFormat) {
+                            session.startDate = date
                         }
                     }
                     
-                    if let endDate = record["End_Date_Time__c"].string {
-                        if let endDate = SIRequest.sessionDateFormatter.date(from: endDate) {
-                            session.endDate = self.getDateFromOffset(date: endDate)
+                    if let dateString = record["End_Date_Time__c"].string {
+                        if let date = SIDate(string: dateString, format: self.defaultSessionDateFormat) {
+                            session.endDate = date
                         }
                     }
                     
@@ -428,15 +427,15 @@ class SIRequest {
                     session.displayName = displayName
                 }
                 
-                if let startDate = record["Start_Date_Time__c"].string {
-                    if let startDate = SIRequest.sessionDateFormatter.date(from: startDate) {
-                        session.startDate = self.getDateFromOffset(date: startDate)
+                if let dateString = record["Start_Date_Time__c"].string {
+                    if let date = SIDate(string: dateString, format: self.defaultSessionDateFormat) {
+                          session.startDate = date
                     }
                 }
             
-                if let endDate = record["End_Date_Time__c"].string {
-                    if let endDate = SIRequest.sessionDateFormatter.date(from: endDate) {
-                        session.endDate = self.getDateFromOffset(date: endDate)
+                if let dateString = record["End_Date_Time__c"].string {
+                    if let date = SIDate(string: dateString, format: self.defaultSessionDateFormat) {
+                        session.endDate = date
                     }
                 }
                 
@@ -525,15 +524,15 @@ class SIRequest {
                     session.displayName = displayName
                 }
                 
-                if let startDate = record["Start_Date_Time__c"].string {
-                    if let startDate = SIRequest.sessionDateFormatter.date(from: startDate) {
-                        session.startDate = self.getDateFromOffset(date: startDate)
+                if let dateString = record["Start_Date_Time__c"].string {
+                    if let date = SIDate(string: dateString, format: self.defaultSessionDateFormat) {
+                        session.startDate = date
                     }
                 }
                 
-                if let endDate = record["End_Date_Time__c"].string {
-                    if let endDate = SIRequest.sessionDateFormatter.date(from: endDate) {
-                        session.endDate = self.getDateFromOffset(date: endDate)
+                if let dateString = record["End_Date_Time__c"].string {
+                    if let date = SIDate(string: dateString, format: self.defaultSessionDateFormat) {
+                        session.endDate = date
                     }
                 }
                 
@@ -1667,25 +1666,6 @@ class SIRequest {
             return nil
         }
         
-    }
-    
-    func getDateFromOffset(date: Date) -> Date {
-        let calendar = Calendar.current
-        var components = calendar.dateComponents(in: TimeZone.current, from: date)
-        if components.hour == nil {
-            components.hour = 0
-        }
-        
-        // off set in hours in current time zone from UTC
-        let currentTZOffset = TimeZone.current.secondsFromGMT() / (60*60)
-        // off set in hours in MST time zone from UTC
-        let mstTZOffset = TimeZone.init(identifier: "MST")!.secondsFromGMT() / (60*60)
-        
-        components.hour! += Int(currentTZOffset + abs(mstTZOffset))
-        guard let newDate = components.date else {
-            return date
-        }
-        return newDate
     }
     
 }

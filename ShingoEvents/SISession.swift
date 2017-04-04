@@ -33,16 +33,16 @@ class SISession: SIObject {
     var sessionType : SessionType
     var sessionTrack : String
     var room : SIRoom?
-    var startDate : Date
-    var endDate : Date
+    var startDate : SIDate
+    var endDate : SIDate
     
     override init() {
         didLoadSpeakers = false
         didLoadSessionDetails = false
         speakers = [SISpeaker]()
         displayName = ""
-        startDate = Date.notionallyEmptyDate()
-        endDate = Date.notionallyEmptyDate()
+        startDate = SIDate()
+        endDate = SIDate()
         sessionType = .none
         sessionTrack = ""
         room = nil
