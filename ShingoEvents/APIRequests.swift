@@ -497,7 +497,7 @@ class SIRequest {
     }
     
     /// Gets a single session using a session ID.
-    @discardableResult func requestSession(_ id: String, callback: @escaping (SISession?) -> ()) -> Alamofire.Request? {
+    @discardableResult func requestSession(sessionId id: String, callback: @escaping (SISession?) -> ()) -> Alamofire.Request? {
         
         return getRequest(url: SIRequest.EVENTS_URL + "/sessions/\(id)", description: "REQUEST SESSION") { json in
             

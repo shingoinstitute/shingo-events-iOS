@@ -38,21 +38,7 @@ class ScheduleTableViewCell: SITableViewCell {
         
         selectionStyle = .none
         
-        if !session.didLoadSpeakers {
-            self.session.requestSpeakers {
-                if self.session.speakers.isEmpty {
-                    self.speakersButton.isHidden = true
-                } else {
-                    self.speakersButton.isHidden = false
-                }
-            }
-        } else {
-            if session.speakers.isEmpty {
-                speakersButton.isHidden = true
-            } else {
-                speakersButton.isHidden = false
-            }
-        }
+        session.tableviewCellDelegate = self
         
         speakersButton.addTarget(self, action: #selector(ScheduleTableViewCell.didTapSpeakersButton), for: .touchUpInside)
 
@@ -62,12 +48,13 @@ class ScheduleTableViewCell: SITableViewCell {
         
         titleLabel.text = "\(session.sessionType.rawValue): \(session.displayName)"
         
-        if !session.didLoadSessionDetails {
+        if session.sessionRequest == nil && !session.didLoadSessionDetails {
+            
             DispatchQueue.main.async {
                 self.activityIndicator.startAnimating()
             }
             
-            session.requestSessionInformation({
+            session.requestSessionInformation({ _ in
                 self.session.didLoadSessionDetails = true
                 if !self.session.speakers.isEmpty {
                     self.speakersButton.isHidden = false
@@ -78,6 +65,31 @@ class ScheduleTableViewCell: SITableViewCell {
                 }
                 self.layoutIfNeeded()
             })
+            
+        } else if !session.didLoadSessionDetails {
+            
+            DispatchQueue.main.async {
+                self.activityIndicator.startAnimating()
+            }
+            
+        } else {
+            
+            DispatchQueue.main.async {
+                self.activityIndicator.stopAnimating()
+            }
+            
+        }
+        
+        updateSpeakersButton()
+    }
+    
+    func updateSpeakersButton() {
+        if session.speakerRequest == nil && !session.didLoadSessionDetails {
+            self.session.requestSpeakers({
+                self.speakersButton.isHidden = self.session.speakers.isEmpty
+            })
+        } else if session.didLoadSessionDetails {
+            speakersButton.isHidden = self.session.speakers.isEmpty
         }
     }
     
@@ -116,4 +128,26 @@ class ScheduleTableViewCell: SITableViewCell {
     }
     
 }
+
+extension ScheduleTableViewCell: SISessionDelegate {
+    func onSpeakerRequestComplete() {
+        DispatchQueue.main.async {
+            self.speakersButton.isHidden = self.session.speakers.isEmpty
+        }
+    }
+    
+    func onSessionDetailRequestComplete() {
+        DispatchQueue.main.async {
+            self.activityIndicator.stopAnimating()
+        }
+    }
+}
+
+
+
+
+
+
+
+
 

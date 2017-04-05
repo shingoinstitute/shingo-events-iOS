@@ -189,6 +189,21 @@ class SIEvent: SIObject {
         });
     }
     
+    func requestSessions(callback: (() -> ())?) {
+        for agenda in agendaItems {
+            agenda.requestAgendaSessions({ 
+                for session in agenda.sessions {
+                    session.requestSessionInformation(nil)
+                }
+            })
+        }
+        
+        if let callback = callback {
+            return callback()
+        }
+        
+    }
+    
     func requestVenues(_ callback: @escaping () -> ()) {
         SIRequest().requestVenues(eventId: self.id, callback: { (venues) in
             guard let venues = venues else {

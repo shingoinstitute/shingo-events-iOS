@@ -76,9 +76,9 @@ class EventMenuViewController: UIViewController {
             
             // Load Agenda
             if !self.event.didLoadAgendas {
-                //Note: requestAgendas will request session data under the hood
                 self.event.requestAgendas() {
                     event.didLoadAgendas = true
+                    self.event.requestSessions(callback: nil)
                 }
             }
             
@@ -297,14 +297,6 @@ extension EventMenuViewController {
     
     func didTapSponsors(_ sender: AnyObject) {
         
-        if let sponsor = self.event.sponsors.first {
-            SIRequest().requestSponsor(sponsorId: sponsor.id, callback: { (sponsor) in
-                if let sponsor = sponsor {
-                    print(sponsor.attributedSummary)
-                }
-            })
-        }
-        
         if event.didLoadSponsors {
             self.performSegue(withIdentifier: "SponsorsView", sender: self.event.sponsors)
         } else {
@@ -329,8 +321,8 @@ extension EventMenuViewController {
         
         if segue.identifier == "SchedulesView" {
             let destination = segue.destination as! SchedulesTableViewController
-            destination.agendas = event.agendaItems.sorted { $1.date.regionDate > $0.date.regionDate }
-            destination.eventName = event.name
+            event.agendaItems.sort { $1.date.regionDate > $0.date.regionDate }
+            destination.event = event
         }
         
         if segue.identifier == "SpeakerList" {

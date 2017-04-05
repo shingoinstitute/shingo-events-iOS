@@ -29,22 +29,18 @@ class SIAgenda: SIObject {
     }
     
     /// Gets session information for SIAgenda object using an agenda ID.
-    func requestAgendaSessions(_ callback: @escaping () -> ()) {
-        
-        switch id.isEmpty {
-        case true:
-            callback()
-        case false:
-            SIRequest().requestSessions(agendaId: id, callback: { sessions in
-                
-                if let sessions = sessions {
-                    self.sessions = sessions
-                    self.didLoadSessions = true
-                }
-                
-                callback()
-            });
-        }
+    func requestAgendaSessions(_ callback: (() -> ())?) {
+        SIRequest().requestSessions(agendaId: id, callback: { sessions in
+            
+            if let sessions = sessions {
+                self.sessions = sessions
+                self.didLoadSessions = true
+            }
+            
+            if let callback = callback {
+                return callback()
+            }
+        });
     }
     
 }
