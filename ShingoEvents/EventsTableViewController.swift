@@ -91,30 +91,18 @@ extension EventsTableViewController: SICellDelegate, SplashScreenViewDelegate {
         let splashScreen = SplashScreenView(viewController: self, identifier: identifier, event: event)
 
         if event.didLoadEventData {
-//            present(splashScreen, animated: true) {
-//                self.onPresentSplashScreenComplete(identifier: identifier, event: event)
-                
-                // ----------
-                // DELETE ME
-                super.performSegue(withIdentifier: identifier, sender: event)
-                //----------
-
-//            }
+            present(splashScreen, animated: true) {
+                self.onPresentSplashScreenComplete(identifier: identifier, event: event)
+            }
         } else {
-//            present(splashScreen, animated: true) {
+            present(splashScreen, animated: true) {
                 event.requestEvent() {
                     if !event.didLoadEventData {
                         self.displayBadRequestNotification()
                     }
-                    
-                    // ----------
-                    // DELETE ME
-                    super.performSegue(withIdentifier: identifier, sender: event)
-                    //----------
-
-//                    self.onPresentSplashScreenComplete(identifier: identifier, event: event)
+                    self.onPresentSplashScreenComplete(identifier: identifier, event: event)
                 }
-//            }
+            }
         }
     }
     

@@ -44,11 +44,12 @@ class MainMenuViewController: UIViewController {
         
         // begin API calls to fetch conference and affiliate data
         let workItem = DispatchWorkItem(qos: .background, flags: .assignCurrentContext) {
-            self.requestEvents()
             self.requestAffiliates()
         }
         let queue = DispatchQueue.global(qos: .utility)
         queue.async(execute: workItem)
+        
+        self.requestEvents()
         
         // Create background view gradient
         let gradientColors:[CGFloat] = [
