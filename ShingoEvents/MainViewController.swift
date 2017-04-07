@@ -40,7 +40,9 @@ class MainMenuViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        activityView = ActivityViewController(message: "Loading Upcoming Conferences...")
+        activityView = ActivityViewController(message: "Getting Upcoming Conferences...")
+        
+        self.requestEvents()
         
         // begin API calls to fetch conference and affiliate data
         let workItem = DispatchWorkItem(qos: .background, flags: .assignCurrentContext) {
@@ -49,7 +51,7 @@ class MainMenuViewController: UIViewController {
         let queue = DispatchQueue.global(qos: .utility)
         queue.async(execute: workItem)
         
-        self.requestEvents()
+        
         
         // Create background view gradient
         let gradientColors:[CGFloat] = [

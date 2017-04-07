@@ -17,7 +17,7 @@ class EventMenuViewController: UIViewController {
     
     var eventSpeakers = [String : SISpeaker]()
     
-    var activityVC: ActivityViewController = ActivityViewController()
+    var activityVC: ActivityViewController = ActivityViewController(message: "Fetching Data...")
     
     @IBOutlet weak var speakerButton: UIButton! {
         didSet {
