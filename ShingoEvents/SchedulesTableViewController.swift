@@ -11,8 +11,15 @@ import Alamofire
 
 class SchedulesTableViewController: UITableViewController, SISpeakerDelegate {
 
-    var agendas: [SIAgenda]!
-    var eventName: String!
+    var event: SIEvent!
+    
+    lazy var agendas: [SIAgenda]! = {
+        return self.event.agendas
+    }()
+    
+    lazy var eventName: String! = {
+       return self.event.name
+    }()
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -55,13 +62,10 @@ class SchedulesTableViewController: UITableViewController, SISpeakerDelegate {
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
                     }
-                
-//                    for row in 0 ..< sessions.count {
-//                        let session = sessions[row]
-//                        if !session.didLoadSessionDetails {
-//                            session.requestSessionInformation({})
-//                        }
-//                    }
+                    
+                    for session in sessions {
+                        session.requestSessionInformation(nil)
+                    }
                 })
             }
         }
@@ -180,6 +184,7 @@ extension SchedulesTableViewController {
     }
     
 }
+
 
 
 

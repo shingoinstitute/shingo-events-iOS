@@ -8,12 +8,13 @@
 
 import UIKit
 import MapKit
+import Alamofire
 import PureLayout
 
 class EventMenuViewController: UIViewController {
     
     var event: SIEvent!
-
+    
     var eventSpeakers = [String : SISpeaker]()
     
     var activityVC: ActivityViewController = ActivityViewController()
@@ -42,7 +43,7 @@ class EventMenuViewController: UIViewController {
             eventHeaderImageView.clipsToBounds = true
         }
     }
-
+    
     @IBOutlet weak var bannerViewWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var bannerViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var bannerView: BannerView! {
@@ -65,71 +66,14 @@ class EventMenuViewController: UIViewController {
     
     var didSetupConstraints = false
     
+    var requestManager: SIRequestManager!
+    
+    var segueTypeOnRequestCompletion: SIRequestType = .none
+    
     override func loadView() {
         super.loadView()
-        
-        DispatchQueue.global(qos: .utility).async { [unowned self, weak event = self.event!] in
-            
-            guard let event = event else {
-                return
-            }
-            
-            // Load Agenda
-            if !self.event.didLoadAgendas {
-                //Note: requestAgendas will request session data under the hood
-                self.event.requestAgendas() {
-                    event.didLoadAgendas = true
-                }
-            }
-            
-            if !self.event.didLoadSpeakers {
-                // Load Speakers for entire event
-                self.event.requestSpeakers() {
-                    event.didLoadSpeakers = true
-                }
-            }
-            
-            if !self.event.didLoadVenues {
-                // Load venue photos
-                self.event.requestVenues() {
-                    event.didLoadVenues = true
-                }
-            }
-            
-            if !self.event.didLoadRecipients {
-                // Load Recipient information
-                self.event.requestRecipients() {
-                    event.didLoadRecipients  = true
-                }
-            }
-            
-            if !self.event.didLoadAffiliates {
-                // Load Affiliate information
-                self.event.requestAffiliates() {
-                    event.didLoadAffiliates = true
-                }
-            }
-            
-            if !self.event.didLoadExhibitors {
-                // Load Exhibitor information
-                self.event.requestExhibitors() {
-                    event.didLoadExhibitors = true
-                }
-            }
-            
-            if !self.event.didLoadSponsors {
-                // Load Sponsor information
-                self.event.requestSponsors() {
-                    event.didLoadSponsors = true
-                }
-            }
-            
-            if !self.event.didLoadAttendees {
-                self.event.requestAttendees() {
-                    event.didLoadAttendees = true
-                }
-            }
-        }
+        requestManager = SIRequestManager(event: event, delegate: self)
+        requestManager.requestAll()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -156,7 +100,7 @@ class EventMenuViewController: UIViewController {
                 }
             }
         }
-
+        
         // Add targets to all buttons
         scheduleButton.addTarget(self, action: #selector(EventMenuViewController.didTapSchedule(_:)), for: UIControlEvents.touchUpInside)
         venuePhotosButton.addTarget(self, action: #selector(EventMenuViewController.didTapVenue(_:)), for: UIControlEvents.touchUpInside)
@@ -187,20 +131,15 @@ class EventMenuViewController: UIViewController {
 
 extension EventMenuViewController {
     
-    // MARK: - Button Outlet functions
+    // MARK: - Button handler methods
     func didTapSchedule(_ sender: AnyObject) {
-        (sender as! UIButton).isEnabled = false
         if event.didLoadAgendas {
-            self.performSegue(withIdentifier: "SchedulesView", sender: self.event.agendaItems)
-            (sender as! UIButton).isEnabled = true
+            self.performSegue(withIdentifier: "SchedulesView", sender: self.event.agendas)
         } else {
-            self.present(activityVC, animated: false, completion: { 
-                self.event.requestAgendas() {
-                    self.dismiss(animated: true, completion: { 
-                        self.performSegue(withIdentifier: "SchedulesView", sender: self.event.agendaItems)
-                        (sender as! UIButton).isEnabled = true
-                    });
-                }
+            scheduleButton.isEnabled = false
+            segueTypeOnRequestCompletion = .agenda
+            present(activityVC, animated: false, completion: {
+                self.requestManager.requestAgendas()
             });
         }
     }
@@ -209,26 +148,20 @@ extension EventMenuViewController {
         if event.didLoadSpeakers  {
             self.performSegue(withIdentifier: "SpeakerList", sender: self.eventSpeakers)
         } else {
-            self.present(activityVC, animated: false, completion: { 
-                self.event.requestSpeakers() {
-                    self.dismiss(animated: true, completion: { 
-                        self.performSegue(withIdentifier: "SpeakerList", sender: self.eventSpeakers)
-                    });
-                }
+            segueTypeOnRequestCompletion = .speaker
+            present(activityVC, animated: false, completion: {
+                self.requestManager.requestSpeakers()
             });
         }
     }
     
     func didTapRecipients(_ sender: AnyObject) {
         if event.didLoadRecipients {
-            self.performSegue(withIdentifier: "RecipientsView", sender: self.event.recipients)
+            performSegue(withIdentifier: "RecipientsView", sender: self.event.recipients)
         } else {
-            self.present(activityVC, animated: false, completion: {
-                self.event.requestRecipients() {
-                    self.dismiss(animated: true, completion: { 
-                        self.performSegue(withIdentifier: "RecipientsView", sender: self.event.recipients)
-                    });
-                }
+            segueTypeOnRequestCompletion = .recipient
+            present(activityVC, animated: false, completion: {
+                self.requestManager.requestRecipients()
             });
         }
     }
@@ -236,84 +169,58 @@ extension EventMenuViewController {
     func didTapDirections(_ sender: AnyObject) {
         if event.didLoadVenues {
             if let venue = self.event.venues.first {
-                self.performSegue(withIdentifier: "MapView", sender: venue)
+                performSegue(withIdentifier: "MapView", sender: venue)
             }
         } else {
-            self.present(activityVC, animated: false, completion: { 
-                self.event.requestVenues({
-                    self.dismiss(animated: true, completion: {
-                        if let venue = self.event.venues.first {
-                            self.performSegue(withIdentifier: "MapView", sender: venue)
-                        }
-                    });
-                });
+            segueTypeOnRequestCompletion = .map
+            present(activityVC, animated: false, completion: {
+                self.requestManager.requestVenues()
             });
         }
     }
     
     func didTapExhibitors(_ sender: AnyObject) {
         if event.didLoadExhibitors {
-            self.performSegue(withIdentifier: "ExhibitorsListView", sender: self.event.exhibitors)
+            performSegue(withIdentifier: "ExhibitorsListView", sender: self.event.exhibitors)
         } else {
-            self.present(activityVC, animated: false, completion: {
-                self.event.requestExhibitors({
-                    self.dismiss(animated: true, completion: {
-                        self.performSegue(withIdentifier: "ExhibitorsListView", sender: self.event.exhibitors)
-                    })
-                });
-            });
+            segueTypeOnRequestCompletion = .exhibitor
+            present(activityVC, animated: false, completion: { 
+                self.requestManager.requestExhibitors()
+            })
         }
     }
     
     func didTapAttendess(_ sender: AnyObject) {
         
         if event.didLoadAttendees {
-            self.performSegue(withIdentifier: "AttendeesView", sender: self.event.attendees)
+            performSegue(withIdentifier: "AttendeesView", sender: self.event.attendees)
         } else {
-            self.present(activityVC, animated: false, completion: {
-                self.event.requestAttendees() {
-                    self.dismiss(animated: true, completion: {
-                        self.performSegue(withIdentifier: "AttendeesView", sender: self.event.attendees)
-                    });
-                }
+            segueTypeOnRequestCompletion = .attendee
+            present(activityVC, animated: false, completion: {
+                self.requestManager.requestAttendees()
             });
         }
     }
     
     func didTapVenue(_ sender: AnyObject) {
-        
         if event.didLoadVenues {
             self.performSegue(withIdentifier: "VenueView", sender: self.event.venues)
         } else {
-            self.present(activityVC, animated: false, completion: {
-                self.event.requestVenues() {
-                    self.dismiss(animated: true, completion: {
-                        self.performSegue(withIdentifier: "VenueView", sender: self.event.venues)
-                    });
-                }
-            });
+            segueTypeOnRequestCompletion = .venue
+            present(activityVC, animated: false, completion: {
+                self.requestManager.requestVenues()
+            })
         }
     }
     
     func didTapSponsors(_ sender: AnyObject) {
         
-        if let sponsor = self.event.sponsors.first {
-            SIRequest().requestSponsor(sponsorId: sponsor.id, callback: { (sponsor) in
-                if let sponsor = sponsor {
-                    print(sponsor.attributedSummary)
-                }
-            })
-        }
-        
         if event.didLoadSponsors {
-            self.performSegue(withIdentifier: "SponsorsView", sender: self.event.sponsors)
+            performSegue(withIdentifier: "SponsorsView", sender: self.event.sponsors)
         } else {
-            self.present(activityVC, animated: false, completion: {
-                self.event.requestSponsors {
-                    self.dismiss(animated: true, completion: {
-                        self.performSegue(withIdentifier: "SponsorsView", sender: self.event.sponsors)
-                    });
-                }
+            segueTypeOnRequestCompletion = .sponsor
+            present(activityVC, animated: false, completion: {
+                self.requestManager.requestSponsors()
             });
         }
     }
@@ -327,13 +234,16 @@ extension EventMenuViewController {
         
         navigationItem.title = ""
         
-        if segue.identifier == "SchedulesView" {
+        switch segue.identifier! {
+            
+        case "SchedulesView":
             let destination = segue.destination as! SchedulesTableViewController
-            destination.agendas = event.agendaItems.sorted { $1.date.regionDate > $0.date.regionDate }
-            destination.eventName = event.name
-        }
-        
-        if segue.identifier == "SpeakerList" {
+            event.agendas.sort { $1.date.regionDate > $0.date.regionDate }
+            destination.event = event
+            
+            break
+            
+        case "SpeakerList":
             let destination = segue.destination as! SpeakerListTableViewController
             
             var keynoteSpeakers = [SISpeaker]()
@@ -359,9 +269,9 @@ extension EventMenuViewController {
             destination.concurrentSpeakers = concurrentSpeakers.sorted { $0.getLastName() < $1.getLastName() }
             destination.unknownSpeakers = unknownSpeakers.sorted { $0.getLastName() < $1.getLastName() }
             
-        }
-        
-        if segue.identifier == "RecipientsView" {
+            break
+            
+        case "RecipientsView":
             let destination = segue.destination as! RecipientsTableViewController
             if let recipients = sender as? [SIRecipient] {
                 
@@ -392,16 +302,18 @@ extension EventMenuViewController {
                 destination.publicationRecipients = publicationRecipients
                 
             }
-        }
-        
-        if segue.identifier == "MapView" {
+            
+            break
+            
+        case "MapView":
             let destination = segue.destination as! MapViewController
             if let venue = sender as? SIVenue {
                 destination.venue = venue
             }
-        }
-        
-        if segue.identifier == "ExhibitorsListView" {
+            
+            break
+            
+        case "ExhibitorsListView":
             
             let destination = segue.destination as! ExhibitorTableViewController
             if let exhibitors = sender as? [SIExhibitor] {
@@ -430,22 +342,24 @@ extension EventMenuViewController {
                 destination.sectionInformation = exhibitorSections
                 
             }
-        }
-        
-        if segue.identifier == "AttendeesView" {
+            
+            break
+            
+        case "AttendeesView":
             let destination = segue.destination as! AttendessTableViewController
             if let attendees = sender as? [SIAttendee] {
-                
                 destination.attendees = attendees.sorted { $0.getLastName() < $1.getLastName() }
             }
-        }
-        
-        if segue.identifier == "VenueView" {
+            
+            break
+            
+        case "VenueView":
             let destination = segue.destination as! VenueMapsCollectionView
             destination.venue = self.event.venues[0]
-        }
-        
-        if segue.identifier == "SponsorsView" {
+            
+            break
+            
+        case "SponsorsView":
             let destination = segue.destination as! SponsorsTableViewController
             if let sponsors = sender as? [SISponsor] {
                 
@@ -481,13 +395,60 @@ extension EventMenuViewController {
                 destination.presidents = sponsorTypes[4]
                 destination.other = sponsorTypes[5]
             }
+            
+            break
+            
+        default: break
+            
         }
         
     }
 }
 
-extension EventMenuViewController {
+extension EventMenuViewController: SIRequestManagerDelegate {
+    func onRequestComplete(requestType type: SIRequestType) {
+        
+        let segueType: SIRequestType = segueTypeOnRequestCompletion == type ? type : .none
+        
+        dismiss(animated: false) { 
+            switch segueType {
+            case .speaker:
+                self.performSegue(withIdentifier: "SpeakerList", sender: self.event.speakers)
+                break
+            case .agenda:
+                self.performSegue(withIdentifier: "SchedulesView", sender: self.event.agendas)
+                self.scheduleButton.isEnabled = true
+                break
+            case .attendee:
+                self.performSegue(withIdentifier: "AttendeesView", sender: self.event.attendees)
+                break
+            case .exhibitor:
+                self.performSegue(withIdentifier: "ExhibitorsListView", sender: self.event.exhibitors)
+                break
+            case .recipient:
+                self.performSegue(withIdentifier: "RecipientsView", sender: self.event.recipients)
+                break
+            case .sponsor:
+                self.performSegue(withIdentifier: "SponsorsView", sender: self.event.sponsors)
+                break
+            case .venue:
+                self.performSegue(withIdentifier: "VenueView", sender: self.event.venues)
+                break
+            case .map:
+                self.performSegue(withIdentifier: "MapView", sender: self.event.venues.first)
+                break
+            case .none, .event, .sessions, .affiliate:
+                break
+            }
+        }
+        
+        segueTypeOnRequestCompletion = .none
+    }
+}
 
+
+extension EventMenuViewController {
+    
     /**
      This method parses a string and returns a character that can be used as a header in an alphabetically sorted list.
      
@@ -511,7 +472,7 @@ extension EventMenuViewController {
         }
         return nil
     }
-
+    
 }
 
 

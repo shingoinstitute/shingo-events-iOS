@@ -10,9 +10,8 @@ import UIKit
 
 class SponsorTableViewCell: SITableViewCell {
 
-    @IBOutlet weak var nameLabel: UILabel! { didSet { entityNameLabel = nameLabel } }
-    @IBOutlet weak var descriptionTextView: UITextView! { didSet { entityTextView = descriptionTextView } }
     @IBOutlet weak var logoImageView: UIImageView!
+    @IBOutlet weak var descriptionTextView: UITextView! { didSet { entityTextView = descriptionTextView } }
     
     @IBOutlet weak var imageViewBottomConstraint: NSLayoutConstraint!
     
@@ -34,34 +33,29 @@ class SponsorTableViewCell: SITableViewCell {
     
     override func updateCell() {
         super.updateCell()
+
         guard let sponsor = sponsor else {
             return
         }
         
-        if sponsor.attributedSummary.string.isEmpty {
-            descriptionTextView.removeFromSuperview()
-            imageViewBottomConstraint = NSLayoutConstraint(item: logoImageView,
-                                                           attribute: .bottom,
-                                                           relatedBy: .equal,
-                                                           toItem: contentView,
-                                                           attribute: .bottomMargin,
-                                                           multiplier: 1,
-                                                           constant: 0)
-            contentView.addConstraint(imageViewBottomConstraint)
-            updateConstraints()
+        if sponsor.image != nil {
+            sponsor.resizeIntrinsicContent(maximumAllowedWidth: frame.width)
+            if let img = sponsor.image {
+                logoImageView.image = img
+            }
+        } else if logoImageView.image == #imageLiteral(resourceName: "FlameOnly-100") {
+            sponsor.requestBannerImage(callback: { 
+                self.sponsor.resizeIntrinsicContent(maximumAllowedWidth: self.frame.width)
+                if let img = self.sponsor.image {
+                    self.logoImageView.image = img
+                }
+                
+            })
         }
         
-        nameLabel.text = sponsor.name
-        
-        if logoImageView == nil {
-            logoImageView = UIImageView()
+        if let delegate = self.delegate {
+            delegate.cellDidUpdate()
         }
-        
-        if self.logoImageView.image == nil {
-            setLogoImage(sponsor: sponsor)
-        }
-        
-    
         
     }
     
@@ -79,17 +73,12 @@ class SponsorTableViewCell: SITableViewCell {
         }
     }
     
-    func setLogoImage(sponsor: SISponsor) {
-        
-        sponsor.getLogoImage() { image in
-            
-            self.logoImageView.image = image.af_imageScaled(to: CGSize(width: self.contentView.frame.width, height: (image.size.height * self.contentView.frame.width) / image.size.width))
-            
-            if let delegate = self.delegate {
-                delegate.cellDidUpdate()
-            }
-
-        }
-    }
-    
 }
+
+
+
+
+
+
+
+

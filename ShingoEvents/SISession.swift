@@ -9,6 +9,11 @@
 import Foundation
 import Alamofire
 
+protocol SISessionDelegate {
+    func onSpeakerRequestComplete()
+    func onSessionDetailRequestComplete()
+}
+
 class SISession: SIObject {
     
     enum SessionType: String {
@@ -36,6 +41,9 @@ class SISession: SIObject {
     var startDate : SIDate
     var endDate : SIDate
     
+    var tableviewCellDelegate: SISessionDelegate?
+    var eventDelegate: SISessionDelegate?
+    
     override init() {
         didLoadSpeakers = false
         didLoadSessionDetails = false
@@ -49,32 +57,47 @@ class SISession: SIObject {
         super.init()
     }
     
-    private var sessionRequest: Alamofire.Request? {
-        willSet (newRequest) {
-            if let request = self.sessionRequest {
-                if let _ = request.response {
-                    request.cancel()
-                }
-            }
-            self.sessionRequest = newRequest
+    var sessionRequest: Alamofire.Request? {
+        get {
+            return self._sessionRequest
         }
     }
     
-    private var speakersRequest: Alamofire.Request? {
+    private var _sessionRequest: Alamofire.Request? {
         willSet (newRequest) {
-            
-            if let request = self.speakersRequest {
-                if let _ = request.response {
-                    request.cancel()
-                }
+            if let request = self._sessionRequest {
+                request.cancel()
             }
-            self.speakersRequest = newRequest
+            self._sessionRequest = newRequest
+        }
+    }
+    
+    var speakerRequest: Alamofire.Request? {
+        get {
+            return self._speakersRequest
+        }
+    }
+    
+    private var _speakersRequest: Alamofire.Request? {
+        willSet (newRequest) {
+            if let request = self._speakersRequest {
+                request.cancel()
+            }
+            self._speakersRequest = newRequest
         }
     }
     
     /// Gets additional information about the session object.
-    func requestSessionInformation(_ callback:@escaping () -> ()) {
-        sessionRequest = SIRequest().requestSession(id, callback: { session in
+    func requestSessionInformation(_ callback: (() -> ())?) {
+        
+        if didLoadSessionDetails || _sessionRequest != nil {
+            if let done = callback {
+                done()
+            }
+            return
+        }
+        
+        _sessionRequest = SIRequest().requestSession(sessionId: id, callback: { session in
             if let session = session {
                 self.displayName = session.displayName
                 self.startDate = session.startDate
@@ -85,27 +108,51 @@ class SISession: SIObject {
                 self.name = session.name
                 self.id = session.id
                 self.attributedSummary = session.attributedSummary
+                self.didLoadSpeakers = session.didLoadSpeakers
+                self.speakers = session.speakers
+                
                 self.didLoadSessionDetails = true
                 
-                callback()
+                self.requestSpeakers(nil)
                 
-                if !self.didLoadSpeakers {
-                    self.requestSpeakers() {
-                        self.didLoadSpeakers = true
-                    }
+                self._sessionRequest = nil
+                
+                if let delegate = self.tableviewCellDelegate {
+                    delegate.onSessionDetailRequestComplete()
+                }
+                
+                if let done = callback {
+                    return done()
                 }
             }
         });
     }
     
     /// Gets all speakers associated with the session object.
-    func requestSpeakers(_ callback: @escaping () -> ()) {
-        speakersRequest = SIRequest().requestSpeakers(sessionId: id, callback: { speakers in
+    func requestSpeakers(_ callback: (() -> ())?) {
+        
+        if _speakersRequest != nil || didLoadSpeakers {
+            if let done = callback {
+                done()
+            }
+            return
+        }
+        
+        _speakersRequest = SIRequest().requestSpeakers(sessionId: id, callback: { speakers in
             if let speakers = speakers {
                 self.speakers = speakers
                 self.didLoadSpeakers = true
             }
-            callback()
+            
+            self._speakersRequest = nil
+            
+            if let delegate = self.tableviewCellDelegate {
+                delegate.onSpeakerRequestComplete()
+            }
+            
+            if let done = callback {
+                return done()
+            }
         });
     }
     
@@ -137,3 +184,16 @@ class SISession: SIObject {
     }
     
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

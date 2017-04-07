@@ -65,8 +65,10 @@ class SponsorsTableViewController: UITableViewController, SICellDelegate {
     }
     
     func cellDidUpdate() {
-        tableView.beginUpdates()
-        tableView.endUpdates()
+//        UIView.performWithoutAnimation {
+            tableView.beginUpdates()
+            tableView.endUpdates()
+//        }
     }
 }
 
@@ -137,40 +139,31 @@ extension SponsorsTableViewController {
             case "Friends":
                 if (friends.count > 0) {
                     cell.sponsor = friends[(indexPath as NSIndexPath).row]
-                    cell.nameLabel.text = friends[(indexPath as NSIndexPath).row].name
                 }
             case "Supporters":
                 if (supporters.count > 0) {
                     cell.sponsor = supporters[(indexPath as NSIndexPath).row]
-                    cell.nameLabel.text = supporters[(indexPath as NSIndexPath).row].name
                 }
             case "Benefactors":
                 if (benefactors.count > 0) {
                     cell.sponsor = benefactors[(indexPath as NSIndexPath).row]
-                    cell.nameLabel.text = benefactors[(indexPath as NSIndexPath).row].name
                 }
             case "Champions":
                 if (champions.count > 0) {
                     cell.sponsor = champions[(indexPath as NSIndexPath).row]
-                    cell.nameLabel.text = champions[(indexPath as NSIndexPath).row].name
                 }
             case "Presidents":
                 if (presidents.count > 0) {
                     cell.sponsor = presidents[(indexPath as NSIndexPath).row]
-                    cell.nameLabel.text = presidents[(indexPath as NSIndexPath).row].name
                 }
             case "Other":
                 if other.count > 0 {
                     cell.sponsor = other[(indexPath as NSIndexPath).row]
-                    cell.nameLabel.text = other[(indexPath as NSIndexPath).row].name
                 }
             default: break
         }
         
         cell.isExpanded = cell.entity.isSelected
-        if let image = cell.sponsor.image {
-            cell.logoImageView.image = image.af_imageScaled(to: CGSize(width: view.frame.width, height: (view.frame.width * image.size.height) / image.size.width))
-        }
         
         return cell
     }
@@ -184,6 +177,8 @@ extension SponsorsTableViewController {
         tableView.beginUpdates()
         tableView.endUpdates()
     }
+    
+    
     
 }
 

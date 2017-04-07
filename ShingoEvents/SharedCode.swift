@@ -10,7 +10,6 @@ import Foundation
 import UIKit
 
 protocol SICellDelegate { func cellDidUpdate() }
-protocol SISpeakerDelegate { func performActionOnSpeakers(data: [SISpeaker]) }
 
 struct Alphabet {
     static private var upperCaseEnglish: [String] = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "#"]
@@ -443,118 +442,51 @@ extension Date {
 
 extension DateFormatter {
     
-    static func time(from sdate: Date, to edate: Date) -> String {
-
-        let cal = Calendar(identifier: .gregorian)
-        
-        let sDateComps = cal.dateComponents(in: TimeZone.current, from: sdate)
-        let eDateComps = cal.dateComponents(in: TimeZone.current, from: edate)
-        
-        let sHour = sDateComps.hour!
-        let sMin = sDateComps.minute!
-        let eHour = eDateComps.hour!
-        let eMin = eDateComps.minute!
-        
-        var startTime = ""
-        if sHour == 0 {
-            startTime = "12"
-        } else {
-            startTime = (sHour > 0 && sHour <= 12) ? String(sHour) : String(sHour - 12)
-        }
-        startTime += ":"
-        if sMin == 0 {
-            startTime += "00"
-        } else {
-            startTime += (sMin > 0 && sMin < 10) ? "0" + String(sMin) : String(sMin)
-        }
-        
-        startTime += (sHour > 0 && sHour < 12) ? " am" : " pm"
-        
-        var endTime: String = ""
-        
-        if eHour == 0 {
-            endTime = "12"
-        } else {
-            endTime = (eHour > 0 && eHour <= 12) ? String(eHour) : String(eHour - 12)
-        }
-        endTime += ":"
-        if eMin == 0 {
-            endTime += "00"
-        } else {
-            endTime += (eMin > 0 && eMin < 10) ? "0" + String(eMin) : String(eMin)
-        }
-        
-        endTime += (eHour > 0 && eHour < 12) ? " am" : " pm"
-        
-        return "\(startTime) - \(endTime)"
-        
-    }
- 
-//    static func attributedTime(from: Date, to: Date) -> NSAttributedString? {
+//    static func time(from sdate: Date, to edate: Date) -> String {
+//
+//        let cal = Calendar(identifier: .gregorian)
 //        
-//        let timeFrame: String = DateFormatter.time(from: from, to: to)
+//        let sDateComps = cal.dateComponents(in: TimeZone.current, from: sdate)
+//        let eDateComps = cal.dateComponents(in: TimeZone.current, from: edate)
 //        
-//        guard let stringComponents = timeFrame.split("-") else {
-//            return nil
+//        let sHour = sDateComps.hour!
+//        let sMin = sDateComps.minute!
+//        let eHour = eDateComps.hour!
+//        let eMin = eDateComps.minute!
+//        
+//        var startTime = ""
+//        if sHour == 0 {
+//            startTime = "12"
+//        } else {
+//            startTime = (sHour > 0 && sHour <= 12) ? String(sHour) : String(sHour - 12)
+//        }
+//        startTime += ":"
+//        if sMin == 0 {
+//            startTime += "00"
+//        } else {
+//            startTime += (sMin > 0 && sMin < 10) ? "0" + String(sMin) : String(sMin)
 //        }
 //        
-//        guard let fromTime = stringComponents.first else {
-//            return nil
+//        startTime += (sHour > 0 && sHour < 12) ? " am" : " pm"
+//        
+//        var endTime: String = ""
+//        
+//        if eHour == 0 {
+//            endTime = "12"
+//        } else {
+//            endTime = (eHour > 0 && eHour <= 12) ? String(eHour) : String(eHour - 12)
+//        }
+//        endTime += ":"
+//        if eMin == 0 {
+//            endTime += "00"
+//        } else {
+//            endTime += (eMin > 0 && eMin < 10) ? "0" + String(eMin) : String(eMin)
 //        }
 //        
-//        guard let toTime = stringComponents.last else {
-//            return nil
-//        }
+//        endTime += (eHour > 0 && eHour < 12) ? " am" : " pm"
 //        
-//        guard let startComponents = fromTime.split(" ") else {
-//            return nil
-//        }
+//        return "\(startTime) - \(endTime)"
 //        
-//        guard let endComponents = toTime.split(" ") else {
-//            return nil
-//        }
-//        
-//        guard let startTime = startComponents.first else {
-//            return nil
-//        }
-//        
-//        guard let startPeriod = startComponents.last else {
-//            return nil
-//        }
-//        
-//        guard let endTime = endComponents.first else {
-//            return nil
-//        }
-//        
-//        guard let endPeriod = endComponents.last else {
-//            return nil
-//        }
-//        
-//        let pointSize = UIFont.preferredFont(forTextStyle: .headline).pointSize
-//        let systemFontDesc = UIFont.systemFont(ofSize: pointSize, weight: UIFontWeightSemibold).fontDescriptor
-//        let smallCapsFontDesc = systemFontDesc.addingAttributes(
-//            [
-//                UIFontDescriptorFeatureSettingsAttribute: [
-//                    [
-//                        UIFontFeatureTypeIdentifierKey: kUpperCaseType,
-//                        UIFontFeatureSelectorIdentifierKey: kUpperCaseSmallCapsSelector,
-//                        ],
-//                ]
-//            ]
-//        )
-//        
-//        let smallCapsFont = UIFont(descriptor: smallCapsFontDesc, size: pointSize)
-//        
-//        let timeAttributes = [NSFontAttributeName:UIFont.preferredFont(forTextStyle: .headline)]
-//        let periodAttributes = [NSFontAttributeName:smallCapsFont]
-//        
-//        let attributedText = NSMutableAttributedString(string: startTime, attributes: timeAttributes)
-//        attributedText.append(NSAttributedString(string: startPeriod, attributes: periodAttributes))
-//        attributedText.append(NSAttributedString(string: " - ", attributes: timeAttributes))
-//        attributedText.append(NSAttributedString(string: endTime, attributes: timeAttributes))
-//        attributedText.append(NSAttributedString(string: endPeriod, attributes: periodAttributes))
-//        
-//        return attributedText
 //    }
     
 }

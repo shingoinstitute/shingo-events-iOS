@@ -55,6 +55,7 @@
 		C2CFC3101C481EAB0036E485 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CFC30F1C481EAB0036E485 /* MainViewController.swift */; };
 		C2CFC3141C483C1C0036E485 /* SchedulesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2CFC3131C483C1C0036E485 /* SchedulesTableViewController.swift */; };
 		C2CFC3181C4954C20036E485 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C2CFC3171C4954C20036E485 /* Main.storyboard */; };
+		C2DBAB411E980961001B32FC /* SIRequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DBAB401E980961001B32FC /* SIRequestManager.swift */; };
 		C2E0FF5B1DD3A23A005CDD7D /* SponsorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E0FF5A1DD3A23A005CDD7D /* SponsorTableViewCell.swift */; };
 		C2E589571E6F32A5006F8544 /* RadialGradientLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E589561E6F32A5006F8544 /* RadialGradientLayer.swift */; };
 		C2E5896D1E6F56D2006F8544 /* SplashScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E5896C1E6F56D2006F8544 /* SplashScreenView.swift */; };
@@ -134,6 +135,7 @@
 		C2CFC30F1C481EAB0036E485 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		C2CFC3131C483C1C0036E485 /* SchedulesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchedulesTableViewController.swift; sourceTree = "<group>"; };
 		C2CFC3171C4954C20036E485 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		C2DBAB401E980961001B32FC /* SIRequestManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SIRequestManager.swift; sourceTree = "<group>"; };
 		C2E0FF5A1DD3A23A005CDD7D /* SponsorTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SponsorTableViewCell.swift; sourceTree = "<group>"; };
 		C2E589561E6F32A5006F8544 /* RadialGradientLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadialGradientLayer.swift; sourceTree = "<group>"; };
 		C2E5896C1E6F56D2006F8544 /* SplashScreenView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashScreenView.swift; sourceTree = "<group>"; };
@@ -183,6 +185,7 @@
 				C2F17F661C655DAA0028062C /* Bridging-Header.h */,
 				C2A695081C35AC2900F6E0B8 /* AppDelegate.swift */,
 				C2E9508E1D22E8F100178C03 /* APIRequests.swift */,
+				C2DBAB401E980961001B32FC /* SIRequestManager.swift */,
 				C24267A21E81C513004F27C0 /* classes */,
 				C24FF46E1D918D1A0061B3E2 /* view controllers */,
 			);
@@ -596,6 +599,7 @@
 				C2B155111D626BE00099330F /* ExhibitorTableViewCell.swift in Sources */,
 				C24267B01E81C8BC004F27C0 /* SISpeaker.swift in Sources */,
 				C24267A11E81C4D4004F27C0 /* SISponsor.swift in Sources */,
+				C2DBAB411E980961001B32FC /* SIRequestManager.swift in Sources */,
 				C2986DC41C65136600ADCF40 /* ShingoModelViewController.swift in Sources */,
 				C28EC33D1DAC50480012A8A8 /* AttendeeTableViewCell.swift in Sources */,
 				C24267BE1E81C943004F27C0 /* SIAffiliate.swift in Sources */,

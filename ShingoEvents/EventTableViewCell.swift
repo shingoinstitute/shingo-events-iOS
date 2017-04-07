@@ -12,6 +12,8 @@ class EventTableViewCell: UITableViewCell {
     
     var maxBannerImageWidth: CGFloat!
     
+    @IBOutlet weak var eventDescriptionLabel: UILabel!
+    
     @IBOutlet weak var eventNameLabel: UILabel! {
         didSet {
             eventNameLabel.font = UIFont.preferredFont(forTextStyle: .headline)
@@ -36,48 +38,53 @@ class EventTableViewCell: UITableViewCell {
     
     func updateCell() {
         
+        event.tableViewCellDelegate = self
+        
         eventNameLabel.text = event.name
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.timeZone = TimeZone(abbreviation: "GMT")
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        dateFormatter.dateStyle = .medium
         let dates = event.startDate.toString() + " - " + event.endDate.toString()
         eventDateRangeLabel.text = dates
         
+        onEventDetailCompletion()
+        onEventImageRequestCompletion()
         
-        if let image = event.image {
-            eventImageView.image = image
-            if let del = self.delegate {
-                del.cellDidUpdate()
+    }
+}
+
+extension EventTableViewCell: SIEventDelegate {
+    func onEventDetailCompletion() {
+        DispatchQueue.main.async {
+            self.eventDescriptionLabel.attributedText = SIRequest.parseHTMLStringUsingPreferredFont(string: self.event.salesText, forTextStyle: .subheadline)
+            if let delegate = self.delegate {
+                delegate.cellDidUpdate()
             }
-        } else {
-            event.getBannerImage() { image in
-                
-                if let image = image {
-                    self.eventImageView.image = image
+        }
+        
+    }
+    
+    func onEventImageRequestCompletion() {
+        DispatchQueue.main.async {
+//            if self.eventImageView.image == #imageLiteral(resourceName: "FlameOnly-100") || self.eventImageView.image == nil {
+                if let _ = self.event.image {
+                    self.event.resizeIntrinsicContent(maximumAllowedWidth: self.eventImageView.frame.width)
+                    self.eventImageView.image = self.event.image
+                    
+                    if let delegate = self.delegate {
+                        delegate.cellDidUpdate()
+                    }
+                    
                 } else {
                     self.eventImageView.image = #imageLiteral(resourceName: "FlameOnly-100")
                 }
-                if let delegate = self.delegate {
-                    delegate.cellDidUpdate()
-                }
-            }
+//            }
         }
-
+        
     }
-    
-    func resizeImageToMaxWidth() {
-        if let width = maxBannerImageWidth {
-            if let image = imageView!.image {
-                if image.size.width > width {
-                    let newHeight = (image.size.height / image.size.width) * width
-                    let size = CGSize(width: width, height: newHeight)
-                    let resizedImg = image.af_imageScaled(to: size)
-                    imageView!.image = resizedImg
-                }
-            }
-        }
-    }
-    
 }
+
+
+
+
+
+
+

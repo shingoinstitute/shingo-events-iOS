@@ -497,7 +497,7 @@ class SIRequest {
     }
     
     /// Gets a single session using a session ID.
-    @discardableResult func requestSession(_ id: String, callback: @escaping (SISession?) -> ()) -> Alamofire.Request? {
+    @discardableResult func requestSession(sessionId id: String, callback: @escaping (SISession?) -> ()) -> Alamofire.Request? {
         
         return getRequest(url: SIRequest.EVENTS_URL + "/sessions/\(id)", description: "REQUEST SESSION") { json in
             
@@ -1185,8 +1185,8 @@ class SIRequest {
                         sponsor.logoURL = logoURL
                     }
                     
-                    if let bannerURL = record["Banner_URL__c"].string {
-                        sponsor.bannerURL = bannerURL
+                    if let imageUrl = record["Banner_URL__c"].string {
+                        sponsor.imageUrl = imageUrl
                     }
                     
                     if let splashScreenURL = record["Splash_Screen_URL__c"].string {
@@ -1248,8 +1248,8 @@ class SIRequest {
                     }
                 }
                 
-                if let bannerURL = record["Banner_URL__c"].string {
-                    sponsor.bannerURL = bannerURL
+                if let imageUrl = record["Banner_URL__c"].string {
+                    sponsor.imageUrl = imageUrl
                 }
                 
                 if let type = record["Sponsor_Level__c"].string {
@@ -1632,25 +1632,23 @@ class SIRequest {
         vc.present(alert, animated: true, completion: nil)
     }
     
-    static func parseHTMLStringUsingPreferredFont(string: String) -> NSAttributedString? {
+    static func parseHTMLStringUsingPreferredFont(string: String, forTextStyle style: UIFontTextStyle = .body) -> NSAttributedString? {
         
         do {
             
             let options: [String:Any] = [
                 NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
                 NSCharacterEncodingDocumentAttribute : String.Encoding.utf8.rawValue,
+                NSForegroundColorAttributeName : UIColor.black
             ]
             
             guard let data = string.data(using: String.Encoding.utf8) else {
                 return nil
             }
-            if (string.lowercased().contains("enjoy a glass of wine")) {
-                print("foobar")
-            }
             
             let htmlString = try NSMutableAttributedString(data: data, options: options, documentAttributes: nil)
             
-            htmlString.usePreferredFontWhileMaintainingAttributes(forTextStyle: .body)
+            htmlString.usePreferredFontWhileMaintainingAttributes(forTextStyle: style)
             
             return htmlString
         } catch {
@@ -1666,6 +1664,16 @@ class SIRequest {
             return nil
         }
         
+    }
+    
+    static func requestIsRunning(request: Alamofire.Request?) -> Bool {
+        guard let request = request else {
+            return false
+        }
+        if let task = request.task {
+            return task.state == URLSessionTask.State.running
+        }
+        return false
     }
     
 }
