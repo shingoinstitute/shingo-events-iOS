@@ -9,6 +9,11 @@
 import Foundation
 import UIKit
 
+protocol SISponsorDelegate {
+    func onRequestCompletionHandler()
+    func onBannerImageRequestCompletionHandler()
+}
+
 class SISponsor: SIObject {
     
     enum SponsorType: Int {
@@ -23,35 +28,42 @@ class SISponsor: SIObject {
     var sponsorType : SponsorType
     var logoURL : String {
         didSet {
-            requestLogoImage(nil)
+            requestLogoImage(callback: nil)
         }
     }
     var bannerURL : String {
         didSet {
-            requestBannerImage(nil)
+            requestBannerImage(callback: nil)
         }
     }
     var splashScreenURL : String {
         didSet {
-            requestSplashScreenImage(nil)
+            requestSplashScreenImage(callback: nil)
         }
     }
-    private var bannerImage : UIImage?
-    private var splashScreenImage : UIImage?
+    var bannerImage : UIImage? {
+        get {
+            return self.image
+        }
+    }
+    var logoImage: UIImage?
+    var splashScreenImage : UIImage?
     var didLoadBannerImage: Bool
+    var didLoadLogoImage: Bool
     var didLoadSplashScreen: Bool
     var didLoadSponsorDetails: Bool
+    
+    var tableViewCellDelegate: SISponsorDelegate?
     
     override init() {
         sponsorType = .none
         logoURL = ""
         bannerURL = ""
         splashScreenURL = ""
-        bannerImage = nil
-        splashScreenImage = nil
         didLoadBannerImage = false
         didLoadSplashScreen = false
         didLoadSponsorDetails = false
+        didLoadLogoImage = false
         super.init()
     }
     
@@ -61,108 +73,68 @@ class SISponsor: SIObject {
         self.sponsorType = type
     }
     
-    fileprivate func requestLogoImage(_ callback: (() -> Void)?) {
+    func requestLogoImage(callback: (() -> Void)?) {
         
-        if image != nil || logoURL.isEmpty {
-            if let cb = callback { cb() }
-            return
-        }
-        
-        self.requestImage(URLString: logoURL) { image in
-            if let image = image {
-                self.image = image
-                self.didLoadImage = true
+        if logoURL.isEmpty {
+            if let done = callback {
+                return done()
             }
-            if let cb = callback { cb() }
-        }
-    }
-    
-    private func requestBannerImage(_ callback: (() -> Void)?) {
-        
-        if bannerImage != nil || bannerURL.isEmpty {
-            if let cb = callback { cb() }
-            return
-        }
-        
-        requestImage(URLString: bannerURL) { image in
-            if let image = image as UIImage? {
-                self.bannerImage = image
-                self.didLoadBannerImage = true
-            }
-            if let cb = callback {
-                cb()
+        } else {
+            self.requestImage(URLString: logoURL) { image in
+                if let image = image {
+                    self.logoImage = image
+                    self.didLoadLogoImage = true
+                }
+                if let done = callback {
+                    return done()
+                }
             }
         }
     }
     
-    private func requestSplashScreenImage(_ callback: (() -> Void)?) {
+    func requestBannerImage(callback: (() -> Void)?) {
         
-        if splashScreenImage != nil || splashScreenURL.isEmpty {
-            if let cb = callback { cb() }
-            return
+        if bannerURL.isEmpty {
+            if let done = callback {
+                return done()
+            }
+        } else {
+            requestImage(URLString: bannerURL) { image in
+                if let image = image as UIImage? {
+                    self.image = image
+                    self.didLoadBannerImage = true
+                    self.didLoadImage = true
+                }
+                
+                if let delegate = self.tableViewCellDelegate {
+                    delegate.onBannerImageRequestCompletionHandler()
+                }
+                
+                if let done = callback {
+                    done()
+                }
+            }
         }
         
-        requestImage(URLString: splashScreenURL, callback: { image in
-            if let image = image {
-                self.splashScreenImage = image
-                self.didLoadSplashScreen = true
-            }
-            if let cb = callback {
-                cb()
-            }
-        });
     }
     
-    func getBannerImage(_ callback: @escaping (UIImage) -> ()) {
+    func requestSplashScreenImage(callback: (() -> Void)?) {
         
-        if let image = self.bannerImage {
-            callback(image)
-            return
-        }
-        
-        requestBannerImage() {
-            if let image = self.image {
-                callback(image)
-            } else if let image = UIImage(named: "Shingo Icon Small") {
-                callback(image)
-            } else {
-                callback(UIImage())
+        if splashScreenURL.isEmpty {
+            if let done = callback {
+                return done()
             }
-        }
-    }
-    
-    func getLogoImage(_ callback: @escaping (UIImage) -> ()) {
-        
-        if let image = self.image {
-            callback(image)
-            return
-        }
-        
-        requestLogoImage {
-            if let image = self.image {
-                callback(image)
-            } else if let image = UIImage(named: "sponsor_banner_pl") {
-                callback(image)
-            } else {
-                callback(UIImage())
-            }
-        }
-    }
-    
-    func getSplashScreenImage(_ callback: @escaping (UIImage) -> ()) {
-        
-        if let image = self.splashScreenImage {
-            callback(image)
-            return
-        }
-        
-        requestSplashScreenImage {
-            if let image = self.image {
-                callback(image)
-            } else if let image = UIImage(named: "Sponsor_Splash_Screen_pl") {
-                callback(image)
-            } else {
-                callback(UIImage())
+        } else {
+            requestImage(URLString: splashScreenURL) { image in
+                
+                if let image = image {
+                    self.splashScreenImage = image
+                    self.didLoadSplashScreen = true
+                }
+                
+                if let done = callback {
+                    done()
+                }
             }
         }
     }
@@ -177,6 +149,11 @@ class SISponsor: SIObject {
                 self.splashScreenImage = sponsor.splashScreenImage
                 self.sponsorType = sponsor.sponsorType
                 self.didLoadSponsorDetails = true
+                
+                if let delegate = self.tableViewCellDelegate {
+                    delegate.onRequestCompletionHandler()
+                }
+                
             }
         }
     }

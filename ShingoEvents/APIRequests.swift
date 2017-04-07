@@ -1632,25 +1632,23 @@ class SIRequest {
         vc.present(alert, animated: true, completion: nil)
     }
     
-    static func parseHTMLStringUsingPreferredFont(string: String) -> NSAttributedString? {
+    static func parseHTMLStringUsingPreferredFont(string: String, forTextStyle style: UIFontTextStyle = .body) -> NSAttributedString? {
         
         do {
             
             let options: [String:Any] = [
                 NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
                 NSCharacterEncodingDocumentAttribute : String.Encoding.utf8.rawValue,
+                NSForegroundColorAttributeName : UIColor.black
             ]
             
             guard let data = string.data(using: String.Encoding.utf8) else {
                 return nil
             }
-            if (string.lowercased().contains("enjoy a glass of wine")) {
-                print("foobar")
-            }
             
             let htmlString = try NSMutableAttributedString(data: data, options: options, documentAttributes: nil)
             
-            htmlString.usePreferredFontWhileMaintainingAttributes(forTextStyle: .body)
+            htmlString.usePreferredFontWhileMaintainingAttributes(forTextStyle: style)
             
             return htmlString
         } catch {
@@ -1666,6 +1664,16 @@ class SIRequest {
             return nil
         }
         
+    }
+    
+    static func requestIsRunning(request: Alamofire.Request?) -> Bool {
+        guard let request = request else {
+            return false
+        }
+        if let task = request.task {
+            return task.state == URLSessionTask.State.running
+        }
+        return false
     }
     
 }

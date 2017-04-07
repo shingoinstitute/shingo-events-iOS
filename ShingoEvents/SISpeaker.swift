@@ -9,6 +9,14 @@
 import Foundation
 import UIKit
 
+protocol SISpeakerDelegate {
+    func performActionOnSpeakers(data: [SISpeaker])
+}
+
+protocol SISpeakerRequestDelegate {
+    func onSpeakerRequestComplete()
+}
+
 class SISpeaker: SIObject {
     
     enum SpeakerType: String {
@@ -37,6 +45,8 @@ class SISpeaker: SIObject {
         }
     }
     
+    var eventDelegate: SISpeakerRequestDelegate?
+    
     override init() {
         title = ""
         pictureURL = ""
@@ -63,6 +73,11 @@ class SISpeaker: SIObject {
                 self.organizationName = speaker.organizationName
                 self.contactEmail = speaker.contactEmail
                 self.associatedSessionIds = speaker.associatedSessionIds
+                
+                if let delegate = self.eventDelegate {
+                    delegate.onSpeakerRequestComplete()
+                }
+                
             }
         }
     }

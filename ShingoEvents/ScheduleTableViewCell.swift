@@ -77,7 +77,6 @@ class ScheduleTableViewCell: SITableViewCell {
             DispatchQueue.main.async {
                 self.activityIndicator.stopAnimating()
             }
-            
         }
         
         updateSpeakersButton()

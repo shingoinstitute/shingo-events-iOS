@@ -42,6 +42,7 @@ class SISession: SIObject {
     var endDate : SIDate
     
     var tableviewCellDelegate: SISessionDelegate?
+    var eventDelegate: SISessionDelegate?
     
     override init() {
         didLoadSpeakers = false
@@ -183,3 +184,16 @@ class SISession: SIObject {
     }
     
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

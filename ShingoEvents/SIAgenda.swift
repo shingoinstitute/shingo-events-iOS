@@ -7,14 +7,31 @@
 //
 
 import Foundation
+import Alamofire
 
-// An Event Day
+protocol SIAgendaDelegate {
+    func onAgendaRequestCompletion()
+}
+
+/** 
+ An `SIAgenda` object represents a single day during an event
+*/
 class SIAgenda: SIObject {
     
     var didLoadSessions : Bool
     
+    var requestDelegate: SIAgendaDelegate?
+    
     // related objects
     var sessions : [SISession]
+    
+    var sessionsRequest: Alamofire.Request? {
+        willSet(newRequest) {
+            if !SIRequestManager.requestIsRunning(request: sessionsRequest) {
+                self.sessionsRequest = newRequest
+            }
+        }
+    }
     
     // agenda specific properties
     var displayName : String
@@ -30,17 +47,26 @@ class SIAgenda: SIObject {
     
     /// Gets session information for SIAgenda object using an agenda ID.
     func requestAgendaSessions(_ callback: (() -> ())?) {
-        SIRequest().requestSessions(agendaId: id, callback: { sessions in
-            
-            if let sessions = sessions {
-                self.sessions = sessions
-                self.didLoadSessions = true
-            }
-            
-            if let callback = callback {
-                return callback()
-            }
-        });
+        if !SIRequestManager.requestIsRunning(request: sessionsRequest) {
+            sessionsRequest = SIRequest().requestSessions(agendaId: id, callback: { sessions in
+                
+                if let sessions = sessions {
+                    self.sessions = sessions
+                    self.didLoadSessions = true
+                }
+                
+                if let delegate = self.requestDelegate {
+                    delegate.onAgendaRequestCompletion()
+                }
+                
+                if let done = callback {
+                    return done()
+                }
+
+            })
+        } else if let done = callback {
+            return done()
+        }
     }
     
 }

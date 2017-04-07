@@ -57,8 +57,14 @@ class SITableViewCell: UITableViewCell {
     
     func updateCell() {
         selectionStyle = .none
-        entityNameLabel.text = entity.name
-        entityTextView.isHidden = entity.attributedSummary.string.isEmpty
+        
+        if entityNameLabel != nil {
+            entityNameLabel.text = entity.name
+        }
+        
+        if entityTextView != nil {
+            entityTextView.isHidden = entity.attributedSummary.string.isEmpty
+        }
     }
 
     func expandCell() {

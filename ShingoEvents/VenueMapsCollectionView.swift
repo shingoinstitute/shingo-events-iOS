@@ -56,7 +56,7 @@ extension VenueMapsCollectionView: UICollectionViewDataSource, UICollectionViewD
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // The number of cells is the number of venue maps plus 1. The +1 cell is for displaying the venue address.
+        // The number of cells is the number of venue maps + 1. The +1 cell is for displaying the venue address.
         if venue.venueMaps.isEmpty {
             return 2
         }

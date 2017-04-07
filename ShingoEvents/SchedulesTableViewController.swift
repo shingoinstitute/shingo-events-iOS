@@ -14,7 +14,7 @@ class SchedulesTableViewController: UITableViewController, SISpeakerDelegate {
     var event: SIEvent!
     
     lazy var agendas: [SIAgenda]! = {
-        return self.event.agendaItems
+        return self.event.agendas
     }()
     
     lazy var eventName: String! = {
@@ -66,7 +66,6 @@ class SchedulesTableViewController: UITableViewController, SISpeakerDelegate {
                     for session in sessions {
                         session.requestSessionInformation(nil)
                     }
-
                 })
             }
         }

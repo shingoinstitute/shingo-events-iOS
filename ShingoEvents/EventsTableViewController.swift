@@ -19,14 +19,9 @@ class EventsTableViewController: UITableViewController {
     
     var advertIsDonePresenting: Bool = false
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationItem.title = "Upcoming Events"
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        navigationItem.title = "Upcoming Events"
         tableView.backgroundView = gradientBackgroundView
         gradientBackgroundView.backgroundColor = .lightShingoBlue
         
@@ -47,8 +42,8 @@ class EventsTableViewController: UITableViewController {
     }
     
     func displayBadRequestNotification() {
-        let alert = UIAlertController(title: "Oops!",
-                                      message: "We were unable to fetch any data for you. Please make sure you have an internet connection.",
+        let alert = UIAlertController(title: "Connection Not Detected",
+                                      message: "We were unable to fetch any data for you, please make check your device's network connection.",
                                       preferredStyle: UIAlertControllerStyle.alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(action)
@@ -71,12 +66,6 @@ extension EventsTableViewController: SICellDelegate, SplashScreenViewDelegate {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "Event Cell", for: indexPath) as! EventTableViewCell;
-
-        for constraint in cell.eventImageView.constraints {
-            if constraint.identifier == "bannerImageViewWidthConstraint" {
-                cell.maxBannerImageWidth = constraint.constant
-            }
-        }
         
         cell.event = events[indexPath.row]
         cell.delegate = self
@@ -105,11 +94,11 @@ extension EventsTableViewController: SICellDelegate, SplashScreenViewDelegate {
 //            present(splashScreen, animated: true) {
 //                self.onPresentSplashScreenComplete(identifier: identifier, event: event)
                 
+                // ----------
                 // DELETE ME
-                //
                 super.performSegue(withIdentifier: identifier, sender: event)
-                //
-                //
+                //----------
+
 //            }
         } else {
 //            present(splashScreen, animated: true) {
@@ -118,11 +107,11 @@ extension EventsTableViewController: SICellDelegate, SplashScreenViewDelegate {
                         self.displayBadRequestNotification()
                     }
                     
+                    // ----------
                     // DELETE ME
-                    //
                     super.performSegue(withIdentifier: identifier, sender: event)
-                    //
-                    //
+                    //----------
+
 //                    self.onPresentSplashScreenComplete(identifier: identifier, event: event)
                 }
 //            }
@@ -148,7 +137,9 @@ extension EventsTableViewController: SICellDelegate, SplashScreenViewDelegate {
             event.didDisplaySponsorAd = false
         }
     }
-    
+}
+
+extension EventsTableViewController {
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
@@ -162,8 +153,10 @@ extension EventsTableViewController: SICellDelegate, SplashScreenViewDelegate {
     }
     
     func cellDidUpdate() {
-        tableView.beginUpdates()
-        tableView.endUpdates()
+        UIView.performWithoutAnimation {
+            tableView.beginUpdates()
+            tableView.endUpdates()
+        }
     }
     
 }

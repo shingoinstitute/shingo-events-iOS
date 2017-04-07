@@ -21,6 +21,7 @@ class SIObject : AnyObject {
     var attributedSummary: NSAttributedString
     var didLoadImage: Bool
     var isSelected: Bool
+    var shouldResizeImage = true
     
     init() {
         image = nil
@@ -36,22 +37,34 @@ class SIObject : AnyObject {
         let urlRequest = URLRequest(url: URL(string: URLString)!)
         
         Alamofire.request(urlRequest).responseImage { (response) in
-            guard var image = response.result.value else {
+            guard let image = response.result.value else {
                 return callback(nil)
             }
             
-            if (image.size.width > 321) {
-                let newHeight = (image.size.height / image.size.width) * 321
-                let size = CGSize(width: 321, height: newHeight)
-                image = image.af_imageScaled(to: size)
-            } else if (image.scale > 1) {
-                let size = CGSize(width: image.size.width * image.scale, height: image.size.height * image.scale)
-                image = image.af_imageScaled(to: size)
-            }
             
             debugPrint("Image Downloaded for Object: \(Mirror(reflecting: self).subjectType), \(image)")
             return callback(image)
         }
+    }
+    
+    func resizeIntrinsicContent(maximumAllowedWidth width: CGFloat) {
+        
+        if shouldResizeImage && self.image != nil {
+            
+            if (image!.size.width > width) {
+                let height = ((image?.size.height)! / (image?.size.width)!) * width
+                let size = CGSize(width: width, height: height)
+                image = image!.af_imageScaled(to: size)
+            }
+            else if (image!.scale > 1) {
+                let size = CGSize(width: image!.size.width * image!.scale, height: image!.size.height * image!.scale)
+                image = image!.af_imageScaled(to: size)
+            }
+            
+            shouldResizeImage = false
+        }
+        
+        
     }
     
 }

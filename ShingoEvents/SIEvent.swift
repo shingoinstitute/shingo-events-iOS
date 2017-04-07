@@ -8,6 +8,12 @@
 
 import Foundation
 import UIKit
+import Alamofire
+
+protocol SIEventDelegate {
+    func onEventDetailCompletion()
+    func onEventImageRequestCompletion()
+}
 
 class SIEvent: SIObject {
     
@@ -25,7 +31,7 @@ class SIEvent: SIObject {
     
     // Related objects
     var speakers: [String:SISpeaker] // Speakers are stored in a dictionary to prevent duplicate speakers from appearing that may be recieved from the API response
-    var agendaItems: [SIAgenda]
+    var agendas: [SIAgenda]
     var venues: [SIVenue]
     var recipients: [SIRecipient]
     var affiliates: [SIAffiliate]
@@ -48,6 +54,23 @@ class SIEvent: SIObject {
         }
     }
     
+    var tableViewCellDelegate: SIEventDelegate?
+    
+    var requester: Alamofire.Request? {
+        get {
+            return _requester
+        }
+    }
+    
+    private var _requester: Alamofire.Request? {
+        willSet (newRequest) {
+            if let request = self._requester {
+                request.cancel()
+            }
+            self._requester = newRequest
+        }
+    }
+    
     override init() {
         didLoadAttendees = false
         didLoadSpeakers = false
@@ -61,7 +84,7 @@ class SIEvent: SIObject {
         didLoadSponsors = false
         didDisplaySponsorAd = false
         speakers = [String:SISpeaker]() // key = speaker's name, value = SISpeaker object
-        agendaItems = []
+        agendas = []
         venues = []
         recipients = []
         affiliates = []
@@ -83,11 +106,11 @@ class SIEvent: SIObject {
     // Requests for information on event objects.
     func requestEvent(_ callback: (() -> Void)?) {
         didLoadEventData = false
-        SIRequest().requestEvent(eventId: id) { (event) in
+        _requester = SIRequest().requestEvent(eventId: id) { (event) in
             if let event = event {
                 self.didLoadEventData = true
                 self.speakers = event.speakers
-                self.agendaItems = event.agendaItems
+                self.agendas = event.agendas
                 self.venues = event.venues
                 self.recipients = event.recipients
                 self.affiliates = event.affiliates
@@ -101,6 +124,11 @@ class SIEvent: SIObject {
                 self.set(splashAds: event.getSplashAds())
                 self.set(bannerAds: event.getBannerAds())
                 
+            }
+            self._requester = nil
+            
+            if let delegate = self.tableViewCellDelegate {
+                delegate.onEventDetailCompletion()
             }
             
             if let cb = callback {
@@ -152,8 +180,8 @@ class SIEvent: SIObject {
         return nil
     }
     
-    func requestAttendees(callback: @escaping () -> Void) {
-        SIRequest().requestEvent(eventId: id) { event in
+    func requestAttendees(callback: @escaping () -> Void) -> Alamofire.Request? {
+        return SIRequest().requestEvent(eventId: id) { event in
             if let event = event {
                 self.attendees = event.attendees
                 self.didLoadAttendees = true
@@ -162,8 +190,8 @@ class SIEvent: SIObject {
         }
     }
     
-    func requestSpeakers(_ callback:@escaping () -> ()) {
-        SIRequest().requestSpeakers(eventId: id) { (speakers) in
+    func requestSpeakers(_ callback:@escaping () -> ()) -> Alamofire.Request? {
+        return SIRequest().requestSpeakers(eventId: id) { (speakers) in
             if let speakers = speakers {
                 for speaker in speakers {
                     self.speakers[speaker.name] = speaker //Adds speakers to dictionary object
@@ -174,15 +202,15 @@ class SIEvent: SIObject {
         }
     }
     
-    func requestAgendas(_ callback: @escaping () -> ()) {
-        SIRequest().requestAgendaDays(eventId: self.id, callback: { agendas in
+    func requestAgendas(_ callback: @escaping () -> ()) -> Alamofire.Request? {
+        return SIRequest().requestAgendaDays(eventId: self.id, callback: { agendas in
             
             guard let agendas = agendas else {
                 callback()
                 return
             }
             
-            self.agendaItems = agendas
+            self.agendas = agendas
             self.didLoadAgendas = true
             
             callback()
@@ -190,8 +218,9 @@ class SIEvent: SIObject {
     }
     
     func requestSessions(callback: (() -> ())?) {
-        for agenda in agendaItems {
-            agenda.requestAgendaSessions({ 
+        
+        for agenda in agendas {
+            agenda.requestAgendaSessions({
                 for session in agenda.sessions {
                     session.requestSessionInformation(nil)
                 }
@@ -199,13 +228,12 @@ class SIEvent: SIObject {
         }
         
         if let callback = callback {
-            return callback()
+            callback()
         }
-        
     }
     
-    func requestVenues(_ callback: @escaping () -> ()) {
-        SIRequest().requestVenues(eventId: self.id, callback: { (venues) in
+    func requestVenues(_ callback: @escaping () -> ()) -> Alamofire.Request? {
+        return SIRequest().requestVenues(eventId: self.id, callback: { (venues) in
             guard let venues = venues else {
                 callback()
                 return
@@ -222,8 +250,8 @@ class SIEvent: SIObject {
         });
     }
     
-    func requestRecipients(_ callback: @escaping () -> ()) {
-        SIRequest().requestRecipients(eventId: self.id) { (recipients) in
+    func requestRecipients(_ callback: @escaping () -> ()) -> Alamofire.Request? {
+        return SIRequest().requestRecipients(eventId: self.id) { (recipients) in
             guard let recipients = recipients else {
                 callback()
                 return
@@ -236,36 +264,34 @@ class SIEvent: SIObject {
         }
     }
     
-    func requestAffiliates(_ callback: @escaping () -> ()) {
-        SIRequest.requestAffiliates { (affiliates) in
+    func requestAffiliates(_ callback: @escaping () -> ()) -> Alamofire.Request? {
+        return SIRequest.requestAffiliates { (affiliates) in
             guard let affiliates = affiliates else {
-                callback()
-                return
+                return callback()
             }
             
             self.affiliates = affiliates
             self.didLoadAffiliates = true
             
-            callback()
+            return callback()
         }
     }
     
-    func requestExhibitors(_ callback: @escaping () -> ()) {
-        SIRequest().requestExhibitors(eventId: self.id) { (exhibitors) in
+    func requestExhibitors(_ callback: @escaping () -> ()) -> Alamofire.Request? {
+        return SIRequest().requestExhibitors(eventId: self.id) { (exhibitors) in
             guard let exhibitors = exhibitors else {
-                callback()
-                return
+                return callback()
             }
             
             self.exhibitors = exhibitors
             self.didLoadExhibitors = true
             
-            callback()
+            return callback()
         }
     }
     
-    func requestSponsors(_ callback: @escaping () -> ()) {
-        SIRequest().requestSponsors(eventId: self.id) { (sponsors) in
+    func requestSponsors(_ callback: @escaping () -> ()) -> Alamofire.Request? {
+        return SIRequest().requestSponsors(eventId: self.id) { (sponsors) in
             guard let sponsors = sponsors else { return callback() }
             
             self.sponsors = sponsors
@@ -283,15 +309,15 @@ class SIEvent: SIObject {
     fileprivate func requestBannerImage(_ callback: (() -> Void)?) {
         
         if self.image != nil {
-            if let cb = callback {
-                cb()
+            if let done = callback {
+                done()
             }
             return
         }
         
         if bannerURL.isEmpty {
-            if let cb = callback {
-                cb()
+            if let done = callback {
+                done()
             }
             return
         }
@@ -301,17 +327,14 @@ class SIEvent: SIObject {
                 self.image = image
                 self.didLoadImage = true
             }
-            if let cb = callback {
-                cb()
+            
+            if let done = callback {
+                done()
             }
         }
     }
     
     func getBannerImage(_ callback: @escaping (_ image: UIImage?) -> Void) {
-        if let image = self.image {
-            callback(image)
-            return
-        }
         
         requestBannerImage() {
             if let image = self.image {
@@ -319,7 +342,16 @@ class SIEvent: SIObject {
             } else {
                 callback(nil)
             }
+            
+            if let delegate = self.tableViewCellDelegate {
+                delegate.onEventImageRequestCompletion()
+            }
+            
         }
     }
-    
 }
+
+
+
+
+
