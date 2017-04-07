@@ -35,35 +35,6 @@ class VenueMapCollectionCell: UICollectionViewCell {
     }
 }
 
-class VenueMapInformationCell: UICollectionViewCell {
-    
-    var venue: SIVenue! { didSet { updateCell() } }
-    
-    @IBOutlet weak var title: UILabel!
-    @IBOutlet weak var address: UILabel!
-    
-    
-    func updateCell() {
-        
-        contentView.backgroundColor = UIColor.black.withAlphaComponent(0.9)
-        contentView.layer.cornerRadius = 3.0
-        
-        title.textColor = UIColor.yellow
-        title.text = venue.name
-        
-        address.textColor = UIColor.yellow
-        address.text = venue.address
-        
-        if venue.name.isEmpty {
-            address.text = "Venue information not available."
-        }
-        
-    }
-    
-
-    
-}
-
 
 
 

@@ -47,7 +47,7 @@ class MainMenuViewController: UIViewController {
             self.requestEvents()
             self.requestAffiliates()
         }
-        let queue = DispatchQueue.global(qos: .background)
+        let queue = DispatchQueue.global(qos: .utility)
         queue.async(execute: workItem)
         
         // Create background view gradient

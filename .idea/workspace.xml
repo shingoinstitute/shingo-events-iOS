@@ -1,26 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bfc5d176-14c0-49db-934f-a6bb8850773f" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Shingo Events.xcodeproj/project.pbxproj" afterPath="$PROJECT_DIR$/Shingo Events.xcodeproj/project.pbxproj" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Shingo Events.xcodeproj/xcuserdata/craigblackburn.xcuserdatad/xcschemes/xcschememanagement.plist" afterPath="$PROJECT_DIR$/Shingo Events.xcodeproj/xcuserdata/craigblackburn.xcuserdatad/xcschemes/xcschememanagement.plist" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ShingoEvents/APIRequests.swift" afterPath="$PROJECT_DIR$/ShingoEvents/APIRequests.swift" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ShingoEvents/EventMenuViewController.swift" afterPath="$PROJECT_DIR$/ShingoEvents/EventMenuViewController.swift" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ShingoEvents/EventTableViewCell.swift" afterPath="$PROJECT_DIR$/ShingoEvents/EventTableViewCell.swift" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ShingoEvents/EventsTableViewController.swift" afterPath="$PROJECT_DIR$/ShingoEvents/EventsTableViewController.swift" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ShingoEvents/Main.storyboard" afterPath="$PROJECT_DIR$/ShingoEvents/Main.storyboard" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ShingoEvents/SIAgenda.swift" afterPath="$PROJECT_DIR$/ShingoEvents/SIAgenda.swift" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ShingoEvents/SIEvent.swift" afterPath="$PROJECT_DIR$/ShingoEvents/SIEvent.swift" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ShingoEvents/SIObject.swift" afterPath="$PROJECT_DIR$/ShingoEvents/SIObject.swift" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ShingoEvents/SISession.swift" afterPath="$PROJECT_DIR$/ShingoEvents/SISession.swift" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ShingoEvents/SISpeaker.swift" afterPath="$PROJECT_DIR$/ShingoEvents/SISpeaker.swift" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ShingoEvents/SISponsor.swift" afterPath="$PROJECT_DIR$/ShingoEvents/SISponsor.swift" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ShingoEvents/ScheduleTableViewCell.swift" afterPath="$PROJECT_DIR$/ShingoEvents/ScheduleTableViewCell.swift" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ShingoEvents/SchedulesTableViewController.swift" afterPath="$PROJECT_DIR$/ShingoEvents/SchedulesTableViewController.swift" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ShingoEvents/SharedCode.swift" afterPath="$PROJECT_DIR$/ShingoEvents/SharedCode.swift" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ShingoEvents/SponsorTableViewCell.swift" afterPath="$PROJECT_DIR$/ShingoEvents/SponsorTableViewCell.swift" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ShingoEvents/SponsorsTableViewController.swift" afterPath="$PROJECT_DIR$/ShingoEvents/SponsorsTableViewController.swift" />
-    </list>
+    <list default="true" id="bfc5d176-14c0-49db-934f-a6bb8850773f" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -48,7 +29,7 @@
         <entry file="file://$PROJECT_DIR$/ShingoEvents/SIEvent.swift">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="267">
-              <caret line="38" column="29" lean-forward="true" selection-start-line="38" selection-start-column="29" selection-end-line="38" selection-end-column="29" />
+              <caret line="38" column="29" lean-forward="false" selection-start-line="38" selection-start-column="29" selection-end-line="38" selection-end-column="29" />
               <folding />
             </state>
           </provider>
@@ -304,12 +285,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1491587828852</updated>
-      <workItem from="1491587832747" duration="603000" />
+      <workItem from="1491587832747" duration="717000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="603000" />
+    <option name="totallyTimeSpent" value="717000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -322,7 +303,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-1920" y="22" width="1920" height="1058" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18430753" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -382,7 +362,7 @@
     <entry file="file://$PROJECT_DIR$/ShingoEvents/SIEvent.swift">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="267">
-          <caret line="38" column="29" lean-forward="true" selection-start-line="38" selection-start-column="29" selection-end-line="38" selection-end-column="29" />
+          <caret line="38" column="29" lean-forward="false" selection-start-line="38" selection-start-column="29" selection-end-line="38" selection-end-column="29" />
           <folding />
         </state>
       </provider>
