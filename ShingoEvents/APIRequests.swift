@@ -1185,8 +1185,8 @@ class SIRequest {
                         sponsor.logoURL = logoURL
                     }
                     
-                    if let bannerURL = record["Banner_URL__c"].string {
-                        sponsor.bannerURL = bannerURL
+                    if let imageUrl = record["Banner_URL__c"].string {
+                        sponsor.imageUrl = imageUrl
                     }
                     
                     if let splashScreenURL = record["Splash_Screen_URL__c"].string {
@@ -1248,8 +1248,8 @@ class SIRequest {
                     }
                 }
                 
-                if let bannerURL = record["Banner_URL__c"].string {
-                    sponsor.bannerURL = bannerURL
+                if let imageUrl = record["Banner_URL__c"].string {
+                    sponsor.imageUrl = imageUrl
                 }
                 
                 if let type = record["Sponsor_Level__c"].string {

@@ -31,7 +31,7 @@ class SISponsor: SIObject {
             requestLogoImage(callback: nil)
         }
     }
-    var bannerURL : String {
+    var imageUrl : String {
         didSet {
             requestBannerImage(callback: nil)
         }
@@ -41,14 +41,9 @@ class SISponsor: SIObject {
             requestSplashScreenImage(callback: nil)
         }
     }
-    var bannerImage : UIImage? {
-        get {
-            return self.image
-        }
-    }
+
     var logoImage: UIImage?
     var splashScreenImage : UIImage?
-    var didLoadBannerImage: Bool
     var didLoadLogoImage: Bool
     var didLoadSplashScreen: Bool
     var didLoadSponsorDetails: Bool
@@ -58,9 +53,8 @@ class SISponsor: SIObject {
     override init() {
         sponsorType = .none
         logoURL = ""
-        bannerURL = ""
+        imageUrl = ""
         splashScreenURL = ""
-        didLoadBannerImage = false
         didLoadSplashScreen = false
         didLoadSponsorDetails = false
         didLoadLogoImage = false
@@ -74,67 +68,45 @@ class SISponsor: SIObject {
     }
     
     func requestLogoImage(callback: (() -> Void)?) {
-        
-        if logoURL.isEmpty {
+        self.requestImage(URLString: logoURL) { image in
+            if let image = image {
+                self.logoImage = image
+                self.didLoadLogoImage = true
+            }
             if let done = callback {
                 return done()
-            }
-        } else {
-            self.requestImage(URLString: logoURL) { image in
-                if let image = image {
-                    self.logoImage = image
-                    self.didLoadLogoImage = true
-                }
-                if let done = callback {
-                    return done()
-                }
             }
         }
     }
     
     func requestBannerImage(callback: (() -> Void)?) {
-        
-        if bannerURL.isEmpty {
-            if let done = callback {
-                return done()
+        requestImage(URLString: imageUrl) { image in
+            if let image = image as UIImage? {
+                self.image = image
+                self.didLoadImage = true
             }
-        } else {
-            requestImage(URLString: bannerURL) { image in
-                if let image = image as UIImage? {
-                    self.image = image
-                    self.didLoadBannerImage = true
-                    self.didLoadImage = true
-                }
-                
-                if let delegate = self.tableViewCellDelegate {
-                    delegate.onBannerImageRequestCompletionHandler()
-                }
-                
-                if let done = callback {
-                    done()
-                }
+            
+            if let delegate = self.tableViewCellDelegate {
+                delegate.onBannerImageRequestCompletionHandler()
+            }
+            
+            if let done = callback {
+                done()
             }
         }
         
     }
     
     func requestSplashScreenImage(callback: (() -> Void)?) {
-        
-        if splashScreenURL.isEmpty {
-            if let done = callback {
-                return done()
+        requestImage(URLString: splashScreenURL) { image in
+            
+            if let image = image {
+                self.splashScreenImage = image
+                self.didLoadSplashScreen = true
             }
-        } else {
-            requestImage(URLString: splashScreenURL) { image in
-                
-                if let image = image {
-                    self.splashScreenImage = image
-                    self.didLoadSplashScreen = true
-                }
-                
-                if let done = callback {
-                    done()
-                }
+            
+            if let done = callback {
+                done()
             }
         }
     }
@@ -145,7 +117,7 @@ class SISponsor: SIObject {
                 self.name = sponsor.name
                 self.logoURL = sponsor.logoURL
                 self.attributedSummary = sponsor.attributedSummary
-                self.bannerURL = sponsor.bannerURL
+                self.imageUrl = sponsor.imageUrl
                 self.splashScreenImage = sponsor.splashScreenImage
                 self.sponsorType = sponsor.sponsorType
                 self.didLoadSponsorDetails = true

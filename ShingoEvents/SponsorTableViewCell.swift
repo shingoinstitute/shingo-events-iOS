@@ -33,30 +33,24 @@ class SponsorTableViewCell: SITableViewCell {
     
     override func updateCell() {
         super.updateCell()
-        
-        if let _ = sponsor.image {
-            sponsor.resizeIntrinsicContent(maximumAllowedWidth: frame.width)
-            logoImageView = UIImageView(image: sponsor.image)
-        } else {
-            logoImageView = UIImageView(image: #imageLiteral(resourceName: "Handshake-100"))
-            sponsor.requestBannerImage(callback: { 
-                self.sponsor.resizeIntrinsicContent(maximumAllowedWidth: self.frame.width)
-                self.logoImageView = UIImageView(image: self.sponsor.image)
-            })
+
+        guard let sponsor = sponsor else {
+            return
         }
         
-        if sponsor.attributedSummary.string.isEmpty {
-            descriptionTextView.removeFromSuperview()
-            imageViewBottomConstraint = NSLayoutConstraint(item: logoImageView,
-                                                           attribute: .bottom,
-                                                           relatedBy: .equal,
-                                                           toItem: contentView,
-                                                           attribute: .bottomMargin,
-                                                           multiplier: 1,
-                                                           constant: 0)
-            
-            contentView.addConstraint(imageViewBottomConstraint)
-            updateConstraints()
+        if sponsor.image != nil {
+            sponsor.resizeIntrinsicContent(maximumAllowedWidth: frame.width)
+            if let img = sponsor.image {
+                logoImageView.image = img
+            }
+        } else if logoImageView.image == #imageLiteral(resourceName: "FlameOnly-100") {
+            sponsor.requestBannerImage(callback: { 
+                self.sponsor.resizeIntrinsicContent(maximumAllowedWidth: self.frame.width)
+                if let img = self.sponsor.image {
+                    self.logoImageView.image = img
+                }
+                
+            })
         }
         
         if let delegate = self.delegate {
