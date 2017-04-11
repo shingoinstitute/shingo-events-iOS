@@ -64,17 +64,10 @@ class VenueMapViewController: UIViewController, UIScrollViewDelegate {
         return newImage!
     }
     
-    override func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
-//        switch toInterfaceOrientation {
-//        case .Portrait:
-//            imageView.image = resizeImage(venueMap.getVenueMapImage(), toSize: view.frame.height)
-//        case .LandscapeLeft, .LandscapeRight:
-//            imageView.image = resizeImage(venueMap.getVenueMapImage(), toSize: view.frame.height)
-//        default:
-//            break
-//        }
-        venueMap.getVenueMapImage() { image in
-            self.imageView.image = self.resizeImage(image, toSize: self.view.frame.height)
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        if let img = imageView.image {
+            imageView.image = resizeImage(img, toSize: self.view.frame.height)
         }
     }
     

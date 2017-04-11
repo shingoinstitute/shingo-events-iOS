@@ -65,8 +65,10 @@ class SponsorsTableViewController: UITableViewController, SICellDelegate {
     }
     
     func cellDidUpdate() {
-        tableView.beginUpdates()
-        tableView.endUpdates()
+//        UIView.performWithoutAnimation {
+            tableView.beginUpdates()
+            tableView.endUpdates()
+//        }
     }
 }
 
@@ -175,6 +177,8 @@ extension SponsorsTableViewController {
         tableView.beginUpdates()
         tableView.endUpdates()
     }
+    
+    
     
 }
 

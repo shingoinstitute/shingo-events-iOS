@@ -11,20 +11,15 @@ import Alamofire
 
 class SchedulesTableViewController: UITableViewController, SISpeakerDelegate {
 
-    var agendas: [SIAgenda]!
-    var eventName: String!
+    var event: SIEvent!
     
-    override func loadView() {
-        super.loadView()
-        
-        if agendas == nil {
-            addNoContentLabelNotification()
-        } else if agendas.isEmpty {
-            addNoContentLabelNotification()
-        } else {
-            requestDataForTable()
-        }
-    }
+    lazy var agendas: [SIAgenda]! = {
+        return self.event.agendas
+    }()
+    
+    lazy var eventName: String! = {
+       return self.event.name
+    }()
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -35,7 +30,7 @@ class SchedulesTableViewController: UITableViewController, SISpeakerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        agendas != nil && !agendas.isEmpty ? requestDataForTable() : addNoContentLabelNotification()
         tableView.backgroundView = gradientBackgroundView
         gradientBackgroundView.backgroundColor = .lightShingoBlue
         
@@ -43,7 +38,10 @@ class SchedulesTableViewController: UITableViewController, SISpeakerDelegate {
         gradientLayer.frame = gradientBackgroundView.bounds
         gradientBackgroundView.layer.insertSublayer(gradientLayer, at: 0)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(SchedulesTableViewController.adjustFontForCategorySizeChange), name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(self.tableView.reloadData),
+                                               name: NSNotification.Name.UIContentSizeCategoryDidChange,
+                                               object: nil)
         
         tableView.estimatedRowHeight = 106
         tableView.rowHeight = UITableViewAutomaticDimension
@@ -54,32 +52,23 @@ class SchedulesTableViewController: UITableViewController, SISpeakerDelegate {
     
     private func requestDataForTable() {
 
-        DispatchQueue.global(qos: .utility).async { [unowned self] in
-            for section in 0 ..< self.agendas.count {
-                let agenda = self.agendas[section]
-                if !agenda.didLoadSessions {
-                    agenda.requestAgendaSessions({
-                        let sessions = agenda.sessions.sorted {$1.startDate.isGreaterThanDate($0.startDate)}
-                        agenda.sessions = sessions
-                        
-                        DispatchQueue.main.async {
-                            self.tableView.reloadData()
-                        }
-                        
-                        for row in 0 ..< sessions.count {
-                            let session = sessions[row]
-                            if !session.didLoadSessionDetails {
-                                session.requestSessionInformation({})
-                            }
-                        }
-                    })
-                }
+        for section in 0 ..< self.agendas.count {
+            let agenda = self.agendas[section]
+            if !agenda.didLoadSessions {
+                agenda.requestAgendaSessions({
+                    let sessions = agenda.sessions.sorted {$1.startDate.regionDate > $0.startDate.regionDate}
+                    agenda.sessions = sessions
+                    
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
+                    
+                    for session in sessions {
+                        session.requestSessionInformation(nil)
+                    }
+                })
             }
         }
-    }
-    
-    func adjustFontForCategorySizeChange() {
-        tableView.reloadData()
     }
     
     func addNoContentLabelNotification() {
@@ -186,7 +175,7 @@ extension SchedulesTableViewController {
         dateFormatter.dateStyle = .medium
         dateFormatter.timeZone = TimeZone(identifier: "GMT")
         
-        let dateText = dateFormatter.string(from: agendas[section].date as Date)
+        let dateText: String = agendas[section].date.toString()
         
         let label = UILabel(text: "\t\(agendas[section].displayName), \(dateText)", font: UIFont.preferredFont(forTextStyle: .headline))
         label.textColor = UIColor.white
@@ -195,6 +184,7 @@ extension SchedulesTableViewController {
     }
     
 }
+
 
 
 

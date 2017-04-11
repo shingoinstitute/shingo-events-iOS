@@ -14,17 +14,14 @@ class EventsTableViewController: UITableViewController {
     
     // MARK: - Properties
     var events: [SIEvent]!
-
+    
     var gradientBackgroundView = UIView()
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationItem.title = "Upcoming Events"
-    }
+    var advertIsDonePresenting: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        navigationItem.title = "Upcoming Events"
         tableView.backgroundView = gradientBackgroundView
         gradientBackgroundView.backgroundColor = .lightShingoBlue
         
@@ -32,7 +29,7 @@ class EventsTableViewController: UITableViewController {
         gradientLayer.frame = gradientBackgroundView.bounds
         gradientBackgroundView.layer.insertSublayer(gradientLayer, at: 0)
         
-        tableView.estimatedRowHeight = 200;
+        tableView.estimatedRowHeight = 300;
         tableView.rowHeight = UITableViewAutomaticDimension;
         
         // Begins API requests for each event.
@@ -45,8 +42,8 @@ class EventsTableViewController: UITableViewController {
     }
     
     func displayBadRequestNotification() {
-        let alert = UIAlertController(title: "Oops!",
-                                      message: "We were unable to fetch any data for you. Please make sure you have an internet connection.",
+        let alert = UIAlertController(title: "Connection Not Detected",
+                                      message: "We were unable to fetch any data for you, please make check your device's network connection.",
                                       preferredStyle: UIAlertControllerStyle.alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(action)
@@ -54,7 +51,7 @@ class EventsTableViewController: UITableViewController {
     }
 }
 
-extension EventsTableViewController: SICellDelegate {
+extension EventsTableViewController: SICellDelegate, SplashScreenViewDelegate {
 
     // MARK: - Table view data source
     
@@ -70,42 +67,67 @@ extension EventsTableViewController: SICellDelegate {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "Event Cell", for: indexPath) as! EventTableViewCell;
         
-        cell.cardView.backgroundColor = .white
-        cell.backgroundColor = .clear
-        
         cell.event = events[indexPath.row]
-        
         cell.delegate = self
         
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
         let cell = tableView.cellForRow(at: indexPath) as! EventTableViewCell
-        cell.cardView.backgroundColor = .white
+        cell.contentView.backgroundColor = .white
         
         let event = events[(indexPath as NSIndexPath).row]
         
+        self.performSegue(withIdentifier: "EventMenu", sender: event)
+    }
+    
+    override func performSegue(withIdentifier identifier: String, sender: Any?) {
+        
+        guard let event = sender as? SIEvent else {
+            return
+        }
+        
+        let splashScreen = SplashScreenView(viewController: self, identifier: identifier, event: event)
+
         if event.didLoadEventData {
-            self.performSegue(withIdentifier: "EventMenu", sender: event)
-            
+            present(splashScreen, animated: true) {
+                self.onPresentSplashScreenComplete(identifier: identifier, event: event)
+            }
         } else {
-            let activityView = ActivityViewController(message: "Downloading Event Data...")
-            present(activityView, animated: false, completion: {
+            present(splashScreen, animated: true) {
                 event.requestEvent() {
-                    self.dismiss(animated: true, completion: {
-                        if event.didLoadEventData {
-                            self.performSegue(withIdentifier: "EventMenu", sender: self.events[(indexPath as NSIndexPath).row])
-                        } else {
-                            self.displayBadRequestNotification()
-                        }
-                    })
+                    if !event.didLoadEventData {
+                        self.displayBadRequestNotification()
+                    }
+                    self.onPresentSplashScreenComplete(identifier: identifier, event: event)
                 }
-            })
+            }
         }
     }
     
+    /**
+     onPresentSplashScreenComplete allows the view to dismiss a `SplashScreenView` and perform a segue at the correct time.
+     The view will dismiss a `SplashScreenView` and let the view controller perform a segue when:
+     
+     a) An event has already loaded its data, but still needs to display a sponsor ad, or
+     
+     b) A sponsor ad has been displayed for a predetermined length of time but the event is still loading its data
+     
+     - parameter identifier: The identfier of the viewController to be segued to.
+     - parameter event: The event object to be displayed on the following viewController.
+     */
+    func onPresentSplashScreenComplete(identifier: String, event: SIEvent) {
+        if event.didDisplaySponsorAd && event.didLoadEventData {
+            dismiss(animated: false) {
+                super.performSegue(withIdentifier: identifier, sender: event)
+            }
+            event.didDisplaySponsorAd = false
+        }
+    }
+}
+
+extension EventsTableViewController {
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
@@ -119,45 +141,10 @@ extension EventsTableViewController: SICellDelegate {
     }
     
     func cellDidUpdate() {
-        tableView.beginUpdates()
-        tableView.endUpdates()
-    }
-    
-}
-
-class RadialGradientLayer: CALayer {
-    
-    override init(){
-        
-        super.init()
-        
-        needsDisplayOnBoundsChange = true
-    }
-
-    
-    required init(coder aDecoder: NSCoder) {
-        
-        super.init()
-        
-    }
-    
-    override func draw(in ctx: CGContext) {
-        
-        ctx.saveGState()
-        
-        let locations:[CGFloat] = [0.0, 1.0]
-        let gradColors: [CGFloat] = [0, 0, 0, 0, 0, 0 , 0, 0.5]
-        
-        let colorSpace = CGColorSpaceCreateDeviceRGB()
-        
-        let gradient = CGGradient(colorSpace: colorSpace, colorComponents: gradColors, locations: locations, count: 2)!
-        
-        let gradCenter = CGPoint(x: self.bounds.size.width / 2, y: self.bounds.size.height / 2)
-        let gradRadius = min(self.bounds.size.width, self.bounds.size.height)
-        
-        ctx.drawRadialGradient(gradient, startCenter: gradCenter, startRadius: 0, endCenter: gradCenter, endRadius: gradRadius, options: CGGradientDrawingOptions.drawsAfterEndLocation)
-
-        
+        UIView.performWithoutAnimation {
+            tableView.beginUpdates()
+            tableView.endUpdates()
+        }
     }
     
 }

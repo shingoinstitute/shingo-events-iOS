@@ -10,22 +10,11 @@ import Foundation
 import UIKit
 
 /**
- 
  This class provides a view that indicates data is being loaded onto the device from an external source.
- 
  This class is meant to be presented modally.
- 
- - author: Craig Blackburn 3/15/2016
- 
- - copyright: © 2016 Utah State University
  */
 class ActivityViewController: UIViewController {
     
-    var message = "Downloading..." {
-        didSet {
-            messageLabel.text = message
-        }
-    }
     var activityView: UIView = {
         let view = UIView.newAutoLayout()
         view.backgroundColor = UIColor(white: 0.0, alpha: 0.5)
@@ -66,11 +55,12 @@ class ActivityViewController: UIViewController {
     
     convenience init() {
         self.init(nibName: nil, bundle: nil)
+        self.messageLabel.text = "Downloading..."
     }
     
     convenience init(message: String) {
         self.init(nibName: nil, bundle: nil)
-        self.message = message
+        self.messageLabel.text = message
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -79,14 +69,8 @@ class ActivityViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        messageLabel.text = message
-        view.setNeedsUpdateConstraints()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        // `activityIndicatorView` should always be animating and starts as soon as the view becomes visible.
         activityIndicatorView.startAnimating()
+        view.setNeedsUpdateConstraints()
     }
     
     override func updateViewConstraints() {

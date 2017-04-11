@@ -14,6 +14,9 @@ class VenueMapsCollectionView: UIViewController {
 
     var venue : SIVenue!
     
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var addressLabel: UILabel!
+    
     @IBOutlet weak var collectionView: UICollectionView!
     
     override func viewWillAppear(_ animated: Bool) {
@@ -24,12 +27,8 @@ class VenueMapsCollectionView: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let backgroundImage = UIImageView()
-        backgroundImage.image = UIImage(named: "Shingo Icon Fullscreen")
-        backgroundImage.contentMode = UIViewContentMode.scaleAspectFill
-        collectionView.backgroundView = backgroundImage
-        
+        titleLabel.text = venue.name
+        addressLabel.text = venue.address
     }
 
     override var shouldAutorotate : Bool {
@@ -56,24 +55,14 @@ extension VenueMapsCollectionView: UICollectionViewDataSource, UICollectionViewD
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // The number of cells is the number of venue maps plus 1. The +1 cell is for displaying the venue address.
         if venue.venueMaps.isEmpty {
-            return 2
+            return 1
         }
-        
-        return venue.venueMaps.count + 1
+        return venue.venueMaps.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        switch (indexPath as NSIndexPath).row {
-        // The first cell displays information about the venue
-        case 0:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "informationCell", for: indexPath) as! VenueMapInformationCell
-            cell.venue = venue
-            return cell
-        default:
-        // The rest of the cells display maps for the venue
+
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CellIdentifier, for: indexPath) as! VenueMapCollectionCell
         
             if cell.venueMap != nil {
@@ -83,19 +72,16 @@ extension VenueMapsCollectionView: UICollectionViewDataSource, UICollectionViewD
             if self.venue.venueMaps.isEmpty {
                 cell.venueMap = SIVenueMap()
             } else {
-                cell.venueMap = self.venue.venueMaps[(indexPath as NSIndexPath).row - 1]
+                cell.venueMap = self.venue.venueMaps[(indexPath as NSIndexPath).row]
             }
             
             return cell
-        }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if (indexPath as NSIndexPath).row > 0 {
-            let cell = collectionView.cellForItem(at: indexPath) as! VenueMapCollectionCell
-            if let venueMap = cell.venueMap {
-                self.performSegue(withIdentifier: "MapView", sender: venueMap)
-            }
+        let cell = collectionView.cellForItem(at: indexPath) as! VenueMapCollectionCell
+        if let venueMap = cell.venueMap {
+            self.performSegue(withIdentifier: "MapView", sender: venueMap)
         }
     }
     

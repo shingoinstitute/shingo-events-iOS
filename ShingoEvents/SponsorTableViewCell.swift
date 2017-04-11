@@ -10,9 +10,8 @@ import UIKit
 
 class SponsorTableViewCell: SITableViewCell {
 
-    @IBOutlet weak var nameLabel: UILabel! { didSet { entityNameLabel = nameLabel } }
-    @IBOutlet weak var descriptionTextView: UITextView! { didSet { entityTextView = descriptionTextView } }
     @IBOutlet weak var logoImageView: UIImageView!
+    @IBOutlet weak var descriptionTextView: UITextView! { didSet { entityTextView = descriptionTextView } }
     
     @IBOutlet weak var imageViewBottomConstraint: NSLayoutConstraint!
     
@@ -32,68 +31,54 @@ class SponsorTableViewCell: SITableViewCell {
     
     var delegate: SICellDelegate?
     
-    
-    
     override func updateCell() {
         super.updateCell()
+
         guard let sponsor = sponsor else {
             return
         }
         
-        if sponsor.attributedSummary.string.isEmpty {
-            descriptionTextView.removeFromSuperview()
-            imageViewBottomConstraint = NSLayoutConstraint(item: logoImageView,
-                                                           attribute: .bottom,
-                                                           relatedBy: .equal,
-                                                           toItem: contentView,
-                                                           attribute: .bottomMargin,
-                                                           multiplier: 1,
-                                                           constant: 0)
-            contentView.addConstraint(imageViewBottomConstraint)
-            updateConstraints()
+        if sponsor.image != nil {
+            sponsor.resizeIntrinsicContent(maximumAllowedWidth: frame.width)
+            if let img = sponsor.image {
+                logoImageView.image = img
+            }
+        } else if logoImageView.image == #imageLiteral(resourceName: "FlameOnly-100") {
+            sponsor.requestBannerImage(callback: { 
+                self.sponsor.resizeIntrinsicContent(maximumAllowedWidth: self.frame.width)
+                if let img = self.sponsor.image {
+                    self.logoImageView.image = img
+                }
+                
+            })
         }
         
-        nameLabel.text = sponsor.name
-        
-        setLogoImage(sponsor: sponsor)
-    
+        if let delegate = self.delegate {
+            delegate.cellDidUpdate()
+        }
         
     }
     
-//    override func expandCell() {
-//        if !entityTextView.isHidden {
-//            let summary = NSMutableAttributedString(attributedString: entity.attributedSummary)
-//            summary.append(tapToSeeLessText)
-//            entityTextView.attributedText = summary
-//        }
-//    }
-//    
-//    override func shrinkCell() {
-//        if !entityTextView.isHidden {
-//            entityTextView.attributedText = selectMoreInfoText
-//        }
-//    }
+    override func expandCell() {
+        if !entityTextView.isHidden {
+            let summary = NSMutableAttributedString(attributedString: entity.attributedSummary)
+            summary.append(tapToSeeLessText)
+            entityTextView.attributedText = summary
+        }
+    }
     
-    func setLogoImage(sponsor: SISponsor) {
-        sponsor.getLogoImage() { image in
-            
-            if image.size.width > self.contentView.frame.width {
-                let imageView = UIImageView()
-                imageView.image = image
-                imageView.resizeImageViewToIntrinsicContentSize(thatFitsWidth: self.contentView.frame.width)
-                if let image = imageView.image {
-                    self.logoImageView.image = image
-                }
-                if let delegate = self.delegate {
-                    delegate.cellDidUpdate()
-                }
-            } else {
-                self.logoImageView.image = image
-                if let delegate = self.delegate {
-                    delegate.cellDidUpdate()
-                }
-            }
+    override func shrinkCell() {
+        if !entityTextView.isHidden {
+            entityTextView.attributedText = selectMoreInfoText
         }
     }
     
 }
+
+
+
+
+
+
+
+

@@ -38,47 +38,57 @@ class ScheduleTableViewCell: SITableViewCell {
         
         selectionStyle = .none
         
-        
-        if !session.didLoadSpeakers {
-            DispatchQueue.global(qos: .utility).async {
-                self.session.requestSpeakers {
-                    DispatchQueue.main.async {
-                        if self.session.speakers.isEmpty {
-                            self.speakersButton.isHidden = true
-                        } else {
-                            self.speakersButton.isHidden = false
-                        }
-                    }
-                }
-            }
-        } else {
-            if session.speakers.isEmpty {
-                speakersButton.isHidden = true
-            } else {
-                speakersButton.isHidden = false
-            }
-        }
+        session.tableviewCellDelegate = self
         
         speakersButton.addTarget(self, action: #selector(ScheduleTableViewCell.didTapSpeakersButton), for: .touchUpInside)
 
         infoTextView.isHidden = !(!session.attributedSummary.string.isEmpty || session.room != nil)
         
-        if let timeFrame = DateFormatter.attributedTime(from: session.startDate, to: session.endDate) {
-            timeLabel.attributedText = timeFrame
-        }
+        timeLabel.text = session.startDate.getTime() + " - " + session.endDate.getTime()
         
         titleLabel.text = "\(session.sessionType.rawValue): \(session.displayName)"
         
-        if !session.didLoadSessionDetails {
-            activityIndicator.startAnimating()
-            session.requestSessionInformation({
+        if session.sessionRequest == nil && !session.didLoadSessionDetails {
+            
+            DispatchQueue.main.async {
+                self.activityIndicator.startAnimating()
+            }
+            
+            session.requestSessionInformation({ _ in
+                self.session.didLoadSessionDetails = true
                 if !self.session.speakers.isEmpty {
                     self.speakersButton.isHidden = false
                     self.speakersButton.isUserInteractionEnabled = true
                 }
+                DispatchQueue.main.async {
+                    self.activityIndicator.stopAnimating()
+                }
                 self.layoutIfNeeded()
-                self.activityIndicator.stopAnimating()
             })
+            
+        } else if !session.didLoadSessionDetails {
+            
+            DispatchQueue.main.async {
+                self.activityIndicator.startAnimating()
+            }
+            
+        } else {
+            
+            DispatchQueue.main.async {
+                self.activityIndicator.stopAnimating()
+            }
+        }
+        
+        updateSpeakersButton()
+    }
+    
+    func updateSpeakersButton() {
+        if session.speakerRequest == nil && !session.didLoadSessionDetails {
+            self.session.requestSpeakers({
+                self.speakersButton.isHidden = self.session.speakers.isEmpty
+            })
+        } else if session.didLoadSessionDetails {
+            speakersButton.isHidden = self.session.speakers.isEmpty
         }
     }
     
@@ -90,13 +100,17 @@ class ScheduleTableViewCell: SITableViewCell {
             let sessionSummary = NSMutableAttributedString()
             
             if let room = session.room {
-                sessionSummary.append(NSAttributedString(string: "Room: \(room.name)", attributes: [NSFontAttributeName : UIFont.preferredFont(forTextStyle: .headline)]))
+                sessionSummary.append(NSAttributedString(string: "Room: \(room.name)", attributes: [
+                        NSFontAttributeName : UIFont.preferredFont(forTextStyle: .headline)
+                    ]))
                 if !session.attributedSummary.string.isEmpty {
                     sessionSummary.append(NSAttributedString(string: "\n\n"))
                 }
             }
-            
+
             sessionSummary.append(session.attributedSummary)
+            
+            sessionSummary.addAttribute(NSForegroundColorAttributeName, value: UIColor(netHex: 0x424242), range: sessionSummary.fullRange)
             
             sessionSummary.append(tapToSeeLessText)
             
@@ -113,4 +127,26 @@ class ScheduleTableViewCell: SITableViewCell {
     }
     
 }
+
+extension ScheduleTableViewCell: SISessionDelegate {
+    func onSpeakerRequestComplete() {
+        DispatchQueue.main.async {
+            self.speakersButton.isHidden = self.session.speakers.isEmpty
+        }
+    }
+    
+    func onSessionDetailRequestComplete() {
+        DispatchQueue.main.async {
+            self.activityIndicator.stopAnimating()
+        }
+    }
+}
+
+
+
+
+
+
+
+
 

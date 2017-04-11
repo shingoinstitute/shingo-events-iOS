@@ -42,7 +42,7 @@ class SettingsTableViewController: UITableViewController {
     
     @IBAction func didTapReloadData(_ sender: AnyObject) {
         
-        let activityView = ActivityViewController()
+        let activityView = ActivityViewController(message: "ReDownloading Upcoming Events")
         
         present(activityView, animated: true) {
             

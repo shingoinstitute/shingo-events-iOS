@@ -10,6 +10,8 @@ import UIKit
 import Crashlytics
 import Fabric
 import Alamofire
+import ReachabilitySwift
+import SwiftDate
 
 class MainMenuViewController: UIViewController {
     
@@ -26,14 +28,8 @@ class MainMenuViewController: UIViewController {
     @IBOutlet weak var affiliatesButton: UIButton!
     @IBOutlet weak var shingoModelButton: UIButton!
     @IBOutlet weak var settingsButton: UIButton!
-    @IBOutlet weak var copyRightLabel: UILabel!
     
-    @IBOutlet weak var flameImageView: UIImageView! {
-        didSet {
-            flameImageView.backgroundColor = UIColor.black.withAlphaComponent(0.75)
-        }
-    }
-    
+    @IBOutlet weak var flameImageView: UIImageView!
     
     lazy var buttons: [UIButton] = {
         return [self.eventsButton, self.affiliatesButton, self.shingoModelButton, self.settingsButton]
@@ -44,27 +40,47 @@ class MainMenuViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        activityView = ActivityViewController(message: "Loading Upcoming Conferences...")
+        activityView = ActivityViewController(message: "Getting Upcoming Conferences...")
         
-        requestEvents()
+        self.requestEvents()
         
-        requestAffiliates()
+        // begin API calls to fetch conference and affiliate data
+        let workItem = DispatchWorkItem(qos: .background, flags: .assignCurrentContext) {
+            self.requestAffiliates()
+        }
+        let queue = DispatchQueue.global(qos: .utility)
+        queue.async(execute: workItem)
         
+        
+        
+        // Create background view gradient
+        let gradientColors:[CGFloat] = [
+            0, 0, 0, 0,
+            0, 0, 0, 0.116666,
+            0, 0, 0, 0.233333,
+            0, 0, 0, 0.35
+        ]
+        let colorLocations:[CGFloat] = [0, 0.75, 0.85, 1.0]
+        let gradient = RadialGradientLayer(gradientColors: gradientColors, gradientLocations: colorLocations)
+        gradient.frame = view.bounds
+        view.layer.insertSublayer(gradient, at: 0)
+        
+        // Navigation title set to empty string (don't need it)
         navigationItem.title = ""
         
+        // Set nav color scheme to black and yellow
         if let nav = navigationController?.navigationBar {
             nav.barStyle = UIBarStyle.black
             nav.tintColor = UIColor.yellow
         }
         
+        // Set text and image insets to add padding for menu buttons
         for button in self.buttons {
             button.imageEdgeInsets = UIEdgeInsets(top: 0, left: -25, bottom: 0, right: -25)
             button.titleEdgeInsets = UIEdgeInsets(top: 0, left: -46, bottom: 0, right: 0)
-            button.backgroundColor = UIColor.black.withAlphaComponent(0.75)
+            button.backgroundColor = UIColor.black.withAlphaComponent(0.8)
             button.imageView?.contentMode = .scaleAspectFit
         }
-        
-        
         
     }
     
@@ -80,7 +96,7 @@ class MainMenuViewController: UIViewController {
         navigationController?.isNavigationBarHidden = false
     }
     
-    private func requestEvents() {
+    func requestEvents() {
         SIRequest().requestEvents({ events in
             if let events = events {
                 self.events = events
@@ -89,30 +105,38 @@ class MainMenuViewController: UIViewController {
         })
     }
     
-    private func requestAffiliates() {
+    func requestAffiliates() {
         SIRequest.requestAffiliates { (affiliates) in
             if let affiliates = affiliates {
                 self.affiliates = affiliates
             }
         }
     }
-    
+
 }
 
 extension MainMenuViewController {
     
     // MARK: - Button Listeners
     
+    /**
+     didTapEvents is responsible for ensuring event data has been retrieved from the API
+     before allowing the screen to segue to the Event menu table view.
+    */
     @IBAction func didTapEvents(_ sender: AnyObject) {
-        guard let reach = Reachability() else {
-            return
+        
+        // Checks for internet connectivity, alerts user if no internet is detected (since it's 100% necessary to make the application work)
+        let reachability = Reachability()!
+        if !reachability.isReachable {
+            return SIRequest.displayInternetAlert(forViewController: self, completion: nil)
         }
         
-        if reach.isReachable {
-            if eventsDidLoad {
-                performSegue(withIdentifier: "EventsView", sender: self.events)
-            } else {
-                present(activityView, animated: true, completion: {
+        switch eventsDidLoad {
+        case true:
+            performSegue(withIdentifier: "EventsView", sender: self.events)
+        case false:
+            present(activityView, animated: true, completion: {
+                DispatchQueue.global(qos: .utility).async {
                     self.request = SIRequest().requestEvents({ events in
                         self.dismiss(animated: true, completion: {
                             if let events = events {
@@ -124,14 +148,15 @@ extension MainMenuViewController {
                             }
                         })
                     })
-                })
-            }
-        } else {
-            SIRequest.displayInternetAlert(forViewController: self, completion: nil)
+                }
+            })
         }
-        
     }
     
+    /**
+     didTapAffiliates ensures affiliate data has been retrieved before segueing to 
+     the affiliate table view.
+     */
     @IBAction func didTapAffiliates(_ sender: AnyObject) {
         if let affiliates = self.affiliates {
             performSegue(withIdentifier: "AffiliatesView", sender: affiliates)
@@ -182,7 +207,8 @@ extension MainMenuViewController: UnwindToMainVCProtocol {
         case "EventsView":
             let destination = segue.destination as! EventsTableViewController
             if let events = sender as? [SIEvent] {
-                destination.events = events
+                self.events = events.sorted { $0.startDate.regionDate > $1.startDate.regionDate }
+                destination.events = self.events
             }
         case "Support":
             let destination = segue.destination as! SettingsTableViewController
@@ -226,6 +252,17 @@ extension MainMenuViewController: UnwindToMainVCProtocol {
         
     }
     
+    /**
+     getCharacterForSection determines which letter/character should be used for a given `name`
+     (where `name` is typically an organization title) in an alphabetically sorted table view.
+     This helps to ensure that company names that start with "the" get sorted with the "T's" and
+     names that start with a number get sorted under the "#" section (for example, a company named
+     "9 Ball Inc" would get sorted under "#" instead of under "9").
+     
+     - parameter name: The name or title, typically of a company or organization
+     
+     - returns: A single `Character` as a `String`
+    */
     func getCharacterForSection(name: String) -> String? {
         
         if let nameArray = name.split(" ") {
@@ -243,8 +280,10 @@ extension MainMenuViewController: UnwindToMainVCProtocol {
         return nil
     }
     
-    // Protocal for passing data back from the Support
-    // page when the 'reload data' button is pressed
+    /**
+    updateEvents is used as a protocal for passing data back from
+     `SupportTableViewController` when the "reload data" button is pressed
+    */
     func updateEvents(_ events: [SIEvent]?) {
         if let events = events {
             self.events = events

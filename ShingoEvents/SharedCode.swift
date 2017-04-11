@@ -10,7 +10,6 @@ import Foundation
 import UIKit
 
 protocol SICellDelegate { func cellDidUpdate() }
-protocol SISpeakerDelegate { func performActionOnSpeakers(data: [SISpeaker]) }
 
 struct Alphabet {
     static private var upperCaseEnglish: [String] = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "#"]
@@ -351,6 +350,18 @@ extension UIImageView {
         UIGraphicsEndImageContext()
     }
     
+    func resizeIntrinsicContentSize(thatFitsHeight height: CGFloat) {
+        guard let image = self.image else {
+            return
+        }
+        
+        let size = CGSize(width: (height * image.size.width) / image.size.height, height: height)
+        UIGraphicsBeginImageContextWithOptions(size, self.isOpaque, 0.0)
+        self.image?.draw(in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+        self.image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+    }
+    
 }
 
 extension UIImage {
@@ -429,99 +440,54 @@ extension Date {
     
 }
 
-/// Initializer defaults to en_US locale.
 extension DateFormatter {
     
-    /// Important! Defaults time zone to MST.
-    convenience init(dateFormat: String) {
-        self.init()
-        locale = Locale(identifier: "en_US")
-        timeZone = TimeZone(abbreviation: "MST")
-        self.dateFormat = dateFormat
-    }
-    
-    static func time(from: Date, to: Date) -> String {
-
-        let timeFormatter = DateFormatter()
-        timeFormatter.dateFormat = "h:mm a"
-        timeFormatter.timeZone = TimeZone(abbreviation: "MST")
-        timeFormatter.locale = Locale(identifier: "en_US")
-        
-        let timeZoneOffset = TimeInterval(timeFormatter.timeZone.secondsFromGMT()) - TimeInterval(NSTimeZone.local.secondsFromGMT())
-
-        let startTime = timeFormatter.string(from: from.addingTimeInterval(timeZoneOffset))
-        let endTime = timeFormatter.string(from: to.addingTimeInterval(timeZoneOffset))
-        
-        return "\(startTime) - \(endTime)"
-        
-    }
- 
-    static func attributedTime(from: Date, to: Date) -> NSAttributedString? {
-        
-        let timeFrame: String = DateFormatter.time(from: from, to: to)
-        
-        guard let stringComponents = timeFrame.split("-") else {
-            return nil
-        }
-        
-        guard let fromTime = stringComponents.first else {
-            return nil
-        }
-        
-        guard let toTime = stringComponents.last else {
-            return nil
-        }
-        
-        guard let startComponents = fromTime.split(" ") else {
-            return nil
-        }
-        
-        guard let endComponents = toTime.split(" ") else {
-            return nil
-        }
-        
-        guard let startTime = startComponents.first else {
-            return nil
-        }
-        
-        guard let startPeriod = startComponents.last else {
-            return nil
-        }
-        
-        guard let endTime = endComponents.first else {
-            return nil
-        }
-        
-        guard let endPeriod = endComponents.last else {
-            return nil
-        }
-        
-        let pointSize = UIFont.preferredFont(forTextStyle: .headline).pointSize
-        let systemFontDesc = UIFont.systemFont(ofSize: pointSize, weight: UIFontWeightSemibold).fontDescriptor
-        let smallCapsFontDesc = systemFontDesc.addingAttributes(
-            [
-                UIFontDescriptorFeatureSettingsAttribute: [
-                    [
-                        UIFontFeatureTypeIdentifierKey: kUpperCaseType,
-                        UIFontFeatureSelectorIdentifierKey: kUpperCaseSmallCapsSelector,
-                        ],
-                ]
-            ]
-        )
-        
-        let smallCapsFont = UIFont(descriptor: smallCapsFontDesc, size: pointSize)
-        
-        let timeAttributes = [NSFontAttributeName:UIFont.preferredFont(forTextStyle: .headline)]
-        let periodAttributes = [NSFontAttributeName:smallCapsFont]
-        
-        let attributedText = NSMutableAttributedString(string: startTime, attributes: timeAttributes)
-        attributedText.append(NSAttributedString(string: startPeriod, attributes: periodAttributes))
-        attributedText.append(NSAttributedString(string: " - ", attributes: timeAttributes))
-        attributedText.append(NSAttributedString(string: endTime, attributes: timeAttributes))
-        attributedText.append(NSAttributedString(string: endPeriod, attributes: periodAttributes))
-        
-        return attributedText
-    }
+//    static func time(from sdate: Date, to edate: Date) -> String {
+//
+//        let cal = Calendar(identifier: .gregorian)
+//        
+//        let sDateComps = cal.dateComponents(in: TimeZone.current, from: sdate)
+//        let eDateComps = cal.dateComponents(in: TimeZone.current, from: edate)
+//        
+//        let sHour = sDateComps.hour!
+//        let sMin = sDateComps.minute!
+//        let eHour = eDateComps.hour!
+//        let eMin = eDateComps.minute!
+//        
+//        var startTime = ""
+//        if sHour == 0 {
+//            startTime = "12"
+//        } else {
+//            startTime = (sHour > 0 && sHour <= 12) ? String(sHour) : String(sHour - 12)
+//        }
+//        startTime += ":"
+//        if sMin == 0 {
+//            startTime += "00"
+//        } else {
+//            startTime += (sMin > 0 && sMin < 10) ? "0" + String(sMin) : String(sMin)
+//        }
+//        
+//        startTime += (sHour > 0 && sHour < 12) ? " am" : " pm"
+//        
+//        var endTime: String = ""
+//        
+//        if eHour == 0 {
+//            endTime = "12"
+//        } else {
+//            endTime = (eHour > 0 && eHour <= 12) ? String(eHour) : String(eHour - 12)
+//        }
+//        endTime += ":"
+//        if eMin == 0 {
+//            endTime += "00"
+//        } else {
+//            endTime += (eMin > 0 && eMin < 10) ? "0" + String(eMin) : String(eMin)
+//        }
+//        
+//        endTime += (eHour > 0 && eHour < 12) ? " am" : " pm"
+//        
+//        return "\(startTime) - \(endTime)"
+//        
+//    }
     
 }
 

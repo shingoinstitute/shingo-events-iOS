@@ -13,78 +13,55 @@ import MapKit
 import SwiftyJSON
 import Crashlytics
 
-
-
 class SIRequest {
     
     static let BASE_URL = "https://api.shingo.org"
     static let EVENTS_URL = BASE_URL + "/salesforce/events"
     static let SUPPORT_URL = BASE_URL + "/support"
-    
-    /* 
-     *Important! DateFormatter defaults timezone to MST.
-     */
-    static let dateFormatter = DateFormatter(dateFormat: "yyyy-MM-dd")
-    static let sessionDateFormatter = DateFormatter(dateFormat: "yyyy-MM-dd'T'HH:mm:ss.SSS")
-    
-    static let timeZoneOffset = TimeInterval(NSTimeZone.local.secondsFromGMT())
-    
+
+    let defaultDateFormat = "yyyy-MM-dd"
+    let defaultSessionDateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
     
     /// HTTP GET request method.
     func getRequest(url: String, description: String, callback: @escaping (JSON?) -> ()) -> Alamofire.Request? {
-        
-        return Alamofire.request(url).responseJSON { response in
-            
-            print("+-\(self.marks(description))")
-            print("| \(description) |")
-            print("+-\(self.marks(description))")
+        return Alamofire.request(url).responseJSON(queue: DispatchQueue.global(qos: .utility), options: JSONSerialization.ReadingOptions.mutableLeaves) { (response) in
+            print("\n**** \(description) ****")
             
             guard response.result.isSuccess else {
                 print("Error while performing API GET request: \(response.result.error!)")
-                print("+-\(self.marks(description + " - END"))")
-                print("| \(description + " - END") |")
-                print("+-\(self.marks(description + " - END"))")
+                print("\n**** \(description) - END ****\n")
                 return callback(nil)
                 
             }
             
             guard let response = response.result.value else {
-                print("Error while performing API GET request: Invalid response")
-                print("+-\(self.marks(description + " - END"))")
-                print("| \(description + " - END") |")
-                print("+-\(self.marks(description + " - END"))")
+                print("\nError while performing API GET request: Invalid response\n")
+                print("\n**** \(description) - END ****\n")
                 return callback(nil)
-                
             }
             
             let responseJSON = JSON(response)
             
+            print(responseJSON)
+            
+            print("\n**** \(description) - END ****\n")
+            
             if let success = responseJSON["success"].bool {
                 if !success {
-                    print("+-\(self.marks(description + " - END"))")
-                    print("| \(description + " - END") |")
-                    print("+-\(self.marks(description + " - END"))")
                     return callback(nil)
                 }
             }
-            
-            print(responseJSON)
-            
-            print("+-\(self.marks(description + " - END"))")
-            print("| \(description + " - END") |")
-            print("+-\(self.marks(description + " - END"))")
-            
-            callback(responseJSON)
+            return callback(responseJSON)
         }
+        
     }
-    
     
     /// HTTP POST request method.
     func postRequest(url: String, description: String, parameters: [String:String], callback: @escaping (_ value: JSON?) -> ()) -> Alamofire.Request? {
         return Alamofire.request(url, parameters: parameters).responseJSON { response in
             
             guard response.result.isSuccess else {
-                print("Error while performing API POST request: \(response.result.error)")
+                print("Error while performing API POST request: \(response.result.error!)")
                 callback(nil)
                 return
             }
@@ -95,15 +72,11 @@ class SIRequest {
                 return
             }
             
-            let responseJSON = JSON(response)
+            print(JSON(response))
             
-            print(responseJSON)
-            
-            print("+-\(self.marks(description + " - END"))")
-            print("| \(description + " - END") |")
-            print("+-\(self.marks(description + " - END"))")
-            
-            callback(responseJSON)
+            print("\n**** \(description) - END ****\n")
+
+            callback(JSON(response))
         }
     }
     
@@ -112,22 +85,18 @@ class SIRequest {
     
     /// Returns all ready-to-publish events from Salesforce.
     @discardableResult func requestEvents(_ callback: @escaping ([SIEvent]?) -> Void) -> Alamofire.Request? {
-        
-        return getRequest(url: SIRequest.EVENTS_URL, description: "REQUEST EVENTS") { json in
-            
+        return getRequest(url: SIRequest.EVENTS_URL + "?publish_to_web=true", description: "REQUEST EVENTS") { json in
             guard let json = json else {
                 callback(nil)
                 return
             }
-            
             var events = [SIEvent]()
-                
             if let records = json["events"].array {
                 
                 for record in records {
                     
-                    if let publishToApp = record["Publish_to_Web_App__c"].bool {
-                        if !publishToApp {
+                    if let publish = record["Publish_to_Web_App__c"].bool {
+                        if !publish {
                             continue
                         }
                     }
@@ -142,16 +111,15 @@ class SIRequest {
                         event.name = name
                     }
                     
-                    if let startDate = record["Start_Date__c"].string {
-                        if let startDate = SIRequest.dateFormatter.date(from: startDate) {
-                            event.startDate = startDate.addingTimeInterval(SIRequest.timeZoneOffset)
+                    if let dateString = record["Start_Date__c"].string {
+                        if let date = SIDate(string: dateString, format: "yyyy-MM-dd") {
+                            event.startDate = date
                         }
-                        
                     }
                     
-                    if let endDate = record["End_Date__c"].string {
-                        if let endDate = SIRequest.dateFormatter.date(from: endDate) {
-                            event.endDate = endDate.addingTimeInterval(SIRequest.timeZoneOffset)
+                    if let dateString = record["End_Date__c"].string {
+                        if let date = SIDate(string: dateString, format: "yyyy-MM-dd") {
+                            event.endDate = date
                         }
                     }
                     
@@ -194,15 +162,15 @@ class SIRequest {
                     event.name = name
                 }
                 
-                if let startDate = record["Start_Date__c"].string {
-                    if let startDate = SIRequest.dateFormatter.date(from: startDate) {
-                        event.startDate = startDate.addingTimeInterval(SIRequest.timeZoneOffset)
+                if let dateString = record["Start_Date__c"].string {
+                    if let date = SIDate(string: dateString, format: "yyyy-MM-dd") {
+                        event.startDate = date
                     }
                 }
                 
-                if let endDate = record["End_Date__c"].string {
-                    if let endDate = SIRequest.dateFormatter.date(from: endDate) {
-                        event.endDate = endDate.addingTimeInterval(SIRequest.timeZoneOffset)
+                if let dateString = record["End_Date__c"].string {
+                    if let date = SIDate(string: dateString, format: "yyyy-MM-dd") {
+                        event.endDate = date
                     }
                 }
                 
@@ -252,6 +220,44 @@ class SIRequest {
                         
                     }
                     event.attendees = attendees
+                }
+                
+                if let ads = record["Sponsor_Ads__r"]["records"].array {
+                    for ad in ads {
+                        
+                        guard let adId = ad["Id"].string else {
+                            continue
+                        }
+                        
+                        guard let adName = ad["Name"].string else {
+                            continue
+                        }
+                        
+                        guard let adEventId = ad["Event__c"].string else {
+                            continue
+                        }
+                        
+                        guard let sponsorId = ad["Sponsor__c"].string else {
+                            continue
+                        }
+                        
+                        guard let imageUrl = ad["Image_URL__c"].string else {
+                            continue
+                        }
+                        
+                        guard let adType = ad["Ad_Type__c"].string else {
+                            continue
+                        }
+
+                        event.append(advertisement: SponsorAd(id: adId,
+                                                              name: adName,
+                                                              parentEventId: adEventId,
+                                                              parentSponsorId: sponsorId,
+                                                              imageURL: imageUrl,
+                                                              adType: SponsorAd.parseType(adType)))
+
+                        
+                    }
                 }
                 
             }
@@ -310,9 +316,9 @@ class SIRequest {
                     agenda.displayName = displayName
                 }
                 
-                if let date = record["Agenda_Date__c"].string {
-                    if let date = SIRequest.dateFormatter.date(from: date) {
-                        agenda.date = date.addingTimeInterval(SIRequest.timeZoneOffset)
+                if let dateString = record["Agenda_Date__c"].string {
+                    if let date = SIDate(string: dateString, format: "yyyy-MM-dd") {
+                        agenda.date = date
                     }
                 }
                 
@@ -355,15 +361,15 @@ class SIRequest {
                         session.displayName = displayName
                     }
                     
-                    if let startDate = record["Start_Date_Time__c"].string {
-                        if let startDate = SIRequest.sessionDateFormatter.date(from: startDate) {
-                            session.startDate = startDate.addingTimeInterval(SIRequest.timeZoneOffset)
+                    if let dateString = record["Start_Date_Time__c"].string {
+                        if let date = SIDate(string: dateString, format: self.defaultSessionDateFormat) {
+                            session.startDate = date
                         }
                     }
                     
-                    if let endDate = record["End_Date_Time__c"].string {
-                        if let endDate = SIRequest.sessionDateFormatter.date(from: endDate) {
-                            session.endDate = endDate.addingTimeInterval(SIRequest.timeZoneOffset)
+                    if let dateString = record["End_Date_Time__c"].string {
+                        if let date = SIDate(string: dateString, format: self.defaultSessionDateFormat) {
+                            session.endDate = date
                         }
                     }
                     
@@ -427,15 +433,15 @@ class SIRequest {
                     session.displayName = displayName
                 }
                 
-                if let startDate = record["Start_Date_Time__c"].string {
-                    if let startDate = SIRequest.sessionDateFormatter.date(from: startDate.split("+")![0]) {
-                        session.startDate = startDate.addingTimeInterval(SIRequest.timeZoneOffset)
+                if let dateString = record["Start_Date_Time__c"].string {
+                    if let date = SIDate(string: dateString, format: self.defaultSessionDateFormat) {
+                          session.startDate = date
                     }
                 }
             
-                if let endDate = record["End_Date_Time__c"].string {
-                    if let endDate = SIRequest.sessionDateFormatter.date(from: endDate.split("+")![0]) {
-                        session.endDate = endDate.addingTimeInterval(SIRequest.timeZoneOffset)
+                if let dateString = record["End_Date_Time__c"].string {
+                    if let date = SIDate(string: dateString, format: self.defaultSessionDateFormat) {
+                        session.endDate = date
                     }
                 }
                 
@@ -497,7 +503,7 @@ class SIRequest {
     }
     
     /// Gets a single session using a session ID.
-    @discardableResult func requestSession(_ id: String, callback: @escaping (SISession?) -> ()) -> Alamofire.Request? {
+    @discardableResult func requestSession(sessionId id: String, callback: @escaping (SISession?) -> ()) -> Alamofire.Request? {
         
         return getRequest(url: SIRequest.EVENTS_URL + "/sessions/\(id)", description: "REQUEST SESSION") { json in
             
@@ -524,15 +530,15 @@ class SIRequest {
                     session.displayName = displayName
                 }
                 
-                if let startDate = record["Start_Date_Time__c"].string {
-                    if let startDate = SIRequest.sessionDateFormatter.date(from: startDate.split("+")![0]) {
-                        session.startDate = startDate.addingTimeInterval(SIRequest.timeZoneOffset)
+                if let dateString = record["Start_Date_Time__c"].string {
+                    if let date = SIDate(string: dateString, format: self.defaultSessionDateFormat) {
+                        session.startDate = date
                     }
                 }
                 
-                if let endDate = record["End_Date_Time__c"].string {
-                    if let endDate = SIRequest.sessionDateFormatter.date(from: endDate.split("+")![0]) {
-                        session.endDate = endDate.addingTimeInterval(SIRequest.timeZoneOffset)
+                if let dateString = record["End_Date_Time__c"].string {
+                    if let date = SIDate(string: dateString, format: self.defaultSessionDateFormat) {
+                        session.endDate = date
                     }
                 }
                 
@@ -1185,8 +1191,8 @@ class SIRequest {
                         sponsor.logoURL = logoURL
                     }
                     
-                    if let bannerURL = record["Banner_URL__c"].string {
-                        sponsor.bannerURL = bannerURL
+                    if let imageUrl = record["Banner_URL__c"].string {
+                        sponsor.imageUrl = imageUrl
                     }
                     
                     if let splashScreenURL = record["Splash_Screen_URL__c"].string {
@@ -1221,7 +1227,7 @@ class SIRequest {
             if json["sponsor"] != nil {
                 
                 let record = json["sponsor"]
-                print(record)
+
                 if let id = record["Id"].string {
                     sponsor.id = id
                 }
@@ -1248,8 +1254,8 @@ class SIRequest {
                     }
                 }
                 
-                if let bannerURL = record["Banner_URL__c"].string {
-                    sponsor.bannerURL = bannerURL
+                if let imageUrl = record["Banner_URL__c"].string {
+                    sponsor.imageUrl = imageUrl
                 }
                 
                 if let type = record["Sponsor_Level__c"].string {
@@ -1632,34 +1638,23 @@ class SIRequest {
         vc.present(alert, animated: true, completion: nil)
     }
     
-    fileprivate func marks(_ string: String) -> String {
-        let count = string.characters.count
-        var marks = ""
-        for _ in 0 ..< count + 1 {
-            marks += "-"
-        }
-        return "\(marks)+"
-    }
-    
-    static func parseHTMLStringUsingPreferredFont(string: String) -> NSAttributedString? {
+    static func parseHTMLStringUsingPreferredFont(string: String, forTextStyle style: UIFontTextStyle = .body) -> NSAttributedString? {
         
         do {
             
             let options: [String:Any] = [
                 NSDocumentTypeDocumentAttribute : NSHTMLTextDocumentType,
                 NSCharacterEncodingDocumentAttribute : String.Encoding.utf8.rawValue,
+                NSForegroundColorAttributeName : UIColor.black
             ]
             
             guard let data = string.data(using: String.Encoding.utf8) else {
                 return nil
             }
-            if (string.lowercased().contains("enjoy a glass of wine")) {
-                print("foobar")
-            }
             
             let htmlString = try NSMutableAttributedString(data: data, options: options, documentAttributes: nil)
             
-            htmlString.usePreferredFontWhileMaintainingAttributes(forTextStyle: .body)
+            htmlString.usePreferredFontWhileMaintainingAttributes(forTextStyle: style)
             
             return htmlString
         } catch {
@@ -1675,6 +1670,16 @@ class SIRequest {
             return nil
         }
         
+    }
+    
+    static func requestIsRunning(request: Alamofire.Request?) -> Bool {
+        guard let request = request else {
+            return false
+        }
+        if let task = request.task {
+            return task.state == URLSessionTask.State.running
+        }
+        return false
     }
     
 }

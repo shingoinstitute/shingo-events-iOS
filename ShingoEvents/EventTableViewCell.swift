@@ -10,6 +10,10 @@ import UIKit
 
 class EventTableViewCell: UITableViewCell {
     
+    var maxBannerImageWidth: CGFloat!
+    
+    @IBOutlet weak var eventDescriptionLabel: UILabel!
+    
     @IBOutlet weak var eventNameLabel: UILabel! {
         didSet {
             eventNameLabel.font = UIFont.preferredFont(forTextStyle: .headline)
@@ -27,22 +31,6 @@ class EventTableViewCell: UITableViewCell {
             eventImageView.layer.cornerRadius = 5
         }
     }
-    @IBOutlet weak var cardView: UIView! {
-        didSet {
-            cardView.backgroundColor = .white
-            cardView.layer.cornerRadius = 5
-            cardView.layer.shadowColor = UIColor.darkShingoBlue.cgColor
-            cardView.layer.shadowOffset = CGSize(width: 0, height: 2.0)
-            cardView.layer.shadowOpacity = 1
-            cardView.layer.shadowRadius = 5
-            cardView.layer.masksToBounds = false
-        }
-    }
-    
-    @IBOutlet weak var leadingEventImageViewConstraint: NSLayoutConstraint!
-    @IBOutlet weak var trailingEventImageViewConstraint: NSLayoutConstraint!
-    private let rightArrowImageViewWidthConstraintConstant: CGFloat = 30
-    private let cardViewMargins: CGFloat = (2 * 8)
     
     var event: SIEvent! { didSet { updateCell() } }
     
@@ -50,33 +38,53 @@ class EventTableViewCell: UITableViewCell {
     
     func updateCell() {
         
+        event.tableViewCellDelegate = self
+        
         eventNameLabel.text = event.name
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.timeZone = TimeZone(abbreviation: "GMT")
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        dateFormatter.dateStyle = .medium
-        let dates = "\(dateFormatter.string(from: event.startDate as Date)) - \(dateFormatter.string(from: event.endDate as Date))"
+        let dates = event.startDate.toString() + " - " + event.endDate.toString()
         eventDateRangeLabel.text = dates
         
-        event.getBannerImage() { image in
-            
-            guard let image = image else {
-                return
-            }
-            
-            self.eventImageView.image = image
-            
-            let maxImageWidth: CGFloat = self.contentView.frame.width - (self.leadingEventImageViewConstraint.constant + self.trailingEventImageViewConstraint.constant + self.rightArrowImageViewWidthConstraintConstant + self.cardViewMargins)
-            
-            if image.size.width > maxImageWidth {
-                self.eventImageView.resizeImageViewToIntrinsicContentSize(thatFitsWidth: maxImageWidth)
-            } 
-            
+        onEventDetailCompletion()
+        onEventImageRequestCompletion()
+        
+    }
+}
+
+extension EventTableViewCell: SIEventDelegate {
+    func onEventDetailCompletion() {
+        DispatchQueue.main.async {
+            self.eventDescriptionLabel.attributedText = SIRequest.parseHTMLStringUsingPreferredFont(string: self.event.salesText, forTextStyle: .subheadline)
             if let delegate = self.delegate {
                 delegate.cellDidUpdate()
             }
         }
+        
     }
     
+    func onEventImageRequestCompletion() {
+        DispatchQueue.main.async {
+//            if self.eventImageView.image == #imageLiteral(resourceName: "FlameOnly-100") || self.eventImageView.image == nil {
+                if let _ = self.event.image {
+                    self.event.resizeIntrinsicContent(maximumAllowedWidth: self.eventImageView.frame.width)
+                    self.eventImageView.image = self.event.image
+                    
+                    if let delegate = self.delegate {
+                        delegate.cellDidUpdate()
+                    }
+                    
+                } else {
+                    self.eventImageView.image = #imageLiteral(resourceName: "FlameOnly-100")
+                }
+//            }
+        }
+        
+    }
 }
+
+
+
+
+
+
+

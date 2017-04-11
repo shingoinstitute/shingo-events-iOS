@@ -44,7 +44,10 @@ class SpeakerListTableViewController: UITableViewController, SICellDelegate {
         gradientLayer.frame = gradientBackgroundView.bounds
         gradientBackgroundView.layer.insertSublayer(gradientLayer, at: 0)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(SchedulesTableViewController.adjustFontForCategorySizeChange), name: NSNotification.Name.UIContentSizeCategoryDidChange, object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(SpeakerListTableViewController.adjustFontForCategorySizeChange),
+                                               name: NSNotification.Name.UIContentSizeCategoryDidChange,
+                                               object: nil)
         
         tableView.estimatedRowHeight = 150
         tableView.rowHeight = UITableViewAutomaticDimension

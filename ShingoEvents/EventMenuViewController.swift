@@ -8,87 +8,52 @@
 
 import UIKit
 import MapKit
+import Alamofire
 import PureLayout
 
 class EventMenuViewController: UIViewController {
     
     var event: SIEvent!
-
+    
     var eventSpeakers = [String : SISpeaker]()
     
-    var activityVC: ActivityViewController = ActivityViewController()
+    var activityVC: ActivityViewController = ActivityViewController(message: "Fetching Data...")
     
-    @IBOutlet weak var contentView: UIView!
-    @IBOutlet weak var eventNameLabel: UILabel!
-    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var speakerButton: UIButton! {
+        didSet {
+            let size = CGSize(width: 33, height: 33)
+            let speakerButtonImage = #imageLiteral(resourceName: "Speakers-Button").af_imageScaled(to: size)
+            speakerButton.imageView?.image = speakerButtonImage
+            speakerButton.imageView?.resizeImageViewToIntrinsicContentSize(thatFitsWidth: 33)
+        }
+    }
+    @IBOutlet weak var scheduleButton: UIButton!
+    @IBOutlet weak var attendeesButton: UIButton!
+    @IBOutlet weak var exhibitorsButton: UIButton!
+    @IBOutlet weak var recipientsButton: UIButton!
+    @IBOutlet weak var directionsButton: UIButton!
+    @IBOutlet weak var sponsorsButton: UIButton!
+    @IBOutlet weak var venuePhotosButton: UIButton!
     
-    let speakerButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "Speakers-Button"), for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-
-    let scheduleButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "Schedules-Button"), for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-
-    let attendeesButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "Attendees-Button"), for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    let exhibitorsButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "Exhibitors-Button"), for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    let recipientsButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "Recipients-Button"), for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    let directionsButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "Directions-Button"), for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    let sponsorsButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "Sponsors-Button"), for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
-    let venuePhotosButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "Venue-Pictures-Button"), for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
+    @IBOutlet weak var backgroundImage: UIImageView!
+    @IBOutlet weak var eventHeaderImageView: UIImageView! {
+        didSet {
+            eventHeaderImageView.contentMode = .scaleAspectFill
+            eventHeaderImageView.backgroundColor = .clear
+            eventHeaderImageView.clipsToBounds = true
+        }
+    }
     
-    var backgroundImage: UIImageView = {
-        let view = UIImageView.newAutoLayout()
-        view.image = UIImage(named: "Shingo Icon Large")
-        view.contentMode = .scaleAspectFill
-        view.clipsToBounds = true
-        return view
-    }()
-    var eventHeaderImageView: UIImageView = {
-        let view = UIImageView.newAutoLayout()
-        view.contentMode = .scaleAspectFill
-        view.backgroundColor = .clear
-        view.clipsToBounds = true
-        return view
-    }()
+    @IBOutlet weak var bannerViewWidthConstraint: NSLayoutConstraint!
+    @IBOutlet weak var bannerViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var bannerView: BannerView! {
+        didSet {
+            bannerView.backgroundColor = .clear
+            bannerView.bannerAds = event.getBannerAds()
+        }
+    }
     
-    lazy var buttonViews: [UIView] = [
+    lazy var buttons: [UIButton] = [
         self.scheduleButton,
         self.venuePhotosButton,
         self.recipientsButton,
@@ -99,90 +64,43 @@ class EventMenuViewController: UIViewController {
         self.sponsorsButton
     ]
     
-    let BUTTON_WIDTH: CGFloat = 100.0
-    let BUTTON_HEIGHT: CGFloat = 100.0
-    
     var didSetupConstraints = false
+    
+    var requestManager: SIRequestManager!
+    
+    var segueTypeOnRequestCompletion: SIRequestType = .none
     
     override func loadView() {
         super.loadView()
-        
-        DispatchQueue.global(qos: .utility).async { [unowned self] in
-            // Load Agenda
-            if !self.event.didLoadAgendas {
-                //Note: requestAgendas will request session data under the hood
-                self.event.requestAgendas() { self.event.didLoadAgendas = true }
-            }
-            
-            if !self.event.didLoadSpeakers {
-                // Load Speakers for entire event
-                self.event.requestSpeakers() {self.event.didLoadSpeakers = true}
-            }
-            
-            if !self.event.didLoadVenues {
-                // Load venue photos
-                self.event.requestVenues() {self.event.didLoadVenues = true}
-            }
-            
-            if !self.event.didLoadRecipients {
-                // Load Recipient information
-                self.event.requestRecipients() {self.event.didLoadRecipients  = true}
-            }
-            
-            if !self.event.didLoadAffiliates {
-                // Load Affiliate information
-                self.event.requestAffiliates() {self.event.didLoadAffiliates = true}
-            }
-            
-            if !self.event.didLoadExhibitors {
-                // Load Exhibitor information
-                self.event.requestExhibitors() {self.event.didLoadExhibitors = true}
-            }
-            
-            if !self.event.didLoadSponsors {
-                // Load Sponsor information
-                self.event.requestSponsors() {self.event.didLoadSponsors = true}
-            }
-            
-            if !self.event.didLoadAttendees {
-                self.event.requestAttendees() { self.event.didLoadAttendees = true }
-            }
-            
-        }
-        
-        
-        // Setup views
-        contentView.backgroundColor = .clear
-        
-        eventNameLabel.text = event.name
-        eventNameLabel.backgroundColor = UIColor.shingoBlue.withAlphaComponent(0.5)
-        eventNameLabel.textColor = UIColor.white
-        
-        contentView.addSubviews([backgroundImage, eventNameLabel, eventHeaderImageView])
-        contentView.addSubviews(buttonViews)
+        requestManager = SIRequestManager(event: event, delegate: self)
+        requestManager.requestAll()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if event.didLoadImage {
-            navigationItem.title = self.event.name
-        } else {
-            navigationItem.title = ""
-        }
+        navigationItem.title = self.event.name
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        event.getBannerImage() { image in
-            if let image = image {
-                self.eventHeaderImageView.image = image
-                self.navigationItem.title = self.event.name
-            } else {
-                self.navigationItem.title = ""
+        
+        view.backgroundColor = .white
+        
+        bannerView.start()
+        
+        if let bannerImage = event.image {
+            eventHeaderImageView.image = bannerImage
+        } else {
+            event.getBannerImage() { image in
+                if let image = image {
+                    self.eventHeaderImageView.image = image
+                    self.navigationItem.title = self.event.name
+                } else {
+                    self.navigationItem.title = ""
+                }
             }
         }
-
+        
         // Add targets to all buttons
         scheduleButton.addTarget(self, action: #selector(EventMenuViewController.didTapSchedule(_:)), for: UIControlEvents.touchUpInside)
         venuePhotosButton.addTarget(self, action: #selector(EventMenuViewController.didTapVenue(_:)), for: UIControlEvents.touchUpInside)
@@ -193,118 +111,11 @@ class EventMenuViewController: UIViewController {
         attendeesButton.addTarget(self, action: #selector(EventMenuViewController.didTapAttendess(_:)), for: UIControlEvents.touchUpInside)
         sponsorsButton.addTarget(self, action: #selector(EventMenuViewController.didTapSponsors(_:)), for: UIControlEvents.touchUpInside)
         
-        for button in buttonViews {
-            button.contentMode = .scaleAspectFit
-            button.layer.cornerRadius = 5
-            
-            let rect: CGRect = CGRect(x: 0, y: 0, width: BUTTON_WIDTH + 3, height: BUTTON_HEIGHT + 3);
-            button.layer.shadowPath = CGPath(roundedRect: rect, cornerWidth: 10, cornerHeight: 10, transform: nil);
-            button.layer.shadowColor = UIColor.black.cgColor;
-            button.layer.shadowOffset = CGSize(width: 0, height: 0);
-            button.layer.shadowRadius = 5;
-            button.layer.shadowOpacity = 0.25;
+        for button in buttons {
+            button.backgroundColor = UIColor.black.withAlphaComponent(0.7)
+            button.imageView?.contentMode = .scaleAspectFit
+            button.clipsToBounds = true
         }
-        
-        updateViewConstraints()
-    }
-    
-    override func updateViewConstraints() {
-        if !didSetupConstraints {
-            
-            // set dimensions of buttons
-            for button in buttonViews {
-                button.autoSetDimension(.height, toSize: BUTTON_WIDTH)
-                button.autoSetDimension(.width, toSize: BUTTON_HEIGHT)
-                
-            }
-            
-            // calculate button spacing from edge
-            let edgeSpacing = (view.frame.width * (1/4)) - (BUTTON_WIDTH / 2) + 10
-            let verticalButtonSpacing: CGFloat = -10
-            
-            
-            /*
-             
-             Constraints were added programmatically to this view because auto layout
-             simply wasn't cutting it when trying to design this on the storyboard.
-             
-             Buttons appear on menu in 2 columns with 4 rows per column.
-             The number inside the diagram presented below indicating the order the
-             constraints are added.
-             
-                #----------# #----------#
-                |          | |          |
-                | Schedule | | Speakers |
-                |    7     | |    8     |
-                #----------# #----------#
-
-                #----------# #----------#
-                |          | |          |
-                |Attendees | |Recipients|
-                |    5     | |    6     |
-                #----------# #----------#
-
-                #----------# #----------#
-                |          | |          |
-                |Exhibitors| | Sponsors |
-                |    3     | |    4     |
-                #----------# #----------#
-             
-                #----------# #----------#
-                |          | |          |
-                |Venue Pics| |Directions|
-                |     1    | |    2     |
-                #----------# #----------#
-
-             Constrains are added from bottom up so that by the event banner image knows 
-             how much vertical space it can take up. The event banner image is added 
-             last because it is the least important element.
-             
-             */
-            
-            // Constraints added up from bottom left to top right
-            venuePhotosButton.autoPinEdge(.bottom, to: .bottom, of: contentView, withOffset: verticalButtonSpacing)
-            venuePhotosButton.autoPinEdge(.left, to: .left, of: contentView, withOffset: edgeSpacing)
-            
-            directionsButton.autoPinEdge(.bottom, to: .bottom, of: contentView, withOffset: verticalButtonSpacing)
-            directionsButton.autoPinEdge(.right, to: .right, of: contentView, withOffset: -edgeSpacing)
-            
-            exhibitorsButton.autoPinEdge(.bottom, to: .top, of: venuePhotosButton, withOffset: verticalButtonSpacing)
-            exhibitorsButton.autoPinEdge(.left, to: .left, of: contentView, withOffset: edgeSpacing)
-            
-            sponsorsButton.autoPinEdge(.bottom, to: .top, of: directionsButton, withOffset: verticalButtonSpacing)
-            sponsorsButton.autoPinEdge(.right, to: .right, of: contentView, withOffset: -edgeSpacing)
-            
-            attendeesButton.autoPinEdge(.bottom, to: .top, of: exhibitorsButton, withOffset: verticalButtonSpacing)
-            attendeesButton.autoPinEdge(.left, to: .left, of: contentView, withOffset: edgeSpacing)
-            
-            recipientsButton.autoPinEdge(.bottom, to: .top, of: sponsorsButton, withOffset: verticalButtonSpacing)
-            recipientsButton.autoPinEdge(.right, to: .right, of: contentView, withOffset: -edgeSpacing)
-            
-            scheduleButton.autoPinEdge(.bottom, to: .top, of: attendeesButton, withOffset: verticalButtonSpacing)
-            scheduleButton.autoPinEdge(.left, to: .left, of: contentView, withOffset: edgeSpacing)
-            
-            speakerButton.autoPinEdge(.bottom, to: .top, of: recipientsButton, withOffset: verticalButtonSpacing)
-            speakerButton.autoPinEdge(.right, to: .right, of: contentView, withOffset: -edgeSpacing)
-            
-            //Note: eventNameLabel's top, left, and right constraints are set in Main.storyboard
-            eventNameLabel.autoPinEdge(.bottom, to: .top, of: scheduleButton, withOffset: -12)
-            
-            // Constraints for event banner image (same as eventNameLabel.constraints)
-            eventHeaderImageView.autoPinEdge(.top, to: .top, of: eventNameLabel)
-            eventHeaderImageView.autoPinEdge(.left, to: .left, of: eventNameLabel)
-            eventHeaderImageView.autoPinEdge(.right, to: .right, of: eventNameLabel)
-            eventHeaderImageView.autoPinEdge(.bottom, to: .bottom, of: eventNameLabel)
-            
-            // constraints for backgroundImage
-            backgroundImage.autoPinEdge(.top, to: .bottom, of: eventNameLabel)
-            backgroundImage.autoPinEdge(.left, to: .left, of: view)
-            backgroundImage.autoPinEdge(.right, to: .right, of: view)
-            backgroundImage.autoPinEdge(.bottom, to: .bottom, of: view)
-            
-            didSetupConstraints = true
-        }
-        super.updateViewConstraints()
     }
     
     func displayBadRequestNotification() {
@@ -316,25 +127,19 @@ class EventMenuViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    
 }
 
 extension EventMenuViewController {
     
-    // MARK: - Button Outlet functions
+    // MARK: - Button handler methods
     func didTapSchedule(_ sender: AnyObject) {
-        (sender as! UIButton).isEnabled = false
         if event.didLoadAgendas {
-            self.performSegue(withIdentifier: "SchedulesView", sender: self.event.agendaItems)
-            (sender as! UIButton).isEnabled = true
+            self.performSegue(withIdentifier: "SchedulesView", sender: self.event.agendas)
         } else {
-            self.present(activityVC, animated: false, completion: { 
-                self.event.requestAgendas() {
-                    self.dismiss(animated: true, completion: { 
-                        self.performSegue(withIdentifier: "SchedulesView", sender: self.event.agendaItems)
-                        (sender as! UIButton).isEnabled = true
-                    });
-                }
+            scheduleButton.isEnabled = false
+            segueTypeOnRequestCompletion = .agenda
+            present(activityVC, animated: false, completion: {
+                self.requestManager.requestAgendas()
             });
         }
     }
@@ -343,112 +148,79 @@ extension EventMenuViewController {
         if event.didLoadSpeakers  {
             self.performSegue(withIdentifier: "SpeakerList", sender: self.eventSpeakers)
         } else {
-            self.present(activityVC, animated: false, completion: { 
-                self.event.requestSpeakers() {
-                    self.dismiss(animated: true, completion: { 
-                        self.performSegue(withIdentifier: "SpeakerList", sender: self.eventSpeakers)
-                    });
-                }
+            segueTypeOnRequestCompletion = .speaker
+            present(activityVC, animated: false, completion: {
+                self.requestManager.requestSpeakers()
             });
         }
     }
     
     func didTapRecipients(_ sender: AnyObject) {
         if event.didLoadRecipients {
-            self.performSegue(withIdentifier: "RecipientsView", sender: self.event.recipients)
+            performSegue(withIdentifier: "RecipientsView", sender: self.event.recipients)
         } else {
-            self.present(activityVC, animated: false, completion: {
-                self.event.requestRecipients() {
-                    self.dismiss(animated: true, completion: { 
-                        self.performSegue(withIdentifier: "RecipientsView", sender: self.event.recipients)
-                    });
-                }
+            segueTypeOnRequestCompletion = .recipient
+            present(activityVC, animated: false, completion: {
+                self.requestManager.requestRecipients()
             });
         }
     }
     
-    //TODO: Create screen on segue that shows more than the first potentially available venue
     func didTapDirections(_ sender: AnyObject) {
         if event.didLoadVenues {
             if let venue = self.event.venues.first {
-                self.performSegue(withIdentifier: "MapView", sender: venue)
+                performSegue(withIdentifier: "MapView", sender: venue)
             }
         } else {
-            self.present(activityVC, animated: false, completion: { 
-                self.event.requestVenues({
-                    self.dismiss(animated: true, completion: {
-                        if let venue = self.event.venues.first {
-                            self.performSegue(withIdentifier: "MapView", sender: venue)
-                        }
-                    });
-                });
+            segueTypeOnRequestCompletion = .map
+            present(activityVC, animated: false, completion: {
+                self.requestManager.requestVenues()
             });
         }
     }
     
     func didTapExhibitors(_ sender: AnyObject) {
         if event.didLoadExhibitors {
-            self.performSegue(withIdentifier: "ExhibitorsListView", sender: self.event.exhibitors)
+            performSegue(withIdentifier: "ExhibitorsListView", sender: self.event.exhibitors)
         } else {
-            self.present(activityVC, animated: false, completion: {
-                self.event.requestExhibitors({
-                    self.dismiss(animated: true, completion: {
-                        self.performSegue(withIdentifier: "ExhibitorsListView", sender: self.event.exhibitors)
-                    })
-                });
-            });
+            segueTypeOnRequestCompletion = .exhibitor
+            present(activityVC, animated: false, completion: { 
+                self.requestManager.requestExhibitors()
+            })
         }
     }
     
     func didTapAttendess(_ sender: AnyObject) {
         
         if event.didLoadAttendees {
-            self.performSegue(withIdentifier: "AttendeesView", sender: self.event.attendees)
+            performSegue(withIdentifier: "AttendeesView", sender: self.event.attendees)
         } else {
-            self.present(activityVC, animated: false, completion: {
-                self.event.requestAttendees() {
-                    self.dismiss(animated: true, completion: {
-                        self.performSegue(withIdentifier: "AttendeesView", sender: self.event.attendees)
-                    });
-                }
+            segueTypeOnRequestCompletion = .attendee
+            present(activityVC, animated: false, completion: {
+                self.requestManager.requestAttendees()
             });
         }
     }
     
     func didTapVenue(_ sender: AnyObject) {
-        
         if event.didLoadVenues {
             self.performSegue(withIdentifier: "VenueView", sender: self.event.venues)
         } else {
-            self.present(activityVC, animated: false, completion: {
-                self.event.requestVenues() {
-                    self.dismiss(animated: true, completion: {
-                        self.performSegue(withIdentifier: "VenueView", sender: self.event.venues)
-                    });
-                }
-            });
+            segueTypeOnRequestCompletion = .venue
+            present(activityVC, animated: false, completion: {
+                self.requestManager.requestVenues()
+            })
         }
     }
     
     func didTapSponsors(_ sender: AnyObject) {
         
-        if let sponsor = self.event.sponsors.first {
-            SIRequest().requestSponsor(sponsorId: sponsor.id, callback: { (sponsor) in
-                if let sponsor = sponsor {
-                    print(sponsor.attributedSummary)
-                }
-            })
-        }
-        
         if event.didLoadSponsors {
-            self.performSegue(withIdentifier: "SponsorsView", sender: self.event.sponsors)
+            performSegue(withIdentifier: "SponsorsView", sender: self.event.sponsors)
         } else {
-            self.present(activityVC, animated: false, completion: {
-                self.event.requestSponsors {
-                    self.dismiss(animated: true, completion: {
-                        self.performSegue(withIdentifier: "SponsorsView", sender: self.event.sponsors)
-                    });
-                }
+            segueTypeOnRequestCompletion = .sponsor
+            present(activityVC, animated: false, completion: {
+                self.requestManager.requestSponsors()
             });
         }
     }
@@ -462,13 +234,16 @@ extension EventMenuViewController {
         
         navigationItem.title = ""
         
-        if segue.identifier == "SchedulesView" {
+        switch segue.identifier! {
+            
+        case "SchedulesView":
             let destination = segue.destination as! SchedulesTableViewController
-            destination.agendas = event.agendaItems.sorted { $1.date.isGreaterThanDate($0.date) }
-            destination.eventName = event.name
-        }
-        
-        if segue.identifier == "SpeakerList" {
+            event.agendas.sort { $1.date.regionDate > $0.date.regionDate }
+            destination.event = event
+            
+            break
+            
+        case "SpeakerList":
             let destination = segue.destination as! SpeakerListTableViewController
             
             var keynoteSpeakers = [SISpeaker]()
@@ -494,9 +269,9 @@ extension EventMenuViewController {
             destination.concurrentSpeakers = concurrentSpeakers.sorted { $0.getLastName() < $1.getLastName() }
             destination.unknownSpeakers = unknownSpeakers.sorted { $0.getLastName() < $1.getLastName() }
             
-        }
-        
-        if segue.identifier == "RecipientsView" {
+            break
+            
+        case "RecipientsView":
             let destination = segue.destination as! RecipientsTableViewController
             if let recipients = sender as? [SIRecipient] {
                 
@@ -527,16 +302,18 @@ extension EventMenuViewController {
                 destination.publicationRecipients = publicationRecipients
                 
             }
-        }
-        
-        if segue.identifier == "MapView" {
+            
+            break
+            
+        case "MapView":
             let destination = segue.destination as! MapViewController
             if let venue = sender as? SIVenue {
                 destination.venue = venue
             }
-        }
-        
-        if segue.identifier == "ExhibitorsListView" {
+            
+            break
+            
+        case "ExhibitorsListView":
             
             let destination = segue.destination as! ExhibitorTableViewController
             if let exhibitors = sender as? [SIExhibitor] {
@@ -565,22 +342,24 @@ extension EventMenuViewController {
                 destination.sectionInformation = exhibitorSections
                 
             }
-        }
-        
-        if segue.identifier == "AttendeesView" {
+            
+            break
+            
+        case "AttendeesView":
             let destination = segue.destination as! AttendessTableViewController
             if let attendees = sender as? [SIAttendee] {
-                
                 destination.attendees = attendees.sorted { $0.getLastName() < $1.getLastName() }
             }
-        }
-        
-        if segue.identifier == "VenueView" {
+            
+            break
+            
+        case "VenueView":
             let destination = segue.destination as! VenueMapsCollectionView
             destination.venue = self.event.venues[0]
-        }
-        
-        if segue.identifier == "SponsorsView" {
+            
+            break
+            
+        case "SponsorsView":
             let destination = segue.destination as! SponsorsTableViewController
             if let sponsors = sender as? [SISponsor] {
                 
@@ -616,20 +395,66 @@ extension EventMenuViewController {
                 destination.presidents = sponsorTypes[4]
                 destination.other = sponsorTypes[5]
             }
+            
+            break
+            
+        default: break
+            
         }
         
     }
 }
 
-extension EventMenuViewController {
+extension EventMenuViewController: SIRequestManagerDelegate {
+    func onRequestComplete(requestType type: SIRequestType) {
+        
+        let segueType: SIRequestType = segueTypeOnRequestCompletion == type ? type : .none
+        
+        dismiss(animated: false) { 
+            switch segueType {
+            case .speaker:
+                self.performSegue(withIdentifier: "SpeakerList", sender: self.event.speakers)
+                break
+            case .agenda:
+                self.performSegue(withIdentifier: "SchedulesView", sender: self.event.agendas)
+                self.scheduleButton.isEnabled = true
+                break
+            case .attendee:
+                self.performSegue(withIdentifier: "AttendeesView", sender: self.event.attendees)
+                break
+            case .exhibitor:
+                self.performSegue(withIdentifier: "ExhibitorsListView", sender: self.event.exhibitors)
+                break
+            case .recipient:
+                self.performSegue(withIdentifier: "RecipientsView", sender: self.event.recipients)
+                break
+            case .sponsor:
+                self.performSegue(withIdentifier: "SponsorsView", sender: self.event.sponsors)
+                break
+            case .venue:
+                self.performSegue(withIdentifier: "VenueView", sender: self.event.venues)
+                break
+            case .map:
+                self.performSegue(withIdentifier: "MapView", sender: self.event.venues.first)
+                break
+            case .none, .event, .sessions, .affiliate:
+                break
+            }
+        }
+        
+        segueTypeOnRequestCompletion = .none
+    }
+}
 
+
+extension EventMenuViewController {
+    
     /**
      This method parses a string and returns a character that can be used as a header in an alphabetically sorted list.
      
-     - parameters:
-        - name: A name, title, etc. that belongs to an item in a list that should be sorted alphabetically.
+     - parameter name: A name, title, etc. that belongs to an item in a list that should be sorted alphabetically.
      
-     - returns: String (always a single character)
+     - returns: A single `Character` as a `String`
      */
     func getCharacterForSection(name: String) -> String? {
         
@@ -647,7 +472,7 @@ extension EventMenuViewController {
         }
         return nil
     }
-
+    
 }
 
 
