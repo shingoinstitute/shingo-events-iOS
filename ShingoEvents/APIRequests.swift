@@ -95,6 +95,12 @@ class SIRequest {
                 
                 for record in records {
                     
+                    if let publish = record["Publish_to_Web_App__c"].bool {
+                        if !publish {
+                            continue
+                        }
+                    }
+                    
                     let event = SIEvent()
                     
                     if let id = record["Id"].string {

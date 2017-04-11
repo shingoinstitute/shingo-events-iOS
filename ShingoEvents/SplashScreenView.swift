@@ -31,6 +31,12 @@ class SplashScreenView: UIViewController {
     
     var didUpdateViewConstrains = false
     
+    var msgLabel: UILabel = UILabel(text: "Loading")
+    
+    var activityIndicator: UIActivityIndicatorView = UIActivityIndicatorView()
+    
+    var msgContainer: UIView = UIView()
+    
     /**
      - parameter splashScreenImage: The advertisement image to be displayed on the screen
      - parameter delegate: The view controller currently presenting the splash screen.
@@ -38,20 +44,19 @@ class SplashScreenView: UIViewController {
     convenience init(viewController parent: SplashScreenViewDelegate, identifier: String, event: SIEvent) {
         self.init(nibName: nil, bundle: nil)
         self.delegate = parent
-        self.imageView = UIImageView()
-        self.imageView.contentMode = UIViewContentMode.scaleAspectFit
-        self.imageView.backgroundColor = .black
         self.identifier = identifier
         self.event = event
+        
+        self.imageView = UIImageView(image: #imageLiteral(resourceName: "Shingo Icon Fullscreen"))
+        self.imageView.contentMode = UIViewContentMode.scaleAspectFit
+        
+        imageView.backgroundColor = .black
+        imageView.contentMode = .scaleAspectFit
     }
     
     fileprivate override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        
-        // default modal transition style should be `crossDissolve`.
         modalTransitionStyle = UIModalTransitionStyle.crossDissolve
-        
-        // default modal presentation style should be `overCurrentContext`.
         modalPresentationStyle = .overCurrentContext
     }
     
@@ -61,10 +66,42 @@ class SplashScreenView: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         view.addSubview(imageView)
-        imageView.contentMode = .scaleAspectFit
+        view.addSubview(msgContainer)
+        msgContainer.addSubview(msgLabel)
+        msgContainer.addSubview(activityIndicator)
+        
+        msgContainer.backgroundColor = .white
+        msgLabel.backgroundColor = .white
+        activityIndicator.backgroundColor = .white
+        
+        activityIndicator.color = .gray
+        activityIndicator.startAnimating()
+        
         updateViewConstraints()
     }
+    
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setSponsorAd(for: event)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        msgContainer.sizeToFit()
+        Timer.scheduledTimer(withTimeInterval: SplashScreenView.defaultPresentationLength!, repeats: false) { (_) in
+            self.onMinPresentationTimerComplete()
+        }
+    }
+    
+    
+    
+}
+
+extension SplashScreenView {
     
     func setSponsorAd(for event: SIEvent) {
         
@@ -79,27 +116,7 @@ class SplashScreenView: UIViewController {
         } else {
             splashAd.makeImageRequest()
         }
-
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        setSponsorAd(for: event)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        Timer.scheduledTimer(withTimeInterval: SplashScreenView.defaultPresentationLength!, repeats: false) { (_) in
-            self.onMinPresentationTimerComplete()
-        }
-    }
-    
-    override func updateViewConstraints() {
-        if !didUpdateViewConstrains {
-            imageView.autoPinEdgesToSuperviewEdges()
-            didUpdateViewConstrains = true
-        }
-        super.updateViewConstraints()
+        
     }
     
     func onMinPresentationTimerComplete() {
@@ -111,6 +128,35 @@ class SplashScreenView: UIViewController {
     
 }
 
+extension SplashScreenView {
+    
+    override func updateViewConstraints() {
+        if !didUpdateViewConstrains {
+            
+            msgContainer.autoPinEdge(.top, to: .top, of: view, withOffset: 20.0)
+            msgContainer.autoAlignAxis(.vertical, toSameAxisOf: view)
+            
+            msgLabel.autoPinEdge(.top, to: .top, of: msgContainer, withOffset: 4.0)
+            msgLabel.autoPinEdge(.bottom, to: .bottom, of: msgContainer, withOffset: -4.0)
+            msgLabel.autoPinEdge(.right, to: .right, of: msgContainer, withOffset: -4.0)
+            msgLabel.autoAlignAxis(.vertical, toSameAxisOf: msgContainer)
+            
+            activityIndicator.autoPinEdge(.top, to: .top, of: msgContainer, withOffset: 4.0)
+            activityIndicator.autoPinEdge(.right, to: .left, of: msgLabel, withOffset: -4.0)
+            activityIndicator.autoPinEdge(.left, to: .left, of: msgContainer, withOffset: 4.0)
+            activityIndicator.autoPinEdge(.bottom, to: .bottom, of: msgContainer, withOffset: -4.0)
+            activityIndicator.autoSetDimension(.width, toSize: 20.0)
+            
+            imageView.autoPinEdgesToSuperviewEdges()
+            
+            view.bringSubview(toFront: msgContainer)
+            
+            didUpdateViewConstrains = true
+        }
+        super.updateViewConstraints()
+    }
+    
+}
 
 
 
