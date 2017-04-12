@@ -10,13 +10,6 @@ import Foundation
 import Alamofire
 
 protocol SIRequestManagerDelegate {
-//    func onAgendaRequestComplete()
-//    func onSpeakersRequestComplete()
-//    func onAffiliateRequestComplete()
-//    func onVenueRequestComplete()
-//    func onRecipientRequestComplete()
-//    func onSponsorRequestComplete()
-//    func onAttendeeRequestComplete()
     func onRequestComplete(requestType type: SIRequestType)
 }
 

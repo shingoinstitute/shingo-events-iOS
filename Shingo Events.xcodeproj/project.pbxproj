@@ -30,7 +30,6 @@
 		C24267BC1E81C92F004F27C0 /* SIVenueMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24267BB1E81C92F004F27C0 /* SIVenueMap.swift */; };
 		C24267BE1E81C943004F27C0 /* SIAffiliate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24267BD1E81C943004F27C0 /* SIAffiliate.swift */; };
 		C2492B331E89C1DA00D4AE58 /* BannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2492B321E89C1DA00D4AE58 /* BannerView.swift */; };
-		C2494E281C89FBFE00E2969D /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2494E271C89FBFE00E2969D /* Reachability.swift */; };
 		C24FF48C1D9195750061B3E2 /* ShingoEventsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24FF48B1D9195750061B3E2 /* ShingoEventsTests.swift */; };
 		C25F4F801D95E9E8009A9830 /* EventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25F4F7F1D95E9E8009A9830 /* EventTableViewCell.swift */; };
 		C25F4F821D99C3F5009A9830 /* ScheduleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25F4F811D99C3F5009A9830 /* ScheduleTableViewCell.swift */; };
@@ -105,7 +104,6 @@
 		C24267BB1E81C92F004F27C0 /* SIVenueMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SIVenueMap.swift; sourceTree = "<group>"; };
 		C24267BD1E81C943004F27C0 /* SIAffiliate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SIAffiliate.swift; sourceTree = "<group>"; };
 		C2492B321E89C1DA00D4AE58 /* BannerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BannerView.swift; sourceTree = "<group>"; };
-		C2494E271C89FBFE00E2969D /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		C24FF47A1D91901E0061B3E2 /* ShingoEventsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShingoEventsTests.swift; sourceTree = "<group>"; };
 		C24FF47C1D91901E0061B3E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C24FF4891D9195740061B3E2 /* ShingoEventsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShingoEventsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -324,7 +322,6 @@
 				C2492B341E89C1F500D4AE58 /* sponsor ads */,
 				C2E9508C1D1C83F500178C03 /* SharedCode.swift */,
 				C2130BD71C987650009B3BB8 /* ActivityView.swift */,
-				C2494E271C89FBFE00E2969D /* Reachability.swift */,
 				C267F9211D9DD02E00E524E9 /* SITableViewCell.swift */,
 				C2E589561E6F32A5006F8544 /* RadialGradientLayer.swift */,
 				C2AA29811E9434CC00FC25B0 /* SIDate.swift */,
@@ -592,7 +589,6 @@
 				C26DC9061C59841700BB4DDA /* MapViewController.swift in Sources */,
 				C2E9508F1D22E8F100178C03 /* APIRequests.swift in Sources */,
 				C262CA8D1C3B1C29005845AF /* EventsTableViewController.swift in Sources */,
-				C2494E281C89FBFE00E2969D /* Reachability.swift in Sources */,
 				C24267B61E81C8EC004F27C0 /* SIRecipient.swift in Sources */,
 				C2CFC3101C481EAB0036E485 /* MainViewController.swift in Sources */,
 				C26DC9021C59785700BB4DDA /* ExhibitorTableViewController.swift in Sources */,

@@ -64,19 +64,17 @@ extension EventTableViewCell: SIEventDelegate {
     
     func onEventImageRequestCompletion() {
         DispatchQueue.main.async {
-//            if self.eventImageView.image == #imageLiteral(resourceName: "FlameOnly-100") || self.eventImageView.image == nil {
-                if let _ = self.event.image {
-                    self.event.resizeIntrinsicContent(maximumAllowedWidth: self.eventImageView.frame.width)
-                    self.eventImageView.image = self.event.image
-                    
-                    if let delegate = self.delegate {
-                        delegate.cellDidUpdate()
-                    }
-                    
-                } else {
-                    self.eventImageView.image = #imageLiteral(resourceName: "FlameOnly-100")
+            if let _ = self.event.image {
+                self.event.resizeIntrinsicContent(maximumAllowedWidth: self.eventImageView.frame.width)
+                self.eventImageView.image = self.event.image
+                
+                if let delegate = self.delegate {
+                    delegate.cellDidUpdate()
                 }
-//            }
+                
+            } else {
+                self.eventImageView.image = #imageLiteral(resourceName: "FlameOnly-100")
+            }
         }
         
     }

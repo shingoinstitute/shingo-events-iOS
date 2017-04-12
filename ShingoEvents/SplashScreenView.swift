@@ -47,10 +47,10 @@ class SplashScreenView: UIViewController {
         self.identifier = identifier
         self.event = event
         
-        self.imageView = UIImageView(image: #imageLiteral(resourceName: "Shingo Icon Fullscreen"))
+        self.imageView = UIImageView(image: #imageLiteral(resourceName: "FlameOnly-HiRes"))
         self.imageView.contentMode = UIViewContentMode.scaleAspectFit
         
-        imageView.backgroundColor = .black
+        imageView.backgroundColor = .white
         imageView.contentMode = .scaleAspectFit
     }
     
@@ -96,9 +96,6 @@ class SplashScreenView: UIViewController {
             self.onMinPresentationTimerComplete()
         }
     }
-    
-    
-    
 }
 
 extension SplashScreenView {
@@ -106,7 +103,7 @@ extension SplashScreenView {
     func setSponsorAd(for event: SIEvent) {
         
         guard let splashAd = event.getSplashAd() else {
-            imageView.image = #imageLiteral(resourceName: "Shingo Icon Fullscreen")
+            imageView.image = #imageLiteral(resourceName: "FlameOnly-HiRes")
             return
         }
         
