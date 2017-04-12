@@ -50,7 +50,6 @@ class SplashScreenView: UIViewController {
         self.imageView = UIImageView(image: #imageLiteral(resourceName: "FlameOnly-HiRes"))
         self.imageView.contentMode = UIViewContentMode.scaleAspectFit
         
-        imageView.backgroundColor = .white
         imageView.contentMode = .scaleAspectFit
     }
     
@@ -73,8 +72,11 @@ class SplashScreenView: UIViewController {
         msgContainer.addSubview(activityIndicator)
         
         msgContainer.backgroundColor = .white
+        msgContainer.layer.cornerRadius = 2.0
         msgLabel.backgroundColor = .white
         activityIndicator.backgroundColor = .white
+        
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.8)
         
         activityIndicator.color = .gray
         activityIndicator.startAnimating()
@@ -102,10 +104,18 @@ extension SplashScreenView {
     
     func setSponsorAd(for event: SIEvent) {
         
+        let didHaveDefaultImage = imageView.image == #imageLiteral(resourceName: "FlameOnly-HiRes")
+        
         guard let splashAd = event.getSplashAd() else {
             imageView.image = #imageLiteral(resourceName: "FlameOnly-HiRes")
             return
         }
+        
+        if didHaveDefaultImage {
+            updateViewConstraints()
+        }
+        
+        imageView.backgroundColor = .black
         
         if let image = splashAd.image {
             splashAd.presentedAt = Date()
@@ -144,7 +154,14 @@ extension SplashScreenView {
             activityIndicator.autoPinEdge(.bottom, to: .bottom, of: msgContainer, withOffset: -4.0)
             activityIndicator.autoSetDimension(.width, toSize: 20.0)
             
-            imageView.autoPinEdgesToSuperviewEdges()
+            if imageView.image == #imageLiteral(resourceName: "FlameOnly-HiRes") {
+                imageView.autoPinEdge(.top, to: .bottom, of: msgContainer, withOffset: 8)
+                imageView.autoPinEdge(.left, to: .left, of: view, withOffset: 0)
+                imageView.autoPinEdge(.right, to: .right, of: view, withOffset: 0)
+                imageView.autoPinEdge(.bottom, to: .bottom, of: view, withOffset: -8)
+            } else {
+                imageView.autoPinEdgesToSuperviewEdges()
+            }
             
             view.bringSubview(toFront: msgContainer)
             
