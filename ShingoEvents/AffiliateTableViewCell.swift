@@ -24,12 +24,10 @@ class AffiliateTableViewCell: SITableViewCell {
             if let image = affiliate.image {
                 logoImageView.image = image
                 logoImageHeightConstraint.constant = image.size.height
-//                logoImageView.constraints.updateConstant(forAttribute: .height, toValue: image.size.height)
             } else {
                 affiliate.getLogoImage() { image in
                     self.logoImageView.image = affiliate.image
                     self.logoImageHeightConstraint.constant = image.size.height
-//                    self.logoImageView.constraints.updateConstant(forAttribute: .height, toValue: image.size.height)
                 }
             }
             

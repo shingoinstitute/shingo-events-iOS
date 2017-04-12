@@ -117,9 +117,6 @@ extension UIColor {
         self.init(red: CGFloat(red) / 255.0, green: CGFloat(green) / 255.0, blue: CGFloat(blue) / 255.0, alpha: 1.0)
     }
     
-//    convenience init(netHex:Int) {
-//        self.init(red:(netHex >> 16) & 0xff, green:(netHex >> 8) & 0xff, blue:netHex & 0xff)
-//    }
 }
 
 enum DeviceType: Double {
@@ -437,57 +434,6 @@ extension Date {
     
 
     
-    
-}
-
-extension DateFormatter {
-    
-//    static func time(from sdate: Date, to edate: Date) -> String {
-//
-//        let cal = Calendar(identifier: .gregorian)
-//        
-//        let sDateComps = cal.dateComponents(in: TimeZone.current, from: sdate)
-//        let eDateComps = cal.dateComponents(in: TimeZone.current, from: edate)
-//        
-//        let sHour = sDateComps.hour!
-//        let sMin = sDateComps.minute!
-//        let eHour = eDateComps.hour!
-//        let eMin = eDateComps.minute!
-//        
-//        var startTime = ""
-//        if sHour == 0 {
-//            startTime = "12"
-//        } else {
-//            startTime = (sHour > 0 && sHour <= 12) ? String(sHour) : String(sHour - 12)
-//        }
-//        startTime += ":"
-//        if sMin == 0 {
-//            startTime += "00"
-//        } else {
-//            startTime += (sMin > 0 && sMin < 10) ? "0" + String(sMin) : String(sMin)
-//        }
-//        
-//        startTime += (sHour > 0 && sHour < 12) ? " am" : " pm"
-//        
-//        var endTime: String = ""
-//        
-//        if eHour == 0 {
-//            endTime = "12"
-//        } else {
-//            endTime = (eHour > 0 && eHour <= 12) ? String(eHour) : String(eHour - 12)
-//        }
-//        endTime += ":"
-//        if eMin == 0 {
-//            endTime += "00"
-//        } else {
-//            endTime += (eMin > 0 && eMin < 10) ? "0" + String(eMin) : String(eMin)
-//        }
-//        
-//        endTime += (eHour > 0 && eHour < 12) ? " am" : " pm"
-//        
-//        return "\(startTime) - \(endTime)"
-//        
-//    }
     
 }
 
