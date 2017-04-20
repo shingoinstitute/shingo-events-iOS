@@ -57,6 +57,15 @@ class SponsorAd: SIObject {
         }
     }
     
+    func makeImageRequest(callback: @escaping (UIImage?) -> Void) {
+        requestImage(URLString: imageUrl) { image in
+            if let image = image {
+                self.image = image
+            }
+            return callback(self.image)
+        }
+    }
+    
     /**
      A splash ad is presented no more than once every hour. This function determines whether or not
      the ad should be displayed.
