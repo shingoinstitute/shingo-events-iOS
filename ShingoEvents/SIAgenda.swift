@@ -23,7 +23,11 @@ class SIAgenda: SIObject {
     var requestDelegate: SIAgendaDelegate?
     
     // related objects
-    var sessions : [SISession]
+    var sessions : [SISession] {
+        didSet {
+            sessions.sort {$1.startDate.regionDate > $0.startDate.regionDate}
+        }
+    }
     
     var sessionsRequest: Alamofire.Request? {
         willSet(newRequest) {
