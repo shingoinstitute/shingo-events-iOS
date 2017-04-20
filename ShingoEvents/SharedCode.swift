@@ -226,6 +226,7 @@ extension UIDevice {
     }
 }
 
+
 extension String {
     
     var length: Int { get { return self.characters.count } }
@@ -236,6 +237,14 @@ extension String {
     
     func split(_ character: Character) -> [String]? {
         return self.characters.split{$0 == character}.map(String.init)
+    }
+    
+    func split() -> [String] {
+        var chars: [String] = []
+        for i in self.characters {
+            chars.append(String(i))
+        }
+        return chars
     }
     
     /// Is the last formation of characters

@@ -30,7 +30,6 @@
 		C24267BC1E81C92F004F27C0 /* SIVenueMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24267BB1E81C92F004F27C0 /* SIVenueMap.swift */; };
 		C24267BE1E81C943004F27C0 /* SIAffiliate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24267BD1E81C943004F27C0 /* SIAffiliate.swift */; };
 		C2492B331E89C1DA00D4AE58 /* BannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2492B321E89C1DA00D4AE58 /* BannerView.swift */; };
-		C24FF48C1D9195750061B3E2 /* ShingoEventsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C24FF48B1D9195750061B3E2 /* ShingoEventsTests.swift */; };
 		C25F4F801D95E9E8009A9830 /* EventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25F4F7F1D95E9E8009A9830 /* EventTableViewCell.swift */; };
 		C25F4F821D99C3F5009A9830 /* ScheduleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C25F4F811D99C3F5009A9830 /* ScheduleTableViewCell.swift */; };
 		C262CA8D1C3B1C29005845AF /* EventsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C262CA8C1C3B1C29005845AF /* EventsTableViewController.swift */; };
@@ -61,6 +60,7 @@
 		C2E9508D1D1C83F500178C03 /* SharedCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E9508C1D1C83F500178C03 /* SharedCode.swift */; };
 		C2E9508F1D22E8F100178C03 /* APIRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2E9508E1D22E8F100178C03 /* APIRequests.swift */; };
 		C2F17FA81C6AAFCF0028062C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C2F17FA71C6AAFCF0028062C /* Assets.xcassets */; };
+		C2FF17A81EA9760B000B2904 /* FunctionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FF17A71EA9760B000B2904 /* FunctionTests.swift */; };
 		C2FF6B1E1CB2E2CF00331ED2 /* VenueMapsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FF6B1D1CB2E2CF00331ED2 /* VenueMapsCollectionView.swift */; };
 		C2FF6B221CB2E43200331ED2 /* VenueMapCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FF6B211CB2E43200331ED2 /* VenueMapCollectionCell.swift */; };
 		C2FF6B261CB4313200331ED2 /* VenueMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2FF6B251CB4313200331ED2 /* VenueMapViewController.swift */; };
@@ -68,7 +68,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		C24FF48E1D9195750061B3E2 /* PBXContainerItemProxy */ = {
+		C2FF17AA1EA9760B000B2904 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C22AB2861C2484E800A7F3B1 /* Project object */;
 			proxyType = 1;
@@ -104,11 +104,6 @@
 		C24267BB1E81C92F004F27C0 /* SIVenueMap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SIVenueMap.swift; sourceTree = "<group>"; };
 		C24267BD1E81C943004F27C0 /* SIAffiliate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SIAffiliate.swift; sourceTree = "<group>"; };
 		C2492B321E89C1DA00D4AE58 /* BannerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BannerView.swift; sourceTree = "<group>"; };
-		C24FF47A1D91901E0061B3E2 /* ShingoEventsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShingoEventsTests.swift; sourceTree = "<group>"; };
-		C24FF47C1D91901E0061B3E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C24FF4891D9195740061B3E2 /* ShingoEventsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShingoEventsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		C24FF48B1D9195750061B3E2 /* ShingoEventsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShingoEventsTests.swift; sourceTree = "<group>"; };
-		C24FF48D1D9195750061B3E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C25F4F7F1D95E9E8009A9830 /* EventTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventTableViewCell.swift; sourceTree = "<group>"; };
 		C25F4F811D99C3F5009A9830 /* ScheduleTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScheduleTableViewCell.swift; sourceTree = "<group>"; };
 		C262CA8C1C3B1C29005845AF /* EventsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventsTableViewController.swift; sourceTree = "<group>"; };
@@ -141,6 +136,9 @@
 		C2E9508E1D22E8F100178C03 /* APIRequests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIRequests.swift; sourceTree = "<group>"; };
 		C2F17F661C655DAA0028062C /* Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		C2F17FA71C6AAFCF0028062C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C2FF17A51EA9760B000B2904 /* FunctionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FunctionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C2FF17A71EA9760B000B2904 /* FunctionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionTests.swift; sourceTree = "<group>"; };
+		C2FF17A91EA9760B000B2904 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C2FF6B1D1CB2E2CF00331ED2 /* VenueMapsCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VenueMapsCollectionView.swift; sourceTree = "<group>"; };
 		C2FF6B211CB2E43200331ED2 /* VenueMapCollectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VenueMapCollectionCell.swift; sourceTree = "<group>"; };
 		C2FF6B251CB4313200331ED2 /* VenueMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VenueMapViewController.swift; sourceTree = "<group>"; };
@@ -157,7 +155,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C24FF4861D9195740061B3E2 /* Frameworks */ = {
+		C2FF17A21EA9760B000B2904 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -212,8 +210,7 @@
 			isa = PBXGroup;
 			children = (
 				C22AB2901C2484E800A7F3B1 /* ShingoEvents */,
-				C24FF4791D91901E0061B3E2 /* ShingoEventsTests */,
-				C24FF48A1D9195750061B3E2 /* ShingoEventsTests */,
+				C2FF17A61EA9760B000B2904 /* FunctionTests */,
 				C22AB28F1C2484E800A7F3B1 /* Products */,
 				CB0A5FDCC55BAF34E0CAECA2 /* Frameworks */,
 				5DB25D0538898A8E281EE0AD /* Pods */,
@@ -224,7 +221,7 @@
 			isa = PBXGroup;
 			children = (
 				C22AB28E1C2484E800A7F3B1 /* Shingo Events.app */,
-				C24FF4891D9195740061B3E2 /* ShingoEventsTests.xctest */,
+				C2FF17A51EA9760B000B2904 /* FunctionTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -340,24 +337,6 @@
 			name = resources;
 			sourceTree = "<group>";
 		};
-		C24FF4791D91901E0061B3E2 /* ShingoEventsTests */ = {
-			isa = PBXGroup;
-			children = (
-				C24FF47A1D91901E0061B3E2 /* ShingoEventsTests.swift */,
-				C24FF47C1D91901E0061B3E2 /* Info.plist */,
-			);
-			path = ShingoEventsTests;
-			sourceTree = "<group>";
-		};
-		C24FF48A1D9195750061B3E2 /* ShingoEventsTests */ = {
-			isa = PBXGroup;
-			children = (
-				C24FF48B1D9195750061B3E2 /* ShingoEventsTests.swift */,
-				C24FF48D1D9195750061B3E2 /* Info.plist */,
-			);
-			path = ShingoEventsTests;
-			sourceTree = "<group>";
-		};
 		C24FF4BF1D91D66D0061B3E2 /* speakers */ = {
 			isa = PBXGroup;
 			children = (
@@ -374,6 +353,15 @@
 				C28EC33C1DAC50480012A8A8 /* AttendeeTableViewCell.swift */,
 			);
 			name = attendees;
+			sourceTree = "<group>";
+		};
+		C2FF17A61EA9760B000B2904 /* FunctionTests */ = {
+			isa = PBXGroup;
+			children = (
+				C2FF17A71EA9760B000B2904 /* FunctionTests.swift */,
+				C2FF17A91EA9760B000B2904 /* Info.plist */,
+			);
+			path = FunctionTests;
 			sourceTree = "<group>";
 		};
 		C2FF6B201CB2E3E700331ED2 /* venue maps */ = {
@@ -432,22 +420,22 @@
 			productReference = C22AB28E1C2484E800A7F3B1 /* Shingo Events.app */;
 			productType = "com.apple.product-type.application";
 		};
-		C24FF4881D9195740061B3E2 /* ShingoEventsTests */ = {
+		C2FF17A41EA9760B000B2904 /* FunctionTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C24FF4901D9195750061B3E2 /* Build configuration list for PBXNativeTarget "ShingoEventsTests" */;
+			buildConfigurationList = C2FF17AE1EA9760B000B2904 /* Build configuration list for PBXNativeTarget "FunctionTests" */;
 			buildPhases = (
-				C24FF4851D9195740061B3E2 /* Sources */,
-				C24FF4861D9195740061B3E2 /* Frameworks */,
-				C24FF4871D9195740061B3E2 /* Resources */,
+				C2FF17A11EA9760B000B2904 /* Sources */,
+				C2FF17A21EA9760B000B2904 /* Frameworks */,
+				C2FF17A31EA9760B000B2904 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				C24FF48F1D9195750061B3E2 /* PBXTargetDependency */,
+				C2FF17AB1EA9760B000B2904 /* PBXTargetDependency */,
 			);
-			name = ShingoEventsTests;
-			productName = ShingoEventsTests;
-			productReference = C24FF4891D9195740061B3E2 /* ShingoEventsTests.xctest */;
+			name = FunctionTests;
+			productName = FunctionTests;
+			productReference = C2FF17A51EA9760B000B2904 /* FunctionTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -456,8 +444,8 @@
 		C22AB2861C2484E800A7F3B1 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0800;
-				LastUpgradeCheck = 0820;
+				LastSwiftUpdateCheck = 0830;
+				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = "Shingo Institute";
 				TargetAttributes = {
 					C22AB28D1C2484E800A7F3B1 = {
@@ -465,9 +453,9 @@
 						DevelopmentTeam = XQL9FCF56P;
 						LastSwiftMigration = 0800;
 					};
-					C24FF4881D9195740061B3E2 = {
-						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = XQL9FCF56P;
+					C2FF17A41EA9760B000B2904 = {
+						CreatedOnToolsVersion = 8.3.1;
+						DevelopmentTeam = SH73RBX4TW;
 						ProvisioningStyle = Automatic;
 						TestTargetID = C22AB28D1C2484E800A7F3B1;
 					};
@@ -487,7 +475,7 @@
 			projectRoot = "";
 			targets = (
 				C22AB28D1C2484E800A7F3B1 /* Shingo Events */,
-				C24FF4881D9195740061B3E2 /* ShingoEventsTests */,
+				C2FF17A41EA9760B000B2904 /* FunctionTests */,
 			);
 		};
 /* End PBXProject section */
@@ -502,7 +490,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C24FF4871D9195740061B3E2 /* Resources */ = {
+		C2FF17A31EA9760B000B2904 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -633,21 +621,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		C24FF4851D9195740061B3E2 /* Sources */ = {
+		C2FF17A11EA9760B000B2904 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C24FF48C1D9195750061B3E2 /* ShingoEventsTests.swift in Sources */,
+				C2FF17A81EA9760B000B2904 /* FunctionTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		C24FF48F1D9195750061B3E2 /* PBXTargetDependency */ = {
+		C2FF17AB1EA9760B000B2904 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = C22AB28D1C2484E800A7F3B1 /* Shingo Events */;
-			targetProxy = C24FF48E1D9195750061B3E2 /* PBXContainerItemProxy */;
+			targetProxy = C2FF17AA1EA9760B000B2904 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -694,7 +682,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "-D DEBUG";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -803,18 +791,18 @@
 			};
 			name = Release;
 		};
-		C24FF4911D9195750061B3E2 /* Debug */ = {
+		C2FF17AC1EA9760B000B2904 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_SUSPICIOUS_MOVES = YES;
-				DEVELOPMENT_TEAM = XQL9FCF56P;
-				INFOPLIST_FILE = ShingoEventsTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				DEVELOPMENT_TEAM = SH73RBX4TW;
+				INFOPLIST_FILE = FunctionTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.usu.shingo.prize.conference.ShingoEventsTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.craigblackburn.FunctionTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_VERSION = 3.0;
@@ -822,18 +810,18 @@
 			};
 			name = Debug;
 		};
-		C24FF4921D9195750061B3E2 /* Release */ = {
+		C2FF17AD1EA9760B000B2904 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_SUSPICIOUS_MOVES = YES;
-				DEVELOPMENT_TEAM = XQL9FCF56P;
-				INFOPLIST_FILE = ShingoEventsTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				DEVELOPMENT_TEAM = SH73RBX4TW;
+				INFOPLIST_FILE = FunctionTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.usu.shingo.prize.conference.ShingoEventsTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.craigblackburn.FunctionTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Shingo Events.app/Shingo Events";
@@ -861,14 +849,13 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C24FF4901D9195750061B3E2 /* Build configuration list for PBXNativeTarget "ShingoEventsTests" */ = {
+		C2FF17AE1EA9760B000B2904 /* Build configuration list for PBXNativeTarget "FunctionTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				C24FF4911D9195750061B3E2 /* Debug */,
-				C24FF4921D9195750061B3E2 /* Release */,
+				C2FF17AC1EA9760B000B2904 /* Debug */,
+				C2FF17AD1EA9760B000B2904 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
