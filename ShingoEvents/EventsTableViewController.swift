@@ -90,20 +90,44 @@ extension EventsTableViewController: SICellDelegate, SplashScreenViewDelegate {
         
         let splashScreen = SplashScreenView(viewController: self, identifier: identifier, event: event)
 
-        if event.didLoadEventData {
+        /**
+         4 Cases to handle:
+         
+        | Event Did Load | Event Has Splash Ads | Outcome
+        +----------------+----------------------+-------------------------------------------------------
+        | Yes            | Yes                  | Display a splash ad
+        | Yes            | No                   | Go straight to segue
+        | No             | Yes                  | Load events, display a splash ad until complete
+        | No             | No                   | Load events, display loading indicator until complete
+        ------------------------------------------------------------------------------------------------
+         */
+        
+        
+        if event.didLoadEventData && event.hasSplashAds {
             present(splashScreen, animated: true) {
                 self.onPresentSplashScreenComplete(identifier: identifier, event: event)
             }
-        } else {
+            
+        } else if event.didLoadEventData && !event.hasSplashAds {
+            super.performSegue(withIdentifier: identifier, sender: event)
+            
+        } else if !event.didLoadEventData && event.hasSplashAds {
             present(splashScreen, animated: true) {
                 event.requestEvent() {
-                    if !event.didLoadEventData {
-                        self.displayBadRequestNotification()
-                    }
                     self.onPresentSplashScreenComplete(identifier: identifier, event: event)
                 }
             }
+            
+        } else {
+            present(ActivityViewController(message: "Fetching Data"), animated: true) {
+                event.requestEvent() {
+                    self.dismiss(animated: false, completion: {
+                        super.performSegue(withIdentifier: identifier, sender: event)
+                    })
+                }
+            }
         }
+        
     }
     
     /**
@@ -118,7 +142,11 @@ extension EventsTableViewController: SICellDelegate, SplashScreenViewDelegate {
      - parameter event: The event object to be displayed on the following viewController.
      */
     func onPresentSplashScreenComplete(identifier: String, event: SIEvent) {
-        if event.didDisplaySponsorAd && event.didLoadEventData {
+        if !event.hasSplashAds && event.didLoadEventData {
+            dismiss(animated: false) {
+                super.performSegue(withIdentifier: identifier, sender: event)
+            }
+        } else if event.didDisplaySponsorAd && event.didLoadEventData {
             dismiss(animated: false) {
                 super.performSegue(withIdentifier: identifier, sender: event)
             }
