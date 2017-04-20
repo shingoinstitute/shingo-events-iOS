@@ -29,6 +29,14 @@ class SIEvent: SIObject {
     var didLoadAttendees: Bool
     var didDisplaySponsorAd: Bool
     
+    lazy var hasSplashAds: Bool = {
+        return self.sponsorSplashAds.count > 0 || self.recycledSplashAds.count > 0
+    }()
+    
+    lazy var hasBannerAds: Bool = {
+        return self.sponsorBannerAds.count > 0 || self.recycledBannerAds.count > 0
+    }()
+    
     // Related objects
     var speakers: [String:SISpeaker] // Speakers are stored in a dictionary to prevent duplicate speakers from appearing that may be recieved from the API response
     var agendas: [SIAgenda]
