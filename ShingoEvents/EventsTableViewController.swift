@@ -67,7 +67,17 @@ extension EventsTableViewController: SICellDelegate, SplashScreenViewDelegate {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "Event Cell", for: indexPath) as! EventTableViewCell;
         
-        cell.event = events[indexPath.row]
+        let event = events[indexPath.row]
+        
+        if event.didLoadImage {
+            cell.eventImageView.image = event.image
+            cell.eventImageView.contentMode = .scaleAspectFill
+        } else {
+            cell.eventImageView.image = #imageLiteral(resourceName: "FlameOnly-100")
+            cell.eventImageView.contentMode = .scaleAspectFit
+        }
+        
+        cell.event = event
         cell.delegate = self
         
         return cell
@@ -88,12 +98,15 @@ extension EventsTableViewController: SICellDelegate, SplashScreenViewDelegate {
             return
         }
         
-        let splashScreen = SplashScreenView(viewController: self, identifier: identifier, event: event)
-
         /**
-         4 Cases to handle:
+         When a user selects an event, a splash ad should be displayed if one is available.
+         The length of time the splash screen should be displayed depends on if an asynch 
+         API request is happening in the background.
          
-        | Event Did Load | Event Has Splash Ads | Outcome
+         There are 4 cases to consider when deciding when to display a splash screen and deciding
+         how long the splash screen should be displayed.
+         
+        | Event did load | Event has splash ads | Resulting behavior
         +----------------+----------------------+-------------------------------------------------------
         | Yes            | Yes                  | Display a splash ad
         | Yes            | No                   | Go straight to segue
@@ -102,6 +115,7 @@ extension EventsTableViewController: SICellDelegate, SplashScreenViewDelegate {
         ------------------------------------------------------------------------------------------------
          */
         
+        let splashScreen = SplashScreenView(viewController: self, identifier: identifier, event: event)
         
         if event.didLoadEventData && event.hasSplashAds {
             present(splashScreen, animated: true) {
