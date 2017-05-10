@@ -45,35 +45,26 @@ class EventTableViewCell: UITableViewCell {
         let dates = event.startDate.toString() + " - " + event.endDate.toString()
         eventDateRangeLabel.text = dates
         
+        if eventImageView.image == nil || eventImageView.image == #imageLiteral(resourceName: "FlameOnly-100") {
+            event.getImage({ (image) in
+                if let image = image {
+                    self.event.image = image
+                }
+            })
+        }
+        
         onEventDetailCompletion()
-        onEventImageRequestCompletion()
         
     }
 }
 
 extension EventTableViewCell: SIEventDelegate {
+    
     func onEventDetailCompletion() {
         DispatchQueue.main.async {
             self.eventDescriptionLabel.attributedText = SIRequest.parseHTMLStringUsingPreferredFont(string: self.event.salesText, forTextStyle: .subheadline)
             if let delegate = self.delegate {
                 delegate.cellDidUpdate()
-            }
-        }
-        
-    }
-    
-    func onEventImageRequestCompletion() {
-        DispatchQueue.main.async {
-            if let _ = self.event.image {
-                self.event.resizeIntrinsicContent(maximumAllowedWidth: self.eventImageView.frame.width)
-                self.eventImageView.image = self.event.image
-                
-                if let delegate = self.delegate {
-                    delegate.cellDidUpdate()
-                }
-                
-            } else {
-                self.eventImageView.image = #imageLiteral(resourceName: "FlameOnly-100")
             }
         }
         

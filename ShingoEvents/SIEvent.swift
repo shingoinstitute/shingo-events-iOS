@@ -12,7 +12,6 @@ import Alamofire
 
 protocol SIEventDelegate {
     func onEventDetailCompletion()
-    func onEventImageRequestCompletion()
 }
 
 class SIEvent: SIObject {
@@ -58,7 +57,7 @@ class SIEvent: SIObject {
     var salesText: String
     var bannerURL: String {
         didSet {
-            requestBannerImage() {}
+            getImage(nil)
         }
     }
     
@@ -314,18 +313,20 @@ class SIEvent: SIObject {
         }
     }
     
-    fileprivate func requestBannerImage(_ callback: (() -> Void)?) {
+    /// getImage() provides a callback that makes an http request to get the event's bannerImage
+    /// If the event has already loaded the image or does not have a url to fetch from, it will immediately invoke the callback.
+    func getImage(_ callback: ((_ image: UIImage?) -> Void)?) {
         
-        if self.image != nil {
+        if self.image != nil || bannerURL.isEmpty{
             if let done = callback {
-                done()
+                done(self.image)
             }
             return
         }
         
         if bannerURL.isEmpty {
             if let done = callback {
-                done()
+                done(self.image)
             }
             return
         }
@@ -337,26 +338,11 @@ class SIEvent: SIObject {
             }
             
             if let done = callback {
-                done()
+                done(self.image)
             }
         }
     }
-    
-    func getBannerImage(_ callback: @escaping (_ image: UIImage?) -> Void) {
-        
-        requestBannerImage() {
-            if let image = self.image {
-                callback(image)
-            } else {
-                callback(nil)
-            }
-            
-            if let delegate = self.tableViewCellDelegate {
-                delegate.onEventImageRequestCompletion()
-            }
-            
-        }
-    }
+
 }
 
 

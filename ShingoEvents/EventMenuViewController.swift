@@ -91,7 +91,7 @@ class EventMenuViewController: UIViewController {
         if let bannerImage = event.image {
             eventHeaderImageView.image = bannerImage
         } else {
-            event.getBannerImage() { image in
+            event.getImage() { image in
                 if let image = image {
                     self.eventHeaderImageView.image = image
                     self.navigationItem.title = self.event.name

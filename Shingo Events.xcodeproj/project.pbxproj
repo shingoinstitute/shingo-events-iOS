@@ -464,6 +464,7 @@
 						CreatedOnToolsVersion = 7.2;
 						DevelopmentTeam = XQL9FCF56P;
 						LastSwiftMigration = 0800;
+						ProvisioningStyle = Automatic;
 					};
 					C24FF4881D9195740061B3E2 = {
 						CreatedOnToolsVersion = 8.0;
@@ -764,6 +765,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = "";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = XQL9FCF56P;
 				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = YES;
 				INFOPLIST_FILE = ShingoEvents/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -771,6 +773,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.usu.shingo.prize.conference;
 				PRODUCT_NAME = "Shingo Events";
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "./ShingoEvents/Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -788,6 +791,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = XQL9FCF56P;
 				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = YES;
 				INFOPLIST_FILE = ShingoEvents/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -795,6 +799,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.usu.shingo.prize.conference;
 				PRODUCT_NAME = "Shingo Events";
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "./ShingoEvents/Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
