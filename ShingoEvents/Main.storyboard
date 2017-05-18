@@ -300,7 +300,7 @@
                                             <color key="textColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="1000" horizontalCompressionResistancePriority="751" image="FlameOnly-100" translatesAutoresizingMaskIntoConstraints="NO" id="u1s-V4-Mbi">
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="1000" horizontalCompressionResistancePriority="751" image="FlameOnly-100" translatesAutoresizingMaskIntoConstraints="NO" id="u1s-V4-Mbi">
                                             <rect key="frame" x="8" y="59" width="326" height="125"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="125" id="Hdm-sK-RQO"/>
@@ -1030,157 +1030,226 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Pgc-CU-1pS">
-                                <rect key="frame" x="0.0" y="64" width="375" height="100"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lFz-j9-mzL">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="MCR-l2-fS0">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="100" id="thf-L1-RAF"/>
+                                        </constraints>
+                                    </imageView>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xDO-bm-oW6">
+                                        <rect key="frame" x="0.0" y="108" width="375" height="184"/>
+                                        <subviews>
+                                            <button opaque="NO" clipsSubviews="YES" alpha="0.69999998807907104" contentMode="scaleAspectFit" placeholderIntrinsicWidth="175.5" placeholderIntrinsicHeight="36" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="FC9-8p-Kop">
+                                                <rect key="frame" x="8" y="8" width="175.5" height="36"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="36" id="qIA-hD-nxp"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <inset key="titleEdgeInsets" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                <inset key="imageEdgeInsets" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                <state key="normal" title="Speakers" image="Microphone 2-96">
+                                                    <color key="titleColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="didTapSpeakers:" destination="u1g-P8-RbU" eventType="touchUpInside" id="meB-GU-uey"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" clipsSubviews="YES" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="ATs-CY-Sds">
+                                                <rect key="frame" x="191" y="8" width="175.5" height="36"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="36" id="bQB-Ls-yz0"/>
+                                                </constraints>
+                                                <inset key="titleEdgeInsets" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                <inset key="imageEdgeInsets" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                <state key="normal" title="Schedule" image="Timetable-100">
+                                                    <color key="titleColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="didTapSchedule:" destination="u1g-P8-RbU" eventType="touchUpInside" id="MeK-AN-t9v"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" clipsSubviews="YES" alpha="0.69999998807907104" contentMode="scaleAspectFit" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="eSZ-Ts-mm5">
+                                                <rect key="frame" x="191" y="52" width="175.5" height="36"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="36" id="SLo-YE-sfv"/>
+                                                </constraints>
+                                                <inset key="titleEdgeInsets" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                <inset key="imageEdgeInsets" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                <state key="normal" title="Attendees" image="User Group Man Man-96">
+                                                    <color key="titleColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="didTapAttendess:" destination="u1g-P8-RbU" eventType="touchUpInside" id="SvQ-0j-rb0"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" clipsSubviews="YES" alpha="0.69999998807907104" contentMode="scaleAspectFit" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="vaG-At-79X">
+                                                <rect key="frame" x="192" y="140" width="175.5" height="36"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="36" id="EQz-Xg-ox9"/>
+                                                </constraints>
+                                                <inset key="titleEdgeInsets" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                <inset key="imageEdgeInsets" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                <state key="normal" title="Exhibitors" image="Sell-96">
+                                                    <color key="titleColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="didTapExhibitors:" destination="u1g-P8-RbU" eventType="touchUpInside" id="BmQ-wc-rFq"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" clipsSubviews="YES" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="KvZ-Re-3Kt">
+                                                <rect key="frame" x="8" y="52" width="175.5" height="36"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="36" id="mrw-c4-IZg"/>
+                                                </constraints>
+                                                <inset key="titleEdgeInsets" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                <inset key="imageEdgeInsets" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                <state key="normal" title="Recipients" image="Prize-96">
+                                                    <color key="titleColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="didTapRecipients:" destination="u1g-P8-RbU" eventType="touchUpInside" id="IY8-3p-TuI"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" clipsSubviews="YES" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="3Ll-uE-UXR">
+                                                <rect key="frame" x="8" y="140" width="176" height="36"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="36" id="XR6-ej-Nps"/>
+                                                </constraints>
+                                                <inset key="titleEdgeInsets" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                <inset key="imageEdgeInsets" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                <state key="normal" title="Directions" image="Compass-96">
+                                                    <color key="titleColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="didTapDirections:" destination="u1g-P8-RbU" eventType="touchUpInside" id="NMb-5B-Odi"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" clipsSubviews="YES" alpha="0.69999998807907104" contentMode="scaleAspectFit" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="E6m-4Q-OaZ">
+                                                <rect key="frame" x="191" y="96" width="175.5" height="36"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="36" id="8XT-Ii-Q11"/>
+                                                </constraints>
+                                                <inset key="titleEdgeInsets" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                <inset key="imageEdgeInsets" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                <state key="normal" title="Sponsors" image="Handshake-104">
+                                                    <color key="titleColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="didTapSponsors:" destination="u1g-P8-RbU" eventType="touchUpInside" id="czl-2R-Tlp"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" clipsSubviews="YES" alpha="0.69999998807907104" contentMode="scaleAspectFit" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="6WC-TO-2WO">
+                                                <rect key="frame" x="8" y="96" width="175.5" height="36"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="36" id="yoj-xs-5CE"/>
+                                                </constraints>
+                                                <inset key="titleEdgeInsets" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                <inset key="imageEdgeInsets" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                <state key="normal" title="Venue" image="Building-104">
+                                                    <color key="titleColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="didTapVenue:" destination="u1g-P8-RbU" eventType="touchUpInside" id="b2w-71-gP6"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstItem="ATs-CY-Sds" firstAttribute="leading" secondItem="FC9-8p-Kop" secondAttribute="trailing" constant="8" id="0Yj-Js-gWZ"/>
+                                            <constraint firstItem="ATs-CY-Sds" firstAttribute="width" secondItem="FC9-8p-Kop" secondAttribute="width" id="0qh-K0-vuN"/>
+                                            <constraint firstItem="FC9-8p-Kop" firstAttribute="leading" secondItem="xDO-bm-oW6" secondAttribute="leading" constant="8" id="3A2-pb-eZy"/>
+                                            <constraint firstItem="FC9-8p-Kop" firstAttribute="top" secondItem="xDO-bm-oW6" secondAttribute="top" constant="8" id="3Y4-OF-ggv"/>
+                                            <constraint firstItem="eSZ-Ts-mm5" firstAttribute="leading" secondItem="KvZ-Re-3Kt" secondAttribute="trailing" constant="8" id="44n-73-39K"/>
+                                            <constraint firstItem="E6m-4Q-OaZ" firstAttribute="leading" secondItem="6WC-TO-2WO" secondAttribute="trailing" constant="8" id="55Q-Rh-vJB"/>
+                                            <constraint firstItem="E6m-4Q-OaZ" firstAttribute="top" secondItem="eSZ-Ts-mm5" secondAttribute="bottom" constant="8" id="8ii-GD-5gf"/>
+                                            <constraint firstAttribute="trailing" secondItem="eSZ-Ts-mm5" secondAttribute="trailing" constant="8" id="ARd-BA-UYT"/>
+                                            <constraint firstItem="6WC-TO-2WO" firstAttribute="top" secondItem="KvZ-Re-3Kt" secondAttribute="bottom" constant="8" id="B1u-Et-6R8"/>
+                                            <constraint firstItem="eSZ-Ts-mm5" firstAttribute="top" secondItem="ATs-CY-Sds" secondAttribute="bottom" constant="8" id="BTS-1l-rCL"/>
+                                            <constraint firstAttribute="bottom" secondItem="3Ll-uE-UXR" secondAttribute="bottom" constant="8" id="G3H-Tf-Z1h"/>
+                                            <constraint firstAttribute="trailing" secondItem="ATs-CY-Sds" secondAttribute="trailing" constant="8" id="HR0-YU-SpF"/>
+                                            <constraint firstItem="vaG-At-79X" firstAttribute="top" secondItem="E6m-4Q-OaZ" secondAttribute="bottom" constant="8" id="Ijg-2u-Yrd"/>
+                                            <constraint firstItem="vaG-At-79X" firstAttribute="width" secondItem="FC9-8p-Kop" secondAttribute="width" id="MPZ-hI-rFs"/>
+                                            <constraint firstAttribute="height" constant="184" id="Mft-lk-VFn"/>
+                                            <constraint firstAttribute="bottom" secondItem="vaG-At-79X" secondAttribute="bottom" constant="8" id="RjC-6N-jbw"/>
+                                            <constraint firstItem="E6m-4Q-OaZ" firstAttribute="width" secondItem="FC9-8p-Kop" secondAttribute="width" id="V9E-aK-yEv"/>
+                                            <constraint firstItem="3Ll-uE-UXR" firstAttribute="top" secondItem="6WC-TO-2WO" secondAttribute="bottom" constant="8" id="W58-DB-9WZ"/>
+                                            <constraint firstItem="KvZ-Re-3Kt" firstAttribute="top" secondItem="FC9-8p-Kop" secondAttribute="bottom" constant="8" id="a36-Ia-Hlv"/>
+                                            <constraint firstAttribute="trailing" secondItem="vaG-At-79X" secondAttribute="trailing" constant="8" id="ag9-54-qfP"/>
+                                            <constraint firstItem="KvZ-Re-3Kt" firstAttribute="leading" secondItem="xDO-bm-oW6" secondAttribute="leading" constant="8" id="b4E-SY-Sme"/>
+                                            <constraint firstAttribute="trailing" secondItem="E6m-4Q-OaZ" secondAttribute="trailing" constant="8" id="cLd-DX-gV5"/>
+                                            <constraint firstItem="vaG-At-79X" firstAttribute="leading" secondItem="3Ll-uE-UXR" secondAttribute="trailing" constant="8" id="q5k-gh-7F9"/>
+                                            <constraint firstItem="6WC-TO-2WO" firstAttribute="leading" secondItem="xDO-bm-oW6" secondAttribute="leading" constant="8" id="qKh-Qb-SQ8"/>
+                                            <constraint firstItem="KvZ-Re-3Kt" firstAttribute="width" secondItem="FC9-8p-Kop" secondAttribute="width" id="rIQ-Q7-nep"/>
+                                            <constraint firstItem="6WC-TO-2WO" firstAttribute="width" secondItem="FC9-8p-Kop" secondAttribute="width" id="rMc-AX-npE"/>
+                                            <constraint firstItem="3Ll-uE-UXR" firstAttribute="leading" secondItem="xDO-bm-oW6" secondAttribute="leading" constant="8" id="skM-YX-LRK"/>
+                                            <constraint firstItem="eSZ-Ts-mm5" firstAttribute="width" secondItem="FC9-8p-Kop" secondAttribute="width" id="sr0-xY-UeJ"/>
+                                            <constraint firstItem="ATs-CY-Sds" firstAttribute="top" secondItem="xDO-bm-oW6" secondAttribute="top" constant="8" id="ydN-Hn-NnK"/>
+                                            <constraint firstItem="3Ll-uE-UXR" firstAttribute="width" secondItem="FC9-8p-Kop" secondAttribute="width" id="yef-2N-naZ"/>
+                                        </constraints>
+                                    </view>
+                                    <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" text="sales text" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tWu-In-efu">
+                                        <rect key="frame" x="0.0" y="300" width="375" height="36.5"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no"/>
+                                        <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES"/>
+                                    </textView>
+                                </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="100" id="Gyo-Ct-QE3"/>
+                                    <constraint firstItem="tWu-In-efu" firstAttribute="leading" secondItem="lFz-j9-mzL" secondAttribute="leading" id="2wo-z3-Hkf"/>
+                                    <constraint firstItem="MCR-l2-fS0" firstAttribute="leading" secondItem="lFz-j9-mzL" secondAttribute="leading" id="4M4-kn-Ywc"/>
+                                    <constraint firstAttribute="trailing" secondItem="tWu-In-efu" secondAttribute="trailing" id="GYo-iZ-Gjd"/>
+                                    <constraint firstItem="MCR-l2-fS0" firstAttribute="top" secondItem="lFz-j9-mzL" secondAttribute="topMargin" constant="-8" id="KXU-it-wlN"/>
+                                    <constraint firstAttribute="trailing" secondItem="xDO-bm-oW6" secondAttribute="trailing" id="KwJ-UW-AI7"/>
+                                    <constraint firstItem="xDO-bm-oW6" firstAttribute="leading" secondItem="lFz-j9-mzL" secondAttribute="leading" id="Z4H-8r-eyd"/>
+                                    <constraint firstItem="tWu-In-efu" firstAttribute="top" secondItem="xDO-bm-oW6" secondAttribute="bottom" constant="8" id="gxA-t3-Kqy"/>
+                                    <constraint firstAttribute="bottom" secondItem="tWu-In-efu" secondAttribute="bottom" id="jHi-Z0-hta"/>
+                                    <constraint firstItem="xDO-bm-oW6" firstAttribute="top" secondItem="MCR-l2-fS0" secondAttribute="bottom" constant="8" id="naW-YG-hMZ"/>
+                                    <constraint firstAttribute="trailing" secondItem="MCR-l2-fS0" secondAttribute="trailing" id="xZG-g8-u8C"/>
                                 </constraints>
-                            </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="FlameOnly-HiRes" translatesAutoresizingMaskIntoConstraints="NO" id="94O-X6-CjF">
-                                <rect key="frame" x="0.0" y="164" width="375" height="453"/>
-                            </imageView>
-                            <button opaque="NO" alpha="0.69999999999999996" contentMode="scaleAspectFit" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MLa-NZ-CUx">
-                                <rect key="frame" x="16" y="172" width="343" height="47.5"/>
-                                <color key="backgroundColor" red="0.60000002379999995" green="0.60000002379999995" blue="0.60000002379999995" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <inset key="titleEdgeInsets" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <inset key="imageEdgeInsets" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <state key="normal" title="Speakers" image="Microphone 2-24">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                            </button>
-                            <button opaque="NO" alpha="0.69999999999999996" contentMode="scaleAspectFit" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n1X-V2-bXG">
-                                <rect key="frame" x="16" y="227.5" width="343" height="48"/>
-                                <color key="backgroundColor" red="0.60000002379999995" green="0.60000002379999995" blue="0.60000002379999995" alpha="1" colorSpace="calibratedRGB"/>
-                                <inset key="titleEdgeInsets" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <inset key="imageEdgeInsets" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <state key="normal" title="Schedule" image="calendar-clock">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                            </button>
-                            <button opaque="NO" alpha="0.69999999999999996" contentMode="scaleAspectFit" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rfs-dd-5Yc">
-                                <rect key="frame" x="16" y="283.5" width="343" height="47.5"/>
-                                <color key="backgroundColor" red="0.60000002379999995" green="0.60000002379999995" blue="0.60000002379999995" alpha="1" colorSpace="calibratedRGB"/>
-                                <inset key="titleEdgeInsets" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <inset key="imageEdgeInsets" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <state key="normal" title="Attendees" image="User Group Man Man-24">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                            </button>
-                            <button opaque="NO" alpha="0.69999999999999996" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OBK-uD-L06">
-                                <rect key="frame" x="16" y="339" width="343" height="48"/>
-                                <color key="backgroundColor" red="0.60000002379999995" green="0.60000002379999995" blue="0.60000002379999995" alpha="1" colorSpace="calibratedRGB"/>
-                                <inset key="titleEdgeInsets" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <inset key="imageEdgeInsets" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <state key="normal" title="Exhibitors" image="Sell Filled-24">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                            </button>
-                            <button opaque="NO" alpha="0.69999999999999996" contentMode="scaleAspectFit" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="afw-62-6YU">
-                                <rect key="frame" x="16" y="395" width="343" height="47.5"/>
-                                <color key="backgroundColor" red="0.60000002379999995" green="0.60000002379999995" blue="0.60000002379999995" alpha="1" colorSpace="calibratedRGB"/>
-                                <inset key="titleEdgeInsets" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <inset key="imageEdgeInsets" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <state key="normal" title="Recipients" image="Medal-24">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                            </button>
-                            <button opaque="NO" alpha="0.69999999999999996" contentMode="scaleAspectFit" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IW4-OV-Zvx">
-                                <rect key="frame" x="16" y="450.5" width="343" height="47.5"/>
-                                <color key="backgroundColor" red="0.60000002379999995" green="0.60000002379999995" blue="0.60000002379999995" alpha="1" colorSpace="calibratedRGB"/>
-                                <inset key="titleEdgeInsets" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <inset key="imageEdgeInsets" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <state key="normal" title="Directions" image="Compass-24">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                            </button>
-                            <button opaque="NO" alpha="0.69999999999999996" contentMode="scaleAspectFit" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Du-Z2-TqX">
-                                <rect key="frame" x="16" y="506" width="343" height="47.5"/>
-                                <color key="backgroundColor" red="0.60000002379999995" green="0.60000002379999995" blue="0.60000002379999995" alpha="1" colorSpace="calibratedRGB"/>
-                                <inset key="titleEdgeInsets" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <inset key="imageEdgeInsets" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <state key="normal" title="Sponsors" image="Handshake-24">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                            </button>
-                            <button opaque="NO" alpha="0.69999999999999996" contentMode="scaleAspectFit" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M8q-ah-4bv">
-                                <rect key="frame" x="16" y="561.5" width="343" height="47.5"/>
-                                <color key="backgroundColor" red="0.60000002379999995" green="0.60000002379999995" blue="0.60000002379999995" alpha="1" colorSpace="calibratedRGB"/>
-                                <inset key="titleEdgeInsets" minX="16" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <inset key="imageEdgeInsets" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                <state key="normal" title="Venue" image="Building-24">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                            </button>
+                            </scrollView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1JQ-lu-wTU" customClass="BannerView" customModule="Shingo_Events" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="617" width="375" height="50"/>
-                                <color key="backgroundColor" red="0.85532819959999995" green="0.86379679570000001" blue="0.86379679570000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <rect key="frame" x="0.0" y="603" width="375" height="64"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="5MH-P5-XcY"/>
-                                    <constraint firstAttribute="width" constant="375" id="JPE-bi-hd8"/>
+                                    <constraint firstAttribute="height" constant="64" id="gaz-jT-5Bd"/>
                                 </constraints>
                             </view>
                         </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="n1X-V2-bXG" firstAttribute="top" secondItem="MLa-NZ-CUx" secondAttribute="bottom" constant="8" id="1mR-kc-UXJ"/>
-                            <constraint firstItem="OBK-uD-L06" firstAttribute="height" secondItem="MLa-NZ-CUx" secondAttribute="height" id="2Ul-T3-c7K"/>
-                            <constraint firstAttribute="trailing" secondItem="94O-X6-CjF" secondAttribute="trailing" id="4Pp-bd-bbV"/>
-                            <constraint firstAttribute="trailing" secondItem="1JQ-lu-wTU" secondAttribute="trailing" id="9LB-4X-2hT"/>
-                            <constraint firstItem="afw-62-6YU" firstAttribute="height" secondItem="MLa-NZ-CUx" secondAttribute="height" id="9hn-zR-Y4V"/>
-                            <constraint firstItem="rfs-dd-5Yc" firstAttribute="leading" secondItem="rAy-Ke-xpN" secondAttribute="leadingMargin" id="BdA-OT-3um"/>
-                            <constraint firstItem="0Du-Z2-TqX" firstAttribute="leading" secondItem="rAy-Ke-xpN" secondAttribute="leadingMargin" id="BxE-sL-Num"/>
-                            <constraint firstItem="n1X-V2-bXG" firstAttribute="leading" secondItem="rAy-Ke-xpN" secondAttribute="leadingMargin" id="CXE-jz-gfn"/>
-                            <constraint firstItem="94O-X6-CjF" firstAttribute="top" secondItem="Pgc-CU-1pS" secondAttribute="bottom" id="ECC-1y-oTa"/>
-                            <constraint firstItem="0Du-Z2-TqX" firstAttribute="top" secondItem="IW4-OV-Zvx" secondAttribute="bottom" constant="8" id="EiF-cQ-nBJ"/>
-                            <constraint firstItem="Pgc-CU-1pS" firstAttribute="leading" secondItem="rAy-Ke-xpN" secondAttribute="leading" id="HlU-pA-jj8"/>
-                            <constraint firstItem="MLa-NZ-CUx" firstAttribute="top" secondItem="Pgc-CU-1pS" secondAttribute="bottom" constant="8" id="Hom-E1-jNT"/>
-                            <constraint firstItem="IW4-OV-Zvx" firstAttribute="leading" secondItem="rAy-Ke-xpN" secondAttribute="leadingMargin" id="HtL-WJ-Kz8"/>
-                            <constraint firstItem="rfs-dd-5Yc" firstAttribute="height" secondItem="MLa-NZ-CUx" secondAttribute="height" id="K2t-84-CmC"/>
-                            <constraint firstItem="0Du-Z2-TqX" firstAttribute="height" secondItem="MLa-NZ-CUx" secondAttribute="height" id="KON-ZW-Oeg"/>
-                            <constraint firstAttribute="trailing" secondItem="Pgc-CU-1pS" secondAttribute="trailing" id="KRG-qD-3Yn"/>
-                            <constraint firstItem="1JQ-lu-wTU" firstAttribute="top" secondItem="94O-X6-CjF" secondAttribute="bottom" id="LB4-bA-rjA"/>
-                            <constraint firstItem="M8q-ah-4bv" firstAttribute="height" secondItem="MLa-NZ-CUx" secondAttribute="height" id="Mkk-iH-1tP"/>
-                            <constraint firstItem="1JQ-lu-wTU" firstAttribute="top" secondItem="M8q-ah-4bv" secondAttribute="bottom" constant="8" id="NdS-9c-y3g"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="MLa-NZ-CUx" secondAttribute="trailing" id="Nlu-SD-r6c"/>
-                            <constraint firstItem="1JQ-lu-wTU" firstAttribute="leading" secondItem="rAy-Ke-xpN" secondAttribute="leading" id="Qo4-lx-jNh"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="OBK-uD-L06" secondAttribute="trailing" id="R2j-hf-2bb"/>
-                            <constraint firstItem="IW4-OV-Zvx" firstAttribute="top" secondItem="afw-62-6YU" secondAttribute="bottom" constant="8" id="RAh-ya-QdT"/>
-                            <constraint firstItem="MLa-NZ-CUx" firstAttribute="leading" secondItem="rAy-Ke-xpN" secondAttribute="leadingMargin" id="Tww-3J-xgw"/>
-                            <constraint firstItem="afw-62-6YU" firstAttribute="top" secondItem="OBK-uD-L06" secondAttribute="bottom" constant="8" id="WA4-5G-C7f"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="M8q-ah-4bv" secondAttribute="trailing" id="Y7b-KV-thk"/>
-                            <constraint firstItem="M8q-ah-4bv" firstAttribute="top" secondItem="0Du-Z2-TqX" secondAttribute="bottom" constant="8" id="azM-jP-qve"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="0Du-Z2-TqX" secondAttribute="trailing" id="bGr-0b-OoU"/>
-                            <constraint firstItem="Pgc-CU-1pS" firstAttribute="top" secondItem="CqH-DA-lTH" secondAttribute="bottom" id="fBT-Me-MQo"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="IW4-OV-Zvx" secondAttribute="trailing" id="faN-0B-gXS"/>
-                            <constraint firstItem="n1X-V2-bXG" firstAttribute="height" secondItem="MLa-NZ-CUx" secondAttribute="height" id="fgp-vF-oSr"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="rfs-dd-5Yc" secondAttribute="trailing" id="ftN-cO-Azq"/>
-                            <constraint firstItem="94O-X6-CjF" firstAttribute="leading" secondItem="rAy-Ke-xpN" secondAttribute="leading" id="hOf-bj-yfA"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="afw-62-6YU" secondAttribute="trailing" id="nRr-Fh-fKP"/>
-                            <constraint firstItem="gPo-cY-A0V" firstAttribute="top" secondItem="1JQ-lu-wTU" secondAttribute="bottom" id="qiA-Uo-ozg"/>
-                            <constraint firstItem="M8q-ah-4bv" firstAttribute="leading" secondItem="rAy-Ke-xpN" secondAttribute="leadingMargin" id="tBO-Ow-r92"/>
-                            <constraint firstItem="OBK-uD-L06" firstAttribute="leading" secondItem="rAy-Ke-xpN" secondAttribute="leadingMargin" id="unL-Pu-qn0"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="n1X-V2-bXG" secondAttribute="trailing" id="vnf-g0-KYR"/>
-                            <constraint firstItem="rfs-dd-5Yc" firstAttribute="top" secondItem="n1X-V2-bXG" secondAttribute="bottom" constant="8" id="xKA-kb-lhK"/>
-                            <constraint firstItem="afw-62-6YU" firstAttribute="leading" secondItem="rAy-Ke-xpN" secondAttribute="leadingMargin" id="xNr-oH-CEh"/>
-                            <constraint firstItem="IW4-OV-Zvx" firstAttribute="height" secondItem="MLa-NZ-CUx" secondAttribute="height" id="zeb-bP-e3j"/>
-                            <constraint firstItem="OBK-uD-L06" firstAttribute="top" secondItem="rfs-dd-5Yc" secondAttribute="bottom" constant="8" id="zjc-ay-qBN"/>
+                            <constraint firstItem="1JQ-lu-wTU" firstAttribute="width" secondItem="rAy-Ke-xpN" secondAttribute="width" id="4Ei-xf-QjW"/>
+                            <constraint firstItem="1JQ-lu-wTU" firstAttribute="top" secondItem="lFz-j9-mzL" secondAttribute="bottom" id="4fY-rh-2DB"/>
+                            <constraint firstAttribute="trailing" secondItem="lFz-j9-mzL" secondAttribute="trailing" id="6EC-Ur-z0O"/>
+                            <constraint firstItem="lFz-j9-mzL" firstAttribute="top" secondItem="rAy-Ke-xpN" secondAttribute="top" id="ICq-Ry-Nnf"/>
+                            <constraint firstItem="xDO-bm-oW6" firstAttribute="width" secondItem="rAy-Ke-xpN" secondAttribute="width" id="O7o-1m-qrJ"/>
+                            <constraint firstItem="1JQ-lu-wTU" firstAttribute="leading" secondItem="rAy-Ke-xpN" secondAttribute="leading" id="Oyi-6L-17f"/>
+                            <constraint firstItem="tWu-In-efu" firstAttribute="width" secondItem="rAy-Ke-xpN" secondAttribute="width" id="RqC-yQ-sf3"/>
+                            <constraint firstItem="gPo-cY-A0V" firstAttribute="top" secondItem="1JQ-lu-wTU" secondAttribute="bottom" id="ZFi-Vn-59Z"/>
+                            <constraint firstAttribute="trailing" secondItem="1JQ-lu-wTU" secondAttribute="trailing" id="hfG-er-I4D"/>
+                            <constraint firstItem="MCR-l2-fS0" firstAttribute="width" secondItem="rAy-Ke-xpN" secondAttribute="width" id="j4w-FB-zER"/>
+                            <constraint firstItem="lFz-j9-mzL" firstAttribute="leading" secondItem="rAy-Ke-xpN" secondAttribute="leading" id="vKO-Mo-cHI"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Re7-Ob-w4q"/>
                     <connections>
-                        <outlet property="attendeesButton" destination="rfs-dd-5Yc" id="FvZ-tf-3Cl"/>
-                        <outlet property="backgroundImage" destination="94O-X6-CjF" id="bCT-iW-GyW"/>
+                        <outlet property="attendeesButton" destination="eSZ-Ts-mm5" id="LcA-yZ-953"/>
                         <outlet property="bannerView" destination="1JQ-lu-wTU" id="5fg-z8-J5r"/>
-                        <outlet property="bannerViewHeightConstraint" destination="5MH-P5-XcY" id="oRl-Y0-Z7T"/>
-                        <outlet property="bannerViewWidthConstraint" destination="JPE-bi-hd8" id="AsZ-od-3gV"/>
-                        <outlet property="directionsButton" destination="IW4-OV-Zvx" id="PvV-iz-Iog"/>
-                        <outlet property="eventHeaderImageView" destination="Pgc-CU-1pS" id="cKu-SO-8Va"/>
-                        <outlet property="exhibitorsButton" destination="OBK-uD-L06" id="mrJ-k5-rob"/>
-                        <outlet property="recipientsButton" destination="afw-62-6YU" id="cF3-JW-cup"/>
-                        <outlet property="scheduleButton" destination="n1X-V2-bXG" id="2uw-jS-uN5"/>
-                        <outlet property="speakerButton" destination="MLa-NZ-CUx" id="zxW-zR-faD"/>
-                        <outlet property="sponsorsButton" destination="0Du-Z2-TqX" id="bW4-9q-Ng3"/>
-                        <outlet property="venuePhotosButton" destination="M8q-ah-4bv" id="eEP-Wi-29T"/>
+                        <outlet property="bannerViewHeightConstraint" destination="gaz-jT-5Bd" id="JWG-hJ-a9C"/>
+                        <outlet property="contentView" destination="xDO-bm-oW6" id="OaN-2K-FaE"/>
+                        <outlet property="directionsButton" destination="3Ll-uE-UXR" id="WTh-fP-t6B"/>
+                        <outlet property="eventHeaderImageView" destination="MCR-l2-fS0" id="uku-3I-qlu"/>
+                        <outlet property="exhibitorsButton" destination="vaG-At-79X" id="ehZ-RT-pz1"/>
+                        <outlet property="recipientsButton" destination="KvZ-Re-3Kt" id="tBZ-Pu-E2K"/>
+                        <outlet property="salesTextView" destination="tWu-In-efu" id="BwI-UQ-iRZ"/>
+                        <outlet property="scheduleButton" destination="ATs-CY-Sds" id="U1b-kO-EHV"/>
+                        <outlet property="scrollView" destination="lFz-j9-mzL" id="u6y-m4-R7M"/>
+                        <outlet property="speakerButton" destination="FC9-8p-Kop" id="h8E-Hc-ihj"/>
+                        <outlet property="sponsorsButton" destination="E6m-4Q-OaZ" id="mmQ-3W-OGA"/>
+                        <outlet property="venuePhotosButton" destination="6WC-TO-2WO" id="i3t-Sn-hLg"/>
                         <segue destination="9is-r1-ySf" kind="show" identifier="SpeakerList" id="Bbs-g6-pYd"/>
                         <segue destination="IVi-St-3H2" kind="show" identifier="RecipientsView" id="7uH-N8-zyn"/>
                         <segue destination="27Y-qz-tpL" kind="show" identifier="MapView" id="MaN-R7-jnJ"/>
@@ -1691,21 +1760,21 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Building-24" width="24" height="24"/>
-        <image name="Compass-24" width="24" height="24"/>
+        <image name="Building-104" width="104" height="104"/>
+        <image name="Compass-96" width="96" height="96"/>
         <image name="FlameOnly-100" width="100" height="100"/>
         <image name="FlameOnly-HiRes" width="375" height="667"/>
         <image name="Handshake-100" width="100" height="100"/>
-        <image name="Handshake-24" width="24" height="24"/>
-        <image name="Medal-24" width="24" height="24"/>
-        <image name="Microphone 2-24" width="24" height="24"/>
+        <image name="Handshake-104" width="104" height="104"/>
+        <image name="Microphone 2-96" width="96" height="96"/>
         <image name="Name Filled-100" width="100" height="100"/>
         <image name="Podium With Speaker-100" width="100" height="100"/>
-        <image name="Sell Filled-24" width="24" height="24"/>
+        <image name="Prize-96" width="96" height="96"/>
+        <image name="Sell-96" width="96" height="96"/>
         <image name="Settings-100" width="100" height="100"/>
         <image name="Shingo Title" width="375" height="134"/>
-        <image name="User Group Man Man-24" width="24" height="24"/>
-        <image name="calendar-clock" width="24" height="24"/>
+        <image name="Timetable-100" width="100" height="100"/>
+        <image name="User Group Man Man-96" width="96" height="96"/>
         <image name="down-arrow" width="33" height="33"/>
         <image name="mapNotAvailable" width="100" height="100"/>
         <image name="shigeoGrad" width="213" height="158"/>
@@ -1713,6 +1782,6 @@
         <image name="white_star" width="50" height="50"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Vtm-iE-WQY"/>
+        <segue reference="Bbs-g6-pYd"/>
     </inferredMetricsTieBreakers>
 </document>

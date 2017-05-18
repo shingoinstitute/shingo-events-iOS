@@ -32,41 +32,30 @@ class EventTableViewCell: UITableViewCell {
         }
     }
     
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
     var event: SIEvent! { didSet { updateCell() } }
     
     var delegate: SICellDelegate?
     
     func updateCell() {
         
-        event.tableViewCellDelegate = self
-        
         eventNameLabel.text = event.name
         
-        let dates = event.startDate.toString() + " - " + event.endDate.toString()
+        let dates = event.startDate.toDateString() + " - " + event.endDate.toDateString()
         eventDateRangeLabel.text = dates
         
-        if eventImageView.image == nil || eventImageView.image == #imageLiteral(resourceName: "FlameOnly-100") {
-            event.getImage({ (image) in
-                if let image = image {
-                    self.event.image = image
-                }
-            })
-        }
-        
-        onEventDetailCompletion()
-        
-    }
-}
-
-extension EventTableViewCell: SIEventDelegate {
-    
-    func onEventDetailCompletion() {
-        DispatchQueue.main.async {
-            self.eventDescriptionLabel.attributedText = SIRequest.parseHTMLStringUsingPreferredFont(string: self.event.salesText, forTextStyle: .subheadline)
-            if let delegate = self.delegate {
-                delegate.cellDidUpdate()
-            }
-        }
+//        event.getImage() { image in
+//            if let image = image {
+//                self.event.image = image
+//            }
+//        }
         
     }
 }

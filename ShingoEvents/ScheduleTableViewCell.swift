@@ -44,7 +44,7 @@ class ScheduleTableViewCell: SITableViewCell {
 
         infoTextView.isHidden = !(!session.attributedSummary.string.isEmpty || session.room != nil)
         
-        timeLabel.text = session.startDate.getTime() + " - " + session.endDate.getTime()
+        timeLabel.text = session.startDate.toTimeString() + " - " + session.endDate.toTimeString()
         
         titleLabel.text = "\(session.sessionType.rawValue): \(session.displayName)"
         

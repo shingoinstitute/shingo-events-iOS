@@ -16,13 +16,11 @@ class SIDate {
     
     var date: Date! { get {return self._date.absoluteDate} }
     var regionDate: DateInRegion! { get {return _date } }
-    var format = "MMM dd, yyyy"
-    var region: Region! { get { return Region(tz: TimeZone(identifier: "UTC")!, cal: Calendar(identifier: .gregorian), loc: Locale.autoupdatingCurrent) } }
+    let regionUTC: Region = Region(tz: TimeZoneName.currentAutoUpdating, cal: CalendarName.gregorian, loc: LocaleName.currentAutoUpdating)
+    let regionMST: Region = Region(tz: TimeZoneName.americaDenver, cal: CalendarName.gregorian, loc: LocaleName.currentAutoUpdating)
     
-    /**
-     Times from the server originate from `America/Denver` locale, which is offset from UTC by -6 hours
-    */
-    private var timeZoneOffsetInHours: Int = -6
+    private var timeFormat = DateFormat.custom("h:mm a")
+    private var dateFormat = DateFormat.custom("MMM dd, yyyy")
     
     private var _date: DateInRegion!
 
@@ -35,25 +33,8 @@ class SIDate {
         
         let df = DateFormatter()
         df.dateFormat = format
-        if let date = df.date(from: string) {
-            let d = DateInRegion(absoluteDate: date, in: region)
-            
-            let calendar = Calendar.init(identifier: .gregorian)
-            
-            let hour = calendar.component(.hour, from: d.absoluteDate)
-            let min = calendar.component(.minute, from: d.absoluteDate)
-            let seconds = calendar.component(.second, from: d.absoluteDate)
-            
-            let components: [Calendar.Component : Int] = [
-                .year: d.year,
-                .month: d.month,
-                .day: d.day,
-                .hour: hour == 0 && min == 0 && seconds == 0 ? d.hour : d.hour + timeZoneOffsetInHours,
-                .minute: d.minute,
-                .second: d.second
-            ]
-            
-            _date = DateInRegion(components: components, fromRegion: nil)
+        if let dateFromString = df.date(from: string) {
+            _date = DateInRegion(absoluteDate: dateFromString, in: regionMST)
         } else {
             return nil
         }
@@ -61,36 +42,18 @@ class SIDate {
     
     convenience init(date: Date) {
         self.init()
-        let d = DateInRegion(absoluteDate: date, in: region)
-        
-        let calendar = Calendar.init(identifier: .gregorian)
-        
-        let hour = calendar.component(.hour, from: d.absoluteDate)
-        let min = calendar.component(.minute, from: d.absoluteDate)
-        let seconds = calendar.component(.second, from: d.absoluteDate)
-        
-        let components: [Calendar.Component : Int] = [
-            .year: d.year,
-            .month: d.month,
-            .day: d.day,
-            .hour: hour == 0 && min == 0 && seconds == 0 ? d.hour : d.hour + timeZoneOffsetInHours,
-            .minute: d.minute,
-            .second: d.second
-        ]
-        
-        _date = DateInRegion(components: components, fromRegion: nil)
+        _date = DateInRegion(absoluteDate: date, in: regionMST)
     }
     
     
-    
-    func toString() -> String {
-        return date.string(custom: format)
+    /// toDateString() returns a string representation of a date in the format of "MMM dd, yyyy".
+    func toDateString() -> String {
+        return date.string(format: dateFormat, in: regionUTC)
     }
     
-    func getTime() -> String {
-        return date.string(custom: "h:mm a")
+    /// toTimeString() returns a string representation of date in the format of "h:mm a".
+    func toTimeString() -> String {
+        return date.string(format: timeFormat, in: regionMST)
     }
-    
-    
     
 }
