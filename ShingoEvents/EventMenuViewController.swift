@@ -19,14 +19,16 @@ class EventMenuViewController: UIViewController {
     
     var activityVC: ActivityViewController = ActivityViewController(message: "Fetching Data...")
     
-    @IBOutlet weak var speakerButton: UIButton! {
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var contentView: UIView!
+    
+    @IBOutlet weak var salesTextView: UITextView! {
         didSet {
-            let size = CGSize(width: 33, height: 33)
-            let speakerButtonImage = #imageLiteral(resourceName: "Speakers-Button").af_imageScaled(to: size)
-            speakerButton.imageView?.image = speakerButtonImage
-            speakerButton.imageView?.resizeImageViewToIntrinsicContentSize(thatFitsWidth: 33)
+            salesTextView.isScrollEnabled = false
         }
     }
+    
+    @IBOutlet weak var speakerButton: UIButton!
     @IBOutlet weak var scheduleButton: UIButton!
     @IBOutlet weak var attendeesButton: UIButton!
     @IBOutlet weak var exhibitorsButton: UIButton!
@@ -35,20 +37,13 @@ class EventMenuViewController: UIViewController {
     @IBOutlet weak var sponsorsButton: UIButton!
     @IBOutlet weak var venuePhotosButton: UIButton!
     
-    @IBOutlet weak var backgroundImage: UIImageView!
-    @IBOutlet weak var eventHeaderImageView: UIImageView! {
-        didSet {
-            eventHeaderImageView.contentMode = .scaleAspectFill
-            eventHeaderImageView.backgroundColor = .clear
-            eventHeaderImageView.clipsToBounds = true
-        }
-    }
+    @IBOutlet weak var eventHeaderImageView: UIImageView!
     
     @IBOutlet weak var bannerViewWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var bannerViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var bannerView: BannerView! {
         didSet {
-            bannerView.backgroundColor = .clear
+            bannerView.backgroundColor = .shingoBlue
             bannerView.bannerAds = event.getBannerAds()
         }
     }
@@ -64,25 +59,23 @@ class EventMenuViewController: UIViewController {
         self.sponsorsButton
     ]
     
-    var didSetupConstraints = false
-    
     var requestManager: SIRequestManager!
     
     var segueTypeOnRequestCompletion: SIRequestType = .none
     
     override func loadView() {
         super.loadView()
-        requestManager = SIRequestManager(event: event, delegate: self)
-        requestManager.requestAll()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationItem.title = self.event.name
+        requestEventData()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationItem.title = event.name
+        
+        if navigationController != nil {
+            navigationController?.navigationBar.barTintColor = .shingoBlue
+        }
         
         view.backgroundColor = .white
         
@@ -94,12 +87,11 @@ class EventMenuViewController: UIViewController {
             event.getImage() { image in
                 if let image = image {
                     self.eventHeaderImageView.image = image
-                    self.navigationItem.title = self.event.name
-                } else {
-                    self.navigationItem.title = ""
                 }
             }
         }
+        
+        salesTextView.attributedText = SIRequest.parseHTMLStringUsingPreferredFont(string: event.salesText, forTextStyle: .subheadline)
         
         // Add targets to all buttons
         scheduleButton.addTarget(self, action: #selector(EventMenuViewController.didTapSchedule(_:)), for: UIControlEvents.touchUpInside)
@@ -112,10 +104,19 @@ class EventMenuViewController: UIViewController {
         sponsorsButton.addTarget(self, action: #selector(EventMenuViewController.didTapSponsors(_:)), for: UIControlEvents.touchUpInside)
         
         for button in buttons {
-            button.backgroundColor = UIColor.black.withAlphaComponent(0.7)
             button.imageView?.contentMode = .scaleAspectFit
             button.clipsToBounds = true
         }
+        
+//        contentView.sizeToFit()
+//        scrollView.sizeToFit()
+        updateViewConstraints()
+        
+    }
+    
+    private func requestEventData() {
+        requestManager = SIRequestManager(event: event, delegate: self)
+        requestManager.requestAll()
     }
     
     func displayBadRequestNotification() {
@@ -231,8 +232,6 @@ extension EventMenuViewController {
     
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        navigationItem.title = ""
         
         switch segue.identifier! {
             

@@ -65,22 +65,32 @@ extension EventsTableViewController: SICellDelegate, SplashScreenViewDelegate {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Event Cell", for: indexPath) as! EventTableViewCell;
+        var cell = tableView.dequeueReusableCell(withIdentifier: "Event Cell") as? EventTableViewCell
+        
+        if cell == nil {
+            cell = EventTableViewCell.init(style: .default, reuseIdentifier: "Event Cell")
+        }
         
         let event = events[indexPath.row]
         
-        if event.didLoadImage {
-            cell.eventImageView.image = event.image
-            cell.eventImageView.contentMode = .scaleAspectFill
+        if let image = event.image {
+            cell!.eventImageView.contentMode = .scaleAspectFill
+            cell!.eventImageView.image = image
         } else {
-            cell.eventImageView.image = #imageLiteral(resourceName: "FlameOnly-100")
-            cell.eventImageView.contentMode = .scaleAspectFit
+            event.getImage() { image in
+                if let image = image {
+                    cell!.eventImageView.contentMode = .scaleAspectFill
+                    cell!.eventImageView.image = image
+                }
+            }
         }
+
+//        cell!.eventDescriptionLabel.attributedText = SIRequest.parseHTMLStringUsingPreferredFont(string: event.salesText, forTextStyle: .subheadline)
         
-        cell.event = event
-        cell.delegate = self
+        cell!.event = event
+        cell!.delegate = self
         
-        return cell
+        return cell!
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
