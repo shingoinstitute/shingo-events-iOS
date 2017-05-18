@@ -22,12 +22,10 @@ class EventsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Upcoming Events"
-        tableView.backgroundView = gradientBackgroundView
-        gradientBackgroundView.backgroundColor = .lightShingoBlue
         
-        let gradientLayer = RadialGradientLayer()
-        gradientLayer.frame = gradientBackgroundView.bounds
-        gradientBackgroundView.layer.insertSublayer(gradientLayer, at: 0)
+        if navigationController != nil {
+            navigationController?.navigationBar.barTintColor = .shingoBlue
+        }
         
         tableView.estimatedRowHeight = 300;
         tableView.rowHeight = UITableViewAutomaticDimension;
@@ -84,8 +82,6 @@ extension EventsTableViewController: SICellDelegate, SplashScreenViewDelegate {
                 }
             }
         }
-
-//        cell!.eventDescriptionLabel.attributedText = SIRequest.parseHTMLStringUsingPreferredFont(string: event.salesText, forTextStyle: .subheadline)
         
         cell!.event = event
         cell!.delegate = self

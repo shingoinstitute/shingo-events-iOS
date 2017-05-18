@@ -51,12 +51,6 @@ class EventTableViewCell: UITableViewCell {
         let dates = event.startDate.toDateString() + " - " + event.endDate.toDateString()
         eventDateRangeLabel.text = dates
         
-//        event.getImage() { image in
-//            if let image = image {
-//                self.event.image = image
-//            }
-//        }
-        
     }
 }
 
