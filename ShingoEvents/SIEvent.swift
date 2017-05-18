@@ -10,10 +10,6 @@ import Foundation
 import UIKit
 import Alamofire
 
-protocol SIEventDelegate {
-    func onEventDetailCompletion()
-}
-
 class SIEvent: SIObject {
     
     var didLoadSpeakers: Bool
@@ -60,8 +56,6 @@ class SIEvent: SIObject {
             getImage(nil)
         }
     }
-    
-    var tableViewCellDelegate: SIEventDelegate?
     
     var requester: Alamofire.Request? {
         get {
@@ -133,10 +127,6 @@ class SIEvent: SIObject {
                 
             }
             self._requester = nil
-            
-            if let delegate = self.tableViewCellDelegate {
-                delegate.onEventDetailCompletion()
-            }
             
             if let cb = callback {
                 cb()

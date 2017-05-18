@@ -131,6 +131,10 @@ class SIRequest {
                         event.bannerURL = bannerURL
                     }
                     
+                    if let salesText = record["Sales_Text__c"].string {
+                        event.salesText = salesText
+                    }
+                    
                     events.append(event)
                 }
             }

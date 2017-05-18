@@ -96,7 +96,7 @@ class SchedulesTableViewController: UITableViewController, SISpeakerDelegate {
     
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        navigationItem.title = ""
+//        navigationItem.title = ""
         
         switch segue.identifier! {
             
@@ -175,7 +175,7 @@ extension SchedulesTableViewController {
         dateFormatter.dateStyle = .medium
         dateFormatter.timeZone = TimeZone(identifier: "GMT")
         
-        let dateText: String = agendas[section].date.toString()
+        let dateText: String = agendas[section].date.toDateString()
         
         let label = UILabel(text: "\t\(agendas[section].displayName), \(dateText)", font: UIFont.preferredFont(forTextStyle: .headline))
         label.textColor = UIColor.white
