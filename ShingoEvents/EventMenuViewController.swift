@@ -14,20 +14,14 @@ import PureLayout
 class EventMenuViewController: UIViewController {
     
     var event: SIEvent!
-    
     var eventSpeakers = [String : SISpeaker]()
-    
     var activityVC: ActivityViewController = ActivityViewController(message: "Fetching Data...")
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var contentView: UIView!
+    @IBOutlet weak var salesTextView: UITextView!
     
-    @IBOutlet weak var salesTextView: UITextView! {
-        didSet {
-            salesTextView.isScrollEnabled = false
-        }
-    }
-    
+    @IBOutlet weak var eventHeaderImageView: UIImageView!
     @IBOutlet weak var speakerButton: UIButton!
     @IBOutlet weak var scheduleButton: UIButton!
     @IBOutlet weak var attendeesButton: UIButton!
@@ -37,31 +31,25 @@ class EventMenuViewController: UIViewController {
     @IBOutlet weak var sponsorsButton: UIButton!
     @IBOutlet weak var venuePhotosButton: UIButton!
     
-    @IBOutlet weak var eventHeaderImageView: UIImageView!
-    
-    @IBOutlet weak var bannerViewWidthConstraint: NSLayoutConstraint!
-    @IBOutlet weak var bannerViewHeightConstraint: NSLayoutConstraint!
-    @IBOutlet weak var bannerView: BannerView! {
-        didSet {
-            bannerView.backgroundColor = .shingoBlue
-            bannerView.bannerAds = event.getBannerAds()
-        }
-    }
-    
-    lazy var buttons: [UIButton] = [
-        self.scheduleButton,
-        self.venuePhotosButton,
-        self.recipientsButton,
-        self.exhibitorsButton,
+    lazy var menuButtons: [UIButton] = [
         self.speakerButton,
-        self.directionsButton,
+        self.scheduleButton,
         self.attendeesButton,
-        self.sponsorsButton
+        self.exhibitorsButton,
+        self.recipientsButton,
+        self.directionsButton,
+        self.sponsorsButton,
+        self.venuePhotosButton
     ]
     
-    var requestManager: SIRequestManager!
+    @IBOutlet weak var bannerViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var bannerView: BannerView!
     
+    var requestManager: SIRequestManager!
     var segueTypeOnRequestCompletion: SIRequestType = .none
+    
+    let sponsorBannerViewEnabledHeight: CGFloat = 64
+    let sponsorBannerViewDisabledHeight: CGFloat = 8
     
     override func loadView() {
         super.loadView()
@@ -77,10 +65,19 @@ class EventMenuViewController: UIViewController {
             navigationController?.navigationBar.barTintColor = .shingoBlue
         }
         
-        view.backgroundColor = .white
+        for button in menuButtons {
+            button.imageView?.contentMode = .scaleAspectFit
+            button.setImage(button.imageView?.image?.af_imageScaled(to: CGSize(width: 36, height: 36)), for: .normal)
+        }
         
-        bannerView.start()
+        salesTextView.attributedText = SIRequest.parseHTMLStringUsingPreferredFont(string: event.salesText, forTextStyle: .subheadline)
         
+        setupSponsorBannerView()
+        
+        getEventBannerImage()
+    }
+    
+    private func getEventBannerImage() {
         if let bannerImage = event.image {
             eventHeaderImageView.image = bannerImage
         } else {
@@ -90,28 +87,33 @@ class EventMenuViewController: UIViewController {
                 }
             }
         }
+    }
+    
+    private func setupSponsorBannerView() {
+        bannerView.bannerAds = event.getBannerAds()
         
-        salesTextView.attributedText = SIRequest.parseHTMLStringUsingPreferredFont(string: event.salesText, forTextStyle: .subheadline)
-        
-        // Add targets to all buttons
-        scheduleButton.addTarget(self, action: #selector(EventMenuViewController.didTapSchedule(_:)), for: UIControlEvents.touchUpInside)
-        venuePhotosButton.addTarget(self, action: #selector(EventMenuViewController.didTapVenue(_:)), for: UIControlEvents.touchUpInside)
-        recipientsButton.addTarget(self, action: #selector(EventMenuViewController.didTapRecipients(_:)), for: UIControlEvents.touchUpInside)
-        exhibitorsButton.addTarget(self, action: #selector(EventMenuViewController.didTapExhibitors(_:)), for: UIControlEvents.touchUpInside)
-        speakerButton.addTarget(self, action: #selector(EventMenuViewController.didTapSpeakers(_:)), for: UIControlEvents.touchUpInside)
-        directionsButton.addTarget(self, action: #selector(EventMenuViewController.didTapDirections(_:)), for: UIControlEvents.touchUpInside)
-        attendeesButton.addTarget(self, action: #selector(EventMenuViewController.didTapAttendess(_:)), for: UIControlEvents.touchUpInside)
-        sponsorsButton.addTarget(self, action: #selector(EventMenuViewController.didTapSponsors(_:)), for: UIControlEvents.touchUpInside)
-        
-        for button in buttons {
-            button.imageView?.contentMode = .scaleAspectFit
-            button.clipsToBounds = true
+        if event.hasBannerAds {
+            bannerView.start()
+        } else {
+            bannerViewHeightConstraint.constant = 0
+            checkForBannerAdsOnInterval()
         }
+    }
+    
+    private func checkForBannerAdsOnInterval() {
         
-//        contentView.sizeToFit()
-//        scrollView.sizeToFit()
-        updateViewConstraints()
-        
+        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { (timer) in
+            
+            if self.event.hasBannerAds {
+                timer.invalidate()
+                UIView.animate(withDuration: 0.2, animations: {
+                    self.bannerViewHeightConstraint.constant = self.sponsorBannerViewEnabledHeight
+                    self.view.layoutIfNeeded()
+                }, completion: { (_) in
+                    self.bannerView.start()
+                })
+            }
+        }
     }
     
     private func requestEventData() {
@@ -128,12 +130,7 @@ class EventMenuViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
-}
-
-extension EventMenuViewController {
-    
-    // MARK: - Button handler methods
-    func didTapSchedule(_ sender: AnyObject) {
+    @IBAction func didTapSchedule(_ sender: Any) {
         if event.didLoadAgendas {
             self.performSegue(withIdentifier: "SchedulesView", sender: self.event.agendas)
         } else {
@@ -145,7 +142,7 @@ extension EventMenuViewController {
         }
     }
     
-    func didTapSpeakers(_ sender: AnyObject) {
+    @IBAction func didTapSpeakers(_ sender: Any) {
         if event.didLoadSpeakers  {
             self.performSegue(withIdentifier: "SpeakerList", sender: self.eventSpeakers)
         } else {
@@ -156,7 +153,7 @@ extension EventMenuViewController {
         }
     }
     
-    func didTapRecipients(_ sender: AnyObject) {
+    @IBAction func didTapRecipients(_ sender: Any) {
         if event.didLoadRecipients {
             performSegue(withIdentifier: "RecipientsView", sender: self.event.recipients)
         } else {
@@ -167,7 +164,7 @@ extension EventMenuViewController {
         }
     }
     
-    func didTapDirections(_ sender: AnyObject) {
+    @IBAction func didTapDirections(_ sender: Any) {
         if event.didLoadVenues {
             if let venue = self.event.venues.first {
                 performSegue(withIdentifier: "MapView", sender: venue)
@@ -180,7 +177,7 @@ extension EventMenuViewController {
         }
     }
     
-    func didTapExhibitors(_ sender: AnyObject) {
+    @IBAction func didTapExhibitors(_ sender: Any) {
         if event.didLoadExhibitors {
             performSegue(withIdentifier: "ExhibitorsListView", sender: self.event.exhibitors)
         } else {
@@ -191,7 +188,7 @@ extension EventMenuViewController {
         }
     }
     
-    func didTapAttendess(_ sender: AnyObject) {
+    @IBAction func didTapAttendess(_ sender: Any) {
         
         if event.didLoadAttendees {
             performSegue(withIdentifier: "AttendeesView", sender: self.event.attendees)
@@ -203,7 +200,7 @@ extension EventMenuViewController {
         }
     }
     
-    func didTapVenue(_ sender: AnyObject) {
+    @IBAction func didTapVenue(_ sender: Any) {
         if event.didLoadVenues {
             self.performSegue(withIdentifier: "VenueView", sender: self.event.venues)
         } else {
@@ -214,7 +211,7 @@ extension EventMenuViewController {
         }
     }
     
-    func didTapSponsors(_ sender: AnyObject) {
+    @IBAction func didTapSponsors(_ sender: Any) {
         
         if event.didLoadSponsors {
             performSegue(withIdentifier: "SponsorsView", sender: self.event.sponsors)
